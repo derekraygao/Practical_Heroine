@@ -1,4 +1,5 @@
 var RO = require('./RolesObject.js');
+var rI = require('./ResultsInfo.js');
 
 
 
@@ -17,12 +18,14 @@ class Controller {
 		{	
 			playersInRoomArray: [],
 			gamePhase: 0,
-			teamLeaderIndex: -1,
+			teamLeaderIndex: 0,
 			missionTeam: [],
 			missionVoteInfo: [],
 			teamVoteInfo: [],
 			numOfFailedTeamProposals: 0,
 			rolesObject: new RO.RolesObject(),
+			results: new rI.ResultsInfo(),
+			playerTracker: {} //{name: index in player array}
 
 		};
 
@@ -33,12 +36,39 @@ class Controller {
 	}; //end constructor
 
 
+
 	addPlayerToArray(name, socketID, roomName, roomMaster) {
 
 		this.roomsData[roomName].playersInRoomArray.
 		push(new Player(name, socketID, roomName, roomMaster));
 
 	};
+
+
+	setPlayerReady(obj) {
+
+		obj.pA[obj.index].ready = true;
+
+	};
+
+
+	isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj) {
+
+		if (obj.pA.length < 5) { return false; };
+
+		for (let i = 0; i < obj.pA.length; i++) {
+
+			if (!obj.pA[i].ready) {
+
+				return false;
+
+			};
+
+		}; //end for
+
+		return true;
+
+	}; //end isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj)
 
 
 	updateTeamLeaderIndex(obj) {
@@ -103,11 +133,18 @@ class Controller {
 
 
 
+	missionSuccessOrFail(accumulator) {
+		return ( (accumulator >= 0) ? "Success" : "Fail" );
+	};
+
+
 	missionVoteCalculation(obj) {
 
 		var missionVoteAccumulator = 0;
 
 		for (let i = 0; i < obj.pA.length; i++) {
+
+			if (!obj.pA[i].selectedForMission) { continue; };
 
 			//default missionVote is null
 			if (!obj.pA[i].missionVote) { 
@@ -130,18 +167,20 @@ class Controller {
 
 			);
 
-		};
+		}; //end for
+
+
+		this.roomsData[obj.room].results.addMissionInfo(
+			this.roomsData[obj.room].gamePhase,
+			this.roomsData[obj.room].missionVoteInfo,
+			missionVoteAccumulator,
+			this.missionSuccessOrFail(missionVoteAccumulator)
+		);
 
 
 		return missionVoteAccumulator;
 
 	};
-
-
-
-
-
-
 
 
 
@@ -190,7 +229,7 @@ class Controller {
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
-			//default teamVote is null
+			//default teamVote is null, meaning offline
 			if (!obj.pA[i].teamVote) { continue; };
 
 			teamVoteAccumulator += obj.pA[i].teamVote;
@@ -204,19 +243,49 @@ class Controller {
 
 			);
 			
-		};
+		}; //end for
+
+		return teamVoteAccumulator;
+
+	}; //end teamVoteCalculation
+
+
+
+	wasTeamAccepted(obj) {
+
+		var teamVoteAccumulator = this.teamVoteCalculation(obj);
 
 
 		if (teamVoteAccumulator >= 0) {
 
 			this.roomsData[obj.room].numOfFailedTeamProposals = 0;
 
-			return "Success";
+			this.roomsData[obj.room].results.
+			addTeamInfo(
+				this.roomsData[obj.room].gamePhase,
+				obj.pA[this.roomsData[obj.room].teamLeaderIndex].name,
+				this.roomsData[obj.room].missionTeam,
+				this.roomsData[obj.room].teamVoteInfo,
+				"Accepted"
+			);
+
+			return "Successful Team Proposal";
 
 		} else {
 
+			//this must be before you reset teamVoteInfo below
+			this.roomsData[obj.room].results.
+			addTeamInfo(
+				this.roomsData[obj.room].gamePhase,
+				obj.pA[this.roomsData[obj.room].teamLeaderIndex].name,
+				this.roomsData[obj.room].missionTeam,
+				this.roomsData[obj.room].teamVoteInfo,
+				"Rejected"
+			);
+
+
 			this.roomsData[obj.room].numOfFailedTeamProposals += 1;
-			this.roomsData[obj.room].teamVoteInfo = [];
+			
 
 			if (this.roomsData[obj.room].numOfFailedTeamProposals > 4) {
 				return "Game Over. Too Many Failed Team Proposals";
@@ -227,7 +296,30 @@ class Controller {
 		};
 
 
-	}; //end teamVoteCalculation
+	}; //end wasTeamAccepted
+
+
+
+
+
+
+	//put this outside teamVoteCalculation since you are resetting
+	//teamVoteInfo and need to send this data to clients
+	resetDataForFailedTeamProposal() {
+
+		this.roomsData[obj.room].missionTeam = [];
+		this.roomsData[obj.room].teamVoteInfo = [];
+
+		for (let i = 0; i < obj.pA.length; i++) {
+
+			obj.pA[i].isTeamLeader = false;
+			obj.pA[i].teamVote = null;
+
+		};
+
+	}; //end resetDataForFailedTeamProposal
+
+
 
 
 
@@ -273,12 +365,36 @@ class Controller {
 			this.roomsData[obj.room].rolesObject.rolesInGame.
 			push(obj.rO.roles[rolesForThisGame[i]]);
 
+			this.roomsData[obj.room].playerTracker[obj.pA[i].name] = i;
+
 		};
 
 	}; //end assignPlayersTheirRoles
 
 
 
+
+	resetDataAtEndOfMission(obj) {
+
+		this.roomsData[obj.room].missionTeam = [];
+		this.roomsData[obj.room].missionVoteInfo = [];
+		this.roomsData[obj.room].teamVoteInfo = [];
+
+
+		for (let i = 0; i < obj.pA.length; i++) {
+
+			obj.pA[i].ready = false;
+			obj.pA[i].isTeamLeader = false;
+			obj.pA[i].selectedForMission = false;
+			obj.pA[i].missionVote = null;
+			obj.pA[i].teamVote = null;
+
+		
+		};
+
+
+
+	}; //end resetDataAtEndOfMission
 
 
 

@@ -53,6 +53,10 @@ var obj = Controller.returnpArrayRoomAndIndex({id: "DerekID"});
 
 Controller.assignPlayersTheirRoles(obj);
 
+Controller.roomsData["testing"].gamePhase = 1;
+
+console.log(obj.rO.rolesInGame);
+console.log(obj.pA);
 
 
 Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
@@ -65,8 +69,8 @@ Controller.addTeamVote(obj, 2, -3);
 Controller.addTeamVote(obj, 3, 1);
 //output 1
 
-Controller.addMissionVote(obj, 0, -3);
-Controller.addMissionVote(obj, 1, null);
+Controller.addMissionVote(obj, 0, null);
+Controller.addMissionVote(obj, 1, -2);
 Controller.addMissionVote(obj, 2, 1);
 Controller.addMissionVote(obj, 3, -4);
 //output 0
@@ -75,6 +79,61 @@ Controller.addMissionVote(obj, 3, -4);
 console.log(Controller.teamVoteCalculation(obj));
 console.log(Controller.roomsData["testing"].teamVoteInfo);
 
+Controller.missionVoteCalculation(obj);
+
+console.log(Controller.roomsData["testing"].results.missionInfo[1]);
+
+
+getIdentitiesTest();
+
+
+
+
+
+function getIdentitiesTest() {
+
+	console.log("Villain Identities Are: ");
+	console.log(obj.rO.getVillainsIdentities());
+
+	console.log("Villain Identities For Princess Are: ");
+	console.log(obj.rO.getVillainsIdentitiesForPrincess());
+
+	console.log("Princess Identity Is: ");
+	console.log(obj.rO.getPrincessIdentity());
+
+	console.log("Princess Identity For Marcus Is (Could Include Ditto): ");
+	console.log(obj.rO.getPrincessIdentityArrayForMarcus());
+
+
+
+};
+
+
+
+
+
+
+//console.log(didAnyoneWinTest());
+
+/* testing didAnyoneWin() */
+
+function didAnyoneWinTest() {
+
+Controller.roomsData["testing"].gamePhase = 1;
+Controller.missionVoteCalculation(obj);
+
+Controller.roomsData["testing"].gamePhase = 2;
+Controller.missionVoteCalculation(obj);
+
+Controller.roomsData["testing"].gamePhase = 3;
+Controller.missionVoteCalculation(obj);
+
+Controller.roomsData["testing"].gamePhase = 4;
+Controller.missionVoteCalculation(obj);
+
+return (Controller.roomsData["testing"].results.didAnyoneWin(3));
+
+};
 
 
 

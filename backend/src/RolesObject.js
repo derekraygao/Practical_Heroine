@@ -347,7 +347,7 @@ class RolesObject {
       case 4:
 
         rolesArrayForThisGame[2] = "ranger";
-        rolesArrayForThisGame[3] = "saintess";
+        rolesArrayForThisGame[3] = "ditto";
 
         break;
 
@@ -434,14 +434,72 @@ class RolesObject {
 
 
 
+  getRolesInGame() {
 
-  populateRolesInformation() {
-
-
-
+    return this.rolesInGame;
 
   };
 
+
+  getPrincessIdentity() {
+
+    return (this.roles["princess"].name);
+
+  };
+
+
+  //marcus does not know between ditto & persequor
+  getPrincessIdentityArrayForMarcus() {
+
+    if (!this.roles["ditto"].inGame) { return ([this.roles["princess"].name]); };
+
+    /*ditto is in game*/
+    var princessAndDitto = [this.roles["princess"].name, this.roles["ditto"].name];
+
+    shuffle(princessAndDitto);
+
+    return princessAndDitto;
+
+  }; //end getPrincessIdentityForMarcus
+
+
+
+
+  getVillainsIdentities() {
+
+    var listOfVillains = [];
+
+    for (let i = 0; i < this.rolesInGame.length; i++) {
+
+      if (this.rolesInGame[i].team == "villains") {
+        listOfVillains.push(this.rolesInGame[i].name);
+      };
+
+    };
+
+    return listOfVillains;
+
+  }; //end getVillainIdentities
+
+
+  //princess does not know ditto's identity
+  getVillainsIdentitiesForPrincess() {
+
+    var listOfVillains = [];
+
+    for (let i = 0; i < this.rolesInGame.length; i++) {
+
+      if (this.rolesInGame[i].role == "ditto") { continue; };
+
+      if (this.rolesInGame[i].team == "villains") {
+        listOfVillains.push(this.rolesInGame[i].name);
+      };
+
+    };
+
+    return listOfVillains;
+
+  }; //end getVillainsIdentitiesForPrincess
 
 
 
