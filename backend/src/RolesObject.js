@@ -1,3 +1,5 @@
+var {UmbraLord} = require('./characters/UmbraLord.js');
+
 
 
 class RolesObject {
@@ -192,16 +194,7 @@ class RolesObject {
 
       //bad roles
 
-      demonLord: 
-      {
-            role: "demonLord",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "unknown",
-            team: "villains"
-      },
+      "Umbra Lord": new UmbraLord(),
 
 
       hecate: 
@@ -331,7 +324,7 @@ class RolesObject {
     var rolesArrayForThisGame = [];
 
     rolesArrayForThisGame[0] = "princess";
-    rolesArrayForThisGame[1] = "demonLord";
+    rolesArrayForThisGame[1] = "Umbra Lord";
 
     switch(obj.pA.length) {
 
@@ -500,6 +493,32 @@ class RolesObject {
     return listOfVillains;
 
   }; //end getVillainsIdentitiesForPrincess
+
+
+
+  getAllIdentitiesAndTheirRoles() {
+
+    var identityAndRoleArray = [];
+
+    for (let i = 0; i < this.rolesInGame.length; i++) {
+
+      identityAndRoleArray.push(
+
+        {
+          name: this.rolesInGame[i].name,
+          role: this.rolesInGame[i].role,
+          team: this.rolesInGame[i].team
+        }
+
+      ); //end push()
+
+    }; //end for
+
+
+    return identityAndRoleArray;
+
+  }; //end getAllIdentitiesAndTheirRoles
+
 
 
 

@@ -17,15 +17,16 @@ class Controller {
 		this.roomsData["testing"] = 
 		{	
 			playersInRoomArray: [],
+			missionNo: 0,
 			gamePhase: 0,
-			teamLeaderIndex: 0,
+			teamLeaderIndex: -1,
 			missionTeam: [],
 			missionVoteInfo: [],
 			teamVoteInfo: [],
 			numOfFailedTeamProposals: 0,
 			rolesObject: new RO.RolesObject(),
 			results: new rI.ResultsInfo(),
-			playerTracker: {} //{name: index in player array}
+			playerTracker: {} //{name: index in player array} //populated in assignPlayersTheirRoles
 
 		};
 
@@ -43,6 +44,21 @@ class Controller {
 		push(new Player(name, socketID, roomName, roomMaster));
 
 	};
+
+
+	setGamePhase(obj, gamePhase) {
+
+		obj.rD["gamePhase"] = gamePhase;
+
+	};
+
+
+	updateMissionNumber(obj) {
+
+		obj.rD["missionNo"] += 1;
+
+	};
+
 
 
 	setPlayerReady(obj) {
@@ -71,15 +87,30 @@ class Controller {
 	}; //end isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj)
 
 
+	areAllConnectedPlayersReady(obj) {
+
+		for (let i = 0; i < obj.pA.length; i++) {
+
+			if (!obj.pA[i].connected) { continue; };
+
+			if (!obj.pA[i].ready) { return false; };
+
+		};
+
+		return true;
+
+	}; //end areAllConnectedPlayersReady(obj)
+
+
+
+
 	updateTeamLeaderIndex(obj) {
 
-		this.roomsData[obj.room].teamLeaderIndex += 1;
+		obj.rD.teamLeaderIndex += 1;
 
-		if (this.roomsData[obj.room].teamLeaderIndex 
-			> (obj.pA.length - 1)
-		) {
-			this.roomsData[obj.room].teamLeaderIndex = 0;
-		  };
+		if (obj.rD.teamLeaderIndex > (obj.pA.length - 1) ) {
+			obj.rD.teamLeaderIndex = 0;
+		};
 
 	};
 
@@ -88,13 +119,15 @@ class Controller {
 
 		this.updateTeamLeaderIndex(obj);
 
-		if (!obj.pA[this.roomsData[obj.room].teamLeaderIndex].connected) {
+		if (!obj.pA[obj.rD.teamLeaderIndex].connected) {
 
 			this.chooseOnlyConnectedTeamLeader(obj);
 
 		} else {
 
-			obj.pA[this.roomsData[obj.room].teamLeaderIndex].isTeamLeader = true;
+			obj.pA[obj.rD.teamLeaderIndex].isTeamLeader = true;
+
+			return (obj.pA[obj.rD.teamLeaderIndex].name);
 
 		};
 
@@ -171,7 +204,7 @@ class Controller {
 
 
 		this.roomsData[obj.room].results.addMissionInfo(
-			this.roomsData[obj.room].gamePhase,
+			this.roomsData[obj.room].missionNo,
 			this.roomsData[obj.room].missionVoteInfo,
 			missionVoteAccumulator,
 			this.missionSuccessOrFail(missionVoteAccumulator)
@@ -214,13 +247,26 @@ class Controller {
 	};
 
 
+	//default absoluteTeamVoteUsed is "No" and once demonLord uses,
+	//change to "Yes". Then, after points calculation, change to "Used"
 
+	isTeamVoteAcceptOrNot(vote, rO) {
 
-	isTeamVoteAcceptOrNot(vote) {
+		if (rO.roles["Umbra Lord"].absoluteTeamVoteYesUsed == "Yes") {
+			
+			return "Absolute Yes";
 
-		return( (vote >= 0) ? "Accept" : "Reject" );
+		} else if (rO.roles["Umbra Lord"].absoluteTeamVoteNoUsed == "Yes") {
 
-	};
+			return "Absolute No";
+
+		} else {
+
+			return( (vote >= 0) ? "Accept" : "Reject" );
+
+		};
+
+	}; //end isTeamVoteAcceptOrNot
 
 
 	teamVoteCalculation(obj) {
@@ -234,11 +280,13 @@ class Controller {
 
 			teamVoteAccumulator += obj.pA[i].teamVote;
 
+			//no need for exact number because it's team vote. Just need to know if
+			//it's accept or reject. Only need to store Mission exact number
 			this.roomsData[obj.room].teamVoteInfo.push(
 
 				{
 					name: obj.pA[i].name,
-					vote: this.isTeamVoteAcceptOrNot(obj.pA[i].teamVote)
+					vote: this.isTeamVoteAcceptOrNot(obj.pA[i].teamVote, obj.rO)
 				}
 
 			);
@@ -255,6 +303,11 @@ class Controller {
 
 		var teamVoteAccumulator = this.teamVoteCalculation(obj);
 
+		teamVoteAccumulator = obj.rO.roles["Umbra Lord"].
+		adjustVotesWithUmbraLordAbsolutePower(teamVoteAccumulator);
+
+		console.log("team vote accumulator is: " + teamVoteAccumulator);
+
 
 		if (teamVoteAccumulator >= 0) {
 
@@ -262,10 +315,10 @@ class Controller {
 
 			this.roomsData[obj.room].results.
 			addTeamInfo(
-				this.roomsData[obj.room].gamePhase,
-				obj.pA[this.roomsData[obj.room].teamLeaderIndex].name,
-				this.roomsData[obj.room].missionTeam,
-				this.roomsData[obj.room].teamVoteInfo,
+				obj.rD.missionNo,
+				obj.pA[obj.rD.teamLeaderIndex].name,
+				obj.rD.missionTeam,
+				obj.rD.teamVoteInfo,
 				"Accepted"
 			);
 
@@ -276,10 +329,10 @@ class Controller {
 			//this must be before you reset teamVoteInfo below
 			this.roomsData[obj.room].results.
 			addTeamInfo(
-				this.roomsData[obj.room].gamePhase,
-				obj.pA[this.roomsData[obj.room].teamLeaderIndex].name,
-				this.roomsData[obj.room].missionTeam,
-				this.roomsData[obj.room].teamVoteInfo,
+				obj.rD.missionNo,
+				obj.pA[obj.rD.teamLeaderIndex].name,
+				obj.rD.missionTeam,
+				obj.rD.teamVoteInfo,
 				"Rejected"
 			);
 
@@ -348,6 +401,7 @@ class Controller {
 
 	//need to shuffle playerArray BEFORE this function, cause we are setting
 	//index here
+	//length of rolesForThisGame == length of playerArray
 	assignPlayersTheirRoles(obj) {
 
 		var rolesForThisGame = obj.rO.getListOfRolesForGame(obj);
@@ -362,14 +416,24 @@ class Controller {
 			obj.rO.roles[rolesForThisGame[i]].inGame = true;
 			obj.rO.roles[rolesForThisGame[i]].index = i;
 
-			this.roomsData[obj.room].rolesObject.rolesInGame.
-			push(obj.rO.roles[rolesForThisGame[i]]);
+			obj.rO.rolesInGame.push(obj.rO.roles[rolesForThisGame[i]]);
 
-			this.roomsData[obj.room].playerTracker[obj.pA[i].name] = i;
+			obj.pT[obj.pA[i].name] = i;
 
 		};
 
 	}; //end assignPlayersTheirRoles
+
+
+
+	resetPlayerReadyStatus(obj) {
+
+		for (var i = 0; i < obj.pA.length; i++) {
+			obj.pA[i].ready = false;
+		};
+
+	};
+
 
 
 
@@ -427,6 +491,9 @@ class Controller {
 				room: this.socketRoom[socket.id], 
 				pA: this.roomsData[this.socketRoom[socket.id]].playersInRoomArray,
 				rO: this.roomsData[this.socketRoom[socket.id]].rolesObject,
+				rI: this.roomsData[this.socketRoom[socket.id]].results,
+				rD: this.roomsData[this.socketRoom[socket.id]],
+				pT: this.roomsData[this.socketRoom[socket.id]].playerTracker,
 				index: index
 			}
 		);
@@ -451,7 +518,17 @@ class Controller {
 	};
 
 
+	setPlayerDisconnected(obj, index) {
 
+		obj.pA[index].connected = false;
+
+	};
+
+	setPlayerReady(obj, index) {
+
+		obj.pA[index].ready = true;
+
+	};
 
 
 

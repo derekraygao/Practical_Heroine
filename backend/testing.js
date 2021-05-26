@@ -53,22 +53,26 @@ var obj = Controller.returnpArrayRoomAndIndex({id: "DerekID"});
 
 Controller.assignPlayersTheirRoles(obj);
 
-Controller.roomsData["testing"].gamePhase = 1;
+Controller.roomsData["testing"].missionNo = 1;
 
-console.log(obj.rO.rolesInGame);
-console.log(obj.pA);
+//console.log(obj.rO.rolesInGame);
+//console.log(obj.pA);
 
 
 Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
 Controller.setPlayersForMission(obj);
 
 
-Controller.addTeamVote(obj, 0, 4);
+Controller.addTeamVote(obj, 0, 3);
 Controller.addTeamVote(obj, 1, null);
 Controller.addTeamVote(obj, 2, -3);
 Controller.addTeamVote(obj, 3, 1);
 //output 1
 
+
+
+
+/*
 Controller.addMissionVote(obj, 0, null);
 Controller.addMissionVote(obj, 1, -2);
 Controller.addMissionVote(obj, 2, 1);
@@ -79,12 +83,63 @@ Controller.addMissionVote(obj, 3, -4);
 console.log(Controller.teamVoteCalculation(obj));
 console.log(Controller.roomsData["testing"].teamVoteInfo);
 
-Controller.missionVoteCalculation(obj);
-
+console.log("Mission Vote Calcuation Is: " + Controller.missionVoteCalculation(obj));
 console.log(Controller.roomsData["testing"].results.missionInfo[1]);
 
+*/
 
-getIdentitiesTest();
+
+
+
+
+function demonLordAbsolutePowerTest() {
+
+	/*
+	console.log("");
+	Controller.roomsData["testing"].teamVoteInfo = [];
+
+	*/
+
+	Controller.roomsData["testing"].teamLeaderIndex = 0;
+
+	console.log("Used Absolute Vote Yes");
+	obj.rO.roles["Umbra Lord"].useAbsoluteTeamYesPower();
+	console.log(Controller.wasTeamAccepted(obj));
+	console.log(obj.rI.getLatestTeamVotingInfo(1));
+
+	console.log("");
+	Controller.roomsData["testing"].teamVoteInfo = [];
+
+
+
+	console.log("This should be normal team votes");
+	console.log(Controller.wasTeamAccepted(obj));
+	console.log(obj.rI.getLatestTeamVotingInfo(1));
+
+	console.log("");
+	Controller.roomsData["testing"].teamVoteInfo = [];
+
+
+
+	console.log("Used Absolute Vote No");
+	obj.rO.roles["Umbra Lord"].useAbsoluteTeamNoPower();
+	console.log(Controller.wasTeamAccepted(obj));
+	console.log(obj.rI.getLatestTeamVotingInfo(1));
+
+	console.log("");
+	Controller.roomsData["testing"].teamVoteInfo = [];
+
+
+
+	console.log("This should be normal team votes");
+	console.log(Controller.wasTeamAccepted(obj));
+	console.log(obj.rI.getLatestTeamVotingInfo(1));
+
+};
+
+
+
+
 
 
 
@@ -119,16 +174,16 @@ function getIdentitiesTest() {
 
 function didAnyoneWinTest() {
 
-Controller.roomsData["testing"].gamePhase = 1;
+Controller.roomsData["testing"].missionNo = 1;
 Controller.missionVoteCalculation(obj);
 
-Controller.roomsData["testing"].gamePhase = 2;
+Controller.roomsData["testing"].missionNo = 2;
 Controller.missionVoteCalculation(obj);
 
-Controller.roomsData["testing"].gamePhase = 3;
+Controller.roomsData["testing"].missionNo = 3;
 Controller.missionVoteCalculation(obj);
 
-Controller.roomsData["testing"].gamePhase = 4;
+Controller.roomsData["testing"].missionNo = 4;
 Controller.missionVoteCalculation(obj);
 
 return (Controller.roomsData["testing"].results.didAnyoneWin(3));

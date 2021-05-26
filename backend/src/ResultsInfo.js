@@ -53,6 +53,22 @@ class ResultsInfo {
 	}; //end addTeamInfo
 
 
+	/*
+	output is [{name: "Derek", vote: "Accept/Reject/Absolute Yes/Absolute No"}, {name: , vote: }]
+	*/
+	getLatestTeamVotingInfo(missionNumber) {
+
+		//index for very last teamInfo/most recent
+		var teamInfoIndex = (this.teamInfo[missionNumber].length - 1);
+		if (teamInfoIndex < 0) { return []; };
+
+		return this.teamInfo[missionNumber][teamInfoIndex]["votingInfo"];
+
+	}; //end getLatestTeamVotingInfo
+
+
+
+
 	//votingArray is [{name: "Derek", vote: 5}]
 	//result is either "Success" or "Fail"
 	addMissionInfo(missionNumber, votingArray, pointTotal, result) {
