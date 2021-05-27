@@ -107,6 +107,33 @@ var fakeNamesArray = ["HPotter", "Pikachu", "Naruto", "ClarkKent", "Madonna", "S
                       "RoyMustang", "Katnissa", "Mr.Darcy", "CaptSparrow", "HPoirot", "Holmes", "FrankenS"];
 
 
+/*
+gamePhase
+
+0 = enter name & click ready to start very first game
+1 = power phase 1
+2 = team leader is choosing team
+3 = vote on team leader's team
+4 = view team votes/results
+5 = power phase 2 (only for selected for mission - not selected waits)
+6 = vote on mission/power phase 3 (only for selected for mission - not selected waits)
+7 = view mission results and click ready to start next round
+8 = night phase
+9 = villains get to guess on who is the princess
+10 = game over & click ready to start a new game (other people can join 
+during this phase)
+11 = less than 5 people in the room - game automatically ends and people can 
+join the room during this phase
+
+
+*/
+
+
+
+
+
+
+
 
 
 var myClass = require('./src/Controller.js');
@@ -136,6 +163,11 @@ io.on('connection', function (socket) {
     };
 
     /* if everyone is ready */
+
+    Controller.setGamePhase(obj, 1);
+
+    Controller.resetPlayerReadyStatus(obj);
+
     shuffle(obj.pA);
 
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
@@ -182,8 +214,358 @@ io.on('connection', function (socket) {
 
 
 
+  socket.on("End Power Phase 1", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.setPlayerReady(obj);
+
+    if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };
+
+    /* ready for next phase */
+
+    Controller.resetPlayerReadyStatus(obj);
+
+    //starting teamLeader Index is -1, and chooseOnly +1 to index
+    var teamLeaderName = Controller.chooseOnlyConnectedTeamLeader(obj);
 
 
+    Controller.setGamePhase(obj, 2);
+    //on client side, also set gamePhase to 2
+    emitToTeamLeaderChoosingTeam(obj, teamLeaderName);
+
+
+  });
+
+
+
+
+  socket.on("Team Leader's Proposed Team Submission", (proposedTeamArray) => {
+    //missionTeamArray = ["Derek", "Cloud", "Serena"]
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    //makes sure person is team leader
+    if (!obj.pA[obj.index].isTeamLeader) { return 0; };
+
+    Controller.setMissionTeam(obj, proposedTeamArray);
+
+    //team leader needs to vote too because he/she might be demonLord 
+    //and might want to use absolute voting power
+
+    Controller.setGamePhase(obj, 3);
+
+    //Don't need to send team leader name because it was sent previously
+    emitToAllSocketsInRoom(obj, 
+      "Set Team Leader's Proposed Team", proposedTeamArray);
+
+
+
+  }); //end Team Leader's Proposed Team Submission
+
+
+
+  socket.on("Vote on Team Leader's Proposed Team", (vote) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    //vote is either "Accept" or "Reject"
+    Controller.setPlayerTeamVote(obj, vote);
+
+    if (!Controller.didAllPlayersVoteOnTheTeam(obj)) { return 0; };
+
+
+    var teamCase = Controller.wasTeamAccepted(obj);
+
+
+    switch (teamCase) {
+
+      case "Successful Team Proposal":
+
+        Controller.setGamePhase(obj, 4);
+
+        emitToAllSocketsInRoom(obj, "Team Was Accepted!", 
+          obj.rI.getLatestTeamVotingInfo(obj.rD.missionNo));
+
+        break;
+
+
+      case "Failed Team Proposal":
+
+        //you'll update teamLeaderTracker AFTER everyone is finished viewing the 
+        //team results, which is why to see nextTeamLeader, you do current index + 1
+
+        Controller.setGamePhase(obj, 4);
+
+        emitToAllSocketsInRoom(
+          obj, 
+          "Team Was Rejected!",
+          {
+            teamVoteInfo: obj.rI.getLatestTeamVotingInfo(obj.rD.missionNo),
+            numOfFailedTeamProposals: obj.rD.numOfFailedTeamProposals,
+            nextTeamLeader: obj.pA[(obj.rD.teamLeaderIndex + 1)].name
+          } 
+          
+        );
+
+        break;
+
+
+      case "Game Over. Too Many Failed Team Proposals":
+
+        Controller.setGamePhase(obj, 10);
+
+        emitToAllSocketsInRoom(
+          obj, 
+          "Game Over. Too Many Failed Team Proposals",
+          obj.rO.getAllIdentitiesAndTheirRoles()
+        );
+
+        //emitAll and update resultsInfo on client side
+
+        break;
+
+
+      default:
+
+
+    }; //end switch
+
+
+
+  }); //end "Vote on Team Leader's Proposed Team"
+
+
+
+  socket.on("Ready For Next Team Leader Proposal After Failed One", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.setPlayerReady(obj);
+
+    if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };
+
+    Controller.resetPlayerReadyStatus(obj);
+
+    //uses original teamLeaderIndex to set player.isTeamLeader = false
+    //before selecting for/choosing new team leader
+    Controller.resetDataForFailedTeamProposal(obj);
+
+    //this updates teamLeaderIndex
+    var teamLeaderName = Controller.chooseOnlyConnectedTeamLeader(obj);
+
+    Controller.setGamePhase(obj, 2);
+
+    //on client side, also set gamePhase to 2
+    emitToTeamLeaderChoosingTeam(obj, teamLeaderName);
+
+
+
+  }); //end "Ready For Next Team Leader Proposal After Failed One"
+
+
+
+
+
+
+
+  //after people view team votes
+  socket.on("Ready To Start Power Phase 2", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.setPlayerReady(obj);
+
+    if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };
+
+    Controller.resetPlayerReadyStatus(obj);
+
+    Controller.setPlayersForMission(obj);
+
+    //tells selected for mission to start power phase 2 and for
+    //those not selected to wait
+    Controller.setGamePhase(obj, 5);
+
+    emitStartPowerPhase2(obj);
+
+
+  }); //end "Ready For Next Team Leader Proposal After Failed One"
+
+
+
+  socket.on("End Power Phase 2. Start Mission Voting", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.setPlayerReady(obj);
+
+    if (!Controller.areAllConnectedPlayersDoneWithPowerPhase2(obj)) { return 0; };
+
+    Controller.resetPlayerReadyStatus(obj);
+
+    Controller.setGamePhase(obj, 6);
+
+    emitStartMission(obj);
+
+  }); //end "Ready For Next Team Leader Proposal After Failed One"
+
+
+
+
+  socket.on("Vote on Mission", (vote) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.setPlayerMissionVote(vote, obj);
+
+    if ( !Controller.didAllPlayersVoteOnTheMission(obj) ) { return 0; };
+
+    /*All players have voted on mission */
+
+    var missionPointsTotal = Controller.missionVoteCalculation(obj);
+
+    var gameStatus = obj.rI.didAnyoneWin(obj.rD.missionNo);
+
+
+    switch(gameStatus) {
+
+      case "Heroes Win! Villains' Last Chance.":
+
+        console.log("Heroes Win! Villains' Last Chance.");
+
+        Controller.setGamePhase(obj, 9);
+
+        emitToVillainsToGuessPrincessIdentity(obj);
+
+        break;
+
+      case "Villains Win!":
+
+        console.log("Villains Win!");
+
+        Controller.setGamePhase(obj, 10);
+
+        emitToAllSocketsInRoom(
+          obj, 
+          "Game Over. Villians Win! Roles & Identities Revealed!", 
+          Controller.getAllIdentitiesAndTheirRoles()
+        );
+
+        break;
+
+      case "Nobody Has Won Yet.":
+
+        console.log("Nobody Has Won Yet.");
+
+        Controller.setGamePhase(obj, 7);
+
+        emitToAllSocketsInRoom(obj, "Mission Results", missionPointsTotal);
+
+        break;
+
+      default:
+
+        break;
+
+    }; //end switch
+
+
+  
+
+  }); //end "Vote on Mission"
+
+
+
+  socket.on("Ready For Next Round/Mission", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.setPlayerReady(obj);
+
+    if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };    
+
+    Controller.resetDataAtEndOfMission(obj);
+
+    Controller.setGamePhase(obj, 8);
+
+    emitToAllSocketsInRoom(obj, "Start Night Phase", "");
+
+
+  });
+
+
+
+  socket.on("End Night Phase", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.setPlayerReady(obj);
+
+    if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };  
+
+    Controller.resetPlayerReadyStatus(obj);
+
+
+    Controller.setGamePhase(obj, 1);
+
+    emitToAllSocketsInRoom(obj, "Start Power Phase 1", "");
+
+
+  });
+
+
+
+
+
+
+
+
+  socket.on("Submit Villain Guess On The Princess' Identity", (guess) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.addPrincessGuessForVillain(obj, guess);
+
+
+    if (!Controller.didAllConnectedVillainsGuessOnThePrincessIdentity(obj)) {
+      return 0;
+    };
+
+
+    Controller.setGamePhase(obj, 10);
+
+    //if everyone did guess, then next phase
+    if (obj.rO.didVillainsCorrectlyGuessThePrincessIdentity()) {
+
+      emitToAllSocketsInRoom(
+        obj, 
+        "Game Over. Villians Correctly Guessed The Princess' Identity!", 
+        Controller.getAllIdentitiesAndTheirRoles()
+      );
+
+
+    } else {
+
+      emitToAllSocketsInRoom(
+        obj, 
+        "Game Over. Heroes Win! Villains Failed To Guess The Princess' Identity", 
+        Controller.getAllIdentitiesAndTheirRoles()
+      );
+
+    }; //end else
+
+
+  }); //end socket.on("Submit Villain Guess On The Princess' Identity")
 
 
 
@@ -191,6 +573,120 @@ io.on('connection', function (socket) {
 
 
 }); //end of io.on curly braces
+
+
+
+
+
+
+function emitToAllSocketsInRoom(obj, _destination, _data) {
+
+  for (var i = 0; i < obj.pA.length; i++) {
+    
+    if (obj.pA[i].connected) {
+      io.to(`${obj.pA[i].socketID}`).emit(_destination, _data);
+    }; //end if
+    
+  }; //end for
+
+}; //end emitToAllSocketsInRoom
+
+
+
+function emitToTeamLeaderChoosingTeam(obj, data) {
+
+  for (var i = 0; i < obj.pA.length; i++) {
+
+    if (obj.pA[i].isTeamLeader) {
+      io.to(`${obj.pA[i].socketID}`).emit("You Are Team Leader", data);
+    } else {
+      io.to(`${obj.pA[i].socketID}`).emit("Wait While Team Leader Chooses Team", data);
+    };
+
+  }; //end for
+
+
+}; //end emitToTeamLeaderChoosingTeam
+
+
+
+function emitStartPowerPhase2(obj) {
+
+    for (let i = 0; i < obj.pA.length; i++) {
+
+      if (obj.pA[i].selectedForMission) {
+
+        io.to(`${obj.pA[i].socketID}`).emit(
+        "Start Power Phase 2");
+
+      } else {
+
+        io.to(`${obj.pA[i].socketID}`).emit(
+        "Wait During Power Phase 2");
+
+      };
+
+    }; //end for
+
+}; //end emitStartPowerPhase2
+
+
+
+function emitStartMission(obj) {
+
+    for (let i = 0; i < obj.pA.length; i++) {
+
+      if (obj.pA[i].selectedForMission) {
+
+        io.to(`${obj.pA[i].socketID}`).emit(
+        "Start Mission");
+
+      } else {
+
+        io.to(`${obj.pA[i].socketID}`).emit(
+        "Wait While Team Completes Mission");
+
+      };
+
+    }; //end for
+
+}; //end emitStartMission
+
+
+
+function emitToVillainsToGuessPrincessIdentity(obj) {
+
+  for (let i = 0; i < obj.rO.rolesInGame.length; i++) {
+
+    if (obj.rO.rolesInGame[i].team == "villains") {
+
+        io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
+        "Guess The Identity of The Princess");      
+
+    } else {
+
+        io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
+        "Wait While the Villains Guess The Identity Of The Princess");
+
+    }; //end else
+
+  }; //end for
+
+
+}; //end emitToVillainsToGuessPrincessIdentity(obj)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
