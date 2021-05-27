@@ -311,7 +311,6 @@ class RolesObject {
                      "delayer", "ditto", "spiritualist"];
 
 
-
   }; //end constructor
 
 
@@ -455,6 +454,70 @@ class RolesObject {
 
   }; //end getPrincessIdentityForMarcus
 
+
+
+  //remember it's 1 to 1 mapping between playerArray and rolesInGame
+  addPrincessGuessForVillain(obj, guessName) {
+    
+    this.rolesInGame[obj.index].princessGuess = guessName;
+
+  };
+
+
+  didVillainsCorrectlyGuessThePrincessIdentity() {
+
+    var princessIdentityMap = {};
+
+    for (var i = 0; i < this.rolesInGame.length; i++) {
+
+      if (this.rolesInGame[i].team != "villains") { continue; };
+
+      //if someone already guessed and it exists as a property
+      if (princessIdentityMap[this.rolesInGame[i].princessGuess]) {
+
+        princessIdentityMap[this.rolesInGame[i].princessGuess] += 1;
+
+      } else {
+
+        //if princess guess is null because someone disconnected
+        if (!this.rolesInGame[i].princessGuess) { continue; };
+
+        princessIdentityMap[this.rolesInGame[i].princessGuess] = 1;
+
+      };
+
+      
+    }; //end for
+
+
+    //Time to Find Which Guess Has Most Votes
+    var princessGuessArray = [];
+
+    for (var key in princessIdentityMap) {
+      princessGuessArray.push({"guessName": key, "votes": princessIdentityMap[key]});
+    };
+
+
+    //sort descending order
+    princessGuessArray.sort( (a, b) => {
+
+      return (b.votes - a.votes);
+
+    });
+
+
+    if (princessGuessArray[0].guessName == this.getPrincessIdentity()) {
+
+      return true;
+
+    } else {
+
+      return false;
+
+    };
+
+
+  }; //end didVillainsCorrectlyGuessThePrincessIdentity()
 
 
 

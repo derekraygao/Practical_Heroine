@@ -47,11 +47,12 @@ Controller.addPlayerToArray("Derek", "DerekID", "testing", false);
 Controller.addPlayerToArray("Cloud", "CloudID", "testing", false);
 Controller.addPlayerToArray("Serena", "SerenaID", "testing", false);
 Controller.addPlayerToArray("Lucio", "LucioID", "testing", false);
-//Controller.addPlayerToArray("Xing", "XingID", "testing", false);
+Controller.addPlayerToArray("Xing", "XingID", "testing", false);
 
 var obj = Controller.returnpArrayRoomAndIndex({id: "DerekID"});
 
 Controller.assignPlayersTheirRoles(obj);
+
 
 Controller.roomsData["testing"].missionNo = 1;
 
@@ -70,6 +71,10 @@ Controller.addTeamVote(obj, 3, 1);
 //output 1
 
 
+/* //test setting of mission votes and if anyone won
+setMissionVotes("Success", "Fail", "Fail", "Fail");
+console.log(didAnyoneWinTest());
+*/
 
 
 /*
@@ -89,7 +94,11 @@ console.log(Controller.roomsData["testing"].results.missionInfo[1]);
 */
 
 
-
+/* test guessing princess correctly
+//players 2,3,4 are villains and should only be counted
+addPrincessGuess("Serena", "Serena", "Derek", "Derek", "Serena");
+console.log(obj.rO.didVillainsCorrectlyGuessThePrincessIdentity());
+*/
 
 
 function demonLordAbsolutePowerTest() {
@@ -165,6 +174,46 @@ function getIdentitiesTest() {
 
 
 
+function setMissionVotes(vote1, vote2, vote3, vote4) {
+
+	Controller.setPlayerMissionVote(vote1, obj);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "CloudID"});
+	Controller.setPlayerMissionVote(vote2, obj);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "SerenaID"});
+	Controller.setPlayerMissionVote(vote3, obj);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "LucioID"});
+	Controller.setPlayerMissionVote(vote4, obj);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "DerekID"});
+
+};
+
+
+function addPrincessGuess(guess1, guess2, guess3, guess4, guess5) {
+
+	obj.rO.addPrincessGuessForVillain(obj, guess1);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "CloudID"});
+	obj.rO.addPrincessGuessForVillain(obj, guess2);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "SerenaID"});
+	obj.rO.addPrincessGuessForVillain(obj, guess3);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "LucioID"});
+	obj.rO.addPrincessGuessForVillain(obj, guess4);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "XingID"});
+	obj.rO.addPrincessGuessForVillain(obj, guess5);
+
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "DerekID"});
+
+
+};
+
 
 
 
@@ -175,16 +224,16 @@ function getIdentitiesTest() {
 function didAnyoneWinTest() {
 
 Controller.roomsData["testing"].missionNo = 1;
-Controller.missionVoteCalculation(obj);
+console.log("Mission Vote Total is: " + Controller.missionVoteCalculation(obj));
 
 Controller.roomsData["testing"].missionNo = 2;
-Controller.missionVoteCalculation(obj);
+console.log("Mission Vote Total is: " + Controller.missionVoteCalculation(obj));
 
 Controller.roomsData["testing"].missionNo = 3;
-Controller.missionVoteCalculation(obj);
+console.log("Mission Vote Total is: " + Controller.missionVoteCalculation(obj));
 
 Controller.roomsData["testing"].missionNo = 4;
-Controller.missionVoteCalculation(obj);
+console.log("Mission Vote Total is: " + Controller.missionVoteCalculation(obj));
 
 return (Controller.roomsData["testing"].results.didAnyoneWin(3));
 

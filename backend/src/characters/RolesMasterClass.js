@@ -8,6 +8,8 @@ class RolesMasterClass {
 		this.inGame = false; 
 		this.index = -1;
 
+		this.princessGuess = null;
+
 	};
 
 

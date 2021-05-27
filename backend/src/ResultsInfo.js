@@ -88,7 +88,7 @@ class ResultsInfo {
 		var successfulMissionCount = 0;
 		var failedMissionCount = 0;
 
-		for (var i = 1; i < (missionNumber + 1); i++) {
+		for (let i = 1; i < (missionNumber + 1); i++) {
 
 			if (this.missionInfo[i].result == "Success") {
 
@@ -105,7 +105,7 @@ class ResultsInfo {
 
 		if (successfulMissionCount >= 4) {
 
-			return "Heroes Win!";
+			return "Heroes Win! Villains' Last Chance.";
 
 		} else if (failedMissionCount >= 4) {
 

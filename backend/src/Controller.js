@@ -31,8 +31,10 @@ class Controller {
 		};
 
 		this.socketRoom["DerekID"] = "testing";
-
-	
+		this.socketRoom["CloudID"] = "testing";
+		this.socketRoom["SerenaID"] = "testing";
+		this.socketRoom["LucioID"] = "testing";
+		this.socketRoom["XingID"] = "testing";
 
 	}; //end constructor
 
@@ -135,87 +137,6 @@ class Controller {
 
 
 
-	//_vote is either "Success" or "Fail"
-	setPlayerMissionVote(obj, _vote) {
-
-		if (_vote == "Success") {
-			obj.pA[obj.index].missionVote = 1;
-		} else {
-			obj.pA[obj.index].missionVote = -1;
-		};
-
-	};
-
-
-	didAllPlayersVoteOnTheMission(obj) {
-
-		for (let i = 0; i < obj.pA.length; i++) {
-
-			if (!obj.pA[i].connected) { continue; };
-
-			//default missionVote is null
-			if (!obj.pA[i].missionVote) {
-				return false;
-			};
-
-		};
-
-		return true;
-
-	};
-
-
-
-	missionSuccessOrFail(accumulator) {
-		return ( (accumulator >= 0) ? "Success" : "Fail" );
-	};
-
-
-	missionVoteCalculation(obj) {
-
-		var missionVoteAccumulator = 0;
-
-		for (let i = 0; i < obj.pA.length; i++) {
-
-			if (!obj.pA[i].selectedForMission) { continue; };
-
-			//default missionVote is null
-			if (!obj.pA[i].missionVote) { 
-
-				this.roomsData[obj.room].missionVoteInfo.
-				push({name: obj.pA[i].name, vote: "offline"});
-
-				continue; 
-			};
-
-
-			missionVoteAccumulator += obj.pA[i].missionVote;
-
-			this.roomsData[obj.room].missionVoteInfo.push(
-
-				{
-					name: obj.pA[i].name,
-					vote: obj.pA[i].missionVote
-				}
-
-			);
-
-		}; //end for
-
-
-		this.roomsData[obj.room].results.addMissionInfo(
-			this.roomsData[obj.room].missionNo,
-			this.roomsData[obj.room].missionVoteInfo,
-			missionVoteAccumulator,
-			this.missionSuccessOrFail(missionVoteAccumulator)
-		);
-
-
-		return missionVoteAccumulator;
-
-	};
-
-
 
 	//_vote is either "Accept" or "Reject"
 	setPlayerTeamVote(obj, _vote) {
@@ -301,6 +222,8 @@ class Controller {
 
 	wasTeamAccepted(obj) {
 
+		//function here that adjustsTeamVotes
+
 		var teamVoteAccumulator = this.teamVoteCalculation(obj);
 
 		teamVoteAccumulator = obj.rO.roles["Umbra Lord"].
@@ -358,14 +281,16 @@ class Controller {
 
 	//put this outside teamVoteCalculation since you are resetting
 	//teamVoteInfo and need to send this data to clients
-	resetDataForFailedTeamProposal() {
+	resetDataForFailedTeamProposal(obj) {
 
 		this.roomsData[obj.room].missionTeam = [];
 		this.roomsData[obj.room].teamVoteInfo = [];
 
+		obj.pA[obj.rD.teamLeaderIndex].isTeamLeader = false;
+
 		for (let i = 0; i < obj.pA.length; i++) {
 
-			obj.pA[i].isTeamLeader = false;
+			//obj.pA[i].isTeamLeader = false;
 			obj.pA[i].teamVote = null;
 
 		};
@@ -390,7 +315,7 @@ class Controller {
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
-			if (this.roomsData[obj.room].missionTeam.includes(obj.pA[i].name)) {
+			if (obj.rD.missionTeam.includes(obj.pA[i].name)) {
 				obj.pA[i].selectedForMission = true;
 			};
 
@@ -399,11 +324,128 @@ class Controller {
 	}; //end setPlayersForMission
 
 
+	setPlayerMissionVote(vote, obj) {
+
+		switch(vote) {
+
+			case "Success":
+
+				obj.pA[obj.index].missionVote = 1;
+
+				break;
+
+			case "Fail":
+
+				obj.pA[obj.index].missionVote = -1;
+
+				break;
+
+			case "":
+
+				break;
+
+			default:
+
+				break;
+
+
+
+		}; //end switch
+
+
+	}; //end addMissionVoteForPlayer
+
+
+	/*disconnected player missionVote DOES get counted if they
+	voted before d/c, because in mission vote accumulator it 
+	will add if vote is not null
+	*/ 
+	didAllPlayersVoteOnTheMission(obj) {
+
+		for (let i = 0; i < obj.pA.length; i++) {
+
+			if (!obj.pA[i].selectedForMission) { continue; };
+
+			if (!obj.pA[i].connected) { continue; };
+
+			//default missionVote is null
+			if (!obj.pA[i].missionVote) {
+				return false;
+			};
+
+		};
+
+		return true;
+
+	};
+
+
+
+	missionSuccessOrFail(accumulator) {
+		return ( (accumulator >= 0) ? "Success" : "Fail" );
+	};
+
+
+	missionVoteCalculation(obj) {
+
+		var missionVoteAccumulator = 0;
+
+		//need to do mission vote adjustments here
+
+		for (let i = 0; i < obj.pA.length; i++) {
+
+			if (!obj.pA[i].selectedForMission) { continue; };
+
+			//default missionVote is null
+			if (!obj.pA[i].missionVote) { 
+
+				obj.rD.missionVoteInfo.
+				push({name: obj.pA[i].name, vote: "offline"});
+
+				continue; 
+			};
+
+
+			missionVoteAccumulator += obj.pA[i].missionVote;
+
+			obj.rD.missionVoteInfo.push(
+
+				{
+					name: obj.pA[i].name,
+					vote: obj.pA[i].missionVote
+				}
+
+			);
+
+		}; //end for
+
+
+		obj.rI.addMissionInfo(
+			obj.rD.missionNo,
+			obj.rD.missionVoteInfo,
+			missionVoteAccumulator,
+			this.missionSuccessOrFail(missionVoteAccumulator)
+		);
+
+
+		return missionVoteAccumulator;
+
+	}; //end missionVoteCalculation
+
+
+
+
+
+
+
+
+
 	//need to shuffle playerArray BEFORE this function, cause we are setting
 	//index here
 	//length of rolesForThisGame == length of playerArray
 	assignPlayersTheirRoles(obj) {
 
+		//getListOfRolesForGame is already shuffled
 		var rolesForThisGame = obj.rO.getListOfRolesForGame(obj);
 		//console.log(rolesForThisGame);
 
