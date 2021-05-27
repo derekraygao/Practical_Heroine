@@ -166,6 +166,9 @@ io.on('connection', function (socket) {
 
     Controller.setGamePhase(obj, 1);
 
+    //default missionNo is 0, add to become Mission 1
+    Controller.updateMissionNumber(obj);
+
     Controller.resetPlayerReadyStatus(obj);
 
     shuffle(obj.pA);
@@ -287,6 +290,8 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 4);
 
+        updateTeamHistoryResults(obj);
+
         emitToAllSocketsInRoom(obj, "Team Was Accepted!", 
           obj.rI.getLatestTeamVotingInfo(obj.rD.missionNo));
 
@@ -299,6 +304,8 @@ io.on('connection', function (socket) {
         //team results, which is why to see nextTeamLeader, you do current index + 1
 
         Controller.setGamePhase(obj, 4);
+
+        updateTeamHistoryResults(obj);
 
         emitToAllSocketsInRoom(
           obj, 
@@ -433,6 +440,9 @@ io.on('connection', function (socket) {
 
     var gameStatus = obj.rI.didAnyoneWin(obj.rD.missionNo);
 
+    //needs to come after above mission calculations
+    updateMissionResults(obj);
+
 
     switch(gameStatus) {
 
@@ -466,7 +476,7 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 7);
 
-        emitToAllSocketsInRoom(obj, "Mission Results", missionPointsTotal);
+        emitToAllSocketsInRoom(obj, "Mission Ended", missionPointsTotal);
 
         break;
 
@@ -495,6 +505,9 @@ io.on('connection', function (socket) {
     Controller.resetDataAtEndOfMission(obj);
 
     Controller.setGamePhase(obj, 8);
+
+    //+1 to current Mission No. Need to update on client side too
+    Controller.updateMissionNumber(obj);
 
     emitToAllSocketsInRoom(obj, "Start Night Phase", "");
 
@@ -677,6 +690,32 @@ function emitToVillainsToGuessPrincessIdentity(obj) {
 
 
 
+function updateTeamHistoryResults(obj) {
+
+  var latestTeamAllInfo = obj.rI.getLatestTeamVotingAllInfo(obj.rD.missionNo);
+
+  for (var i = 0; i < obj.pA.length; i++) {
+
+    io.to(`${obj.pA[i].socketID}`).emit(
+        "Update Team History Results", latestTeamAllInfo);
+
+  };
+
+}; //end updateTeamHistoryResults(obj)
+
+
+function updateMissionResults(obj) {
+
+  var latestMInfo = obj.rI.getLatestMissionInfo(obj);
+
+  for (var i = 0; i < obj.pA.length; i++) {
+
+    io.to(`${obj.pA[i].socketID}`).emit(
+        "Update Mission Results", latestMInfo);
+
+  };
+
+}; //end updateMissionResults
 
 
 

@@ -67,6 +67,16 @@ class ResultsInfo {
 	}; //end getLatestTeamVotingInfo
 
 
+	getLatestTeamVotingAllInfo(missionNumber) {
+
+		//index for very last teamInfo/most recent
+		var teamInfoIndex = (this.teamInfo[missionNumber].length - 1);
+		if (teamInfoIndex < 0) { return []; };
+
+		return this.teamInfo[missionNumber][teamInfoIndex];
+
+	};
+
 
 
 	//votingArray is [{name: "Derek", vote: 5}]
@@ -78,6 +88,22 @@ class ResultsInfo {
 		this.missionInfo[missionNumber].votingArray = votingArray;
 
 		this.missionInfo[missionNumber].result = result;
+
+	};
+
+
+	getLatestMissionInfo(obj) {
+
+		var latestMInfo = 
+		{
+			missionNumber: obj.rD.missionNo,
+			teamLeader: obj.pA[obj.rD.teamLeaderIndex].name,
+			missionTeam: obj.rD.missionTeam,
+			pointTotal: this.missionInfo[obj.rD.missionNo].pointTotal,
+			result: this.missionInfo[obj.rD.missionNo].result
+		};
+
+		return latestMInfo;
 
 	};
 
