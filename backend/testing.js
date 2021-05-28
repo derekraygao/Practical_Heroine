@@ -111,6 +111,11 @@ console.log(obj.rO.didVillainsCorrectlyGuessThePrincessIdentity());
 */
 
 
+//console.log(obj.rO.rolesInGame);
+rolesInGame();
+testOraclePower();
+
+
 
 
 function demonLordAbsolutePowerTest() {
@@ -299,6 +304,49 @@ function testSeerPower() {
 	obj.rD.missionNo = 1;
 
 };
+
+
+
+function rolesInGame() {
+
+	for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
+		console.log("Name: " + obj.rO.rolesInGame[i].name 
+			+ ", " + "Role: " + obj.rO.rolesInGame[i].role
+			+ ", " + "Index: " + i);
+
+		console.log("");
+	};
+
+}; //end rolesInGame();
+
+
+function testOraclePower() {
+
+	console.log("1 AND 1");
+	console.log(obj.rO.roles["Oracle"].prophesize("1 AND 1", obj));
+	console.log("");
+
+	console.log("At Least 1 Good");
+	console.log(obj.rO.roles["Oracle"].prophesize("At Least 1 Good", obj));
+	console.log("");
+
+	console.log("At Least 1 Good & Evil");
+	console.log(obj.rO.roles["Oracle"].prophesize("At Least 1 Evil & Good", obj));
+	console.log("");
+
+	console.log("Princess");
+	console.log(obj.rO.roles["Oracle"].prophesize("Princess", obj));
+	console.log("");
+
+	console.log("Roles");
+	console.log(obj.rO.roles["Oracle"].prophesize("Roles", obj));
+	console.log("");
+
+	console.log("Nothing Test");
+	console.log(obj.rO.roles["Oracle"].prophesize("None", obj));
+
+};
+
 
 
 
