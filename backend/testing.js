@@ -113,7 +113,14 @@ console.log(obj.rO.didVillainsCorrectlyGuessThePrincessIdentity());
 
 //console.log(obj.rO.rolesInGame);
 rolesInGame();
-testOraclePower();
+
+
+
+
+
+
+
+
 
 
 
@@ -345,6 +352,12 @@ function testOraclePower() {
 	console.log("Nothing Test");
 	console.log(obj.rO.roles["Oracle"].prophesize("None", obj));
 
+};
+
+
+
+function testBalancerPower(name1, name2) {
+	console.log(obj.rO.roles["Balancer"].mysticScales(name1, name2, obj));
 };
 
 
