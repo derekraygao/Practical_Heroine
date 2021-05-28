@@ -55,6 +55,7 @@ Controller.assignPlayersTheirRoles(obj);
 
 
 Controller.roomsData["testing"].missionNo = 1;
+Controller.roomsData["testing"].teamLeaderIndex = 1;
 
 //console.log(obj.rO.rolesInGame);
 //console.log(obj.pA);
@@ -68,7 +69,12 @@ Controller.addTeamVote(obj, 0, 3);
 Controller.addTeamVote(obj, 1, null);
 Controller.addTeamVote(obj, 2, -3);
 Controller.addTeamVote(obj, 3, 1);
-//output 1
+Controller.addTeamVote(obj, 4, 1);
+//output 2
+console.log(Controller.wasTeamAccepted(obj));
+//console.log(Controller.teamVoteCalculation(obj));
+//console.log(Controller.roomsData["testing"].teamVoteInfo);
+
 
 
 /* //test setting of mission votes and if anyone won
@@ -77,28 +83,34 @@ console.log(didAnyoneWinTest());
 */
 
 
-/*
+
 Controller.addMissionVote(obj, 0, null);
 Controller.addMissionVote(obj, 1, -2);
 Controller.addMissionVote(obj, 2, 1);
 Controller.addMissionVote(obj, 3, -4);
+Controller.addMissionVote(obj, 4, 2);
 //output 0
 
 
-console.log(Controller.teamVoteCalculation(obj));
-console.log(Controller.roomsData["testing"].teamVoteInfo);
+//console.log("Mission Vote Calcuation Is: " + Controller.missionVoteCalculation(obj));
+//console.log(Controller.roomsData["testing"].results.missionInfo[1]);
 
-console.log("Mission Vote Calcuation Is: " + Controller.missionVoteCalculation(obj));
-console.log(Controller.roomsData["testing"].results.missionInfo[1]);
-
+/* //test seer power
+testSeerPower();
 */
 
-
-/* test guessing princess correctly
+/*
+//test guessing princess correctly
 //players 2,3,4 are villains and should only be counted
-addPrincessGuess("Serena", "Serena", "Derek", "Derek", "Serena");
+//remember need to stop shuffle() in assignRoles, otherwise 1st person is not
+//guaranteed to be the princess
+addPrincessGuess("Serena", "Lucio", "Derek", "Derek", null);
+console.log(Controller.didAllConnectedVillainsGuessOnThePrincessIdentity(obj));
+
 console.log(obj.rO.didVillainsCorrectlyGuessThePrincessIdentity());
 */
+
+
 
 
 function demonLordAbsolutePowerTest() {
@@ -174,7 +186,7 @@ function getIdentitiesTest() {
 
 
 
-function setMissionVotes(vote1, vote2, vote3, vote4) {
+function setMissionVotes(vote1, vote2, vote3, vote4, vote5) {
 
 	Controller.setPlayerMissionVote(vote1, obj);
 
@@ -186,6 +198,9 @@ function setMissionVotes(vote1, vote2, vote3, vote4) {
 
 	obj = Controller.returnpArrayRoomAndIndex({id: "LucioID"});
 	Controller.setPlayerMissionVote(vote4, obj);
+
+	obj = Controller.returnpArrayRoomAndIndex({id: "XingID"});
+	Controller.setPlayerMissionVote(vote5, obj);
 
 	obj = Controller.returnpArrayRoomAndIndex({id: "DerekID"});
 
@@ -240,6 +255,50 @@ return (Controller.roomsData["testing"].results.didAnyoneWin(3));
 };
 
 
+function getLatestTeamAndMisionInfoTest() {
+
+	console.log(obj.rI.getLatestTeamVotingAllInfo(1));
+
+	console.log(obj.rI.getLatestMissionInfo(obj));
+
+};
+
+
+function testSeerPower() {
+
+	console.log("Testing Seer Power on Princess Role");
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+
+	console.log("Testing Seer Power on Umbra Lord Role");
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));	
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
+
+
+	obj.pA[0].devilized = true;
+	obj.pA[0].soulMark = true;
+
+	obj.pA[1].shrinkCount = 2;
+	obj.pA[1].multiplier = 4;
+
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
+
+	obj.rD.missionNo = 7;
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
+
+	obj.rD.missionNo = 1;
+
+};
 
 
 
