@@ -116,7 +116,7 @@ rolesInGame();
 
 
 
-
+testDetectiveChatPower("Cloud");
 
 
 
@@ -360,6 +360,52 @@ function testBalancerPower(name1, name2) {
 	console.log(obj.rO.roles["Balancer"].mysticScales(name1, name2, obj));
 };
 
+
+
+function logMissionVotes() {
+
+	for (var i = 0; i < obj.pA.length; i++) {
+		console.log(obj.pA[i].name + "'s Mission Vote is: " + obj.pA[i].missionVote);
+	};
+
+};
+
+
+function testDetectiveChatPower(name) {
+
+
+	obj.rD.missionNo = 1;
+	//first need some mission results
+	Controller.addMissionVote(obj, 0, null); //Derek
+	Controller.addMissionVote(obj, 1, 0); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
+
+	console.log(Controller.missionVoteCalculation(obj));
+
+	//must increment missionNo here, since you are checking for LAST mission
+	obj.rD.missionNo = 2;
+	console.log("Detective Chat Power for Mission 1, " 
+		+ name + "'s vote is: " + obj.rO.roles["Detective Chat"].investigate(name, obj));
+
+	
+	console.log(obj.rI.missionInfo[1].votingArray);
+
+	Controller.addMissionVote(obj, 1, -6); //Cloud
+	Controller.addMissionVote(obj, 2, -2); //Serena
+
+	Controller.missionVoteCalculation(obj);
+
+
+	obj.rD.missionNo = 3;
+	console.log("Detective Chat Power for Mission 2, " 
+		+ name + "'s vote is: " + obj.rO.roles["Detective Chat"].investigate(name, obj));
+
+
+};
 
 
 

@@ -104,6 +104,44 @@ class Controller {
 	}; //end areAllConnectedPlayersReady(obj)
 
 
+	areAllConnectedPlayersDoneWithPowerPhase2(obj) {
+
+		for (let i = 0; i < obj.pA.length; i++) {
+
+			if (!obj.pA[i].connected) { continue; };
+			if (!obj.pA[i].selectedForMission) { continue; };
+
+			if (!obj.pA[i].ready) { return false; };
+
+		}; //end for
+
+		return true;
+
+	}; //end areAllConnectedPlayersDoneWithPowerPhase2(obj)
+
+
+
+	//remember there's 1:1 mapping of pA & rolesInGame index
+	didAllConnectedVillainsGuessOnThePrincessIdentity(obj) {
+
+		for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
+
+			if (!obj.pA[i].connected) { continue; };
+			if (obj.rO.rolesInGame[i].team != "villains") { continue; };
+
+			//if princessGuess is null
+			if (!obj.rO.rolesInGame[i].princessGuess) {
+				return false;
+			};
+
+		};
+
+		return true;
+
+
+	}; //end didAllConnectedVillainsGuessOnThePrincessIdentity(obj)
+
+
 
 
 	updateTeamLeaderIndex(obj) {
@@ -157,7 +195,7 @@ class Controller {
 			if (!obj.pA[i].connected) { continue; };
 
 			//default teamVote is null
-			if (!obj.pA[i].teamVote) {
+			if (obj.pA[i].teamVote == null) {
 				return false;
 			};
 
@@ -197,7 +235,7 @@ class Controller {
 		for (let i = 0; i < obj.pA.length; i++) {
 
 			//default teamVote is null, meaning offline
-			if (!obj.pA[i].teamVote) { continue; };
+			if (obj.pA[i].teamVote == null) { continue; };
 
 			teamVoteAccumulator += obj.pA[i].teamVote;
 
@@ -229,7 +267,7 @@ class Controller {
 		teamVoteAccumulator = obj.rO.roles["Umbra Lord"].
 		adjustVotesWithUmbraLordAbsolutePower(teamVoteAccumulator);
 
-		console.log("team vote accumulator is: " + teamVoteAccumulator);
+		//console.log("team vote accumulator is: " + teamVoteAccumulator);
 
 
 		if (teamVoteAccumulator >= 0) {
@@ -369,7 +407,7 @@ class Controller {
 			if (!obj.pA[i].connected) { continue; };
 
 			//default missionVote is null
-			if (!obj.pA[i].missionVote) {
+			if (obj.pA[i].missionVote == null) {
 				return false;
 			};
 
@@ -397,7 +435,7 @@ class Controller {
 			if (!obj.pA[i].selectedForMission) { continue; };
 
 			//default missionVote is null
-			if (!obj.pA[i].missionVote) { 
+			if (obj.pA[i].missionVote == null) {
 
 				obj.rD.missionVoteInfo.
 				push({name: obj.pA[i].name, vote: "offline"});
