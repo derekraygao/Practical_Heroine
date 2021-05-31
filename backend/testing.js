@@ -92,6 +92,8 @@ Controller.addMissionVote(obj, 4, 2);
 //output 0
 
 
+
+
 //console.log("Mission Vote Calcuation Is: " + Controller.missionVoteCalculation(obj));
 //console.log(Controller.roomsData["testing"].results.missionInfo[1]);
 
@@ -113,11 +115,6 @@ console.log(obj.rO.didVillainsCorrectlyGuessThePrincessIdentity());
 
 //console.log(obj.rO.rolesInGame);
 rolesInGame();
-
-
-
-testDetectiveChatPower("Cloud");
-
 
 
 
@@ -171,7 +168,38 @@ function demonLordAbsolutePowerTest() {
 };
 
 
+function testUmbraLordPowers() {
 
+	obj.rO.roles["Umbra Lord"].bidePower();
+	console.log("Bide should be +2" + " actual power is: " 
+		+ obj.rO.roles["Umbra Lord"].bide);
+
+	obj.rO.roles["Umbra Lord"].bidePower();
+	console.log("Bide should be +4" + " actual power is: " 
+		+ obj.rO.roles["Umbra Lord"].bide);
+
+	obj.pA[3].role = "Saintess";
+
+
+	console.log("Lucio role is Saintess and devilized should be false: " 
+		+ obj.pA[3].devilized);
+
+	console.log("Derek role is non-Saintess and devilized should be false: " 
+		+ obj.pA[3].devilized);
+
+	obj.rO.roles["Umbra Lord"].devilConversion("Lucio", obj);
+	obj.rO.roles["Umbra Lord"].devilConversion("Derek", obj);
+
+	console.log("After devil conversion power");
+	console.log("Derek devilized is " + obj.pA[0].devilized);
+	console.log("Lucio devilized is: " + obj.pA[3].devilized);
+
+	console.log("Used meteor, vote should be -5");
+	console.log(obj.rO.roles["Umbra Lord"].meteor(-1));
+	console.log("bide should now be 0, bide is: " 
+		+ obj.rO.roles["Umbra Lord"].bide);
+
+};
 
 
 
@@ -408,9 +436,319 @@ function testDetectiveChatPower(name) {
 };
 
 
+function testAuraKnightPower(name) {
+
+	console.log(name + "'s role is: " 
+		+ obj.rO.rolesInGame[obj.pT[name]].role 
+		+ " and alignment is: " + obj.rO.rolesInGame[obj.pT[name]].alignment);
+
+	console.log(obj.rO.roles["Aura Knight"].readAura(name, obj));
+
+	obj.pA[obj.pT[name]].burnCount = 2;
+	obj.pA[obj.pT[name]].devilized = true;
+	obj.pA[obj.pT[name]].delayerCount = 2;
+
+	console.log(obj.rO.roles["Aura Knight"].readAura(name, obj));
+};
+
+
+
+function testRangerPower(name) {
+
+	console.log(obj.rO.roles["Ranger"].sense(obj));
+
+	console.log("Using shrink ray on: " + name);
+	obj.rO.roles["Ranger"].shrinkRay(name, obj);
+	console.log(name + " shrink count is : " + obj.pA[obj.pT[name]].shrinkCount);
+	
+	obj.pA[obj.pT[name]].bomb = true;
+	console.log("Putting bomb on: " + name);
+
+	console.log(obj.rO.roles["Ranger"].sense(obj));
+
+	console.log("Using anti magic ray on " + name);
+	obj.rO.roles["Ranger"].antiMagicRay(name, obj);
+
+	console.log(obj.pA[obj.pT[name]]);
+
+	console.log(obj.rO.roles["Ranger"].sense(obj));
+
+};
 
 /*console.log(Controller.roomsData["testing"].teamVoteInfo);
 
 console.log(Controller.missionVoteCalculation(obj));
 console.log(Controller.roomsData["testing"].missionVoteInfo);
 */
+
+
+function testPearPower() {
+
+	obj.rD.missionNo = 1;
+	//first need some mission results
+	Controller.addMissionVote(obj, 0, null); //Derek
+	Controller.addMissionVote(obj, 1, 4); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
+
+	console.log(Controller.missionVoteCalculation(obj));
+
+	obj.rO.roles["Pear"].spyOn("Cloud");
+
+	console.log("Vanish is: " + obj.pA[obj.pT["Cloud"]].invisible);
+	obj.rO.roles["Pear"].vanish("Cloud", obj);
+	console.log("Vanish after power is: " + obj.pA[obj.pT["Cloud"]].invisible);
+
+	console.log(obj.rO.roles["Pear"].expose(obj));
+
+	//expose should have been reset, so get message of "expose power not used"
+	console.log(obj.rO.roles["Pear"].expose(obj));
+
+};
+
+
+function testScientistPower() {
+
+	obj.rD.missionNo = 1;
+	//first need some mission results
+	Controller.addMissionVote(obj, 0, null); //Derek
+	Controller.addMissionVote(obj, 1, 4); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
+
+	console.log(Controller.missionVoteCalculation(obj));
+
+	obj.rO.roles["Scientist"].getIndividualVotes(obj);
+
+
+	obj.rO.roles["Scientist"].exposeIndividualVotes = true;
+	console.log(obj.rO.roles["Scientist"].exposeVotes(obj));
+	console.log(obj.rO.roles["Scientist"].exposeVotes(obj));
+
+};
+
+
+function testEsperPower() {
+
+	obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+		console.log(obj.pA[i].name + " pseudonym is: " 
+			+ obj.pA[i].pseudonym + " , role is: " + obj.pA[i].role);
+
+	};
+
+	console.log("Message not coming from Esper");
+	console.log(obj.rO.roles["Esper"].convertTelepathMessage(0, "Hello", obj));
+
+	console.log("Message coming from Esper");
+	console.log(obj.rO.roles["Esper"].convertTelepathMessage(3, "Hello", obj));
+
+};
+
+
+function testSensorPower() {
+
+	obj.pA[0].bomb = true;
+	obj.pA[0].burnCount = 1;
+	obj.pA[0].soulMark = true;
+	obj.pA[0].shrinkCount = 1;
+	obj.pA[0].multiplier = 2;
+
+	obj.pA[1].bomb = true;
+
+	console.log("Scan Individual should have: bomb, burn, soulmark, shrink, multiplier");
+	console.log(obj.rO.roles["Sensor"].scanOne(obj.pA[0].name, obj));
+
+	console.log("Scan Individual should have only bomb");
+	console.log(obj.rO.roles["Sensor"].scanOne(obj.pA[1].name, obj));
+
+	console.log("Scan Individual should have nothing");
+	console.log(obj.rO.roles["Sensor"].scanOne(obj.pA[2].name, obj));
+
+	console.log(obj.rO.roles["Sensor"].scanAll("Multiplier", obj));
+
+};
+
+
+function testJailerPower() {
+
+	obj.pA[0].role = "Jailer";
+
+	console.log("Message coming from Jailer");
+	console.log(obj.rO.roles["Jailer"].convertJailerMessage(0, "Hello", obj));
+	
+	console.log("Message coming from Jailed Player");
+	console.log(obj.rO.roles["Jailer"].convertJailerMessage(1, "Hello", obj));
+
+
+};
+
+
+function testIchigoPower() {
+
+
+	var vote1 = 3;
+	var vote2 = 0;
+	var vote3 = -1;
+
+	console.log("Hylian Shield Acting on Vote = 3, expect -1");
+	console.log(vote1 = obj.rO.roles["Ichigo"].hylianShield(vote1));
+
+	console.log("Hylian Shield Acting on Vote = 0, expect +4");
+	console.log(vote1 = obj.rO.roles["Ichigo"].hylianShield(vote2));
+
+	console.log("Hylian Shield Acting on Vote = -1, expect +3");
+	console.log(vote1 = obj.rO.roles["Ichigo"].hylianShield(vote3));
+
+	console.log("");
+	console.log("Now testing status notification");
+
+	obj.pA[2].role = "Ichigo";
+
+	console.log(obj.rO.roles["Ichigo"].naviNotification(1, "bomb", obj));
+
+	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "bomb", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "devilized", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "burn", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "shrink", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "anti-magic ray", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "soul mark", obj));
+
+};
+
+
+
+function checkStatusConditionForSaintess(playerObject) {
+
+	console.log("For player " + playerObject.name + ", status is: ");
+
+	console.log("devilized: " + playerObject.devilized);
+	console.log("soul mark: " + playerObject.soulMark);
+	console.log("bomb: " + playerObject.bomb);
+	console.log("burn count: " + playerObject.burnCount);
+	console.log("shrink count: " + playerObject.shrinkCount);
+	console.log("multiplier: " + playerObject.multiplier);
+	console.log("bless: " + playerObject.bless);
+	console.log("safeguard: " + playerObject.safeguard);
+
+
+};
+
+
+function testSaintessPower() {
+
+	obj.pA[0].devilized = true;
+	obj.pA[0].soulMark = true;
+	obj.pA[0].bomb = true;
+	obj.pA[0].burnCount = 1;
+	obj.pA[0].multiplier = 2;
+	obj.pA[0].shrinkCount = 2;
+
+	//obj.pA[0].role = "Delayer";
+	//obj.rO.roles["Delayer"].delayerCount = 2;
+
+	console.log(obj.rO.roles["Saintess"].saintessSense(obj));
+
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+	console.log("");
+	obj.rO.roles["Saintess"].purify("Derek", obj);
+	console.log("After purify");
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+	console.log("");
+	obj.rO.roles["Saintess"].esuna("Derek", obj);
+	console.log("After esuna");
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+
+	console.log("");
+	obj.rO.roles["Saintess"].dispel("Derek", obj);
+	console.log("After dispel");
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+	console.log("");
+	obj.rO.roles["Saintess"].bless("Derek", obj);
+	console.log("After bless");
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+	//obj.pA[0].role = "Umbra Lord"; //should not affect umbra lord
+
+	console.log("");
+	obj.rO.roles["Saintess"].safeguard("Derek", obj);
+	console.log("After safeguard");
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+	obj.pA[0].role = "Umbra Lord";
+
+};
+
+
+function testHecatePower() {
+
+	console.log(obj.rO.roles["Hecate"].multiplication("Derek", obj));
+	console.log("Derek multiplication is now: " + obj.pA[0].multiplier);
+
+	obj.pA[0].devilized = true;
+	obj.pA[0].soulMark = true;
+	obj.pA[0].burnCount = 3;
+	obj.pA[0].shrinkCount = 5;
+	obj.pA[0].bomb = true;
+	obj.pA[0].bless = true;
+	obj.pA[0].safeguard = true;
+
+
+	obj.rO.roles["Hecate"].exchangeOfTheSpirits("Derek", "Cloud", obj);
+
+	console.log("Status after exchange of spirits");
+	console.log(obj.pA[0]);
+	console.log(obj.pA[1]);
+
+};
+
+
+function testBombermanPower() {
+
+	obj.rO.roles["Bomberman"].plantBomb("Derek", obj);
+
+	console.log("Derek bomb status is: " + obj.pA[0].bomb);
+
+	obj.rO.roles["Bomberman"].firePunch("Cloud", obj);
+
+	console.log("Cloud burn counter should be 1, it is: " + obj.pA[1].burnCount);
+
+	obj.rO.roles["Bomberman"].increaseBurnCounter(obj);
+
+	console.log("Cloud burn counter after increaseBurnCounter should be 2, it is: " 
+		+ obj.pA[1].burnCount);
+};
+
+
+function testLieutenantBlitzPower() {
+
+	obj.pA[0].role = "Lieutenant Blitz";
+	console.log("For mission #1, votes should be 1");
+
+	console.log(obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(1, obj.pA[0], obj));
+
+	obj.rD.missionNo = 2;
+	console.log("For mission #2, Lt. Blitz votes should be 2");
+	console.log(obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(1, obj.pA[0], obj));
+
+	console.log("For mission #2, for NOT Lt. Blitz role, vote should be 1");
+	console.log(obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(1, obj.pA[1], obj));
+
+	obj.rD.missionNo = 3;
+	console.log("For mission #2, votes should be 2");
+
+
+};
+
