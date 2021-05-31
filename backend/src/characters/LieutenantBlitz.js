@@ -16,14 +16,15 @@ class LieutenantBlitz extends RolesMasterClass {
 
 
 	//need to do *= to handle negative/positive vote
-	adjustVotesBlitz(vote, playerObject, obj) {
+	adjustVotesBlitz(obj) {
 
-	  if (playerObject.role == "Lieutenant Blitz") {
-	    vote *= Math.ceil((calculateNumberofTeamMembers(obj.rD.missionNo, obj.pA.length))/2);
-	  };
+	  if (!obj.rO.roles["Lieutenant Blitz"].inGame) { return 0; };
 
-	  return vote;
-
+	  if (!obj.pA[obj.rO.roles["Lieutenant Blitz"].index].selectedForMission) { return 0;};
+	 
+	  obj.pA[obj.rO.roles["Lieutenant Blitz"].index].missionVote 
+	  *= Math.ceil((calculateNumberofTeamMembers(obj.rD.missionNo, obj.pA.length))/2);
+	
 	};
 
 

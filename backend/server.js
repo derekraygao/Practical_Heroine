@@ -3347,6 +3347,8 @@ function FormatNamesInArrayString(_array) {
 
 function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
+  //3 and 4 are for testing purposes only...minimum of 5 players for game
+
   if (_numOfPlayers == 3) {
 
     if (_MNumber == 1) {
@@ -3421,7 +3423,7 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     if (_MNumber == 1) {
 
-      return 3;
+      return 2;
 
     } else if (_MNumber == 2) {
 
@@ -3441,11 +3443,11 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 6) {
 
-      return 3;
+      return 2;
 
     } else if (_MNumber == 7) {
 
-      return 3;
+      return 4;
 
     };
 
