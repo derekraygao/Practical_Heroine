@@ -9,6 +9,7 @@ class UmbraLord extends RolesMasterClass {
         this.role = "Umbra Lord";
         this.alignment = "unknown";
         this.team = "villains";
+        this.bide = 0;
         this.absoluteTeamVoteYesUsed = "No"; //when demonLord uses powers, set to "Yes", then after vote calculation, set to "Used"
         this.absoluteTeamVoteNoUsed = "No";
 
@@ -47,6 +48,32 @@ class UmbraLord extends RolesMasterClass {
 
 
 	}; //end adjustVotesWithUmbraLordAbsolutePower
+
+
+	devilConversion(name, obj) {
+
+		var index = obj.pT[name];
+		if (obj.pA[index].role == "Saintess") { return 0; };
+
+		obj.pA[index].devilized = true;
+
+	};
+
+
+	bidePower() {
+
+		this.bide += 2;
+	};
+
+
+	meteor(originalVote) {
+
+		var meteorPoweredVote = originalVote - this.bide;
+		this.bide = 0;
+
+		return meteorPoweredVote;
+
+	};
 
 
 
