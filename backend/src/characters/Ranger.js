@@ -15,6 +15,10 @@ class Ranger extends RolesMasterClass {
 
 	rangerSensing(_playerObject, _rolesObject) {
 
+		if (_rolesObject.role == "Delayer") {
+			if (_rolesObject.delayerCount > 0) { return "delayer power"; };
+		};
+
 		if (_playerObject.bomb) { return "status"; };
 		if (_playerObject.soulMark) { return "status"; };
 		if (_playerObject.burnCount > 0) { return "status"; };
@@ -24,10 +28,6 @@ class Ranger extends RolesMasterClass {
 
 		if (_rolesObject.role == "Umbra Lord") {
 			if (_rolesObject.bide != 0) { return "status"; };
-		};
-
-		if (_rolesObject.role == "Delayer") {
-			if (_rolesObject.delayerCount > 0) { return "status"; };
 		};
 
 		return "no status";
@@ -58,6 +58,8 @@ class Ranger extends RolesMasterClass {
 	antiMagicRay(name, obj) {
 
 		var ind = obj.pT[name];
+
+		if (obj.pA[ind].role == "Saintess") { return 0; };
 
 		obj.pA[ind].devilized = false;
 		obj.pA[ind].shrinkCount = 0;
@@ -90,6 +92,8 @@ class Ranger extends RolesMasterClass {
 	shrinkRay(name, obj) {
 
 		var ind = obj.pT[name];
+		if (obj.pA[ind].role == "Saintess") { return 0; };
+		
 		obj.pA[ind].shrinkCount += 2;
 
 	};
