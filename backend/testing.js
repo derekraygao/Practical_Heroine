@@ -247,6 +247,18 @@ function setMissionVotes(vote1, vote2, vote3, vote4, vote5) {
 };
 
 
+function showAllMissionVotes() {
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+		console.log(obj.pA[i].name + " mission vote is: "
+			+ obj.pA[i].missionVote);
+
+	};
+
+};
+
+
 function addPrincessGuess(guess1, guess2, guess3, guess4, guess5) {
 
 	obj.rO.addPrincessGuessForVillain(obj, guess1);
@@ -891,4 +903,30 @@ function testPersequorPower() {
 
 };
 
-testPersequorPower();
+
+function testReverserPower() {
+
+	Controller.addMissionVote(obj, 0, -1); //Derek
+	Controller.addMissionVote(obj, 1, -4); //Cloud
+	Controller.addMissionVote(obj, 2, 3); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, -2); //Xing
+
+	Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log("Derek Vote before reverseVote is: " + obj.pA[0].missionVote);
+
+	obj.rO.roles["Reverser"].reverseVote("Derek", obj);
+
+	console.log("Derek Vote after reverseVote is: " + obj.pA[0].missionVote);
+
+	obj.rO.roles["Reverser"].inGame = true;
+
+	obj.rO.roles["Reverser"].activateMirrorWorld();
+	obj.rO.roles["Reverser"].adjustVotesMirrorWorld(obj);
+
+	showAllMissionVotes();
+
+};
+
