@@ -837,4 +837,58 @@ function testDelayerPower() {
 
 };
 
-testDelayerPower();
+
+//need to make sure index 2 is Persequor inside RolesObject assign roles
+function testPersequorPower() {
+
+	console.log(obj.pA[2]);	
+	console.log(obj.rO.rolesInGame[2]);
+	console.log(obj.pA[4]);
+	console.log(obj.rO.rolesInGame[4]);
+
+	console.log("Now doing identity theft");
+
+	obj.rO.roles["Persequor"].identityTheft("Xing", obj);
+
+
+	console.log(obj.pA[2]);	
+	console.log(obj.rO.rolesInGame[2]);
+	console.log(obj.pA[4]);
+	console.log(obj.rO.rolesInGame[4]);
+
+	console.log("obj.pT for Xing should be 2, it is: " + obj.pT["Xing"]);
+	console.log("obj.pT for Serena should be 4, it is: " + obj.pT["Serena"]);
+
+	console.log(obj.rO.roles["Seer"].scry(obj, "Xing"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Serena"));
+
+
+	console.log("Returning identities to normal");
+	obj.rO.roles["Persequor"].switchBackIdentities(obj);
+
+	console.log(obj.pA[2]);	
+	console.log(obj.rO.rolesInGame[2]);
+	console.log(obj.pA[4]);
+	console.log(obj.rO.rolesInGame[4]);
+
+	console.log("obj.pT for Xing should be 4, it is: " + obj.pT["Xing"]);
+	console.log("obj.pT for Serena should be 2, it is: " + obj.pT["Serena"]);
+
+	console.log(obj.rO.roles["Seer"].scry(obj, "Xing"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Serena"));
+
+
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, -4); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, -2); //Xing
+
+	obj.rO.roles["Persequor"].copyCat("Xing", obj);
+
+	console.log(obj.pA[2].missionVote);
+
+};
+
+testPersequorPower();
