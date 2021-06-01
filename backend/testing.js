@@ -974,4 +974,41 @@ function testBackstabberPower() {
 
 };
 
-testBackstabberPower();
+
+
+//set Serena as Marcus
+function testMarcusPower() {
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	Controller.addMissionVote(obj, 0, -1); //Derek
+	Controller.addMissionVote(obj, obj.pT["Serena"], -2); //Serena
+
+	//obj.pA[2].selectedForMission = false;
+
+	obj.rO.roles["Marcus"].adjustVoteTranscendence(obj);
+	console.log("Mission Vote should be +3, it is: " + obj.pA[2].missionVote);
+
+
+	obj.rO.roles["Marcus"].activateBerserk();
+
+	obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
+	console.log("Mission Vote should be +6, it is: " + obj.pA[2].missionVote);
+
+
+	obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
+	console.log("Mission Vote should be -6, it is: " + obj.pA[2].missionVote);
+
+	obj.rO.roles["Marcus"].berserk = "activated second half";
+	obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
+	obj.rO.roles["Marcus"].adjustVoteTranscendence(obj);
+	console.log("Mission Vote should be +3, it is: " + obj.pA[2].missionVote);
+
+
+	Controller.addMissionVote(obj, obj.pT["Serena"], -2); //Serena
+	console.log("Mission Vote should be -2, it is: " + obj.pA[2].missionVote);
+
+
+};
+
