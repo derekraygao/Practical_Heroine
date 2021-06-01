@@ -734,17 +734,35 @@ function testBombermanPower() {
 
 function testLieutenantBlitzPower() {
 
-	obj.pA[0].role = "Lieutenant Blitz";
-	console.log("For mission #1, votes should be 1");
+	obj.rD.missionNo = 1;
+	//first need some mission results
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, 1); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
 
-	console.log(obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(1, obj.pA[0], obj));
+	Controller.setMissionTeam(obj, ["Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	obj.pA[0].role = "Lieutenant Blitz";
+	obj.rO.roles["Lieutenant Blitz"].inGame = true;
+	obj.rO.roles["Lieutenant Blitz"].index = 0;
+
+	obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
+	console.log("For mission #1, votes should be 1");
+	console.log(obj.pA[0].missionVote);
+
 
 	obj.rD.missionNo = 2;
+	obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
 	console.log("For mission #2, Lt. Blitz votes should be 2");
-	console.log(obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(1, obj.pA[0], obj));
+	console.log(obj.pA[0].missionVote);
 
 	console.log("For mission #2, for NOT Lt. Blitz role, vote should be 1");
-	console.log(obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(1, obj.pA[1], obj));
+	obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
+	console.log(obj.pA[1].missionVote);
+
 
 	obj.rD.missionNo = 3;
 	console.log("For mission #2, votes should be 2");
@@ -752,3 +770,71 @@ function testLieutenantBlitzPower() {
 
 };
 
+
+
+
+function testDelayerPower() {
+
+	obj.pA[0].role = "Delayer";
+	obj.rO.roles["Delayer"].inGame = true;
+	obj.rO.roles["Delayer"].index = 0;
+
+	obj.rO.roles["Delayer"].delayerCount = 1;
+
+	obj.pA[0].teamVote = 1;
+
+	obj.rO.roles["Delayer"].adjustDelayerTeamVote(obj);
+	console.log("Team Vote for Delayer should be: 1.33");
+	console.log(obj.pA[0].teamVote);
+
+	obj.pA[0].teamVote = 1;
+	obj.rO.roles["Delayer"].delayerCount = 2;
+	obj.rO.roles["Delayer"].adjustDelayerTeamVote(obj);
+	console.log("Team Vote for Delayer should be: 1.67");
+	console.log(obj.pA[0].teamVote);
+
+	obj.pA[0].teamVote = 1;
+	obj.rO.roles["Delayer"].delayerCount = 3;
+	obj.rO.roles["Delayer"].adjustDelayerTeamVote(obj);
+	console.log("Team Vote for Delayer should be: 2");
+	console.log(obj.pA[0].teamVote);
+
+	obj.pA[0].teamVote = 1;
+	obj.rO.roles["Delayer"].delayerCount = 4;
+	obj.rO.roles["Delayer"].adjustDelayerTeamVote(obj);
+	console.log("Team Vote for Delayer should be: 2.33");
+	console.log(obj.pA[0].teamVote);
+
+	obj.pA[0].teamVote = 1;
+	obj.rO.roles["Delayer"].delayerCount = 5;
+	obj.rO.roles["Delayer"].adjustDelayerTeamVote(obj);
+	console.log("Team Vote for Delayer should be: 2.67");
+	console.log(obj.pA[0].teamVote);
+
+	obj.pA[0].teamVote = 1;
+	obj.rO.roles["Delayer"].delayerCount = 6;
+	obj.rO.roles["Delayer"].adjustDelayerTeamVote(obj);
+	console.log("Team Vote for Delayer should be: 3");
+	console.log(obj.pA[0].teamVote);
+
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+	Controller.addMissionVote(obj, 0, 1); //Derek
+
+	obj.rO.roles["Delayer"].delayerCount = 2;
+
+	console.log("Mission Vote should be: 4");
+	obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
+	console.log(obj.pA[0].missionVote);
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	console.log("Mission Vote should be: 1");
+	obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
+	console.log(obj.pA[0].missionVote);
+
+
+
+};
+
+testDelayerPower();
