@@ -947,3 +947,31 @@ function testSpiritualistPower() {
 	console.log(obj.pA[2].missionVote);
 
 };
+
+
+
+//Need to set Serena as backstabber inside RolesObject assignroles
+function testBackstabberPower() {
+
+	Controller.setMissionTeam(obj, ["Xing", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log(obj.rO.roles["Backstabber"].betray(obj));
+
+	Controller.addMissionVote(obj, obj.pT["Derek"], -1); //Derek
+	Controller.addMissionVote(obj, obj.pT["Cloud"], -4); //Cloud
+	Controller.addMissionVote(obj, obj.pT["Serena"], 3); //Serena
+	Controller.addMissionVote(obj, obj.pT["Lucio"], -4); //Lucio
+	Controller.addMissionVote(obj, obj.pT["Xing"], -5); //Xing
+
+
+	obj.rO.roles["Backstabber"].adjustVoteRevenge(obj);
+
+	console.log("Serena (original BS) mission vote is: " 
+		+ obj.pA[obj.pT["Serena"]].missionVote);
+	console.log("Xing (new BS) mission vote is: " 
+		+ obj.pA[obj.pT["Xing"]].missionVote);
+
+};
+
+testBackstabberPower();

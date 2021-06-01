@@ -1,4 +1,6 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
+var {shuffle} = require("./shuffle.js");
+
 
 class Persequor extends RolesMasterClass {
 
@@ -41,11 +43,31 @@ class Persequor extends RolesMasterClass {
 	};
 
 
-	identityTheft(personToStealIdentity, obj) {
+	findAHeroToSwitchWith(obj) {
 
+		var heroesIndicesArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.rO.rolesInGame[i].team == "villains") { continue; };
+			if (obj.pA[i].role == "Saintess") { continue; };
+
+			heroesIndicesArr.push(i);
+		};
+
+		shuffle(heroesIndicesArr);
+
+		return heroesIndicesArr[0];
+
+	}; //end findAHeroToSwitchWith(obj)
+
+
+	identityTheft(obj) {
+
+		//checks to make sure it isn't currently being used in case of hacking
 		if (this.originalPersequorInfo.index != -1) { return 0; };
 
-		var theftInd = obj.pT[personToStealIdentity];
+		var theftInd = this.findAHeroToSwitchWith(obj);
 		var pInd = obj.rO.roles["Persequor"].index;
 
 		this.originalPersequorInfo.name = this.name;
@@ -67,7 +89,6 @@ class Persequor extends RolesMasterClass {
 		obj.rO.rolesInGame[theftInd].name = this.originalPersequorInfo.name;
 		obj.rO.rolesInGame[theftInd].socketID = this.originalPersequorInfo.socketID;
 
-
 		obj.pA[pInd].name = this.swappedPlayerInfo.name;
 		obj.pA[pInd].socketID = this.swappedPlayerInfo.socketID;
 
@@ -80,6 +101,8 @@ class Persequor extends RolesMasterClass {
 	switchBackIdentities(obj) {
 
 		if (!obj.rO.roles["Persequor"].inGame) { return 0; };
+		
+		//index == -1 means the identityTheft power was not used
 		if (this.originalPersequorInfo.index == -1) { return 0; };
 
 		var persequorInd = this.originalPersequorInfo.index;
