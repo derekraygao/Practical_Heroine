@@ -930,3 +930,20 @@ function testReverserPower() {
 
 };
 
+
+
+function testSpiritualistPower() {
+
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+
+	Controller.addMissionVote(obj, 2, 1); //Serena
+
+	obj.pA[2].soulMark = true;
+	obj.pA[0].soulMark = true;
+	obj.pA[1].soulMark = true;
+
+	obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
+
+	console.log(obj.pA[2].missionVote);
+
+};
