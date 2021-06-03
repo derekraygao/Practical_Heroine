@@ -26,21 +26,48 @@ class Persequor extends RolesMasterClass {
 	        	socketID: ""
 	        };
 
+	    this.personVoteToCopy = "nobody";
+
 	}; //end constructor
 
 
-	copyCat(personToCopy, obj) {
+	copyCat(personToCopy) {
 
-		var copyIndex = obj.pT[personToCopy];
+		this.personVoteToCopy = personToCopy;
+
+	};
+
+
+	/*don't need to check if persequor is on the team, because 
+	this.personVotetoCopy HAS to be "nobody" unless persequor on team
+	and has used her powers */
+	adjustMissionVoteCopyCat(obj) {
+
+		//if (!this.inGame) { return 0; };
+		if (this.personVoteToCopy == "nobody") { return 0; };
+
+		var copyIndex = obj.pT[this.personVoteToCopy];
+		
+		if (!obj.pA[copyIndex].selectedForMission) {
+
+			obj.pA[this.index].missionVote = -1;
+			return 0;
+
+		};
+
 		var copyVote = obj.pA[copyIndex].missionVote;
 
 		if (copyVote >= 0) {
 			copyVote *= -1;
 		};
 
-		obj.pA[obj.rO.roles["Persequor"].index].missionVote = copyVote; 
+
+		obj.pA[this.index].missionVote = copyVote;
+
+		this.personVoteToCopy = "nobody";
 
 	};
+
 
 
 	findAHeroToSwitchWith(obj) {
