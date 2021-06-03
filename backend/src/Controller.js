@@ -1,6 +1,6 @@
 var RO = require('./RolesObject.js');
 var rI = require('./ResultsInfo.js');
-
+var {VoteAdjuster} = require('./VoteAdjuster.js');
 
 
 class Controller {
@@ -11,7 +11,7 @@ class Controller {
 		this.roomsData = {};
 		this.listOfRooms = ["testing"];
 		this.socketRoom = {}; //which room is a socket in (based on socket.id)
-
+		this.voteAdjuster = new VoteAdjuster(); //all rooms can share this single instance
 
 
 		this.roomsData["testing"] = 
@@ -143,6 +143,21 @@ class Controller {
 
 
 
+	paralyzedPlayerSkip(obj) {
+
+		if (obj.rO.roles["Noah"].thunderWaveTarget
+			== obj.pA[obj.rD.teamLeaderIndex].name) {
+
+			obj.rD.teamLeaderIndex += 1;
+
+			if (obj.rD.teamLeaderIndex > (obj.pA.length - 1) ) {
+				obj.rD.teamLeaderIndex = 0;
+			};
+
+		}; //end if
+
+	}; //end paralyzedPlayerSkip(obj)
+
 
 	updateTeamLeaderIndex(obj) {
 
@@ -151,6 +166,8 @@ class Controller {
 		if (obj.rD.teamLeaderIndex > (obj.pA.length - 1) ) {
 			obj.rD.teamLeaderIndex = 0;
 		};
+
+		this.paralyzedPlayerSkip(obj);
 
 	};
 
@@ -260,7 +277,7 @@ class Controller {
 
 	wasTeamAccepted(obj) {
 
-		//function here that adjustsTeamVotes
+		this.voteAdjuster.adjustTeamVotes(obj);
 
 		var teamVoteAccumulator = this.teamVoteCalculation(obj);
 
@@ -427,8 +444,10 @@ class Controller {
 	missionVoteCalculation(obj) {
 
 		var missionVoteAccumulator = 0;
+		var negativeVoteAccumulator = 0;
+		var positiveVoteAccumulator = 0;
 
-		//need to do mission vote adjustments here
+		this.voteAdjuster.adjustMissionVotes(obj);
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
@@ -444,7 +463,14 @@ class Controller {
 			};
 
 
-			missionVoteAccumulator += obj.pA[i].missionVote;
+
+			if (obj.pA[i].missionVote >= 0) {
+				positiveVoteAccumulator += obj.pA[i].missionVote;
+			} else {
+				negativeVoteAccumulator += obj.pA[i].missionVote;
+			};
+
+
 
 			obj.rD.missionVoteInfo.push(
 
@@ -456,6 +482,20 @@ class Controller {
 			);
 
 		}; //end for
+
+
+		negativeVoteAccumulator = obj.rO.roles["Umbra Lord"]
+		.adjustVotesShadowDomain(negativeVoteAccumulator, obj);
+
+		positiveVoteAccumulator = obj.rO.roles["Ichigo"]
+		.adjustVotesUmbraSlayer(positiveVoteAccumulator, obj);
+
+
+		missionVoteAccumulator = negativeVoteAccumulator + positiveVoteAccumulator;
+
+
+		missionVoteAccumulator = obj.rO.roles["Ichigo"]
+		.hylianShield(missionVoteAccumulator);
 
 
 		obj.rI.addMissionInfo(
@@ -621,6 +661,7 @@ class Player {
 	constructor(_name, _socketID, _roomName, _roomMaster) {
 
 		this.name = _name;
+		this.pseudonym = ""; //for telepathy
 		this.socketID = _socketID;
 		this.room = _roomName;
 		this.roomMaster = _roomMaster;
@@ -638,10 +679,9 @@ class Player {
         this.poisoned = false;
         this.bomb = false;
         this.selectedForTelepathy = false;
-        this.bide = 1;
         this.multiplier = 1; //default 1: needs to be 1 (and not 0) so you can stack multiplication powers
         this.safeguard = false; //safeguard and bless gets reset in resetallplayerinfo
-        this.bless = 1; //default is 1.
+        this.bless = false; //default is 1 changed to false.
         this.invisible = false;
         this.soulMark = false;
         this.jailed = false;
