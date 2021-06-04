@@ -26,7 +26,7 @@ class Persequor extends RolesMasterClass {
 	        	socketID: ""
 	        };
 
-	    this.personVoteToCopy = "nobody";
+	    this.personVoteToCopy = "nobody chosen";
 
 	}; //end constructor
 
@@ -39,12 +39,23 @@ class Persequor extends RolesMasterClass {
 
 
 	/*don't need to check if persequor is on the team, because 
-	this.personVotetoCopy HAS to be "nobody" unless persequor on team
-	and has used her powers */
+	this.personVotetoCopy HAS to be "nobody chosen" unless persequor on team
+	and has used her powers 
+	Also, personVoteToCopy is reset in outside function
+	*/
 	adjustMissionVoteCopyCat(obj) {
 
 		//if (!this.inGame) { return 0; };
-		if (this.personVoteToCopy == "nobody") { return 0; };
+		if (this.personVoteToCopy == "nobody chosen") { return 0; };
+
+		if ([this.name, this.personVotetoCopy].
+			includes(obj.rO.roles["Pear"].playerVoteToVanish)) {
+
+			obj.pA[this.index].missionVote = 0;
+			return 0;
+
+		};
+
 
 		var copyIndex = obj.pT[this.personVoteToCopy];
 		
@@ -63,8 +74,6 @@ class Persequor extends RolesMasterClass {
 
 
 		obj.pA[this.index].missionVote = copyVote;
-
-		this.personVoteToCopy = "nobody";
 
 	};
 

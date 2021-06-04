@@ -11,7 +11,9 @@ class Pear extends RolesMasterClass {
         this.team = "heroes";
 
         //player's name to expose
-        this.voteToExpose = "none";
+        this.voteToExpose = "nobody chosen";
+
+        this.playerVoteToVanish = "nobody chosen";
 
 
 	}; //end constructor
@@ -27,7 +29,7 @@ class Pear extends RolesMasterClass {
 
 	expose(obj) {
 
-		if (this.voteToExpose == "none") 
+		if (this.voteToExpose == "nobody chosen") 
 			{ return "expose power not used"; };
 
 		var exposeVoteInfo = 
@@ -37,18 +39,33 @@ class Pear extends RolesMasterClass {
 			vote: obj.pA[obj.pT[this.voteToExpose]].missionVote
 		};
 
-		this.voteToExpose = "none";
+		this.voteToExpose = "nobody chosen";
 
 		return exposeVoteInfo;
 
 	};
 
 
-	vanish(name, obj) {
+	vanish(name) {
 
-		obj.pA[obj.pT[name]].invisible = true;
+		this.playerVoteToVanish = name;
 
 	};
+
+
+	adjustMissionVoteVanish(obj) {
+
+		if (this.playerVoteToVanish == "nobody chosen") { return 0; };
+
+		var vanishInd = obj.pT[this.playerVoteToVanish];
+
+		obj.pA[vanishInd].missionVote = 0;
+
+		//this is reset in another function
+		//this.playerVoteToVanish = "nobody chosen";
+
+	};
+
 
 
 
