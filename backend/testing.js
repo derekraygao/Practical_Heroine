@@ -912,6 +912,124 @@ function testPersequorPower() {
 };
 
 
+function switchTest() {
+
+
+	console.log("Before Switch, pA");
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+		console.log(obj.pA[i].name + ", role is: " 
+			+ obj.pA[i].role + ", index is: " + i 
+			+ ", socketID: " + obj.pA[i].socketID);
+
+	};
+
+	console.log("");
+	console.log("RolesInGame before switch");
+
+	for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
+
+		console.log(obj.rO.rolesInGame[i].name + ", role is: " 
+			+ obj.rO.rolesInGame[i].role + ", this.index is: " 
+			+ obj.rO.rolesInGame[i].index + ", i is: " + i 
+			+ ", socketID: " + obj.rO.rolesInGame[i].socketID);
+
+	};
+
+	console.log("");
+	console.log("pT is");
+	console.log(obj.pT);
+
+
+	obj.rO.roles["Persequor"].activateIdentityTheft(obj);
+
+	AbilityManager.updateStatuses(obj);
+
+	console.log("");
+	console.log("After switch, rolesInGame");
+
+	for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
+
+		console.log(obj.rO.rolesInGame[i].name + ", role is: " 
+			+ obj.rO.rolesInGame[i].role + ", this.index is: " 
+			+ obj.rO.rolesInGame[i].index + ", i is: " + i 
+			+ ", socketID: " + obj.rO.rolesInGame[i].socketID);
+
+	};
+
+
+	console.log("");
+	console.log("After switch, pA");
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+		console.log(obj.pA[i].name + ", role is: " 
+			+ obj.pA[i].role + ", index is: " + i 
+			+ ", socketID: " + obj.pA[i].socketID);
+
+	};
+
+	console.log("");
+
+	console.log("obj.pT is");
+	console.log(obj.pT);
+
+
+	/* switch back */
+
+	obj.rD.missionNo += 1;
+	//obj.rD.missionNo +=1 //this tests to make sure power does NOT activate
+	//for second time with updateStatuses();
+
+	AbilityManager.updateStatuses(obj);
+
+
+	console.log("");
+	console.log("SWITCHING BACK");
+
+	console.log("");
+	console.log("After switching back, roles object array");
+
+	for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
+
+		console.log(obj.rO.rolesInGame[i].name + ", role is: " 
+			+ obj.rO.rolesInGame[i].role + ", this.index is: " 
+			+ obj.rO.rolesInGame[i].index + ", i is: " + i 
+			+ ", socketID: " + obj.rO.rolesInGame[i].socketID);
+
+	};
+
+
+	console.log("");
+	console.log("After switching back, pA is");
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+		console.log(obj.pA[i].name + ", role is: " 
+			+ obj.pA[i].role + ", index is: " + i 
+			+ ", socketID: " + obj.pA[i].socketID);
+
+	};
+
+	console.log("");
+	console.log("After switching back, player tracker");
+
+	console.log("obj.pT is");
+	console.log(obj.pT);
+
+
+
+
+};
+
+switchTest();
+
+
+
+
+
+
 function testReverserPower() {
 
 	Controller.addMissionVote(obj, 0, -1); //Derek
@@ -980,7 +1098,8 @@ function testBackstabberPower() {
 	console.log("player array order");
 	for (var i = 0; i < obj.pA.length; i++) {
 		console.log(obj.pA[i].name + ", role is: " 
-			+ obj.pA[i].role + ", index is: " + i);
+			+ obj.pA[i].role + ", index is: " + i 
+			+ ", socketID: " + obj.pA[i].socketID);
 	};
 	console.log("");
 
@@ -998,16 +1117,17 @@ function testBackstabberPower() {
 	console.log("player array order AFTER switching backstabbers");
 	for (var i = 0; i < obj.pA.length; i++) {
 		console.log(obj.pA[i].name + ", role is: " 
-			+ obj.pA[i].role + ", index is: " + i);
+			+ obj.pA[i].role + ", index is: " + i 
+			+ ", socketID: " + obj.pA[i].socketID);
 	};
-
 
 	console.log("");
 	console.log("rolesInGame order");
 	for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
 		console.log(obj.rO.rolesInGame[i].name + ", role is: " 
 			+ obj.rO.rolesInGame[i].role + ", index is: " 
-			+ obj.rO.rolesInGame[i].index);
+			+ obj.rO.rolesInGame[i].index + 
+			", socketID: " + obj.rO.rolesInGame[i].socketID);
 	};
 
 	console.log("");
@@ -1018,7 +1138,7 @@ function testBackstabberPower() {
 };
 
 
-testBackstabberPower();
+//testBackstabberPower();
 
 
 //set Serena as Marcus

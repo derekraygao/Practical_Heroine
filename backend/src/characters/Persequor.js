@@ -12,6 +12,7 @@ class Persequor extends RolesMasterClass {
         this.alignment = "evil";
         this.team = "villains";
 
+        /*
         this.originalPersequorInfo = 
 	        {
 	        	name: "",
@@ -25,8 +26,22 @@ class Persequor extends RolesMasterClass {
 	        	index: -1,
 	        	socketID: ""
 	        };
+	    */
 
 	    this.personVoteToCopy = "nobody chosen";
+
+	    this.persequorRoleObjectReference = {};
+
+        this.powersHistory = 
+        {
+        	1: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
+        	2: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
+        	3: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
+        	4: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
+        	5: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
+        	6: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
+
+        };
 
 	}; //end constructor
 
@@ -52,6 +67,9 @@ class Persequor extends RolesMasterClass {
 			includes(obj.rO.roles["Pear"].playerVoteToVanish)) {
 
 			obj.pA[this.index].missionVote = 0;
+
+			this.personVoteToCopy = "nobody chosen";
+
 			return 0;
 
 		};
@@ -62,6 +80,8 @@ class Persequor extends RolesMasterClass {
 		if (!obj.pA[copyIndex].selectedForMission) {
 
 			obj.pA[this.index].missionVote = -1;
+			this.personVoteToCopy = "nobody chosen";
+
 			return 0;
 
 		};
@@ -74,6 +94,19 @@ class Persequor extends RolesMasterClass {
 
 
 		obj.pA[this.index].missionVote = copyVote;
+
+		this.personVoteToCopy = "nobody chosen";
+
+	};
+
+
+
+	activateIdentityTheft(obj) {
+
+		this.powersHistory[obj.rD.missionNo].switchedName = 
+		obj.pA[this.findAHeroToSwitchWith(obj)].name;
+
+		this.persequorRoleObjectReference = obj.rO.roles["Persequor"];
 
 	};
 
@@ -98,6 +131,92 @@ class Persequor extends RolesMasterClass {
 	}; //end findAHeroToSwitchWith(obj)
 
 
+
+	identityTheft(obj) {
+
+		if (this.powersHistory[obj.rD.missionNo].switchedName 
+			== "nobody chosen") {
+			return 0;
+		};
+
+		var switchedInd = obj.pT[this.powersHistory[obj.rD.missionNo].switchedName];
+
+		this.powersHistory[obj.rD.missionNo].switchedName = obj.pA[switchedInd].name;
+		this.powersHistory[obj.rD.missionNo].originalRole = obj.pA[switchedInd].role;
+		this.powersHistory[obj.rD.missionNo].socketID = obj.pA[switchedInd].socketID;
+		this.powersHistory[obj.rD.missionNo].originalIndex = switchedInd;
+
+		obj.pA[this.index].role = obj.pA[switchedInd].role;
+
+		obj.rO.rolesInGame[switchedInd].name = this.name;
+		obj.rO.rolesInGame[switchedInd].socketID = this.socketID;
+		
+		obj.pA[switchedInd].role = "???";
+
+		var tempSwitchedPlayerTargetPlayerObj = obj.pA[switchedInd];
+
+		//switches around switched players in playerObject array
+		obj.pA[switchedInd] = obj.pA[this.index];
+		obj.pA[this.index] = tempSwitchedPlayerTargetPlayerObj;
+
+		//switchedInd now refers to Persequor and this.index refers to switched player
+
+		//swaps out Persequor for Unknown roles object
+		obj.rO.rolesInGame[this.index] = obj.rO.roles["Unknown"];
+
+		obj.rO.roles["Unknown"].name = obj.pA[this.index].name;
+		obj.rO.roles["Unknown"].socketID = obj.pA[this.index].socketID;
+		obj.rO.roles["Unknown"].index = this.index;
+		/* Now change obj.pT which maps player names and indices in rolesInGame */
+
+		obj.pT[this.name] = switchedInd;
+		obj.pT[obj.pA[this.index].name] = this.index;
+
+
+	};
+
+
+	//this needs to occur right before night phase/night chat
+	switchBackIdentities(obj) {
+
+		if (obj.rD.missionNo <= 1) { return 0; };
+
+		if (this.powersHistory[(obj.rD.missionNo -1)].switchedName 
+			== "nobody chosen") {
+			return 0;
+		};
+
+		//right now, this.index refers to ??? and switched player
+		//switchedIndex refers to where Persequor currently is
+		var switchedIndex = obj.pT[this.name];
+		var originalRole = this.powersHistory[(obj.rD.missionNo -1)].originalRole;
+		
+		//switched, non-persequor player
+		obj.pA[this.index].role = originalRole;
+		obj.pA[switchedIndex].role = "Persequor";
+
+		obj.rO.roles[originalRole].name = obj.pA[this.index].name;
+		obj.rO.roles[originalRole].socketID = obj.pA[this.index].socketID;
+
+		obj.rO.rolesInGame[this.index] = this.persequorRoleObjectReference;
+
+		/* swap playerObjects back */
+		var tempPersequorPlayerObject = obj.pA[switchedIndex];
+		obj.pA[switchedIndex] = obj.pA[this.index];
+		obj.pA[this.index] = tempPersequorPlayerObject;
+
+
+		obj.pT[this.name] = this.index;
+		obj.pT[this.powersHistory[(obj.rD.missionNo -1)].switchedName] = switchedIndex;
+
+
+	}; //end switchBackIdentities
+
+
+
+
+
+	/*
 	identityTheft(obj) {
 
 		//checks to make sure it isn't currently being used in case of hacking
@@ -171,7 +290,7 @@ class Persequor extends RolesMasterClass {
 
 	};
 
-
+	*/
 
 
 }; //end class
