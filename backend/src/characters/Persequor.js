@@ -32,8 +32,11 @@ class Persequor extends RolesMasterClass {
 
 	    this.persequorRoleObjectReference = {};
 
+	    //have a 0: because for persequor, you check the previous mission in swap back
+	    //so for mission 1, it's 1 - 1 = 0...this to prevent access errors
         this.powersHistory = 
-        {
+        {	
+        	0: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
         	1: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
         	2: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
         	3: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
@@ -100,11 +103,14 @@ class Persequor extends RolesMasterClass {
 	};
 
 
-
+	/* the reason you do not directly set powersHistory.switchedName =
+	obj.pA[this.findAHeroToSwitchWith(obj)].name, is because if Noah
+	usees his hurricane power, then the indices become messed up.
+	*/
 	activateIdentityTheft(obj) {
 
 		this.powersHistory[obj.rD.missionNo].switchedName = 
-		obj.pA[this.findAHeroToSwitchWith(obj)].name;
+		"switch with somebody";
 
 		this.persequorRoleObjectReference = obj.rO.roles["Persequor"];
 
@@ -139,7 +145,16 @@ class Persequor extends RolesMasterClass {
 			return 0;
 		};
 
+		/* Reason we had to use a dummy name of "switch with somebody" 
+		is because Noah's hurricane will mess up indices order */
+		this.powersHistory[obj.rD.missionNo].switchedName = 
+		obj.pA[this.findAHeroToSwitchWith(obj)].name;
+
+
 		var switchedInd = obj.pT[this.powersHistory[obj.rD.missionNo].switchedName];
+
+		/*console.log("Persequor switch is " + obj.pA[switchedInd].name 
+			+ ", whose role is: " + obj.pA[switchedInd].role); */
 
 		this.powersHistory[obj.rD.missionNo].switchedName = obj.pA[switchedInd].name;
 		this.powersHistory[obj.rD.missionNo].originalRole = obj.pA[switchedInd].role;

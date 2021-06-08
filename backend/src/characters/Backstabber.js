@@ -120,7 +120,9 @@ class Backstabber extends RolesMasterClass {
 		this.originalBackStabberName = this.name;
 
 		var switchInd = this.findAHeroToSwitchWith(obj);
-		console.log("Switched Player Name is: " + obj.pA[switchInd].name);
+		/*console.log("Backstabbed switch player is: " 
+			+ obj.pA[switchInd].name + ", original role: "
+			+ obj.pA[switchInd].role); */
 
 		//backstabber player
 		obj.pA[this.index].role = obj.pA[switchInd].role;

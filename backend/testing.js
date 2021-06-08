@@ -1023,10 +1023,85 @@ function switchTest() {
 
 };
 
-switchTest();
+//switchTest();
 
 
+function logArrays() {
 
+	console.log("");
+	console.log("Player Array");
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+		console.log(obj.pA[i].name + ", role is: " 
+			+ obj.pA[i].role + ", index is: " + i 
+			+ ", socketID: " + obj.pA[i].socketID);
+
+	};
+
+
+	console.log("");
+	console.log("Roles Object");
+
+	for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
+
+		console.log(obj.rO.rolesInGame[i].name + ", role is: " 
+			+ obj.rO.rolesInGame[i].role + ", this.index is: " 
+			+ obj.rO.rolesInGame[i].index + ", i is: " + i 
+			+ ", socketID: " + obj.rO.rolesInGame[i].socketID);
+
+	};
+
+
+	console.log("");
+	console.log("obj.pT");
+	console.log(obj.pT);
+
+};
+
+
+function hurricaneSwitchBackStabTest() {
+
+	//obj.rO.roles["Noah"].activateHurricane();
+	//obj.rO.roles["Persequor"].activateIdentityTheft(obj);
+	obj.rO.roles["Backstabber"].backstab();
+
+	AbilityManager.updateStatuses(obj);
+
+	console.log("After Switching");
+
+	logArrays();
+
+	obj.rD.missionNo += 1;
+
+	obj.rO.roles["Backstabber"].backstab();
+	AbilityManager.updateStatuses(obj);
+
+	console.log("");
+	console.log("Mission +1, switched back persequor");
+	logArrays();
+
+	console.log("");
+	obj.rD.missionNo += 1;
+	obj.rO.roles["Persequor"].activateIdentityTheft(obj);
+	AbilityManager.updateStatuses(obj);
+
+	console.log("");
+	console.log("switched again");
+	logArrays();
+
+	
+	obj.rD.missionNo += 1;
+	AbilityManager.updateStatuses(obj);
+
+	console.log("");
+	console.log("Switched Back");
+	logArrays();
+
+};
+
+
+hurricaneSwitchBackStabTest();
 
 
 
