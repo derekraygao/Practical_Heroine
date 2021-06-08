@@ -134,7 +134,6 @@ class Backstabber extends RolesMasterClass {
 		this.name = obj.pA[switchInd].name;
 		this.socketID = obj.pA[switchInd].socketID;
 
-		var tempRolesObjectBackstabber = obj.rO.roles["Backstabber"];
 		var tempPlayerObjectNewBackstabber = obj.pA[switchInd];
 
 		obj.pA[switchInd] = obj.pA[this.index];
