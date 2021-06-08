@@ -41,6 +41,9 @@ var myClass = require('./src/Controller.js');
 
 var Controller = new myClass.Controller();
 
+var {AbilityManager} = require('./src/AbilityManager.js');
+var AbilityManager = new AbilityManager();
+
 //console.log(Controller);
 
 Controller.addPlayerToArray("Derek", "DerekID", "testing", false);
@@ -60,17 +63,19 @@ Controller.roomsData["testing"].teamLeaderIndex = 1;
 //console.log(obj.rO.rolesInGame);
 //console.log(obj.pA);
 
-
+/*
 Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
 Controller.setPlayersForMission(obj);
-
-
+*/
+/*
 Controller.addTeamVote(obj, 0, 3);
 Controller.addTeamVote(obj, 1, null);
 Controller.addTeamVote(obj, 2, -3);
 Controller.addTeamVote(obj, 3, 1);
 Controller.addTeamVote(obj, 4, 1);
 //output 2
+
+*/
 console.log(Controller.wasTeamAccepted(obj));
 //console.log(Controller.teamVoteCalculation(obj));
 //console.log(Controller.roomsData["testing"].teamVoteInfo);
@@ -642,7 +647,7 @@ function checkStatusConditionForSaintess(playerObject) {
 
 	console.log("For player " + playerObject.name + ", status is: ");
 
-	console.log("devilized: " + playerObject.devilized);
+	console.log("devilized: " + obj.rO.roles["Umbra Lord"].isPlayerDevilized(playerObject.name));
 	console.log("soul mark: " + playerObject.soulMark);
 	console.log("bomb: " + playerObject.bomb);
 	console.log("burn count: " + playerObject.burnCount);
@@ -657,7 +662,9 @@ function checkStatusConditionForSaintess(playerObject) {
 
 function testSaintessPower() {
 
-	obj.pA[0].devilized = true;
+	
+	obj.rO.roles["Umbra Lord"].devilConversion("Derek", obj);
+
 	obj.pA[0].soulMark = true;
 	obj.pA[0].bomb = true;
 	obj.pA[0].burnCount = 1;
@@ -702,6 +709,7 @@ function testSaintessPower() {
 	obj.pA[0].role = "Umbra Lord";
 
 };
+
 
 
 function testHecatePower() {
@@ -953,27 +961,64 @@ function testSpiritualistPower() {
 //Need to set Serena as backstabber inside RolesObject assignroles
 function testBackstabberPower() {
 
-	Controller.setMissionTeam(obj, ["Xing", "Serena"]);
+	Controller.setMissionTeam(obj, ["Lucio", "Serena"]);
 	Controller.setPlayersForMission(obj);
 
-	console.log(obj.rO.roles["Backstabber"].betray(obj));
+	obj.rO.roles["Backstabber"].backstab();
 
 	Controller.addMissionVote(obj, obj.pT["Derek"], -1); //Derek
 	Controller.addMissionVote(obj, obj.pT["Cloud"], -4); //Cloud
 	Controller.addMissionVote(obj, obj.pT["Serena"], 3); //Serena
-	Controller.addMissionVote(obj, obj.pT["Lucio"], -4); //Lucio
+	Controller.addMissionVote(obj, obj.pT["Lucio"], -3); //Lucio
 	Controller.addMissionVote(obj, obj.pT["Xing"], -5); //Xing
 
 
-	obj.rO.roles["Backstabber"].adjustVoteRevenge(obj);
+	console.log("Serena obj.pT index is: " + obj.pT["Serena"]);
+	console.log("Lucio obj.pT index is: " + obj.pT["Lucio"]);
+	console.log("");
+
+	console.log("player array order");
+	for (var i = 0; i < obj.pA.length; i++) {
+		console.log(obj.pA[i].name + ", role is: " 
+			+ obj.pA[i].role + ", index is: " + i);
+	};
+	console.log("");
+
+	AbilityManager.updateStatuses(obj);
+
+	obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
 
 	console.log("Serena (original BS) mission vote is: " 
 		+ obj.pA[obj.pT["Serena"]].missionVote);
-	console.log("Xing (new BS) mission vote is: " 
-		+ obj.pA[obj.pT["Xing"]].missionVote);
+	console.log("Lucio (new BS) mission vote is: " 
+		+ obj.pA[obj.pT["Lucio"]].missionVote);
+
+
+	console.log("");
+	console.log("player array order AFTER switching backstabbers");
+	for (var i = 0; i < obj.pA.length; i++) {
+		console.log(obj.pA[i].name + ", role is: " 
+			+ obj.pA[i].role + ", index is: " + i);
+	};
+
+
+	console.log("");
+	console.log("rolesInGame order");
+	for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
+		console.log(obj.rO.rolesInGame[i].name + ", role is: " 
+			+ obj.rO.rolesInGame[i].role + ", index is: " 
+			+ obj.rO.rolesInGame[i].index);
+	};
+
+	console.log("");
+	console.log("Serena obj.pT index is: " + obj.pT["Serena"]);
+	console.log("Lucio obj.pT index is: " + obj.pT["Lucio"]);
+
 
 };
 
+
+testBackstabberPower();
 
 
 //set Serena as Marcus
@@ -1011,4 +1056,119 @@ function testMarcusPower() {
 
 
 };
+
+
+function testNoahPowers() {
+
+	console.log("Before Shuffling");
+	console.log(obj.pT);
+
+	obj.rO.roles["Noah"].activateHurricane();
+	obj.rO.roles["Noah"].useHurricane(obj);
+
+	console.log("After shuffling");
+	console.log(obj.pT);
+
+	console.log(obj.rO.rolesInGame);
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+		console.log(obj.pA[i].name + ", " + obj.pA[i].role 
+			+ ", index is: " + i);
+
+		console.log(obj.rO.rolesInGame[i].name + ", " + obj.rO.rolesInGame[i].role 
+			+ ", index is: " + i);
+	};
+
+};
+
+
+
+function testNoahPowersParalyzeSkip() {
+
+	obj.rO.roles["Noah"].useThunderWave("Derek", obj);
+
+	for (var i = 0; i < 9; i++) {
+
+		Controller.updateTeamLeaderIndex(obj);
+
+		console.log("team leader index is now: " + obj.rD.teamLeaderIndex);
+
+	};
+
+};
+
+//testNoahPowersParalyzeSkip();
+
+
+function testAdjustMissionVotes() {
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, -3); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -1); //Lucio
+	Controller.addMissionVote(obj, 4, -2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	//obj.pA[0].shrinkCount = 2;
+	//obj.pA[0].burnCount = 3;
+	//obj.pA[0].multiplier= 2;
+
+	//obj.rO.roles["Umbra Lord"].corrupt("Serena", obj);
+
+	//console.log(obj.rO.roles["Hecate"].exchangeOfTheSpirits("Serena", "Derek", obj));
+
+	
+	//obj.rO.roles["Reverser"].reverseVote("Serena");
+
+	//obj.rO.roles["Reverser"].activateMirrorWorld();
+	//obj.rO.roles["Delayer"].delayerCount = 2;
+	//obj.rO.roles["Pear"].vanish("Serena");
+
+
+	//obj.rO.roles["Pear"].spyOn("Derek");
+	//console.log(obj.rO.roles["Pear"].expose(obj));
+
+	//obj.rO.roles["Saintess"].bless("Serena", obj);
+	//obj.rO.roles["Saintess"].safeguard("Serena", obj);
+
+	//obj.rO.roles["Marcus"].activateBerserk();
+
+	//obj.rO.roles["Persequor"].copyCat("Serena");
+
+	//obj.rO.roles["Spiritualist"].plantSoulMark("Derek", obj);
+	//obj.rO.roles["Spiritualist"].plantSoulMark("Xing", obj);
+
+	//obj.rD.missionNo = 7;
+
+	//obj.rO.roles["Bomberman"].plantBomb("Serena", obj);
+
+	console.log(Controller.missionVoteCalculation(obj));
+
+};
+
+//testAdjustMissionVotes();
+
+
+function testAdjustTeamVotes() {
+
+	Controller.addTeamVote(obj, 0, 1); //Derek
+	Controller.addTeamVote(obj, 1, -1); //Cloud
+	Controller.addTeamVote(obj, 2, -1); //Serena
+	Controller.addTeamVote(obj, 3, 1); //Lucio
+	Controller.addTeamVote(obj, 4, 1); //Xing
+
+	//obj.rO.roles["Ranger"].shrinkRay("Serena", obj);
+	//obj.rO.roles["Saintess"].bless("Derek", obj);
+
+	obj.rO.roles["Delayer"].delayerCount = 4;
+
+	console.log(Controller.wasTeamAccepted(obj));
+
+
+};
+
+//testAdjustTeamVotes();
 
