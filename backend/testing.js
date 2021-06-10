@@ -611,36 +611,38 @@ function testJailerPower() {
 
 function testIchigoPower() {
 
+	obj.rO.roles["Ichigo"].activateHylianShield();
 
-	var vote1 = 3;
-	var vote2 = 0;
-	var vote3 = -1;
+	Controller.addMissionVote(obj, 0, -1); //Derek
+	Controller.addMissionVote(obj, 1, 4); //Cloud
+	Controller.addMissionVote(obj, 2, -3); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, -2); //Xing
 
-	console.log("Hylian Shield Acting on Vote = 3, expect -1");
-	console.log(vote1 = obj.rO.roles["Ichigo"].hylianShield(vote1));
+	Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
+	Controller.setPlayersForMission(obj);
 
-	console.log("Hylian Shield Acting on Vote = 0, expect +4");
-	console.log(vote1 = obj.rO.roles["Ichigo"].hylianShield(vote2));
+	console.log("Mission Vote is: ");
+	console.log(Controller.missionVoteCalculation(obj));
 
-	console.log("Hylian Shield Acting on Vote = -1, expect +3");
-	console.log(vote1 = obj.rO.roles["Ichigo"].hylianShield(vote3));
 
 	console.log("");
 	console.log("Now testing status notification");
 
-	obj.pA[2].role = "Ichigo";
+	//obj.pA[2].role = "Ichigo";
 
-	console.log(obj.rO.roles["Ichigo"].naviNotification(1, "bomb", obj));
-
-	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "bomb", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "devilized", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "burn", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "shrink", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "anti-magic ray", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification(2, "soul mark", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"bomb", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"corrupted", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"burn", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"shrink", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"anti-magic ray", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"soul mark", obj));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"paralyzed", obj));
 
 };
 
+
+testIchigoPower();
 
 
 function checkStatusConditionForSaintess(playerObject) {

@@ -56,6 +56,8 @@ class VoteAdjuster {
 		obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
 		obj.rO.roles["Marcus"].adjustVoteTranscendence(obj);
 
+		obj.rO.roles["Ichigo"].adjustVotesHolyStrike(obj);
+
 		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
 		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
 
@@ -66,7 +68,8 @@ class VoteAdjuster {
 	}; //end adjustMissionVotes
 
 
-
+	/*Saintess & Ichigo can never be in same game, 
+	so no need to do Ichigo powers */
 	adjustVotesSaintessOnTeam(obj) {
 
 		obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
