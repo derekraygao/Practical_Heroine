@@ -647,7 +647,7 @@ function checkStatusConditionForSaintess(playerObject) {
 
 	console.log("For player " + playerObject.name + ", status is: ");
 
-	console.log("devilized: " + obj.rO.roles["Umbra Lord"].isPlayerDevilized(playerObject.name));
+	console.log("corrupted: " + playerObject.corrupted);
 	console.log("soul mark: " + playerObject.soulMark);
 	console.log("bomb: " + playerObject.bomb);
 	console.log("burn count: " + playerObject.burnCount);
@@ -663,7 +663,7 @@ function checkStatusConditionForSaintess(playerObject) {
 function testSaintessPower() {
 
 	
-	obj.rO.roles["Umbra Lord"].devilConversion("Derek", obj);
+	obj.rO.roles["Umbra Lord"].corrupt("Derek", obj);
 
 	obj.pA[0].soulMark = true;
 	obj.pA[0].bomb = true;
@@ -711,13 +711,19 @@ function testSaintessPower() {
 };
 
 
+//testSaintessPower();
+
+
 
 function testHecatePower() {
 
-	console.log(obj.rO.roles["Hecate"].multiplication("Derek", obj));
+	obj.rO.roles["Hecate"].setMultiplierTarget("Derek", obj);
+
+	AbilityManager.updateStatuses(obj);
+
 	console.log("Derek multiplication is now: " + obj.pA[0].multiplier);
 
-	obj.pA[0].devilized = true;
+	obj.pA[0].corrupted = true;
 	obj.pA[0].soulMark = true;
 	obj.pA[0].burnCount = 3;
 	obj.pA[0].shrinkCount = 5;
@@ -734,22 +740,30 @@ function testHecatePower() {
 
 };
 
+//testHecatePower();
+
+
 
 function testBombermanPower() {
 
-	obj.rO.roles["Bomberman"].plantBomb("Derek", obj);
+	obj.rO.roles["Bomberman"].setBombTarget("Derek", obj);
+	obj.rO.roles["Bomberman"].setfirePunchTarget("Cloud", obj);
+
+	AbilityManager.updateStatuses(obj);
 
 	console.log("Derek bomb status is: " + obj.pA[0].bomb);
-
-	obj.rO.roles["Bomberman"].firePunch("Cloud", obj);
-
 	console.log("Cloud burn counter should be 1, it is: " + obj.pA[1].burnCount);
 
-	obj.rO.roles["Bomberman"].increaseBurnCounter(obj);
+	obj.rD.missionNo += 1;
+
+	AbilityManager.updateStatuses(obj);
 
 	console.log("Cloud burn counter after increaseBurnCounter should be 2, it is: " 
 		+ obj.pA[1].burnCount);
 };
+
+
+testBombermanPower();
 
 
 function testLieutenantBlitzPower() {
@@ -1062,8 +1076,8 @@ function logArrays() {
 
 function hurricaneSwitchBackStabTest() {
 
-	//obj.rO.roles["Noah"].activateHurricane();
-	//obj.rO.roles["Persequor"].activateIdentityTheft(obj);
+	obj.rO.roles["Noah"].activateHurricane();
+	obj.rO.roles["Persequor"].activateIdentityTheft(obj);
 	obj.rO.roles["Backstabber"].backstab();
 
 	AbilityManager.updateStatuses(obj);
@@ -1101,7 +1115,7 @@ function hurricaneSwitchBackStabTest() {
 };
 
 
-hurricaneSwitchBackStabTest();
+//hurricaneSwitchBackStabTest();
 
 
 
@@ -1367,3 +1381,53 @@ function testAdjustTeamVotes() {
 
 //testAdjustTeamVotes();
 
+
+
+function testAbilityManager() {
+
+	/*
+	console.log("Test Saintess Powers");
+	obj.rO.roles["Saintess"].bless("Derek", obj);
+	obj.rO.roles["Saintess"].safeguard("Derek", obj);
+
+	console.log("Bless & Safeguard should be true");
+	console.log(obj.pA[0]);
+
+	AbilityManager.updateStatuses(obj);
+
+	console.log("Bless & Safeguard should be false");
+	console.log(obj.pA[0]);
+	*/
+
+	/*
+	console.log("");
+
+	console.log("Test Noah Powers");
+
+	obj.rO.roles["Noah"].setThunderWave("Derek", obj);
+	obj.rO.roles["Noah"].setIcePunch("Derek", obj);
+
+	AbilityManager.updateStatuses(obj);
+	console.log("Paralyzed & Frozen should be true");
+	console.log(obj.pA[0]);
+
+	obj.rD.missionNo += 1;
+	AbilityManager.updateStatuses(obj);
+	console.log("Paralyzed & Frozen should be false");
+	console.log(obj.pA[0]);
+
+	obj.rO.roles["Noah"].setThunderWave("Xing", obj);
+	obj.rO.roles["Noah"].setIcePunch("Xing", obj);
+
+	AbilityManager.updateStatuses(obj);
+	console.log(obj.pA[0]);
+	console.log(obj.pA[4]);
+
+	*/
+
+
+
+
+};
+
+//testAbilityManager();
