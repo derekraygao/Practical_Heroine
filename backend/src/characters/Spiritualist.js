@@ -21,20 +21,45 @@ class Spiritualist extends RolesMasterClass {
         						   "Ranger", "Pear", "Esper", "Scientist", 
         						   "Sensor", "Jailer"];
 
-        this.heroesArrayFor79 = ["Marcus", "Saintess", "Ichigo", "Balancer", 
+        this.heroesArrayFor79 = ["Marcus", "Ichigo", "Balancer", 
         						 "Detective Chat", "Ranger", "Pear",
         						 "Esper", "Scientist", "Sensor", "Jailer"];
 
+
+        /*numbers refer to mission round the power was used, but the powers
+        /take effect the next mission
+        no need for mission 7, since there is no mission 8
+        */
+        this.powersHistory = 
+        {
+        	1: {"soulMark": "nobody chosen"},
+        	2: {"soulMark": "nobody chosen"},
+        	3: {"soulMark": "nobody chosen"},
+        	4: {"soulMark": "nobody chosen"},
+        	5: {"soulMark": "nobody chosen"},
+        	6: {"soulMark": "nobody chosen"},
+        };
 
 
 	}; //end constructor
 
 
-	plantSoulMark(name, obj) {
+	markAPlayer(name, obj) {
 
-		var index = obj.pT[name];
-		if (!(index > -1)) { return 0; };
+		this.powersHistory[obj.rD.missionNo].soulMark = name;
+
+	};
+
+
+	//check for if role in game occurs in AbilityManager
+	plantSoulMark(obj) {
+
+		if (this.powersHistory[obj.rD.missionNo].soulMark == "nobody chosen") { return 0; };
+
+		var index = obj.pT[this.powersHistory[obj.rD.missionNo].soulMark];
+
 		if (obj.rO.rolesInGame[index].team == "villains") { return 0; };
+		if (obj.pA[index].role == "Saintess") { return 0; };
 
 		obj.pA[index].soulMark = true;
 
@@ -47,6 +72,8 @@ class Spiritualist extends RolesMasterClass {
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
+			/*prevent counting onself, but placing soulMark
+			should skip villains anyway, so this is redundant?*/
 			if (this.index == i) { continue; };
 
 			if (obj.pA[i].soulMark) { soulMarkNumber += 1; };
@@ -61,6 +88,8 @@ class Spiritualist extends RolesMasterClass {
 	adjustSpiritualistMissionVote(obj) {
 
 		if (!this.inGame) { return 0; };
+
+		if (!obj.pA[this.index].selectedForMission) { return 0; };
 
 		var adjustSpiritualistVote = this.countNumberOfSoulMarks(obj) * 1.25;
 
@@ -124,7 +153,7 @@ class Spiritualist extends RolesMasterClass {
 		var index = obj.pT[name];
 		if (!(index > -1)) { return 0; };
 		if (obj.rO.rolesInGame[index].team == "villains") 
-			{ return ["villain", "villain"]; };
+			{ return ["Villain"]; };
 
 		var actualRole = obj.pA[index].role;
 
@@ -133,6 +162,8 @@ class Spiritualist extends RolesMasterClass {
 			return ["Princess", "Seer", "Aura Knight", "Oracle"];
 
 		};
+
+		if (actualRole == "Saintess") { return ["Saintess"]; };
 
 
 		var fakeRole = this.returnRandomHeroChar(actualRole, obj.pA.length);

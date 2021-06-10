@@ -763,7 +763,7 @@ function testBombermanPower() {
 };
 
 
-testBombermanPower();
+//testBombermanPower();
 
 
 function testLieutenantBlitzPower() {
@@ -1151,11 +1151,32 @@ function testSpiritualistPower() {
 
 	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
 
-	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 0, -1); //Derek
+	Controller.addMissionVote(obj, 1, -4); //Cloud
+	Controller.addMissionVote(obj, 2, 3); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, -2); //Xing
 
-	obj.pA[2].soulMark = true;
-	obj.pA[0].soulMark = true;
-	obj.pA[1].soulMark = true;
+	Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	obj.rO.roles["Spiritualist"].markAPlayer("Derek", obj);
+
+	AbilityManager.updateStatuses(obj);
+
+	obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
+
+	console.log(obj.pA[2].missionVote);
+
+	console.log("Next mission");
+
+	obj.rD.missionNo =+ 1;
+
+	Controller.addMissionVote(obj, 2, 3); //Serena
+
+	obj.rO.roles["Spiritualist"].markAPlayer("Xing", obj);
+
+	AbilityManager.updateStatuses(obj);
 
 	obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
 
@@ -1163,6 +1184,7 @@ function testSpiritualistPower() {
 
 };
 
+testSpiritualistPower();
 
 
 //Need to set Serena as backstabber inside RolesObject assignroles
