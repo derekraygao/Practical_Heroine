@@ -372,6 +372,59 @@ function rolesInGame() {
 }; //end rolesInGame();
 
 
+function testPrincessPower() {
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "corrupted", obj));
+	console.log("");
+	
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "bomb", obj));
+	console.log("");
+	
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "burn", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "soul mark", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "paralyzed", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "multiplier", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification(["Derek", "Serena"], "exchange", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "shrink", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "anti-magic ray", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "bless", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "safeguard", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "purify", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "esuna", obj));
+	console.log("");
+
+	console.log(obj.rO.roles["Princess"].EONotification("Derek", "dispel", obj));
+	console.log("");
+
+
+};
+
+
+//testPrincessPower();
+
+
+
+
 function testOraclePower() {
 
 	console.log("1 AND 1");
@@ -611,16 +664,23 @@ function testJailerPower() {
 
 function testIchigoPower() {
 
-	obj.rO.roles["Ichigo"].activateHylianShield();
+	//obj.rO.roles["Ichigo"].activateHylianShield();
+	//obj.rO.roles["Ichigo"].activateHolyStrike();
+
+	//obj.rO.roles["Pear"].vanish("Serena");
+	obj.rO.roles["Persequor"].copyCat("Serena");
 
 	Controller.addMissionVote(obj, 0, -1); //Derek
-	Controller.addMissionVote(obj, 1, 4); //Cloud
-	Controller.addMissionVote(obj, 2, -3); //Serena
-	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, 2); //Lucio
 	Controller.addMissionVote(obj, 4, -2); //Xing
 
-	Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
+	Controller.setMissionTeam(obj, ["Cloud", "Serena", "Lucio"]);
 	Controller.setPlayersForMission(obj);
+
+	obj.pA[obj.rO.roles["Ichigo"].index].bomb = true;
+
 
 	console.log("Mission Vote is: ");
 	console.log(Controller.missionVoteCalculation(obj));
@@ -631,14 +691,14 @@ function testIchigoPower() {
 
 	//obj.pA[2].role = "Ichigo";
 
-	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"bomb", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"corrupted", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"burn", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"shrink", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"anti-magic ray", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"soul mark", obj));
-	console.log(obj.rO.roles["Ichigo"].naviNotification("Serena" ,"paralyzed", obj));
-
+	console.log(obj.rO.roles["Ichigo"].naviNotification("bomb"));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("corrupted"));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("burn"));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("shrink"));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("anti-magic ray"));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("soul mark"));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("paralyzed"));
+	console.log(obj.rO.roles["Ichigo"].naviNotification("exchange"));
 };
 
 
@@ -1186,7 +1246,7 @@ function testSpiritualistPower() {
 
 };
 
-testSpiritualistPower();
+//testSpiritualistPower();
 
 
 //Need to set Serena as backstabber inside RolesObject assignroles
@@ -1289,6 +1349,45 @@ function testMarcusPower() {
 
 
 };
+
+
+function testMarcusBodyguard() {
+
+	var nameToTarget = obj.rO.roles["Marcus"].bodyguardNameSwitch("Lucio", obj);
+
+	console.log(nameToTarget);
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("corrupted"));
+	console.log("");
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("bomb"));
+	console.log("");
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("burn"));
+	console.log("");
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("soul mark"));
+	console.log("");
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("paralyzed"));
+	console.log("");
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("multiplier"));
+	console.log("");
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("exchange"));
+	console.log("");
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("shrink"));
+	console.log("");
+
+	console.log(obj.rO.roles["Marcus"].bodyguardNotification("anti-magic ray"));
+	console.log("");
+
+};
+
+//testMarcusBodyguard();
+
 
 
 function testNoahPowers() {

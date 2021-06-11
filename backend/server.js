@@ -655,6 +655,98 @@ function updateMissionResults(obj) {
 
 
 
+/*name here is original name NOT, the name from Marcus'
+bodyguardNameSwitch(name, obj) function
+obj is from within the socket.on() scope 
+name should always be an array [], since Ichigo + Marcus don't
+need the name
+*/
+
+function princessMarcusIchigoNotification(name, status, obj) {
+
+  if (obj.rO.roles["Marcus"].inGame) {
+
+    if (name[0] == obj.rO.roles["Princess"].name) {
+
+      io.to(`${obj.rO.roles["Marcus"].socketID}`).emit(
+        "Update Statuses", obj.rO.roles["Marcus"].bodyguardNotification(status));    
+
+    } else if (name[0] == obj.rO.roles["Ichigo"].name) {
+
+       io.to(`${obj.rO.roles["Ichigo"].socketID}`).emit(
+        "Update Statuses", obj.rO.roles["Ichigo"].naviNotification(name, status, obj));    
+
+    } else {
+
+      //this is in case exchange of spirits chooses Marcus + Princess
+      //which would cause array to have [Marcus, Marcus]
+      if (name[0] == name[1]) { return 0; };
+
+      io.to(`${obj.rO.roles["Princess"].socketID}`).emit(
+        "Update Statuses", obj.rO.roles["Princess"].EONotification(name, status)); 
+
+    };
+
+    return 0;
+
+  }; //end if Marcus in game
+
+
+
+
+
+
+
+}; //end princessMarcusIchigoNotification(name, status, obj)
+
+
+//it's only an array for exchange of spirits power
+//Marcus power ensures princess is never the target
+function princessNotificationPower(status, nameOrArray, obj) {
+
+  //this for exchange of spirits and marcus check
+  //if marcus in game and hecate chooses Marcus + Princess,
+  //the array becomes [Marcus, Marcus]
+  if (nameOrArray[0] == nameOrArray[1]) { return 0; };
+
+  var message = obj.rO.roles["Princess"].
+  EONotification(nameOrArray, status, obj);
+
+  io.to(`${obj.rO.roles["Princess"].socketID}`).emit(
+        "Update Statuses", message); 
+
+};
+
+
+function MarcusNotificationPower(status, originalName, obj) {
+
+  if (!obj.rO.roles["Marcus"].inGame) { return 0; };
+
+  if (originalName != obj.rO.roles["Princess"].name) { return 0; };
+
+  var message = obj.rO.roles["Marcus"].bodyguardNotification(status);
+
+  io.to(`${obj.rO.roles["Marcus"].socketID}`).emit(
+        "Update Statuses", message); 
+
+};
+
+
+function IchigoNotificationPower(status, name) {
+
+  //check if Ichigo in game not necessary, cause name will be ""
+  //if (!obj.rO.roles["Ichigo"].inGame) { return 0; };
+
+  if (name != obj.rO.roles["Ichigo"].name) { return 0; };
+
+  var message = obj.rO.roles["Ichigo"].naviNotification(status);
+
+  io.to(`${obj.rO.roles["Ichigo"].socketID}`).emit(
+        "Update Statuses", message);   
+
+};
+
+
 
 
 
