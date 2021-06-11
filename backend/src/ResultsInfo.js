@@ -146,8 +146,23 @@ class ResultsInfo {
 
 	}; //end didAnyoneWin
 
+	//for Umbra Lord Absolute Yes Power
+	didEvilWinTwoMissions() {
 
+		var numOfFailures = 0;
 
+		//no need to check Mission 7
+		for (var i = 1; i < 7; i++) {
+
+			if (this.missionInfo[i].result == "Fail") {
+				numOfFailures += 1;
+			};
+
+		}; //end for
+
+		return ((numOfFailures >= 2) ? true : false);
+
+	}; //end didEvilWinTwoMissions
 
 
 }; //end class ResultsInfo
