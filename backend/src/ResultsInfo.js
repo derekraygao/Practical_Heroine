@@ -109,12 +109,27 @@ class ResultsInfo {
 
 
 
-	didAnyoneWin(missionNumber) {
+	didAnyoneWin(currentMissionNo) {
 
+		var threeWins = this.didAnyoneWinThreeMissionsInARow(currentMissionNo);
+
+		if (threeWins == "Evil 3xs") {
+
+			return "Villains Win!";
+
+		} else if (threeWins == "Good 3xs") {
+
+			return "Heroes Win! Villains' Last Chance.";
+
+		};
+
+
+		//Did Anyone Win 4/7 Missions
 		var successfulMissionCount = 0;
 		var failedMissionCount = 0;
+		var loopStopper = currentMissionNo + 1;
 
-		for (let i = 1; i < (missionNumber + 1); i++) {
+		for (let i = 1; i < loopStopper; i++) {
 
 			if (this.missionInfo[i].result == "Success") {
 
@@ -145,6 +160,43 @@ class ResultsInfo {
 
 
 	}; //end didAnyoneWin
+
+
+	didAnyoneWinThreeMissionsInARow(currentMissionNo) {
+
+		var evilWins = 0;
+		var goodWins = 0;
+		var loopStopper = currentMissionNo + 1;
+		
+		for (var i = 1; i < loopStopper; i++) {
+
+			if (this.missionInfo[i].result == "Fail") {
+
+				evilWins += 1;
+				goodWins = 0;
+
+			} else {
+
+				goodWins += 1;
+				evilWins = 0;
+
+			};
+
+		}; //end for loop
+
+
+		if (evilWins == 3) {
+			return "Evil 3xs";
+		} else if (goodWins == 3) {
+			return "Good 3xs";
+		} else {
+			return "Nobody Won 3xs";
+		};
+
+
+	}; //end didAnyoneWinThreeMissionInARow()
+
+
 
 	//for Umbra Lord Absolute Yes Power
 	didEvilWinTwoMissions() {

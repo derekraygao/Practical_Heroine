@@ -207,6 +207,49 @@ function testUmbraLordPowers() {
 };
 
 
+function testUmbraLordIf2FailuresThenAbsoluteYesDoesNotWork() {
+
+	Controller.addMissionVote(obj, obj.pT["Derek"], -1); //Derek
+	Controller.addMissionVote(obj, obj.pT["Cloud"], -4); //Cloud
+	Controller.addMissionVote(obj, obj.pT["Serena"], 3); //Serena
+	Controller.addMissionVote(obj, obj.pT["Lucio"], -8); //Lucio
+	Controller.addMissionVote(obj, obj.pT["Xing"], -5); //Xing	
+
+	Controller.setMissionTeam(obj, ["Lucio", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	obj.rD.missionNo = 1;
+	Controller.missionVoteCalculation(obj);
+
+	Controller.addMissionVote(obj, obj.pT["Lucio"], null); //Lucio
+
+	obj.rD.missionNo = 2;
+	Controller.missionVoteCalculation(obj);
+
+
+	obj.rD.missionNo = 3;
+	Controller.missionVoteCalculation(obj);
+
+	obj.rD.missionNo = 4;
+	Controller.missionVoteCalculation(obj);
+
+	Controller.addMissionVote(obj, obj.pT["Lucio"], -7); //Lucio
+
+	obj.rD.missionNo = 5;
+	Controller.missionVoteCalculation(obj);
+
+	console.log(obj.rI.missionInfo);
+
+	console.log("Did Evil Win Two Missions");
+	console.log(obj.rI.didEvilWinTwoMissions());
+
+
+	
+
+
+};
+
+//testUmbraLordIf2FailuresThenAbsoluteYesDoesNotWork();
 
 
 
@@ -295,21 +338,46 @@ function addPrincessGuess(guess1, guess2, guess3, guess4, guess5) {
 
 function didAnyoneWinTest() {
 
+Controller.addMissionVote(obj, obj.pT["Derek"], -1); //Derek
+Controller.addMissionVote(obj, obj.pT["Cloud"], -4); //Cloud
+Controller.addMissionVote(obj, obj.pT["Serena"], 3); //Serena
+Controller.addMissionVote(obj, obj.pT["Lucio"], 0); //Lucio
+Controller.addMissionVote(obj, obj.pT["Xing"], -5); //Xing	
+
+Controller.setMissionTeam(obj, ["Lucio", "Serena"]);
+Controller.setPlayersForMission(obj);
+
 Controller.roomsData["testing"].missionNo = 1;
-console.log("Mission Vote Total is: " + Controller.missionVoteCalculation(obj));
+console.log("Mission " + obj.rD.missionNo + " Vote Total is: " + Controller.missionVoteCalculation(obj));
+	
 
+Controller.addMissionVote(obj, obj.pT["Serena"], -5); //Serena	
 Controller.roomsData["testing"].missionNo = 2;
-console.log("Mission Vote Total is: " + Controller.missionVoteCalculation(obj));
-
+console.log("Mission " + obj.rD.missionNo + " Vote Total is: " + Controller.missionVoteCalculation(obj));
+	
+//Controller.addMissionVote(obj, obj.pT["Serena"], -3); //Serena
 Controller.roomsData["testing"].missionNo = 3;
-console.log("Mission Vote Total is: " + Controller.missionVoteCalculation(obj));
+console.log("Mission " + obj.rD.missionNo + " Vote Total is: " + Controller.missionVoteCalculation(obj));
 
+//Controller.addMissionVote(obj, obj.pT["Serena"], 6); //Serena
 Controller.roomsData["testing"].missionNo = 4;
-console.log("Mission Vote Total is: " + Controller.missionVoteCalculation(obj));
+console.log("Mission " + obj.rD.missionNo + " Vote Total is: " + Controller.missionVoteCalculation(obj));
 
-return (Controller.roomsData["testing"].results.didAnyoneWin(3));
+Controller.addMissionVote(obj, obj.pT["Serena"], 6); //Serena
+Controller.roomsData["testing"].missionNo = 5;
+console.log("Mission " + obj.rD.missionNo + " Vote Total is: " + Controller.missionVoteCalculation(obj));
+
+Controller.roomsData["testing"].missionNo = 6;
+console.log("Mission " + obj.rD.missionNo + " Vote Total is: " + Controller.missionVoteCalculation(obj));
+
+
+console.log(obj.rI.missionInfo);
+
+return (Controller.roomsData["testing"].results.didAnyoneWin(4));
 
 };
+
+console.log(didAnyoneWinTest());
 
 
 function getLatestTeamAndMisionInfoTest() {
@@ -702,7 +770,7 @@ function testIchigoPower() {
 };
 
 
-testIchigoPower();
+//testIchigoPower();
 
 
 function checkStatusConditionForSaintess(playerObject) {
