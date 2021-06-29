@@ -1,0 +1,11 @@
+.system-instructions-menu-bar {
+
+	grid-area: system-instructions-menu;
+
+}
+
+.sibutton1 {
+
+	border-right: 2px solid white !important;
+
+}

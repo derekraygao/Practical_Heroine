@@ -1,0 +1,26 @@
+.menu-bar-container {
+
+	grid-area: menu-bar;
+	overflow-x: auto;
+
+}
+
+.menu-button1 {
+
+	border-right: 2px solid white !important;
+}
+
+.menu-button2 {
+
+	border-right: 2px solid white !important;
+}
+
+.menu-button3 {
+
+	border-right: 2px solid white !important;
+}
+
+.menu-button4 {
+
+	border-right: 2px solid white !important;
+}

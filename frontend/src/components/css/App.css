@@ -1,0 +1,47 @@
+.grid-container-main {
+
+	display: grid;
+	grid-template-columns: 20% 40% 20% 20%;
+	grid-template-rows: 8% 8% auto;
+
+	grid-template-areas: "title          description       room-buttons       room-buttons "
+						 "menu-bar        menu-bar          menu-bar            menu-bar"
+						 "chat-box        chat-box         gameplay-box       gameplay-box"
+						 ;
+
+
+	height: 100vh;
+	width: 100vw;
+
+	background-image: url(./backgroundopaque2.jpg); 
+	background-repeat: no-repeat;
+  	background-size: 100% 100%;
+
+}
+
+
+
+
+
+/*
+.grid-container {
+
+	display: grid;
+	grid-template-columns: 20% 40% 20% 20%;
+	grid-template-rows: 8% 8% 5% auto 5% auto;
+
+	grid-template-areas: "title          description       room-buttons       room-buttons "
+						 "menu-bar        menu-bar          menu-bar            menu-bar"
+						 "chat-box        chat-box         system-menu      instructions-menu"
+						 "chat-box        chat-box        system-message     game-instructions"
+						 "chat-box        chat-box         action-menu         action-menu"
+						 "chat-box        chat-box          action-box          action-box"
+						 ;
+
+
+	height: 100vh;
+	width: 100vw;
+
+};
+
+*/
