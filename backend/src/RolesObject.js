@@ -1,4 +1,34 @@
+var {Princess} = require('./characters/Princess.js');
+var {Marcus} = require('./characters/Marcus.js');
+var {Saintess} = require('./characters/Saintess.js');
+var {Ichigo} = require('./characters/Ichigo.js');
+var {Noah} = require('./characters/Noah.js');
+var {Seer} = require('./characters/Seer.js');
+var {Oracle} = require('./characters/Oracle.js');
+var {Balancer} = require('./characters/Balancer.js');
+var {DetectiveChat} = require('./characters/DetectiveChat.js');
+var {AuraKnight} = require('./characters/AuraKnight.js');
+var {Ranger} = require('./characters/Ranger.js');
+var {Pear} = require('./characters/Pear.js');
+var {Esper} = require('./characters/Esper.js');
+var {Scientist} = require('./characters/Scientist.js');
+var {Sensor} = require('./characters/Sensor.js');
+var {Jailer} = require('./characters/Jailer.js');
+
 var {UmbraLord} = require('./characters/UmbraLord.js');
+var {Hecate} = require('./characters/Hecate.js');
+var {Bomberman} = require('./characters/Bomberman.js');
+var {LieutenantBlitz} = require('./characters/LieutenantBlitz.js');
+var {Delayer} = require('./characters/Delayer.js');
+var {Persequor} = require('./characters/Persequor.js');
+var {Reverser} = require('./characters/Reverser.js');
+var {Spiritualist} = require('./characters/Spiritualist.js');
+var {Backstabber} = require('./characters/Backstabber.js');
+
+var {Unknown} = require('./characters/Unknown.js');
+
+
+var {shuffle} = require("./characters/shuffle.js");
 
 
 
@@ -12,184 +42,50 @@ class RolesObject {
     this.roles = 
     {
 
-      princess: 
-      {     
-            role: "princess",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1,
-            alignment: "unknown",
-            team: "heroes"
-      },
+      "Princess": new Princess(),
 
 
-      saintess:
-      { 
-            role: "saintess",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1,
-            alignment: "good",
-            team: "heroes"
-      },
+      "Saintess": new Saintess(),
 
 
-      arduren:
-      {
-            role: "arduren",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1,
-            alignment: "good",
-            team: "heroes"
-      },
+      "Ichigo": new Ichigo(),
 
 
-      marcus:
-      {
-            role: "marcus",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Marcus": new Marcus(),
+
+      "Noah": new Noah(),
+
+      "Seer": new Seer(),
 
 
-      seer:
-      {
-            role: "seer",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Aura Knight": new AuraKnight(),
 
 
-      aura:
-      {
-            role: "aura",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Balancer": new Balancer(),
 
 
-      balancer: 
-      {
-            role: "balancer",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Esper": new Esper(),
 
 
-      telepath: 
-      {
-            role: "telepath",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Pear": new Pear(),
 
 
-      ghost:
-      {
-            role: "ghost",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Detective Chat": new DetectiveChat(),
 
 
-      detective: 
-      {
-            role: "detective",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Ranger": new Ranger(),
 
 
-      ranger:
-      {
-            role: "ranger",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Oracle": new Oracle(),
 
 
-      oracle:
-      {
-            role: "oracle",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Scientist": new Scientist(),
 
 
-      scientist: 
-      {
-            role: "scientist",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Jailer": new Jailer(),
 
 
-      jailer: 
-      {
-            role: "jailer",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
-
-
-      sensor:
-      {
-            role: "sensor",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "good",
-            team: "heroes"
-      },
+      "Sensor": new Sensor(),
 
 
       //bad roles
@@ -197,91 +93,29 @@ class RolesObject {
       "Umbra Lord": new UmbraLord(),
 
 
-      hecate: 
-      {
-            role: "hecate",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "bad",
-            team: "villains"
-      },
+      "Hecate": new Hecate(),
 
 
-      exploder: 
-      {
-            role: "exploder",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "bad",
-            team: "villains"
-      },
+      "Bomberman": new Bomberman(),
 
 
-      alpha: 
-      {
-            role: "alpha",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "bad",
-            team: "villains"
-      },
+      "Lieutenant Blitz": new LieutenantBlitz,
 
 
-      delayer: 
-      {
-            role: "delayer",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "bad",
-            team: "villains",
-            delayerCount: 0 //default is 0
-      },
+      "Delayer": new Delayer(),
 
 
-      ditto:
-      {
-            role: "ditto",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "bad",
-            team: "villains",
-            voteCopyTarget: "",
-            identityTheftTarget: ""
-      },
+      "Persequor": new Persequor(),
 
 
-      spiritualist: 
-      {
-            role: "spiritualist",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "bad",
-            team: "villains"
-      },
+      "Spiritualist": new Spiritualist(),
 
 
-      reverser:
-      {
-            role: "reverser",
-            name: "", 
-            socketID: "", 
-            inGame: false, 
-            index: -1, 
-            alignment: "bad",
-            team: "villains"
-      },
+      "Reverser": new Reverser(),
+
+      "Backstabber": new Backstabber(),
+
+      "Unknown": new Unknown(),
 
 
       sooah:
@@ -300,15 +134,16 @@ class RolesObject {
 
 
     //this is a reference to the objects within the this.roles object
+    //has same index order as player array
     this.rolesInGame = [];
 
       //don't include princess or demonLord, because they're ALWAYS in the game
-    this.goodRoles = ["seer", "balancer", "telepath", "ghost", 
-                      "marcus", "detective", "aura", "ranger", 
-                      "scientist", "oracle", "jailer", "sensor"];
+    this.goodRoles = ["Seer", "Balancer", "Esper", "Pear", 
+                      "Marcus", "Noah", "Detective Chat", "Aura Knight", "Ranger", 
+                      "Scientist", "Oracle", "Jailer", "Sensor"];
 
-    this.badRoles = ["hecate", "exploder", "alpha", "reverser", 
-                     "delayer", "ditto", "spiritualist"];
+    this.badRoles = ["Hecate", "Bomberman", "Lieutenant Blitz", "reverser", 
+                     "Delayer", "Persequor", "spiritualist", "Back Stabber"];
 
 
   }; //end constructor
@@ -322,7 +157,7 @@ class RolesObject {
 
     var rolesArrayForThisGame = [];
 
-    rolesArrayForThisGame[0] = "princess";
+    rolesArrayForThisGame[0] = "Princess";
     rolesArrayForThisGame[1] = "Umbra Lord";
 
     switch(obj.pA.length) {
@@ -331,7 +166,7 @@ class RolesObject {
       case 3:
 
         //rolesArrayForThisGame[2] = goodRoles[0];
-        rolesArrayForThisGame[2] = "marcus";
+        rolesArrayForThisGame[2] = "Marcus";
 
         break;
 
@@ -345,9 +180,9 @@ class RolesObject {
 
       case 5:
 
-        rolesArrayForThisGame[2] = this.badRoles[0];
-        rolesArrayForThisGame[3] = this.goodRoles[0];
-        rolesArrayForThisGame[4] = this.goodRoles[1];
+        rolesArrayForThisGame[2] = "Marcus"; //this.badRoles[0]; //Serena
+        rolesArrayForThisGame[3] = "Persequor"; //this.goodRoles[0]; //Lucio
+        rolesArrayForThisGame[4] = "Pear"; //this.goodRoles[1]; //Xing
 
         break;
 
@@ -355,8 +190,8 @@ class RolesObject {
 
         rolesArrayForThisGame[2] = "spiritualist"; //badRoles[0];
         rolesArrayForThisGame[3] = "oracle";//goodRoles[0];
-        rolesArrayForThisGame[4] = "marcus";//goodRoles[1];
-        rolesArrayForThisGame[5] = "seer";//goodRoles[2];
+        rolesArrayForThisGame[4] = "Marcus";//goodRoles[1];
+        rolesArrayForThisGame[5] = "Seer";//goodRoles[2];
 
         break;
 
@@ -418,7 +253,7 @@ class RolesObject {
     }; //end switch
 
 
-    shuffle(rolesArrayForThisGame);
+    //shuffle(rolesArrayForThisGame);
 
     return rolesArrayForThisGame;
 
@@ -435,7 +270,7 @@ class RolesObject {
 
   getPrincessIdentity() {
 
-    return (this.roles["princess"].name);
+    return (this.roles["Princess"].name);
 
   };
 
@@ -443,10 +278,10 @@ class RolesObject {
   //marcus does not know between ditto & persequor
   getPrincessIdentityArrayForMarcus() {
 
-    if (!this.roles["ditto"].inGame) { return ([this.roles["princess"].name]); };
+    if (!this.roles["Persequor"].inGame) { return ([this.roles["Princess"].name]); };
 
     /*ditto is in game*/
-    var princessAndDitto = [this.roles["princess"].name, this.roles["ditto"].name];
+    var princessAndDitto = [this.roles["Princess"].name, this.roles["Persequor"].name];
 
     shuffle(princessAndDitto);
 
@@ -545,7 +380,7 @@ class RolesObject {
 
     for (let i = 0; i < this.rolesInGame.length; i++) {
 
-      if (this.rolesInGame[i].role == "ditto") { continue; };
+      if (this.rolesInGame[i].role == "Persequor") { continue; };
 
       if (this.rolesInGame[i].team == "villains") {
         listOfVillains.push(this.rolesInGame[i].name);
@@ -595,26 +430,6 @@ class RolesObject {
 
 
 
-function shuffle(array) {
-
-  var currentIndex = array.length, temporaryValue, randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  };
-
-  return array;
-
-};
 
 
 
