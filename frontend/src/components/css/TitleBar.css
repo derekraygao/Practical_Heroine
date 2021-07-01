@@ -1,0 +1,29 @@
+.title-bar-title {
+
+	grid-area: title;
+
+}
+
+
+.title-bar-description {
+
+	grid-area: description;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	max-height: 100%;
+	overflow-y: auto;
+
+	font-size: 120%;
+
+}
+
+
+
+.title-bar-buttons {
+
+	grid-area: room-buttons;
+
+
+}

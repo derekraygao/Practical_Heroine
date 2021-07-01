@@ -1,0 +1,63 @@
+.team-leader-choose-team-container {
+
+	display: grid;
+	grid-template-rows: 20% 80%;
+	grid-template-areas: "instructions"
+						 "team-member-buttons"
+						 ;
+
+}
+
+
+.team-leader-message-container {
+
+	grid-area: instructions;
+	display: flex;
+	justify-content: center;
+
+	word-wrap: break-word;
+	font-size: 115%;
+
+	overflow-y: auto;
+
+	padding-top: 3%;
+	padding-left: 2%;
+	padding-right: 2%;
+
+
+}
+
+
+.choose-team-buttons-container {
+
+	grid-area: team-member-buttons;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+
+	flex-wrap: wrap;
+
+	overflow-y: auto;
+	
+}
+
+.submit-team-button {
+	margin-bottom: 2% !important;
+	margin-left: 5% !important;
+}
+
+
+.wait-team-submission {
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 130%;
+
+	padding-left: 2%;
+	padding-right: 2%;
+
+}
