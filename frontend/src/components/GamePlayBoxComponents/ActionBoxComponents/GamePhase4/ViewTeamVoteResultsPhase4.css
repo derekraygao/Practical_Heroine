@@ -1,0 +1,79 @@
+.view-team-vote-results-container {
+
+	display: grid;
+	grid-template-rows: 20% 50% 30%;
+	grid-template-areas: "results-text"
+						 "visual-results"
+						 "done-viewing-button"
+						 ;
+
+}
+
+
+.team-vote-results-text-container {
+
+	grid-area: results-text;
+
+	display: flex;
+	justify-content: center;
+
+	font-size: 120%;
+
+	padding-top: 4%;
+	padding-left: 2%;
+	padding-right: 2%;
+	overflow-y: auto;
+}
+
+
+.team-vote-visual-display-container {
+
+	grid-area: visual-results;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	overflow-y: auto;
+
+	margin-bottom: 3%;
+	margin-top: 3%;
+
+
+}
+
+/*
+.team-vote-visual-display-container table {
+	
+	max-width: 40%;
+	height: 85%;
+
+	margin-left: 10px !important;
+	margin-top: 3px !important;
+
+
+}
+*/
+
+.team-vote-done-viewing-button-container {
+
+	grid-area: done-viewing-button;
+
+	display: flex;
+	justify-content: center;
+	overflow-y: auto;
+
+	font-size: 120%;
+	padding-top: 1%;
+	padding-left: 2%;
+	padding-right: 2%;
+
+}
+
+.team-vote-done-viewing-button-container button {
+
+	max-height: 80% !important;
+
+}
+
+

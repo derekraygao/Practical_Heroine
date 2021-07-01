@@ -1,0 +1,93 @@
+.vote-on-team-container {
+
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+
+	grid-template-areas: "instructions"
+						 "vote-buttons"
+
+}
+
+
+.vote-on-team-instruction {
+
+	grid-area: instructions;
+
+	display: flex;
+	justify-content: center;
+	
+
+	font-size: 133%;
+	overflow-y: auto;
+
+	padding-top: 4%;
+	padding-left: 1.5%;
+	padding-right: 1.5%;
+
+}
+
+.vote-on-team-button-container {
+
+	grid-area: vote-buttons;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	flex-wrap: wrap;
+
+	overflow-y: auto;
+
+	padding-bottom: 1%;
+
+}
+
+
+
+.vote-on-team-button-container-ul {
+
+	grid-area: vote-buttons;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	flex-wrap: wrap;
+
+	overflow-y: auto;
+
+	padding-bottom: 1%;
+
+}
+
+.vote-on-team-button-container-ul button {
+
+	margin-top: 1% !important;
+
+}
+
+
+.vote-on-team-container-umbra-lord {
+
+	display: grid;
+	grid-template-rows: 35% 65%;
+
+	grid-template-areas: "instructions"
+						 "vote-buttons";
+	
+}
+
+
+.submitted-team-vote-container {
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	overflow-y: auto;
+
+	font-size: 140%;
+
+	padding-left: 3%;
+	padding-right: 3%;
+
+}

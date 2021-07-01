@@ -1,0 +1,27 @@
+.team-vote-table-1 th {
+
+	height: 10% !important;
+	background-color: #21ba45 !important;
+	color: white !important;
+
+}
+
+.team-vote-table-2 th {
+
+	height: 10% !important;
+	background-color: #dc2829 !important;
+	color: white !important;
+
+}
+
+
+.team-vote-table-1 tr {
+
+	max-height: 10% !important;
+}
+
+.team-vote-table-2 tr {
+
+	max-height: 10% !important;
+}
+
