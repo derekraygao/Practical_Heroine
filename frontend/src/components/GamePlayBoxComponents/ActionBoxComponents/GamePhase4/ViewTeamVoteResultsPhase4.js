@@ -21,7 +21,7 @@ class ViewTeamVoteResultsPhase4 extends React.Component {
 
     this.setState({doneViewingResults: true});
 
-    if (this.wasTeamAccepted) {
+    if (this.wasTeamAccepted()) {
 
       socket.emit("Ready To Start Power Phase 2 and Game Phase 5");
 
@@ -64,14 +64,15 @@ class ViewTeamVoteResultsPhase4 extends React.Component {
   }; //end wasTeamApproved()
 
 
-  teamAcceptedText = () => {
+  teamVoteResultsText = () => {
    
-    var latestInd = (this.props.teamVoteInfo[this.props.missionNo].length - 1);
-    var result = this.props.teamVoteInfo[this.props.missionNo][latestInd].result;
+    if (this.wasTeamAccepted()) {
+      return "'Accepted'!";
+    } else {
+      return ("'Rejected'! Number of Failed Team Proposals is: " + this.props.failedProposals);
+    };
 
-    return (result === "Accepted" ? "Accepted" : "Rejected");
-
-  };
+  }; //end teamAcceptedText()
 
 
 
@@ -84,7 +85,7 @@ class ViewTeamVoteResultsPhase4 extends React.Component {
 
         <div className="team-vote-results-text-container">
           {this.props.teamLeader}'s team of: {formatArrayIntoString(this.props.missionTeam)}
-          &nbsp; was '{this.teamAcceptedText()}'! 
+          &nbsp; was {this.teamVoteResultsText()} 
         </div>
 
 
@@ -118,7 +119,8 @@ const mapStateToProps = (state) => {
             teamVoteInfo: state.teamVoteInfo,
             missionNo: state.missionNumber,
             teamLeader: state.teamLeader,
-            missionTeam: state.missionTeam
+            missionTeam: state.missionTeam,
+            failedProposals: state.failedProposals,
          }
   );
 

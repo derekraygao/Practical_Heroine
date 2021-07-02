@@ -1,0 +1,18 @@
+.normal-mission-vote-container {
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	overflow-y: auto;
+
+	padding-left: 2%;
+	padding-right: 2%;
+
+}
+
+.normal-mission-vote-container button {
+
+	max-height: 25% !important;
+
+}

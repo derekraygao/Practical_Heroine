@@ -24,12 +24,6 @@ class TeamLeaderChoosingTeamPhase2 extends React.Component {
 
           };
 
-  componentDidMount() {
-
-    this.props.clearMissionTeam([]);
-
-  };
-
 
   submitTeamMembers = () => {
 
@@ -47,7 +41,7 @@ class TeamLeaderChoosingTeamPhase2 extends React.Component {
 
   createChooseTeamMemberButtons = () => {
 
-    const buttonsArray = testArray8.map((pName, index) => {
+    const buttonsArray = this.props.playerList.map((pName, index) => {
 
       return (
 

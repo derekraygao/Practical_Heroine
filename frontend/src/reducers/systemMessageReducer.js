@@ -1,5 +1,5 @@
 
-export default (systemMessage = [], action) => {
+const systemMessageReducer = (systemMessage = [], action) => {
 
 	switch (action.type) {
 
@@ -12,4 +12,6 @@ export default (systemMessage = [], action) => {
 	}; //switch
 
 };
+
+export default systemMessageReducer;
 

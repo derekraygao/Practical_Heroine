@@ -19,11 +19,13 @@
 	padding-left: 5px;
 
 	margin-top: 3px;
+
 }
 
 
 .testButton {
 
+	display: none;
 	position: absolute;
 	top: 20px;
 	left: 20px;

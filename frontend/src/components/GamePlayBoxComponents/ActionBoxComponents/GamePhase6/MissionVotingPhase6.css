@@ -1,0 +1,13 @@
+.have-voted-on-mission-container {
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 140%;
+
+	overflow-y: auto;
+
+	padding-left: 3%;
+	padding-right: 3%;
+
+}

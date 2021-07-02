@@ -101,7 +101,7 @@ const mapStateToProps = (state) => {
             teamVoteInfo: state.teamVoteInfo,
             missionNo: state.missionNumber,
             teamLeader: state.teamLeader,
-            missionTeam: state.missionTeam
+            missionTeam: state.missionTeam,
          }
   );
 

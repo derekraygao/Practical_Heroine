@@ -1,0 +1,13 @@
+.PP5-wait-for-mission-team-container {
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	overflow-y: auto;
+
+	font-size: 135%;
+
+	padding-left: 3%;
+	padding-right: 3%;
+}

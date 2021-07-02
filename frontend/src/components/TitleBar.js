@@ -14,6 +14,17 @@ class TitleBar extends React.Component {
       case 1:
         return ("Game Phase 1 (Time Left): " + this.props.timer);
 
+      case 5:
+
+        if (this.props.missionTeam.includes(this.props.name)) {
+          return ("Game Phase 5 (Time Left): " + this.props.timer);
+        } else {
+          return ("Game Phase 5 + 6 (Time Left): " + this.props.timer);
+        };
+
+      case 6:
+        return ("Game Phase 6 (Time Left): " + this.props.timer);
+
       default:
         return ""; 
 
@@ -65,6 +76,7 @@ const mapStateToProps = (state) => {
       name: state.name,
       role: state.role,
       gamePhase: state.gamePhase,
+      missionTeam: state.missionTeam,
       timer: state.timer
     }
   );

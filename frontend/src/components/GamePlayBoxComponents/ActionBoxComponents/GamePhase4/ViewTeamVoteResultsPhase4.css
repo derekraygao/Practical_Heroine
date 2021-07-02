@@ -17,9 +17,9 @@
 	display: flex;
 	justify-content: center;
 
-	font-size: 120%;
+	font-size: 115%;
 
-	padding-top: 4%;
+	padding-top: 1%;
 	padding-left: 2%;
 	padding-right: 2%;
 	overflow-y: auto;

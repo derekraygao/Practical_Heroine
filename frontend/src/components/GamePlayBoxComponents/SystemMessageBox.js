@@ -11,7 +11,7 @@ var isScrollAtBottom;
 function checkIfScrollAtBottom() {
 
   var scrollElem = document.querySelector('.system-message-box');
-  
+
   /*
   console.log("scrollElem.scrollHeight is: ", scrollElem.scrollHeight);
   console.log("scrollElem.scrollTop is: ", scrollElem.scrollTop);
@@ -50,7 +50,7 @@ class SystemMessageBox extends React.Component {
 
     checkIfScrollAtBottom();
 
-    console.log("checkIfScrollAtBottom is: " + isScrollAtBottom);
+    //console.log("checkIfScrollAtBottom is: " + isScrollAtBottom);
 
 
   }; //end componentWillUpdate
@@ -90,6 +90,14 @@ class SystemMessageBox extends React.Component {
 
         return (<li key={index} style={{color: "#9933ff", fontSize: "125%"}}>{m.message}</li>);
 
+      } else if (m.type === "intro message") {
+
+        return (<li key={index} style={{marginTop: "5px", marginBottom: "5px"}}>{m.message}</li>);
+
+      } else {
+
+        return (<li key={index} style={{color: "black"}}>Error - not a recognized message type</li>);
+      
       };
 
 
@@ -116,7 +124,7 @@ class SystemMessageBox extends React.Component {
 			<div className="system-message-box">
 
         <ul>
-          {this.returnListOfMessages()} {console.log("Messages rendered")}
+          {this.returnListOfMessages()}
         </ul>
 
         <button 
