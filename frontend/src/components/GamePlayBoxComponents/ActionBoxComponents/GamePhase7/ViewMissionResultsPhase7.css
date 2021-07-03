@@ -1,0 +1,53 @@
+.view-mission-results-container {
+
+	display: grid;
+	grid-template-columns: 72% 28%;
+	grid-template-areas: "table next-mission-button"
+						 ;
+	overflow: auto;
+}
+
+
+.view-mission-results-table-container {
+
+	grid-area: table;
+
+	display: flex;
+	justify-content: center;
+	padding-top: 3%;
+	overflow-y: auto;
+
+}
+
+.view-mission-results-table-container table {
+
+	max-width: 90%;
+
+
+}
+
+.table-style {
+
+	background-color: #f2711c !important;
+	color: white !important;
+	font-weight: bold;
+
+}
+
+
+.next-mission-button-container {
+
+	display: flex;
+	justify-content: center;
+	/*align-items: center; this handled within component*/
+	overflow-y: auto;
+
+}
+
+.next-mission-button-container button {
+	max-width: 80% !important;
+	min-width: 90px !important;
+}
+
+
+

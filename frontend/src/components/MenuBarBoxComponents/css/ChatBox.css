@@ -1,0 +1,11 @@
+.chat-box-container {
+
+	grid-area: chat-box;
+
+	display: flex;
+	height: 100%;
+
+	min-width: 50%;
+	overflow: auto;
+
+}
