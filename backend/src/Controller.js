@@ -39,12 +39,27 @@ class Controller {
 	}; //end constructor
 
 
-
+	//also adds socketRoom
 	addPlayerToArray(name, socketID, roomName, roomMaster) {
 
 		this.roomsData[roomName].playersInRoomArray.
 		push(new Player(name, socketID, roomName, roomMaster));
 
+		this.socketRoom[socketID] = roomName;
+
+	};
+
+
+	getListOfPlayers(obj) {
+
+		var playerList = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+			playerList.push(obj.pA[i].name);
+		};
+
+		return playerList;
+		
 	};
 
 
@@ -145,8 +160,7 @@ class Controller {
 
 	paralyzedPlayerSkip(obj) {
 
-		if (obj.rO.roles["Noah"].thunderWaveTarget
-			== obj.pA[obj.rD.teamLeaderIndex].name) {
+		if (obj.pA[obj.rD.teamLeaderIndex].paralyzed) {
 
 			obj.rD.teamLeaderIndex += 1;
 
@@ -245,6 +259,29 @@ class Controller {
 	}; //end isTeamVoteAcceptOrNot
 
 
+	wasTeamResultBecauseOfUmbraLordAbsolutePower(voteTotal) {
+
+		if (voteTotal >= 0) {
+
+			if (voteTotal == 100) {
+				return "Absolute Accepted";
+			};
+
+			return "Accepted";
+
+		} else {
+
+			if (voteTotal == -100) {
+				return "Absolute Rejected";
+			};
+
+			return "Rejected";
+
+		};
+
+	}; //end wasTeamResultBecauseOfUmbraLordAbsolutePower()
+
+
 	teamVoteCalculation(obj) {
 
 		var teamVoteAccumulator = 0;
@@ -255,6 +292,9 @@ class Controller {
 			if (obj.pA[i].teamVote == null) { continue; };
 
 			teamVoteAccumulator += obj.pA[i].teamVote;
+
+			console.log(obj.pA[i].name + " role is " + 
+				obj.pA[i].role + ", team vote is: " + obj.pA[i].teamVote);
 
 			//no need for exact number because it's team vote. Just need to know if
 			//it's accept or reject. Only need to store Mission exact number
@@ -297,7 +337,7 @@ class Controller {
 				obj.pA[obj.rD.teamLeaderIndex].name,
 				obj.rD.missionTeam,
 				obj.rD.teamVoteInfo,
-				"Accepted"
+				this.wasTeamResultBecauseOfUmbraLordAbsolutePower(teamVoteAccumulator)
 			);
 
 			return "Successful Team Proposal";
@@ -311,7 +351,7 @@ class Controller {
 				obj.pA[obj.rD.teamLeaderIndex].name,
 				obj.rD.missionTeam,
 				obj.rD.teamVoteInfo,
-				"Rejected"
+				this.wasTeamResultBecauseOfUmbraLordAbsolutePower(teamVoteAccumulator)
 			);
 
 
@@ -480,16 +520,33 @@ class Controller {
 				}
 
 			);
-
+			/*
+			console.log(obj.pA[i].name + " final vote after adjustments is: " 
+				+ obj.pA[i].missionVote); 
+			*/
 		}; //end for
 
-
+		/*
+		console.log("Negative Vote Total BEFORE Shadow Domain Is: " 
+			+ negativeVoteAccumulator);
+		*/
 		negativeVoteAccumulator = obj.rO.roles["Umbra Lord"]
 		.adjustVotesShadowDomain(negativeVoteAccumulator, obj);
+		/*
+		console.log("Negative Vote Total AFTER Shadow Domain Is: " 
+			+ negativeVoteAccumulator);
+
+		console.log("Positive Vote Total BEFORE Ichigo Umbra Slayer is: " 
+			+ positiveVoteAccumulator); 
+		*/
 
 		positiveVoteAccumulator = obj.rO.roles["Ichigo"]
 		.adjustVotesUmbraSlayer(positiveVoteAccumulator, obj);
 
+		/*
+		console.log("Positive Vote Total AFTER Ichigo Umbra Slayer is: " 
+			+ positiveVoteAccumulator);
+		*/
 
 		missionVoteAccumulator = negativeVoteAccumulator + positiveVoteAccumulator;
 
@@ -501,6 +558,8 @@ class Controller {
 		obj.rI.addMissionInfo(
 			obj.rD.missionNo,
 			obj.rD.missionVoteInfo,
+			positiveVoteAccumulator,
+			negativeVoteAccumulator,
 			missionVoteAccumulator,
 			this.missionSuccessOrFail(missionVoteAccumulator)
 		);
@@ -644,11 +703,33 @@ class Controller {
 
 	};
 
+	/*
 	setPlayerReady(obj, index) {
 
 		obj.pA[index].ready = true;
 
-	};
+	}; */
+
+
+	isEveryoneReadyFirstGameAndAtLeastThreePlayers(obj) {
+
+		if (obj.pA.length < 3) { return false; };
+
+		for (let i = 0; i < obj.pA.length; i++) {
+
+			if (!obj.pA[i].ready) {
+
+				return false;
+
+			};
+
+		}; //end for
+
+		return true;
+
+	}; //end isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj)
+
+
 
 
 
@@ -675,9 +756,11 @@ class Player {
         this.burnCount = 0;
         this.teamVote = null; 
         this.princessChoice = "";
-        this.devilized = false;
+        this.corrupted = false;
         this.poisoned = false;
         this.bomb = false;
+        this.paralyzed = false;
+        this.frozen = false;
         this.selectedForTelepathy = false;
         this.multiplier = 1; //default 1: needs to be 1 (and not 0) so you can stack multiplication powers
         this.safeguard = false; //safeguard and bless gets reset in resetallplayerinfo

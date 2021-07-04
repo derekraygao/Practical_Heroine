@@ -13,7 +13,16 @@ var VideoGrant = AccessToken.VideoGrant;
 
 var path = require('path');
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+
+const options = { 
+                  cors:true,
+                  origins:["*"],
+                  pingTimeout: 4000, 
+                  pingInterval: 5000
+                };
+
+
+var io = require('socket.io')(server, options);
 
 
 
@@ -75,12 +84,113 @@ var {AbilityManager} = require('./src/AbilityManager.js');
 var AbilityManager = new AbilityManager();
 
 var Controller = new myClass.Controller();
-console.log(Controller);
+//console.log(Controller);
 
+var {randomName} = require('./random_name.js');
+var {shuffle} = require("./src/characters/shuffle.js");
 
 
 //EVERY SERVER MESSAGE (socket.on) GOES INSIDE THE io.on
 io.on('connection', function (socket) {
+
+  console.log(socket.id + " connected!");
+
+
+  /*for testing only */
+  socket.on("Get Testing Name - Skip Input Screen", () => {
+
+    socket.emit("From Server: Random Name For Testing", randomName());
+
+  });
+
+
+
+  socket.on("TESTING ONLY: Ready For New Game", () => {
+
+    var playerRandName = randomName();
+    socket.emit("From Server: Random Name For Testing", playerRandName);
+
+    Controller.addPlayerToArray(playerRandName, socket.id, "testing", "nobody");
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+
+    Controller.setPlayerReady(obj);
+
+    if (!Controller.isEveryoneReadyFirstGameAndAtLeastThreePlayers(obj)) {
+
+      //update control panel ready info
+      return 0;
+
+    };
+
+    /* if everyone is ready */
+
+    console.log("Everyone is ready (3 players!)");
+
+    Controller.setGamePhase(obj, 1);
+
+    //default missionNo is 0, add to become Mission 1
+    Controller.updateMissionNumber(obj);
+
+    Controller.resetPlayerReadyStatus(obj);
+
+    shuffle(obj.pA);
+
+    //index mapping is done here, so cannot shuffle afterwards, or if shuffle
+    //playerArray, then need to re-map the indices
+    Controller.assignPlayersTheirRoles(obj);
+
+    var listOfPlayers = Controller.getListOfPlayers(obj);
+
+    //sets roles on client side
+    for (let i = 0; i < obj.rO.rolesInGame.length; i++) {
+
+      //sets roles for everyone and starts the game
+      io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
+        "Start Game", {
+                        role: obj.rO.rolesInGame[i].role,
+                        team: obj.rO.rolesInGame[i].team,
+                        listOfPlayers: listOfPlayers
+                      }
+      ); //end emit
+
+
+      if (obj.rO.rolesInGame[i].team == "villains") {
+
+        io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
+        "Set Villains List For Villains", obj.rO.getVillainsIdentities());
+
+      };
+
+
+    }; //end for
+
+ 
+    io.to(`${obj.rO.roles["Princess"].socketID}`).emit(
+    "Reveal Villains To Princess", obj.rO.getVillainsIdentitiesForPrincess());
+
+
+    if (obj.rO.roles["Marcus"].inGame) {
+
+        io.to(`${obj.rO.roles["Marcus"].socketID}`).emit(
+          "Reveal Princess Identity To Marcus", 
+          obj.rO.getPrincessIdentityArrayForMarcus()
+        );
+
+    };
+
+
+  }); //end TESTING ONLY: Ready For New Game
+
+
+
+
+
+
+
+
+
+
 
 
   socket.on("Ready For New Game", () => {
@@ -112,13 +222,19 @@ io.on('connection', function (socket) {
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
     //playerArray, then need to re-map the indices
     Controller.assignPlayersTheirRoles(obj);
+    var listOfPlayers = Controller.getListOfPlayers(obj);
 
     //sets roles on client side
     for (let i = 0; i < obj.rO.rolesInGame.length; i++) {
 
       //sets roles for everyone and starts the game
       io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
-        "Start Game", obj.rO.rolesInGame[i].role);
+        "Start Game", {
+                        role: obj.rO.rolesInGame[i].role,
+                        team: obj.rO.rolesInGame[i].team,
+                        listOfPlayers: listOfPlayers
+                      }
+      );
 
 
       if (obj.rO.rolesInGame[i].team == "villains") {
@@ -182,6 +298,7 @@ io.on('connection', function (socket) {
 
   socket.on("Team Leader's Proposed Team Submission", (proposedTeamArray) => {
     //missionTeamArray = ["Derek", "Cloud", "Serena"]
+    console.log("Submitted team is: " + proposedTeamArray);
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
@@ -198,7 +315,7 @@ io.on('connection', function (socket) {
 
     //Don't need to send team leader name because it was sent previously
     emitToAllSocketsInRoom(obj, 
-      "Set Team Leader's Proposed Team", proposedTeamArray);
+      "Start Game Phase 3: Set Team Leader's Proposed Team", proposedTeamArray);
 
 
 
@@ -228,8 +345,13 @@ io.on('connection', function (socket) {
 
         updateTeamHistoryResults(obj);
 
-        emitToAllSocketsInRoom(obj, "Team Was Accepted!", 
+        emitToAllSocketsInRoom(obj, "Start Game Phase 4: Team Was Accepted!", 
+          obj.rI.teamInfo);
+
+        /*
+        emitToAllSocketsInRoom(obj, "Start Game Phase 4: Team Was Accepted!", 
           obj.rI.getLatestTeamVotingInfo(obj.rD.missionNo));
+        */
 
         break;
 
@@ -245,12 +367,14 @@ io.on('connection', function (socket) {
 
         emitToAllSocketsInRoom(
           obj, 
-          "Team Was Rejected!",
+          "Start Game Phase 4: Team Was Rejected!",
           {
-            teamVoteInfo: obj.rI.getLatestTeamVotingInfo(obj.rD.missionNo),
+            teamInfo: obj.rI.teamInfo,
             numOfFailedTeamProposals: obj.rD.numOfFailedTeamProposals,
-            nextTeamLeader: obj.pA[(obj.rD.teamLeaderIndex + 1)].name
-          } 
+            //nextTeamLeader: obj.pA[(obj.rD.teamLeaderIndex + 1)].name this could
+            //result in teamLeaderIndex that is greater than (array length - 1) and thus cause error 
+            //of reading property of undefined
+          } //what happens in case of paralysis?
           
         );
 
@@ -263,7 +387,7 @@ io.on('connection', function (socket) {
 
         emitToAllSocketsInRoom(
           obj, 
-          "Game Over. Too Many Failed Team Proposals",
+          "Start Game Phase 10: Game Over. Villains Win! 5 Failed Team Proposals!",
           obj.rO.getAllIdentitiesAndTheirRoles()
         );
 
@@ -317,7 +441,7 @@ io.on('connection', function (socket) {
 
 
   //after people view team votes
-  socket.on("Ready To Start Power Phase 2", () => {
+  socket.on("Ready To Start Power Phase 2 and Game Phase 5", () => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
@@ -341,13 +465,14 @@ io.on('connection', function (socket) {
 
 
 
-  socket.on("End Power Phase 2. Start Mission Voting", () => {
+  socket.on("End Power Phase 2. Start Mission Voting And Game Phase 6", () => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
     Controller.setPlayerReady(obj);
 
+    //this checks ONLY those selected for mission
     if (!Controller.areAllConnectedPlayersDoneWithPowerPhase2(obj)) { return 0; };
 
     Controller.resetPlayerReadyStatus(obj);
@@ -384,11 +509,11 @@ io.on('connection', function (socket) {
 
       case "Heroes Win! Villains' Last Chance.":
 
-        console.log("Heroes Win! Villains' Last Chance.");
+        console.log("Start Game Phase 9: Heroes Win! Villains' Last Chance.");
 
         Controller.setGamePhase(obj, 9);
 
-        emitToVillainsToGuessPrincessIdentity(obj);
+        emitToStartGamePhase9(obj);
 
         break;
 
@@ -412,7 +537,7 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 7);
 
-        emitToAllSocketsInRoom(obj, "Mission Ended", missionPointsTotal);
+        emitToAllSocketsInRoom(obj, "Start Game Phase 7: Mission Ended", missionPointsTotal);
 
         break;
 
@@ -445,7 +570,7 @@ io.on('connection', function (socket) {
     //+1 to current Mission No. Need to update on client side too
     Controller.updateMissionNumber(obj);
 
-    emitToAllSocketsInRoom(obj, "Start Night Phase", "");
+    emitToAllSocketsInRoom(obj, "Start Game Phase 8: Night Phase", obj.rD.missionNo);
 
 
   });
@@ -457,16 +582,19 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    //console.log(obj.pA[obj.index].name + "end night phase 8");
+
     Controller.setPlayerReady(obj);
 
     if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };  
 
-    Controller.resetPlayerReadyStatus(obj);
+    //console.log("End night phase, all players ready");
 
+    Controller.resetPlayerReadyStatus(obj);
 
     Controller.setGamePhase(obj, 1);
 
-    emitToAllSocketsInRoom(obj, "Start Power Phase 1", "");
+    emitToAllSocketsInRoom(obj, "Start Game Phase 1: Power Phase 1", "");
 
 
   });
@@ -478,13 +606,14 @@ io.on('connection', function (socket) {
 
 
 
-  socket.on("Submit Villain Guess On The Princess' Identity", (guess) => {
+  socket.on("Submit Villain Guess On The Princess's Identity", (guess) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
     obj.rO.addPrincessGuessForVillain(obj, guess);
 
+    console.log(obj.pA[obj.index].name + " guessed the princess to be: " + guess);
 
     if (!Controller.didAllConnectedVillainsGuessOnThePrincessIdentity(obj)) {
       return 0;
@@ -496,19 +625,23 @@ io.on('connection', function (socket) {
     //if everyone did guess, then next phase
     if (obj.rO.didVillainsCorrectlyGuessThePrincessIdentity()) {
 
+      console.log("Correct guess");
+
       emitToAllSocketsInRoom(
         obj, 
-        "Game Over. Villians Correctly Guessed The Princess' Identity!", 
-        Controller.getAllIdentitiesAndTheirRoles()
+        "Start Game Phase 10: Game Over. Villains Win! Correctly Guessed Princess Identity!", 
+        obj.rO.getAllIdentitiesAndTheirRoles()
       );
 
 
     } else {
 
+      console.log("Wrong guess");
+
       emitToAllSocketsInRoom(
         obj, 
-        "Game Over. Heroes Win! Villains Failed To Guess The Princess' Identity", 
-        Controller.getAllIdentitiesAndTheirRoles()
+        "Start Game Phase 10: Game Over. Heroes Win!", 
+        obj.rO.getAllIdentitiesAndTheirRoles()
       );
 
     }; //end else
@@ -517,6 +650,51 @@ io.on('connection', function (socket) {
   }); //end socket.on("Submit Villain Guess On The Princess' Identity")
 
 
+
+  socket.on("Normal Chat", (chatMess) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var _message = {name: obj.pA[obj.index].name, message: chatMess};
+
+    emitToAllSocketsInRoom(obj, 
+      "Normal Chat Message From Server To Client", _message);
+
+  }); //end socket.on("Normal Chat")
+
+
+  socket.on("Villain Chat", (vChatMess) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+    if (obj.rO.rolesInGame[obj.index].team === "heroes") { return 0; };
+
+
+    var _vMessage = {name: obj.pA[obj.index].name, message: vChatMess};
+
+    for (var i = 0; i < obj.pA.length; i++) {
+      
+      if (obj.rO.rolesInGame[i].team === "villains") {
+
+        io.to(`${obj.pA[i].socketID}`).
+        emit("Villain Chat Message From Server To Client", _vMessage);
+
+      };
+
+    }; //end for
+
+
+
+  }); //end socket.on("Villain Chat")
+
+
+
+  socket.on("disconnect", () => {
+
+    console.log(socket.id + " disconnected!");
+
+  });
 
 
 
@@ -546,6 +724,14 @@ function emitToTeamLeaderChoosingTeam(obj, data) {
 
   for (var i = 0; i < obj.pA.length; i++) {
 
+    io.to(`${obj.pA[i].socketID}`).emit(
+      "Start Game Phase 2: Team Leader Choosing A Team", data);
+
+  }; //end for
+
+  /*
+  for (var i = 0; i < obj.pA.length; i++) {
+
     if (obj.pA[i].isTeamLeader) {
       io.to(`${obj.pA[i].socketID}`).emit("You Are Team Leader", data);
     } else {
@@ -553,12 +739,25 @@ function emitToTeamLeaderChoosingTeam(obj, data) {
     };
 
   }; //end for
-
+  */
 
 }; //end emitToTeamLeaderChoosingTeam
 
 
 
+
+function emitStartPowerPhase2(obj) {
+
+    for (let i = 0; i < obj.pA.length; i++) {
+
+      io.to(`${obj.pA[i].socketID}`).emit(
+      "Start Game Phase 5: Power Phase 2");
+
+    }; //end for
+
+}; //end emitStartPowerPhase2
+
+/*
 function emitStartPowerPhase2(obj) {
 
     for (let i = 0; i < obj.pA.length; i++) {
@@ -578,7 +777,7 @@ function emitStartPowerPhase2(obj) {
     }; //end for
 
 }; //end emitStartPowerPhase2
-
+*/
 
 
 function emitStartMission(obj) {
@@ -588,18 +787,32 @@ function emitStartMission(obj) {
       if (obj.pA[i].selectedForMission) {
 
         io.to(`${obj.pA[i].socketID}`).emit(
-        "Start Mission");
-
-      } else {
-
-        io.to(`${obj.pA[i].socketID}`).emit(
-        "Wait While Team Completes Mission");
+        "Start Game Phase 6: Start Mission");
 
       };
 
     }; //end for
 
 }; //end emitStartMission
+
+
+
+function emitToStartGamePhase9(obj) {
+
+  var _villainListArr = obj.rO.getVillainsIdentities();
+
+  for (var i = 0; i < obj.pA.length; i++) {
+
+    io.to(`${obj.pA[i].socketID}`).emit(
+      "Start Game Phase 9: Heroes Win! Villains' Last Chance.", 
+      _villainListArr
+    );
+
+  }; //end for
+
+
+}; //end emitToStartGamePhase9(obj)
+
 
 
 

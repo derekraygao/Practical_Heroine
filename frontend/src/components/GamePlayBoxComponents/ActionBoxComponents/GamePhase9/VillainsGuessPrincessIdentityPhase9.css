@@ -1,0 +1,52 @@
+.villain-guess-princess-container {
+
+	display: flex;
+	
+	justify-content: center;
+	align-items: center;
+
+	overflow: auto;
+
+	padding-left: 2%;
+	padding-right: 2%;
+
+}
+
+.villain-guess-princess-container select {
+	margin-right: 2.5%;
+}
+
+
+.submitted-princess-guess-text-container {
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	overflow: auto;
+
+	font-size: 150%;
+
+	padding-left: 2%;
+	padding-right: 2%;
+
+}
+
+
+
+.wait-while-villains-guess-princess-container {
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	overflow-y: auto;
+
+	padding-left: 2%;
+	padding-right: 2%;
+
+	font-size: 150%;
+	word-wrap: break-word;
+
+
+}
