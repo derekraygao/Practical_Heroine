@@ -1,0 +1,12 @@
+.powers-menu-bar {
+
+	grid-area: action-menu;
+
+	overflow: auto;
+}
+
+.sibutton1 {
+
+	border-right: 2px solid white !important;
+
+}

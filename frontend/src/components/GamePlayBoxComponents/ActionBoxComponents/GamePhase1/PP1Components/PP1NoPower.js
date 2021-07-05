@@ -27,8 +27,16 @@ class PP1NoPower extends React.Component {
     return (
 
       <div className="PP1-No-Power-Container">
+
+        <div className="powers-menu-bar-container orange ui buttons">
+          <button className="ui button">No Power</button>
+        </div> 
+
+        <div className="PP1-no-power-text-div">
         Power Phase 1: You have no powers. Please wait {this.props.timer} seconds for 
-        Power Phase 1 to end.
+        Power Phase 1 to end. 
+        </div>
+
       </div>
 
 

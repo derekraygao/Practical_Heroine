@@ -1,10 +1,14 @@
-.PP1-No-Power-Container {
+
+.PP1-Used-Power-Container {
 
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
 
+	overflow: auto;
+
 	font-size: 120%;
 
 }
+
