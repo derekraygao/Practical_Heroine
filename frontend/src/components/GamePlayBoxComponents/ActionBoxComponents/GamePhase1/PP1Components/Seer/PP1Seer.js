@@ -22,39 +22,6 @@ class PP1Seer extends React.Component {
   componentDidMount = () => {
 
 
-    socket.on("Scry Info From Server", (scryInfo) => {
-
-      var mess = "";
-
-      //if it exists
-      if (scryInfo.status) {
-
-        if (this.props.gamePhase !== 7) {
-
-          mess = scryInfo.name + "'s status conditions: " 
-          + formatArrayIntoString(scryInfo.status);
-
-        } else {
-
-          mess = scryInfo.name + "'s role is: " + scryInfo.role
-          + ". And status conditions are: " 
-          + formatArrayIntoString(scryInfo.status);
-
-        };
-
-
-      } else {
-
-        mess = scryInfo.name + "'s role is: " + scryInfo.role;
-
-      };
-
-
-      this.props.addSystemMessage({type: "power", message: mess});
-
-    });
-
-
   }; //end componentDidMount
 
 

@@ -34,6 +34,7 @@ import GamePlayBox from './GamePlayBox.js';
 
 import socket from '../Socket.js';
 import formatArrayIntoString from 'formatArrayIntoString.js';
+import formatSeerPowerMessage from 'formatSystemMessages/formatSeerPowerMessage.js';
 
 
 
@@ -335,6 +336,17 @@ class App extends React.Component {
     });
 
 
+    socket.on("Scry Info From Server", (scryInfo) => {
+
+      var scryMess = formatSeerPowerMessage(scryInfo, this.props.missionNumber);
+      
+      this.addSysMess("power", scryMess);
+
+    }); //end socket.on("Scry Info From Server")
+
+
+
+
   }; //end componentDidMount()
 
 
@@ -409,6 +421,14 @@ class App extends React.Component {
     };
 
   }; //end timerCountdown()
+
+
+
+  addSysMess = (_type, _message) => {
+
+    this.props.addSystemMessage({type: _type, message: _message})
+
+  };
 
 
   //night phase 8 has different layout - no video chat
