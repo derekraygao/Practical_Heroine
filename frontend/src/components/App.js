@@ -35,7 +35,7 @@ import GamePlayBox from './GamePlayBox.js';
 import socket from '../Socket.js';
 import formatArrayIntoString from 'formatArrayIntoString.js';
 import formatSeerPowerMessage from 'formatSystemMessages/formatSeerPowerMessage.js';
-
+import formatAuraKnightPowerMessage from 'formatSystemMessages/formatAuraKnightPowerMessage.js';
 
 
 
@@ -345,6 +345,13 @@ class App extends React.Component {
     }); //end socket.on("Scry Info From Server")
 
 
+
+    socket.on("Aura Sense Result", (auraInfo) => {
+
+      var auraMess = formatAuraKnightPowerMessage(auraInfo);
+      this.addSysMess("power", auraMess);
+
+    }); //end socket.on("Aura Sense Result")
 
 
   }; //end componentDidMount()

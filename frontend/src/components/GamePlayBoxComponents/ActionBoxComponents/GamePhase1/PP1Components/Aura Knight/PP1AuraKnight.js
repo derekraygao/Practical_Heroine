@@ -15,45 +15,12 @@ class AuraKnight extends React.Component {
   state = {
 
     auraTarget: "nobody selected",
-    alignment: "aura knight power error",
     powerUsed: false
 
   };
 
 
   componentDidMount = () => {
-
-    socket.on("Aura Sense Result", (aResult) => {
-
-      if (aResult.alignment === "Status") {
-
-        var statusAlignmentMessage = "status condition: " + formatArrayIntoString(aResult.status);
-
-        this.setState({alignment: statusAlignmentMessage}, () => {
-
-          var auraMessage = (this.state.auraTarget + " suffers from the" 
-          + " following status conditions: " + formatArrayIntoString(aResult.status) + ".");
-          
-          this.props.addSystemMessage({type: "power", message: auraMessage});
-
-        }); //end setState Callback
-
-        return 0;
-
-      }; //end if
-
-
-      this.setState({alignment: aResult.alignment}, () => {
-
-        var auraMessage = (this.state.auraTarget + "'s alignment is: " 
-        + this.state.alignment +"!");
-
-        this.props.addSystemMessage({type: "power", message: auraMessage});
-
-
-      }); //end setState callback
-   
-    }); //end socket.on
 
 
   }; //end componentDidMount
@@ -105,7 +72,7 @@ class AuraKnight extends React.Component {
         </div> 
 
         <div className="PP1-aura-sense-container">
-          You read {this.state.auraTarget}'s aura: {this.state.alignment}.
+          You read {this.state.auraTarget}'s aura.
           Please wait {this.props.timer} seconds for Game Phase 1 
           to end.
         </div>
