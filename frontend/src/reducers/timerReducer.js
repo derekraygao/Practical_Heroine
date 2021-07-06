@@ -1,5 +1,5 @@
 
-const timerReducer = (timeInSeconds = 1, action) => {
+const timerReducer = (timeInSeconds = 600, action) => {
 
 	switch (action.type) {
 

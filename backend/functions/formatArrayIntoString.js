@@ -43,4 +43,8 @@ function formatArrayIntoString(_array) {
 
 };
 
-export default formatArrayIntoString;
+
+module.exports = {
+   formatArrayIntoString 
+};
+

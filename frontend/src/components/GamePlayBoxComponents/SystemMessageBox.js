@@ -84,15 +84,27 @@ class SystemMessageBox extends React.Component {
 
       } else if (m.type === "power") {
 
-        return (<li key={index} style={{color: "#33ffd6"}}>{m.message}</li>);
+        return (<li key={index} style={{color: "#333aff"}}>{m.message}</li>);
 
       } else if (m.type === "new mission") {
 
         return (<li key={index} style={{color: "#9933ff", fontSize: "125%"}}>{m.message}</li>);
 
+      } else if (m.type === "big font") {
+
+        return (<li key={index} style={{fontSize: "110%"}}>{m.message}</li>);
+
       } else if (m.type === "intro message") {
 
         return (<li key={index} style={{marginTop: "5px", marginBottom: "5px"}}>{m.message}</li>);
+
+      } else if (m.type === "big and orange") {
+
+        return (<li key={index} style={{color: "#f2711d", fontSize: "115%", marginTop: "5px"}}>{m.message}</li>);
+
+      } else if (m.type === "big and purple") {
+
+        return (<li key={index} style={{color: "#a332c9", fontSize: "115%", marginTop: "5px"}}>{m.message}</li>);
 
       } else {
 

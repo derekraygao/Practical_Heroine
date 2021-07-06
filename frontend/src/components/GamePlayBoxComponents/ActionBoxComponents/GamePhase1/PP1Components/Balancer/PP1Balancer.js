@@ -89,7 +89,9 @@ class PP1Balancer extends React.Component {
 
   getPlayerButtonChoices = () => {
 
-    var choicesArr = this.props.playerList;
+    //need to clone array, otherwise splicing affects your
+    //redux store's playerList as well
+    var choicesArr = JSON.parse(JSON.stringify(this.props.playerList));
 
     //remove yourself; cannot use yourself to 
     //balance against another player

@@ -4,6 +4,8 @@ import './css/GamePlayBox.css';
 import SystemInstructionsMenu from './GamePlayBoxComponents/SystemInstructionsMenu.js';
 import SystemMessageBox from './GamePlayBoxComponents/SystemMessageBox.js';
 import InstructionsBox from './GamePlayBoxComponents/InstructionsBox.js';
+
+import PowersMenu from './GamePlayBoxComponents/PowersMenu.js';
 import ActionBox from './GamePlayBoxComponents/ActionBox.js';
 
 
@@ -18,6 +20,8 @@ class GamePlayBox extends React.Component {
 
         <SystemInstructionsMenu />
         <SystemMessageBox />
+
+        <PowersMenu />
         <ActionBox />
 
 

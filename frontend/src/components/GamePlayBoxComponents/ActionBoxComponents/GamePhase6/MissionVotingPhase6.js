@@ -7,7 +7,6 @@ import {timer} from 'actions/timer.js';
 import { systemMessages } from 'actions/systemMessages.js';
 
 import socket from 'Socket.js';
-import formatArrayIntoString from 'formatArrayIntoString.js';
 
 import NormalMissionVoteTab from './PowerPhase6Components/NormalMissionVoteTab.js';
 
@@ -80,13 +79,16 @@ class MissionVotingPhase6 extends React.Component {
     switch (vote) {
 
       case "Success":
-        return ("For Mission " + this.props.missionNumber + " you voted for mission success!");
+        return ("For Mission " + this.props.missionNumber + ", you voted for mission success!");
 
       case "Fail":
-        return ("For Mission " + this.props.missionNumber + " you voted for mission failure!");
+        return ("For Mission " + this.props.missionNumber + ", you voted for mission failure!");
 
       case "Power":
-        return ("For Mission " + this.props.missionNumber + " you used your powers!");
+        return ("For Mission " + this.props.missionNumber + ", you used your powers!");
+
+      default:
+        return "Error! MissionVotingPhase6 voteText() error!";
 
     }; //end switch
 

@@ -1,12 +1,12 @@
 .game-play-box {
 
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 50% 50%;
 	grid-template-rows: 7% 43% 7% 43%;
 
 	grid-template-areas: "system-instructions-menu     system-instructions-menu"
 						 "system-game-box                   system-game-box"
-						 "action-menu                        action-menu"
+						 "action-box                          action-box"
 						 "action-box                          action-box";
 
 

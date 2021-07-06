@@ -12,6 +12,14 @@ import teamLeaderReducer from './teamLeaderReducer.js';
 import teamVoteInfoReducer from './teamVoteInfoReducer.js';
 import numberOfFailedTeamProposalsReducer from './numberOfFailedTeamProposalsReducer.js';
 import missionVoteTabReducer from './missionVoteTabReducer.js';
+import missionResultsHistoryReducer from './missionResultsHistoryReducer.js';
+import gameEndScenarioReducer from './gameEndScenarioReducer.js';
+import mainMenuSelectionReducer from './mainMenuSelectionReducer.js';
+import powersMenuSelectionReducer from './powersMenuSelectionReducer.js';
+
+
+import characterPowersHistoryReducer from './characterPowersHistoryReducer.js';
+import rangerSenseArrayReducer from './rangerSenseArrayReducer.js';
 
 import timerReducer from './timerReducer.js';
 
@@ -29,7 +37,13 @@ export default combineReducers({
 	missionTeam: missionTeamListReducer,
 	teamVoteInfo: teamVoteInfoReducer,
 	failedProposals: numberOfFailedTeamProposalsReducer,
-	missionVoteTab: missionVoteTabReducer, 
+	missionVoteTab: missionVoteTabReducer,
+	missionHistory: missionResultsHistoryReducer,
+	mainMenuSelection: mainMenuSelectionReducer,
+	powersMenuSelection: powersMenuSelectionReducer,
+	gameEndScenario: gameEndScenarioReducer, 
+	characterPowersHistory: characterPowersHistoryReducer,
+	rangerSenseArray: rangerSenseArrayReducer,
 	timer: timerReducer,
 
 });

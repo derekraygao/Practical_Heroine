@@ -14,6 +14,15 @@ class TitleBar extends React.Component {
       case 1:
         return ("Game Phase 1 (Time Left): " + this.props.timer);
 
+      case 2:
+        return ("Game Phase 2: Team Leader Choosing Team");
+
+      case 3:
+        return ("Game Phase 3: Vote On The Proposed Team");
+
+      case 4:
+        return ("Game Phase 4: View Team Voting Results");
+
       case 5:
 
         if (this.props.missionTeam.includes(this.props.name)) {
@@ -24,6 +33,12 @@ class TitleBar extends React.Component {
 
       case 6:
         return ("Game Phase 6 (Time Left): " + this.props.timer);
+
+      case 7:
+        return ("Game Phase 7: View Mission Results");
+
+      case 8:
+        return ("Night Phase 8 (Time Left): " + this.props.timer);
 
       default:
         return ""; 

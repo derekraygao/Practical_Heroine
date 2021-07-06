@@ -52,6 +52,9 @@ class PP1UmbraLord extends React.Component {
 
     const {playerList, villainList} = this.props;
 
+    //need to clone array inside getArrayOfOnlyHeroes, 
+    //otherwise splicing affects your
+    //redux store's playerList as well
     var heroesList = getArrayOfOnlyHeroes(playerList, villainList);
 
     const heroesSelectOptions = heroesList.map((pName, index) => {

@@ -1,5 +1,5 @@
 
-const gamePhaseReducer = (gamePhase = 0, action) => {
+const gamePhaseReducer = (gamePhase = 1, action) => {
 
 	switch (action.type) {
 
@@ -7,7 +7,7 @@ const gamePhaseReducer = (gamePhase = 0, action) => {
 			return action.payload;
 
 		default:
-			return gamePhase
+			return gamePhase;
 
 
 	}; //end switch

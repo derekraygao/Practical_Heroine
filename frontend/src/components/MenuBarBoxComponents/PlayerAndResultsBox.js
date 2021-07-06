@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import socket from 'Socket.js';
-
 import './css/PlayerAndResultsBox.css';
 
 import PlayerListTable from './PlayerAndResultsTables/PlayerListTable.js';

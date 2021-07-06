@@ -79,7 +79,7 @@ class NormalChatBox extends React.Component {
   headerColor = () => {
 
     return (this.props.gamePhase === 8 ? 
-      {backgroundColor: "#2185d0"} : {backgroundColor: "orange"});
+      {backgroundColor: "#2185d0"} : {backgroundColor: "#f2711d"});
 
   };
 
@@ -110,7 +110,7 @@ class NormalChatBox extends React.Component {
 
         <InputSubmit 
           buttonMessage="Chat"
-          buttonColor="blue"
+          buttonColor={this.submitButtonColor()}
           socketDestination="Normal Chat"
         />
 

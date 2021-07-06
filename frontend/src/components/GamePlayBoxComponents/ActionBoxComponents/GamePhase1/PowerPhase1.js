@@ -12,6 +12,12 @@ import PP1UmbraLord from './PP1Components/Umbra Lord/PP1UmbraLord.js';
 import PP1Seer from './PP1Components/Seer/PP1Seer.js';
 import PP1Balancer from './PP1Components/Balancer/PP1Balancer.js';
 import PP1AuraKnight from './PP1Components/Aura Knight/PP1AuraKnight.js';
+import PP1Oracle from './PP1Components/Oracle/PP1Oracle.js';
+import PP1DetectiveChat from './PP1Components/Detective Chat/PP1DetectiveChat.js';
+import PP1Ranger from './PP1Components/Ranger/PP1Ranger.js';
+import PP1Esper from './PP1Components/Esper/PP1Esper.js';
+
+
 
 var timerInterval;
 
@@ -74,7 +80,6 @@ class PowerPhase1 extends React.Component {
     switch (this.props.role) {
 
       case "Princess": 
-
         return <PP1NoPower />;
 
       case "Marcus":
@@ -88,6 +93,18 @@ class PowerPhase1 extends React.Component {
 
       case "Balancer":
         return <PP1Balancer />;
+
+      case "Oracle":
+        return <PP1Oracle />;
+
+      case "Detective Chat":
+        return <PP1DetectiveChat />;
+
+      case "Ranger":
+        return <PP1Ranger />;
+
+      case "Esper":
+        return <PP1Esper />;
 
       case "Umbra Lord":
         return <PP1UmbraLord />;

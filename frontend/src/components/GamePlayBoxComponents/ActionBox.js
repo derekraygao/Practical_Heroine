@@ -2,17 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import './css/ActionBox.css';
+import './css/powerMenuYellowColorClass.css';
 
-import PowerPhase1 from './ActionBoxComponents/PowerPhase1.js';
+import PowerPhase1 from './ActionBoxComponents/GamePhase1/PowerPhase1.js';
 import TeamLeaderChoosingTeamPhase2 from './ActionBoxComponents/GamePhase2/TeamLeaderChoosingTeamPhase2.js';
 import VoteOnProposedTeamPhase3 from './ActionBoxComponents/GamePhase3/VoteOnProposedTeamPhase3';
 import ViewTeamVoteResultsPhase4 from './ActionBoxComponents/GamePhase4/ViewTeamVoteResultsPhase4';
 import PowerPhase5 from './ActionBoxComponents/GamePhase5/PowerPhase5.js';
 import MissionVotingPhase6 from './ActionBoxComponents/GamePhase6/MissionVotingPhase6.js';
+import ViewMissionResultsPhase7 from './ActionBoxComponents/GamePhase7/ViewMissionResultsPhase7.js';
+import VillainsGuessPrincessIdentityPhase9 from './ActionBoxComponents/GamePhase9/VillainsGuessPrincessIdentityPhase9.js';
+import GameOverPhase10 from './ActionBoxComponents/GamePhase10/GameOverPhase10.js';
+
+
 
 class ActionBox extends React.Component {
 
   whichActionBoxComponent = () => {
+
+    console.log("inside ActionBox, gamePhase is: " + this.props.gamePhase);
 
     switch (this.props.gamePhase) {
 
@@ -44,6 +52,18 @@ class ActionBox extends React.Component {
 
         return <MissionVotingPhase6 />;
 
+      case 7:
+
+        return <ViewMissionResultsPhase7 />;
+
+      case 9:
+        
+        return <VillainsGuessPrincessIdentityPhase9 />;
+
+      case 10:
+
+        return <GameOverPhase10 />;
+
 
       default:
         return <div>Error!</div>;
@@ -62,7 +82,7 @@ class ActionBox extends React.Component {
     return (
 
       <div className="action-box-container">
-
+      
         {this.whichActionBoxComponent()}
 
       </div>

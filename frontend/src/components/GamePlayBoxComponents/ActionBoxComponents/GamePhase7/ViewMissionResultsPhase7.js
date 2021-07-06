@@ -41,6 +41,8 @@ class ViewMissionResultsPhase7 extends React.Component {
 
     this.setState({MH: _currentMissionHistory});
 
+    socket.emit("Ready For Next Round/Mission");
+
   };
 
 

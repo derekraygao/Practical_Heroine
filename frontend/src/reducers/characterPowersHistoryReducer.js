@@ -10,8 +10,16 @@ var defaultPH = {
 
 			  },
 
+	"Oracle": {
+				"1 and 1": false,
+				"At Least 1 Good": false,
+				"At Least 1 Evil and Good": false,
+				"Princess": false,
+				"Roles": false
+			  },
 
-};
+
+}; //end defaultPH
 
 /*
 updated object format is: 

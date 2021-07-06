@@ -27,22 +27,25 @@ class ChatBox extends React.Component {
 
 
 
+  displayWhichSpecialChatBoxes = () => {
 
-  showVillainChat() {
+    if (this.props.gamePhase !== 8) { return []};
+
+    var chatBoxesArr = [];
 
     if (this.props.villainList.includes(this.props.myName)) {
-      return <></>;
+      chatBoxesArr.push(<VillainChatBox />);
     };
 
-    return <></>;
 
-  }; //end whichChatBoxes
+    return chatBoxesArr;
 
+  };
 
-
+  //during night phase 8, ALWAYS display this component
   displayOrNot = () => {
 
-    if (this.props.mainMenuSelection === "chat-box"
+    if (this.props.mainMenuSelection === "chat"
       || this.props.gamePhase === 8) {
 
       return {display: "flex"};
@@ -61,7 +64,8 @@ class ChatBox extends React.Component {
       <div class="chat-box-container" style={this.displayOrNot()}>
 
         <NormalChatBox /> {/*this is always displayed within ChatBox container */}
-        <VillainChatBox />
+        
+        {this.displayWhichSpecialChatBoxes()}
 
       </div>
 

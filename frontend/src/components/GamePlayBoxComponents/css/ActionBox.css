@@ -1,6 +1,7 @@
 .action-box-container {
 
 	grid-area: action-box;
+
 	background-color:rgba(255,255,255,0.5);
 
 }
@@ -15,4 +16,15 @@
 	max-width: 100%;
 	overflow-y: auto;
 	
+}
+
+
+.powers-menu-bar-container {
+
+	grid-area: powers-menu;
+	display: flex;
+	overflow: auto;
+
+	width: 100%;
+
 }
