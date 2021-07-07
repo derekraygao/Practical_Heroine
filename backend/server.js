@@ -750,16 +750,23 @@ io.on('connection', function (socket) {
 
 
   //Oracle
-
   socket.on("Oracle Message", (oraclePowerChoice) => {
-    console.log(oraclePowerChoice);
+
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
     var oracleInfoArray = obj.rO.roles["Oracle"].prophesize(
       oraclePowerChoice, obj);
 
-    socket.emit("Luces' Message To Oracle", oracleInfoArray);
+    var oMess = {
+
+      type: "power",
+      message: ("Luces: For '" + oraclePowerChoice + "': "
+      + formatArrayIntoString(oracleInfoArray))
+
+    };
+
+    socket.emit("Add System Message", oMess);
 
   });
 
@@ -847,8 +854,65 @@ io.on('connection', function (socket) {
 
 
 
+  //Jailer
+
+  socket.on("Jail A Player", (_jailedName) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Jailer"].jailPlayer(_jailedName);
+
+    console.log(obj.rO.roles["Jailer"].jailedPlayer);
+
+  });
 
 
+
+  //Sensor
+
+  socket.on("Individual Scan", (pToScan) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var scanInfo = obj.rO.roles["Sensor"].scanOne(pToScan, obj);
+
+    if (scanInfo.statusArray.length == 0) { scanInfo.statusArray = "nothing"; };
+
+    var scanMessage = 
+      {
+        type: "power",
+        message: (pToScan + " has the following status conditions: " 
+      + formatArrayIntoString(scanInfo.statusArray))
+
+      };
+
+    socket.emit("Add System Message", scanMessage);
+
+  });
+
+
+
+  socket.on("Scan All For One Status", (whichStatus) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var statusNamesArr = obj.rO.roles["Sensor"].scanAll(whichStatus, obj);
+
+    if (statusNamesArr.length == 0) { statusNamesArr = "nobody"; };
+
+    var scanMessage = 
+      {
+        type: "power",
+        message: ("The following players are afflicted with the status" 
+        + " condition '" + whichStatus + "': " + formatArrayIntoString(statusNamesArr))
+      };
+
+      socket.emit("Add System Message", scanMessage);
+
+  });
 
 
 

@@ -12,7 +12,7 @@ class Sensor extends RolesMasterClass {
 
 	}; //end constructor
 
-
+/*
 	scanBomb(obj) {
 
 		var bombStatusArr = [];
@@ -187,6 +187,91 @@ class Sensor extends RolesMasterClass {
 
 	}; //end scanBomb
 
+*/
+
+	scanBomb(obj) {
+
+		var bombArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+			if (obj.pA[i].bomb) {
+				bombArr.push(obj.pA[i].name);
+			};
+		};
+
+		return bombArr;
+
+	};
+
+
+	scanBurn(obj) {
+		
+		var burnArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].burnCount > 0) {
+				burnArr.push(obj.pA[i].name);
+			};
+
+		};
+
+		return burnArr;
+	};
+
+
+	scanSoulSea(obj) {
+		
+		var soulSeaArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].soulMark) {
+				soulSeaArr.push(obj.pA[i].name);
+			};
+
+		};
+
+		return soulSeaArr;
+	};
+
+
+
+	scanShrink(obj) {
+		
+		var shrinkArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].shrinkCount > 0) {
+				shrinkArr.push(obj.pA[i].name);
+			};
+
+		};
+
+		return shrinkArr;
+	};
+
+
+
+	scanMultiplier(obj) {
+		
+		var multiplierArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].multiplier > 1) {
+				multiplierArr.push(obj.pA[i].name);
+			};
+
+		};
+
+		return multiplierArr;
+	};
+
+
+
+
 
 	scanAll(condition, obj) {
 
@@ -221,7 +306,7 @@ class Sensor extends RolesMasterClass {
 
 		var individualStatusArr = [];
 
-		if (obj.pA[ind].bomb) { individualStatusArr.push("Bomb"); };
+		if (obj.pA[ind].bomb) { individualStatusArr.push("Flame Seal Bomb"); };
 		if (obj.pA[ind].burnCount > 0) { individualStatusArr.push("Burn"); };
 		if (obj.pA[ind].soulMark) { individualStatusArr.push("Soul Mark"); };
 		if (obj.pA[ind].shrinkCount > 0) { individualStatusArr.push("Shrink"); };
@@ -233,6 +318,7 @@ class Sensor extends RolesMasterClass {
 				statusArray: individualStatusArr
 			}
 		);
+
 
 	}; //end scanOne
 
