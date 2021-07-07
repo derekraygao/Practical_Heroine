@@ -20,26 +20,6 @@ class PP1Balancer extends React.Component {
 
   componentDidMount = () => {
 
-    socket.on("Result of Weighing of Souls", (bResult) => {
-   
-      if (bResult === "Same Alignment") {
-
-        var bMessage = (this.state.balanceArr[0] + " and " 
-          + this.state.balanceArr[1] + " have the same alignment.");
-
-      } else {
-
-
-        var bMessage = (this.state.balanceArr[0] + " and " 
-          + this.state.balanceArr[1] + " have different alignments.");
-
-      };
-
-
-      this.props.addSystemMessage({type: "power", message: bMessage});
-
-    });
-
 
   }; //end componentDidMount
 

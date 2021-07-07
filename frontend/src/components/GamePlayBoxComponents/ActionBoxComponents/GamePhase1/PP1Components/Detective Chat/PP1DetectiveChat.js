@@ -22,28 +22,11 @@ class PP1DetectiveChat extends React.Component {
 
     usedPower: false,
     investigateTarget: "Investigate ?",
-    endVotePower: 0,
 
   };
 
 
   componentDidMount = () => {
-
-
-    socket.on("Investigation Results", (endVotePower) => {
-
-      this.setState({endVotePower: endVotePower}, () => {
-
-        var mess = "For the last mission, " + this.state.investigateTarget 
-        + "'s end vote power was: " + this.state.endVotePower;
-
-        this.props.addSystemMessage({type: "power", message: mess});
-
-      }); //end setState
-
-
-    }); //end socket.on
-
 
   }; //end componentDidMount
 
@@ -105,9 +88,8 @@ class PP1DetectiveChat extends React.Component {
         </div> 
 
         <div className="PP1-investigate-container">
-          Investigation Results: {this.state.investigateTarget}'s 
-          end vote power for the last mission was: {this.state.endVotePower}
-          . Please wait {this.props.timer} seconds for Game 
+          You investigated {this.state.investigateTarget}. 
+          Please wait {this.props.timer} seconds for Game 
           Phase 1 to end.
         </div>
 

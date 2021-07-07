@@ -88,7 +88,7 @@ var Controller = new myClass.Controller();
 
 var {randomName} = require('./random_name.js');
 var {shuffle} = require("./src/characters/shuffle.js");
-
+var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
 
 //EVERY SERVER MESSAGE (socket.on) GOES INSIDE THE io.on
 io.on('connection', function (socket) {
@@ -594,13 +594,29 @@ io.on('connection', function (socket) {
 
     Controller.setGamePhase(obj, 1);
 
+    //put info in Redux store because you cannot send messages
+    //to an unmounted component
+    updateInfoForPowersOnClientSide(obj);
+
     emitToAllSocketsInRoom(obj, "Start Game Phase 1: Power Phase 1", "");
 
 
   });
 
+  //starting Mission 2
+  function updateInfoForPowersOnClientSide(obj) {
+
+    //send to App.js and redux store, because component
+    //has not been mounted yet
+    if (obj.rO.roles["Ranger"].inGame) {
+
+      io.to(`${obj.rO.roles["Ranger"].socketID}`).
+        emit("Receive Ranger Sense Array", 
+          obj.rO.roles["Ranger"].sense(obj));
+    };
 
 
+  }; //end updateInfoForPowersOnClientSide(obj)
 
 
 
@@ -687,6 +703,159 @@ io.on('connection', function (socket) {
 
 
   }); //end socket.on("Villain Chat")
+
+
+
+
+  /* POWERS */
+
+  //Umbra Lord
+
+  socket.on("Corruption", (_name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Umbra Lord"].corrupt(_name, obj);
+
+  });
+
+
+
+  //Seer
+
+  socket.on("Scry", (_name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var scryInfo = obj.rO.roles["Seer"].scry(obj, _name);
+
+    socket.emit("Scry Info From Server", scryInfo);
+
+  });
+
+
+  //Aura Knight
+  socket.on("Sense Aura", (_name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var auraInfo = obj.rO.roles["Aura Knight"].readAura(_name, obj);
+
+    socket.emit("Aura Sense Result", auraInfo);
+
+  });
+
+
+  //Oracle
+
+  socket.on("Oracle Message", (oraclePowerChoice) => {
+    console.log(oraclePowerChoice);
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var oracleInfoArray = obj.rO.roles["Oracle"].prophesize(
+      oraclePowerChoice, obj);
+
+    socket.emit("Luces' Message To Oracle", oracleInfoArray);
+
+  });
+
+
+  //Balancer
+  socket.on("Weighing of Souls", (_bArr) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var balanceResult = obj.rO.roles["Balancer"].
+    mysticScales(_bArr[0], _bArr[1], obj);
+
+    var bMessage = 
+    {
+      type: "power",
+      message: (_bArr[0] + " and " + _bArr[1] + " have " + balanceResult)
+    };
+
+    socket.emit("Add System Message", bMessage);
+
+  });
+
+
+  //Detective Chat
+
+  socket.on("Investigate", (_name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var InvestigationResults = obj.rO.roles["Detective Chat"].
+    investigate(_name, obj);
+
+    var investigateMessage = {
+      type: "power",
+      message: InvestigationResults
+    };
+
+    socket.emit("Add System Message", investigateMessage);
+
+  });
+
+
+
+  /* Esper Powers */
+
+  socket.on("Telepathy Choices", (tArray) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Esper"].setTelepathyArray(tArray, obj);
+
+    console.log(obj.rO.roles["Esper"].telepathyArray);
+
+    socket.emit("Add System Message",
+      {
+        type: "power",
+        message: "For night " + obj.rD.missionNo + " you will telepathically " 
+        + "communicate with: " + formatArrayIntoString(tArray)
+      }
+    ); //end socket.emit()
+
+
+  }); //end socket.on("Telepathy Choices")
+
+
+  socket.on("Headache Charge", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var currentHCharge = obj.rO.roles["Esper"].chargeUpHeadache();
+
+    socket.emit("Add System Message",
+      {
+        type: "power",
+        message: ("Your current headache charge is: " + currentHCharge)
+      }
+    ); //end socket.emit()
+ 
+
+  }); //end socket.on("Headache Charge")
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
