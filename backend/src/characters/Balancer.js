@@ -12,7 +12,7 @@ class Balancer extends RolesMasterClass {
 
 	}; //end constructor
 
-
+	
 	mysticScales(name1, name2, obj) {
 
 		var ind1 = obj.pT[name1];
@@ -21,11 +21,11 @@ class Balancer extends RolesMasterClass {
 		if (obj.rO.rolesInGame[ind1].alignment 
 			== obj.rO.rolesInGame[ind2].alignment) {
 
-			return "Same Alignment";
+			return "the same alignment.";
 
 		} else {
 
-			return "Different Alignment";
+			return "different alignments.";
 
 		};
 
