@@ -22,16 +22,6 @@ class PP1Oracle extends React.Component {
   componentDidMount = () => {
 
 
-    socket.on("Luces' Message To Oracle", (oArray) => {
-
-      var lucesMess = ("Luces: For '" + this.state.whichPowerSelection
-        + "' : " + formatArrayIntoString(oArray));
-
-      this.props.addSystemMessage({type: "power", message: lucesMess});
-
-    });
-
-
   }; //end componentDidMount
 
 

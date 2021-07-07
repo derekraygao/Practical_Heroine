@@ -180,6 +180,10 @@ class Oracle extends RolesMasterClass {
 			case 10:
 				return 6;
 
+
+			default:
+				return 2;
+
 		}; //end switch
 
 	}; //end howManyRoles(obj)
@@ -218,9 +222,9 @@ class Oracle extends RolesMasterClass {
 
 	/*
 	choices: 
-	1 AND 1 
+	1 and 1 
 	At Least 1 Good 
-	At Least 1 Evil & Good
+	At Least 1 Evil and Good
 	Princess
 	Roles
 	*/
@@ -228,13 +232,13 @@ class Oracle extends RolesMasterClass {
 
 	  switch (oraclePowerChoice) {
 
-	  	case "1 AND 1":
+	  	case "1 and 1":
 	  		return (this._1And1(obj));
 
 	  	case "At Least 1 Good":
 	  		return (this.atLeast1Good(obj));
 
-	  	case "At Least 1 Evil & Good":
+	  	case "At Least 1 Evil and Good":
 	  		return (this.atLeast1Good1Evil(obj));
 	  
 	  	case "Princess":
