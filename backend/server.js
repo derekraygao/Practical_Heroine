@@ -616,6 +616,26 @@ io.on('connection', function (socket) {
     };
 
 
+    if (obj.rO.roles["Backstabber"].activateSwitch) {
+
+      var bsInfo = obj.rO.roles["Backstabber"].betray(obj);
+      obj.rO.roles["Backstabber"].activateSwitch = false;
+
+      io.to(`${bsInfo.originalSID}`).
+        emit("Give Original Backstabber New Role", bsInfo.originalBSNewRole);
+
+
+      var newBSInfo = {
+                        originalBSName: bsInfo.originalBSName,
+                        villainList: obj.rO.getVillainsIdentities()
+                      };
+
+      io.to(`${bsInfo.newSID}`).
+        emit("Give New Backstabber New Role", newBSInfo);
+
+    };
+
+
   }; //end updateInfoForPowersOnClientSide(obj)
 
 
@@ -918,6 +938,7 @@ io.on('connection', function (socket) {
 
   /*Villains Powers*/
 
+  //Hecate
   socket.on("Exchange of the Spirits", (namesArr) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
@@ -929,6 +950,7 @@ io.on('connection', function (socket) {
   });
 
 
+  //Reverser
   socket.on("Activate Mirror World", (mwType) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
@@ -940,6 +962,31 @@ io.on('connection', function (socket) {
     emitToAllSocketsInRoom(obj, "Mirorr World Activated");
 
   });
+
+
+
+  //Backstabber
+
+  socket.on("Activate Backstab Switch", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Backstabber"].backstab();
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
 
 
 
