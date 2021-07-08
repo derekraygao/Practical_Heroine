@@ -44,6 +44,8 @@ class VoteAdjuster {
 			obj.rO.roles["Bomberman"].adjustMissionVotesBurn(obj.pA[i]);
 			obj.rO.roles["Bomberman"].adjustMissionVotesBomb(obj.pA[i]);
 
+			obj.rO.roles["Lottie"].adjustMissionVotesLottie(obj.pA[i]);
+
 			obj.rO.roles["Saintess"].adjustMissionVotesBless(obj.pA[i]); 
 
 			obj.rO.roles["Ranger"].adjustMissionVotesShrink(obj.pA[i]);
@@ -61,6 +63,8 @@ class VoteAdjuster {
 		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
 		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
 
+		obj.rO.roles["Lottie"].adjustMissionVotesPrincessAndLottie(obj);
+
 		//safeguard needs to be at the very end
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
 
@@ -68,6 +72,8 @@ class VoteAdjuster {
 	}; //end adjustMissionVotes
 
 
+	/* need to think this through....can saintess, lottie, marcus,
+	and ichigo be on the same team? */
 	/*Saintess & Ichigo can never be in same game, 
 	so no need to do Ichigo powers */
 	adjustVotesSaintessOnTeam(obj) {

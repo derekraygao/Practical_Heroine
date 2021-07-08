@@ -377,7 +377,7 @@ return (Controller.roomsData["testing"].results.didAnyoneWin(4));
 
 };
 
-console.log(didAnyoneWinTest());
+//console.log(didAnyoneWinTest());
 
 
 function getLatestTeamAndMisionInfoTest() {
@@ -1320,6 +1320,8 @@ function testSpiritualistPower() {
 //Need to set Serena as backstabber inside RolesObject assignroles
 function testBackstabberPower() {
 
+	console.log("Testing Backstabber Power");
+
 	Controller.setMissionTeam(obj, ["Lucio", "Serena"]);
 	Controller.setPlayersForMission(obj);
 
@@ -1455,6 +1457,59 @@ function testMarcusBodyguard() {
 };
 
 //testMarcusBodyguard();
+
+
+
+function testLottiePowers() {
+
+	console.log("Testing Lottie Powers");
+	//console.log(obj.rD.missionTeam);
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	obj.rO.roles["Lottie"].addTherapyTarget("Derek");
+	obj.rO.roles["Lottie"].activateGroupHug();
+
+	obj.rO.roles["Lottie"].setTherapyStatus(obj);
+	obj.rO.roles["Lottie"].setGroupHugStatus(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	console.log("Now remove therapy + group hug");
+
+	obj.rO.roles["Lottie"].removeGroupHugAndTherapyAtEndOfRound(obj);
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	/*see if Lottie turns John's vote positive */
+
+	Controller.addMissionVote(obj, 0, -5); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 0); //Serena
+	Controller.addMissionVote(obj, 3, 0); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	console.log("Lottie turns Princess' vote positive");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+};
+
+
+testLottiePowers();
 
 
 
