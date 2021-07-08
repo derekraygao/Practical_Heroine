@@ -32,6 +32,8 @@ class VoteAdjuster {
 		obj.rO.roles["Reverser"].adjustReverseVote(obj);
 		obj.rO.roles["Reverser"].adjustVotesMirrorWorld(obj);
 
+		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
+
 		obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
 		obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);

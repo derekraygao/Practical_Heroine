@@ -554,6 +554,8 @@ class Controller {
 		missionVoteAccumulator = obj.rO.roles["Ichigo"]
 		.hylianShield(missionVoteAccumulator);
 
+		missionVoteAccumulator = obj.rO.roles["Lan"]
+		.adjustVoteSumIntimidate(missionVoteAccumulator, obj);
 
 		obj.rI.addMissionInfo(
 			obj.rD.missionNo,
@@ -753,7 +755,7 @@ class Player {
 		this.selectedForMission = false;
 		this.missionVote = null;
         this.shrinkCount = 0; //default is 0
-        this.burnCount = 0;
+        this.burnCount = 0; //default is 0
         this.teamVote = null; 
         this.princessChoice = "";
         this.corrupted = false;
@@ -765,6 +767,9 @@ class Player {
         this.multiplier = 1; //default 1: needs to be 1 (and not 0) so you can stack multiplication powers
         this.safeguard = false; //safeguard and bless gets reset in resetallplayerinfo
         this.bless = false; //default is 1 changed to false.
+        this.therapy = false;
+        this.groupHug = false;
+        this.confused = false;
         this.invisible = false;
         this.soulMark = false;
         this.jailed = false;

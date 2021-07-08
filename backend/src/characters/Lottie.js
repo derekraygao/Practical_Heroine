@@ -81,6 +81,8 @@ class Lottie extends RolesMasterClass {
 
 	adjustMissionVotesPrincessAndLottie(obj) {
 
+		if (!this.inGame) { return 0; };
+
 		var princessInd = obj.rO.roles["Princess"].index;
 
 		if (obj.pA[princessInd].selectedForMission &&
@@ -100,6 +102,8 @@ class Lottie extends RolesMasterClass {
 
 	removeGroupHugAndTherapyAtEndOfRound(obj) {
 
+		if (!this.inGame) { return 0; };
+			
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			obj.pA[i].therapy = false;
