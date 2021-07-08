@@ -1,0 +1,38 @@
+
+.PP1-Hecate-Container {
+
+	display: grid;
+	grid-template-rows: 14% 86%;
+	grid-template-areas: "powers-menu"
+						 "action-area"
+						 ;
+
+	overflow: auto;
+
+
+}
+
+.PP1-exchange-container {
+
+	grid-area: action-area;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+
+	font-size: 135%;
+	min-height: 200px;
+
+	overflow: auto;
+
+	padding-left: 2%;
+	padding-right: 2%;
+
+}
+
+.PP1-exchange-container select {
+	margin-right: 3%;
+}
+

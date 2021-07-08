@@ -916,8 +916,30 @@ io.on('connection', function (socket) {
 
 
 
+  /*Villains Powers*/
+
+  socket.on("Exchange of the Spirits", (namesArr) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Hecate"].exchangeOfTheSpirits(
+      namesArr[0], namesArr[1], obj);
+
+  });
 
 
+  socket.on("Activate Mirror World", (mwType) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+    if (obj.rO.roles["Reverser"].wasMirrorWorldAlreadyUsed(mwType)) { return 0; };
+
+    obj.rO.roles["Reverser"].activateMirrorWorld(mwType);
+ 
+    emitToAllSocketsInRoom(obj, "Mirorr World Activated");
+
+  });
 
 
 
@@ -939,7 +961,7 @@ io.on('connection', function (socket) {
 
 
 
-function emitToAllSocketsInRoom(obj, _destination, _data) {
+function emitToAllSocketsInRoom(obj, _destination, _data = "") {
 
   for (var i = 0; i < obj.pA.length; i++) {
     

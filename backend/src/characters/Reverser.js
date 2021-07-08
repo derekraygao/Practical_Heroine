@@ -11,11 +11,17 @@ class Reverser extends RolesMasterClass {
         this.alignment = "evil";
         this.team = "villains";
 
-        this.mirrorWorld = "not activated";
+        this.personToReverseVote = "";
+
+        this.mirrorWorldNormal = "not activated";
+        this.mirrorWorldReverse = "not activated";
+
+        //this.mirrorWorld = "not activated";
 
 	}; //end constructor
 
 
+	/*
 	_50PercentChance() {
 
 		var rndInt = (Math.floor(Math.random() * 2) + 1);
@@ -31,12 +37,14 @@ class Reverser extends RolesMasterClass {
 
 		if (this._50PercentChance()) {
 			this.mirrorWorld = "reverse";
+			console.log("mirror world is reversed");
 		} else {
 			this.mirrorWorld = "normal";
+			console.log("mirror world is normal");
 		};
 
 	};
-
+	
 
 	adjustVotesMirrorWorld(obj) {
 
@@ -54,18 +62,103 @@ class Reverser extends RolesMasterClass {
 		};
 
 	}; //end adjustVotesMirrorWorld(obj)
+	
+	*/
 
+	activateMirrorWorld(type) {
 
+		if (type === "Reverse") {
+			console.log("reversed");
+			this.mirrorWorldReverse = "activated";
 
-	reverseVote(name, obj) {
+		} else if (type === "Normal") {
+			console.log("normal");
+			this.mirrorWorldNormal = "activated";
 
-		var ind = obj.pT[name];
-		if (!(ind > -1)) { return 0};
-
-		obj.pA[ind].missionVote *= -1;
+		};
 
 	};
 
+
+	adjustVotesMirrorWorld(obj) {
+
+		if (!this.inGame) { return 0; };
+
+
+		if (this.mirrorWorldNormal == "activated") {
+
+			this.mirrorWorldNormal = "used";
+
+		}; //end if mirrorWorldNormal
+
+
+		if (this.mirrorWorldReverse == "activated") {
+
+			this.mirrorWorldReverse = "used";
+
+			for (var i = 0; i < obj.pA.length; i++) {
+
+				if (!obj.pA[i].selectedForMission) { continue; };
+
+				obj.pA[i].missionVote *= -1;
+
+			}; //end for
+
+		}; //end if mirrorWorldReverse
+		
+
+	}; //end adjustVotesMirrorWorld(obj)
+
+
+
+
+	reverseVote(name) {
+
+		this.personToReverseVote = name;
+
+	};
+
+
+	//don't need to check if on mission or in game, cause your only
+	//choices are fellow mission teammates and you can only
+	//change this.personToReverseVote if reverser is in game
+	adjustReverseVote(obj) {
+
+		if (this.personToReverseVote == "") { return 0; };
+
+		var reverseInd = obj.pT[this.personToReverseVote];
+
+		if (reverseInd) {
+			obj.pA[reverseInd].missionVote *= -1;
+		};
+
+		this.personToReverseVote = "";
+
+	};
+
+
+	wasMirrorWorldAlreadyUsed(type) {
+
+		if (type === "Normal") {
+
+			if (this.mirrorWorldNormal == "used") {
+				return true;
+			};
+
+		} else if (type === "Reverse") {
+
+			if (this.mirrorWorldReverse == "used") {
+				return true;
+			};
+
+		} else {
+
+			return false;
+
+		};
+
+
+	}; //end wasMirrorWorldAlreadyUsed
 
 
 
