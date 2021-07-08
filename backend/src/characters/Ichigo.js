@@ -27,10 +27,10 @@ class Ichigo extends RolesMasterClass {
 
 		if (!this.isHylianShieldActivated) { return voteTotal; };
 
-		if (voteTotal <= 0) {
-			voteTotal += 4;
+		if (voteTotal < 0) {
+			voteTotal += 3;
 		} else {
-			voteTotal -= 4;
+			voteTotal -= 3;
 		};
 
 		return voteTotal;
