@@ -1718,9 +1718,17 @@ function testToxiturtlePoisonPowers() {
 	console.log("Poison Count 0");
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
+	console.log("");
+	console.log("Testing that poison beak doesn't work on same person twice");
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	Controller.addMissionVote(obj, 3, 5); //Lucio //3
+	toxiturtle.poisonBeak("Serena", obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
 };
 
-//testToxiturtlePoisonPowers();
+testToxiturtlePoisonPowers();
 
 
 

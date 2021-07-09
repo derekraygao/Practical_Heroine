@@ -36,6 +36,10 @@ class Toxiturtle extends RolesMasterClass {
 
 		if (this.poisonBeakArray.includes(name)) { return 0; };
 
+		if (this.poisonBeakArray.length > 2) { return 0; };
+
+		this.poisonBeakArray.push(name);
+
 		obj.pA[poisonInd].poisonCount = 3;
 
 	};
