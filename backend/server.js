@@ -436,7 +436,26 @@ io.on('connection', function (socket) {
 
 
 
+  //this must go BEFORE Controller.setPlayersForMission
+  function dropPlayerAffectedBySing(obj) {
 
+    var singResult = 
+    obj.rO.roles["Baby Doll"].ifAsleepDropPlayerFromMission(obj);
+
+    if (singResult !== "nobody was dropped") {
+
+      emitToAllSocketsInRoom(obj, 
+        "Sing: Player Was Dropped From The Mission Team",
+        singResult);
+
+      emitToAllSocketsInRoom(obj, 
+        "Update Mission Team",
+        obj.rD.missionTeam);
+
+    };
+
+
+  }; //end dropPlayerAffectedBySing
 
 
 
@@ -451,6 +470,9 @@ io.on('connection', function (socket) {
     if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };
 
     Controller.resetPlayerReadyStatus(obj);
+
+    //this must go BEFORE Controller.setPlayersForMission
+    dropPlayerAffectedBySing(obj);
 
     Controller.setPlayersForMission(obj);
 

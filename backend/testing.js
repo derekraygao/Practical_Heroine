@@ -1509,7 +1509,106 @@ function testLottiePowers() {
 };
 
 
-testLottiePowers();
+//testLottiePowers();
+
+
+
+function testLanPowers() {
+
+	console.log("Testing Lan Powers");
+	obj.rO.roles["Lan"].index = 2;
+	//console.log(obj.rD.missionTeam);
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	/*
+	obj.rO.roles["Lan"].setPositiveFinalHeavenVotePower(obj);
+	console.log(obj.pA[2].missionVote);
+
+	obj.rO.roles["Lan"].setPositiveFinalHeavenVotePower(obj);
+	console.log(obj.pA[2].missionVote);
+
+	obj.rO.roles["Lan"].setPositiveFinalHeavenVotePower(obj);
+	console.log(obj.pA[2].missionVote);
+
+	obj.rO.roles["Lan"].setNegativeFinalHeavenVotePower(obj);
+	console.log(obj.pA[2].missionVote);
+
+	obj.rO.roles["Lan"].setNegativeFinalHeavenVotePower(obj);
+	console.log(obj.pA[2].missionVote);
+
+	obj.rO.roles["Lan"].setPositiveFinalHeavenVotePower(obj);
+	console.log(obj.pA[2].missionVote);
+	*/
+
+	//obj.rO.roles["Lan"].addIntimidateTarget("Derek");
+
+	obj.rO.roles["Lan"].beatRush("Derek", obj);
+	console.log("confused for index 0 is: " + obj.pA[0].confused);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+};
+
+//testLanPowers();
+
+
+function testBabyDollPowers() {
+
+	console.log("Testing BabyDoll Powers");
+	//console.log(obj.rD.missionTeam);
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 3); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 3); //Serena
+	Controller.addMissionVote(obj, 3, -5); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+
+	obj.rO.roles["Baby Doll"].setSingTarget("Derek", obj);
+
+	obj.rO.roles["Baby Doll"].ifAsleepDropPlayerFromMission(obj);
+	Controller.setPlayersForMission(obj);
+	console.log(obj.rD.missionTeam);
+
+
+	obj.rO.roles["Baby Doll"].activateLullaby();
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+	/*
+	obj.rD.missionNo = 2;
+
+	obj.rD.missionTeam = [];
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+
+	console.log("Make sure doesn't work on same person twice in a row");
+	obj.rO.roles["Baby Doll"].setSingTarget("Derek", obj);
+
+	obj.rO.roles["Baby Doll"].ifAsleepDropPlayerFromMission(obj);
+	Controller.setPlayersForMission(obj);
+	console.log(obj.rD.missionTeam);
+	*/
+
+	
+
+};
+
+testBabyDollPowers();
+
+
 
 
 
