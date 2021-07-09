@@ -27,6 +27,8 @@ class VoteAdjuster {
 
 	adjustVotesSaintessNotOnTeam(obj) {
 
+		obj.rO.roles["Toxiturtle"].adjustMissionVotesPoisoned(obj);
+
 		obj.rO.roles["Umbra Lord"].adjustMissionVotesCorrupted(obj);
 
 		obj.rO.roles["Reverser"].adjustReverseVote(obj);
@@ -70,8 +72,10 @@ class VoteAdjuster {
 		//safeguard needs to be at the very end
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
 
-		
-	}; //end adjustMissionVotes
+		obj.rO.roles["Baby Doll"].adjustMissionVotesLullaby(obj);
+
+
+	}; //end adjustMissionVotesSaintessNotOnTeam()
 
 
 	/* need to think this through....can saintess, lottie, marcus,

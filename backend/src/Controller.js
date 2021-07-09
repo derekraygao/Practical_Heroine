@@ -777,7 +777,7 @@ class Player {
         this.invisible = false;
         this.soulMark = false;
         this.jailed = false;
-        this.reverse = false; 
+        this.reverse = false; //is this necessary???
 
 	}; //end constructor
 

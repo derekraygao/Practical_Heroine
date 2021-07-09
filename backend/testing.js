@@ -1606,7 +1606,7 @@ function testBabyDollPowers() {
 
 };
 
-testBabyDollPowers();
+//testBabyDollPowers();
 
 
 
@@ -1675,8 +1675,52 @@ function testNoahAndToxiTurtlePowersParalyzeSkip() {
 
 };
 
-testNoahAndToxiTurtlePowersParalyzeSkip();
+//testNoahAndToxiTurtlePowersParalyzeSkip();
 
+
+function testToxiturtlePoisonPowers() {
+
+	console.log("Test Toxiturtle Poison ability");
+	
+	var toxiturtle = obj.rO.roles["Toxiturtle"];
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	Controller.addMissionVote(obj, 3, -1); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	toxiturtle.poisonBeak("Serena", obj);
+	//obj.pA[2].corrupted = true;
+	//obj.rO.roles["Reverser"].personToReverseVote = "Serena";
+
+	console.log("Poison Count 3");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	obj.rD.missionNo = 2;
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	AbilityManager.updateStatuses(obj);
+	console.log("Poison Count 2");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	obj.rD.missionNo = 3;
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	AbilityManager.updateStatuses(obj);
+	console.log("Poison Count 1");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	obj.rD.missionNo = 4;
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	AbilityManager.updateStatuses(obj);
+	console.log("Poison Count 0");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+};
+
+//testToxiturtlePoisonPowers();
 
 
 

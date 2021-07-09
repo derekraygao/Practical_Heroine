@@ -96,7 +96,8 @@ class Toxiturtle extends RolesMasterClass {
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (obj.pA[i].poisonCount > 0) {
-
+				
+				//console.log(obj.pA[i].name + ", poison Count" + obj.pA[i].poisonCount);
 				obj.pA[i].missionVote = 
 				this.poisonedMissionVotePower(obj.pA[i].poisonCount);
 
