@@ -15,17 +15,19 @@ class BabyDoll extends RolesMasterClass {
         this.powersHistory = 
         {
 
-        	1: {"sing": "nobody chosen"},
-        	2: {"sing": "nobody chosen"},
-        	3: {"sing": "nobody chosen"},
-        	4: {"sing": "nobody chosen"},
-        	5: {"sing": "nobody chosen"},
-        	6: {"sing": "nobody chosen"},
-        	7: {"sing": "nobody chosen"},
+        	1: {"sing": "nobody chosen", "perishSongArray": "no array"},
+        	2: {"sing": "nobody chosen", "perishSongArray": "no array"},
+        	3: {"sing": "nobody chosen", "perishSongArray": "no array"},
+        	4: {"sing": "nobody chosen", "perishSongArray": "no array"},
+        	5: {"sing": "nobody chosen", "perishSongArray": "no array"},
+        	6: {"sing": "nobody chosen", "perishSongArray": "no array"},
+        	7: {"sing": "nobody chosen", "perishSongArray": "no array"},
 
         };
 
         this.lullabyPowerUsed = false;
+
+        this.perishSongArray = [];
 
 	}; //end constructor
 
@@ -51,6 +53,28 @@ class BabyDoll extends RolesMasterClass {
 	activateLullaby() {
 
 		this.lullabyPowerUsed = true;
+	};
+
+
+	activatePerishSong(arr, obj) {
+
+		this.powersHistory[obj.rD.missionNo].perishSongArray = arr;
+
+	};
+
+
+	setPerishSongArray(obj) {
+
+		if (!this.inGame) { return 0; };
+
+		var currentPSongArr = 
+			this.powersHistory[obj.rD.missionNo].perishSongArray;
+
+
+		if (currentPSongArr !== "no array") {
+			this.perishSongArray = currentPSongArr;
+		};
+
 	};
 
 		
@@ -93,6 +117,61 @@ class BabyDoll extends RolesMasterClass {
 		}; //end for
 
 	}; //end adjustMissionVotesLullaby(obj)
+
+
+
+	areAllPerishersOnTheTeam(obj) {
+
+		var numOfPerishersOnTeam = 0;
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].selectedForMission) {
+
+				if (this.perishSongArray.includes(obj.pA[i].name)) {
+					numOfPerishersOnTeam += 1;
+				};
+
+			};
+
+		}; //end for
+
+
+		if (this.perishSongArray.length == numOfPerishersOnTeam) {
+			return true;
+		};
+
+		return false;
+
+	}; //end areAllPerishersOnTheTeam(obj)
+
+
+	//you know the names exist and are not undefined 
+	//since in checking if parishers are on the team, you check if
+	//obj.pA[i].name is in the this.perishSongArray
+	adjustMissionVotesPerishSong(obj) {
+
+		if (this.perishSongArray.length == 0) { return 0; };
+
+		var perisherInd = -1;
+
+		if (this.areAllPerishersOnTheTeam(obj)) {
+
+			for (var i = 0; i < this.perishSongArray.length; i++) {
+
+				perisherInd = obj.pT[this.perishSongArray[i]];
+
+				obj.pA[perisherInd].missionVote = 0;
+
+			};
+
+
+			this.perishSongArray = [];
+
+		}; //end if areAllPerishersOnTheTeam
+
+	}; // end adjustMissionVotesPerishSong(obj)
+
 
 
 

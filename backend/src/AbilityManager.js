@@ -66,6 +66,12 @@ class AbilityManager {
   }; //end updateBombermanStatuses
 
 
+  updateBabyDollPowers(obj) {
+
+    obj.rO.roles["Baby Doll"].setPerishSongArray(obj);
+
+  };
+
 
   updateSpiritualistStatuses(obj) {
 
@@ -192,6 +198,7 @@ class AbilityManager {
     this.updateNoahAbilities(obj);
     this.updateToxiturtleAbilities(obj)
     this.updateHecateStatuses(obj);
+    this.updateBabyDollPowers(obj);
     this.updateBombermanStatuses(obj);
     this.updateSpiritualistStatuses(obj);
 	  this.handleBackstabberPersequorAndHurricane(obj);

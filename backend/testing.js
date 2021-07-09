@@ -1609,6 +1609,42 @@ function testBabyDollPowers() {
 //testBabyDollPowers();
 
 
+function testBabyDollPerishSong() {
+
+	console.log("Test Baby Doll Perish Song");
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 3); //Serena
+	Controller.addMissionVote(obj, 3, -5); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Xing", "Lucio"]);
+
+	Controller.setPlayersForMission(obj);
+	
+	obj.rO.roles["Baby Doll"].activatePerishSong(["Derek", "Serena", "Lucio"], obj);
+	AbilityManager.updateStatuses(obj);
+
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 3); //Serena
+	Controller.addMissionVote(obj, 3, -5); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	console.log("Perish Song should be reset, mission vote total should be: 1");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+};
+
+
+testBabyDollPerishSong();
+
+
 
 
 
@@ -1728,7 +1764,7 @@ function testToxiturtlePoisonPowers() {
 
 };
 
-testToxiturtlePoisonPowers();
+//testToxiturtlePoisonPowers();
 
 
 
