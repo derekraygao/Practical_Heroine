@@ -170,6 +170,10 @@ class Controller {
 
 		}; //end if
 
+		if (obj.pA[obj.rD.teamLeaderIndex].paralyzed) {
+			this.paralyzedPlayerSkip(obj);
+		};
+
 	}; //end paralyzedPlayerSkip(obj)
 
 
@@ -759,7 +763,7 @@ class Player {
         this.teamVote = null; 
         this.princessChoice = "";
         this.corrupted = false;
-        this.poisoned = false;
+        this.poisonCount = 0;
         this.bomb = false;
         this.paralyzed = false;
         this.frozen = false;

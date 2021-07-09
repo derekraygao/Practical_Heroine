@@ -14,10 +14,31 @@ class AbilityManager {
 
     if (!obj.rO.roles["Noah"].inGame) { return 0; };
 
-    obj.rO.roles["Noah"].adjustThunderWave(obj);
     obj.rO.roles["Noah"].adjustIcePunch(obj);
 
   }; //end updateNoahAbilities
+
+
+  updateToxiturtleAbilities(obj) {
+
+    var toxiturtle = obj.rO.roles["Toxiturtle"];
+    if (!toxiturtle.inGame) { return 0; };
+
+    toxiturtle.reducePoisonCounter(obj);
+  
+
+  }; //end updateToxiturtleAbilities(obj)
+
+
+  updateParalysisAbilitiesEffect(obj) {
+
+    obj.rO.roles["Noah"].removeThunderWaveEffect(obj);
+    obj.rO.roles["Toxiturtle"].adjustGlareRemoveParalysis(obj);
+
+    obj.rO.roles["Noah"].addThunderWaveEffect(obj);
+    obj.rO.roles["Toxiturtle"].adjustGlareSetParalysis(obj);
+
+  }; //end updateParalysisAbilitiesEffect(obj)
 
 
 
@@ -167,11 +188,15 @@ class AbilityManager {
   updateStatuses(obj) {
 
     this.updateSaintessStatuses(obj);
+    
     this.updateNoahAbilities(obj);
+    this.updateToxiturtleAbilities(obj)
     this.updateHecateStatuses(obj);
     this.updateBombermanStatuses(obj);
     this.updateSpiritualistStatuses(obj);
-	this.handleBackstabberPersequorAndHurricane(obj);
+	  this.handleBackstabberPersequorAndHurricane(obj);
+
+    this.updateParalysisAbilitiesEffect(obj);
 
   };
 

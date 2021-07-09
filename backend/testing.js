@@ -1638,9 +1638,15 @@ function testNoahPowers() {
 
 
 
-function testNoahPowersParalyzeSkip() {
+function testNoahAndToxiTurtlePowersParalyzeSkip() {
 
-	obj.rO.roles["Noah"].useThunderWave("Derek", obj);
+	obj.rD.missionNo = 1;
+	obj.rD.teamLeaderIndex = -1;
+	obj.rO.roles["Noah"].setThunderWave("Derek", obj);
+
+	console.log(obj.rO.roles["Toxiturtle"].glare("Xing", obj));
+
+	AbilityManager.updateStatuses(obj);
 
 	for (var i = 0; i < 9; i++) {
 
@@ -1650,9 +1656,28 @@ function testNoahPowersParalyzeSkip() {
 
 	};
 
+	
+	console.log("");
+	console.log("Paralysis should be removed");
+
+	obj.rD.missionNo = 2;
+	AbilityManager.updateStatuses(obj);
+
+	for (var i = 0; i < 9; i++) {
+
+		Controller.updateTeamLeaderIndex(obj);
+
+		console.log("team leader index is now: " + obj.rD.teamLeaderIndex);
+
+	};
+
+
+
 };
 
-//testNoahPowersParalyzeSkip();
+testNoahAndToxiTurtlePowersParalyzeSkip();
+
+
 
 
 function testAdjustMissionVotes() {
