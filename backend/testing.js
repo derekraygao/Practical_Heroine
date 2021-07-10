@@ -1777,6 +1777,56 @@ function testToxiturtlePoisonPowers() {
 //testToxiturtlePoisonPowers();
 
 
+function testPsychologistPowers() {
+
+	console.log("Test Psychologist Powers");
+	
+	var psychologist = obj.rO.roles["Psychologist"];
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	psychologist.setPredictionArray(["Serena", "Lucio"], obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	console.log("");
+	console.log("Get Two Roles For Psychologist");
+
+
+	var checkName = "Serena";
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+	console.log(psychologist.revealOnePlayersRole(checkName, obj));
+
+	console.log(psychologist.revealOneBadOneGoodPlayer(["brad", "kevin"]));
+
+};
+
+//testPsychologistPowers();
+
+
+
+
+
+
+
 
 function testAdjustMissionVotes() {
 
