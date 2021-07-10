@@ -28,17 +28,53 @@ class Toxiturtle extends RolesMasterClass {
 
 
 
+	hasItBeenTwoTurnsSincePoisonBeak(obj) {
+
+		if (this.poisonBeakArray.length == 0) { return true; };
+		if (this.poisonBeakArray.length >= 2) { return false; };
+
+		if (obj.rD.missionNo >=
+			this.poisonBeakArray[0].nextMissionItCanBeUsed)
+		{
+
+			return true;
+		};
+
+		return false;
+
+	}; //end hasItBeenTwoTurnsSincePoisonBeak(obj)
+
+
+
+	//prevent selecting same person twice
+	doesPoisonBeakArrayIncludeName(name) {
+
+		for (var i = 0; i < this.poisonBeakArray.length; i++) {
+
+			if (this.poisonBeakArray[i].name == name) {
+				return true;
+			};
+
+		};
+
+		return false;
+	};
+
+
 	poisonBeak(name, obj) {
 
 		var poisonInd = obj.pT[name];
 
 		if (poisonInd !== 0 && !poisonInd) { return 0; };
+		if (this.doesPoisonBeakArrayIncludeName(name)) { return 0; };
+		if (!this.hasItBeenTwoTurnsSincePoisonBeak(obj)) { return 0; };
 
-		if (this.poisonBeakArray.includes(name)) { return 0; };
-
-		if (this.poisonBeakArray.length > 2) { return 0; };
-
-		this.poisonBeakArray.push(name);
+		this.poisonBeakArray.push(
+			{
+				name: name, 
+				nextMissionItCanBeUsed: (obj.rD.missionNo + 2),
+			}
+		);
 
 		obj.pA[poisonInd].poisonCount = 3;
 
