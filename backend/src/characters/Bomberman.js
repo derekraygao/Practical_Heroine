@@ -23,6 +23,7 @@ class Bomberman extends RolesMasterClass {
         	4: {"bombTarget": "nobody chosen", "firePunchTarget": "nobody chosen"},
         	5: {"bombTarget": "nobody chosen", "firePunchTarget": "nobody chosen"},
         	6: {"bombTarget": "nobody chosen", "firePunchTarget": "nobody chosen"},
+        	6: {"bombTarget": "nobody chosen", "firePunchTarget": "nobody chosen"},
         };
 
         //reset this to false when notifying players that a bomb has exploded
@@ -105,7 +106,7 @@ class Bomberman extends RolesMasterClass {
 		if (!this.inGame) { return 0; };
 		if (!playerObj.bomb) { return 0; };
 
-		playerObj.missionVote -= 5;
+		playerObj.missionVote -= 3.5;
 
 		this.didBombBlowUpThisMission = true;
 
