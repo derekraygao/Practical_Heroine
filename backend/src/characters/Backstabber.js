@@ -23,6 +23,11 @@ class Backstabber extends RolesMasterClass {
 
 	backstab() {
 
+		//means power has been used already
+		if (this.originalBackStabberName != "nobody chosen") {
+			return 0;
+		};
+
 		this.activateSwitch = true;
 
 	};
@@ -40,6 +45,8 @@ class Backstabber extends RolesMasterClass {
 
 			heroesIndicesArr.push(i);
 		};
+
+		if (heroesIndicesArr.length === 0) { return -1; };
 
 		shuffle(heroesIndicesArr);
 
@@ -112,11 +119,6 @@ class Backstabber extends RolesMasterClass {
 		//activateSwitch reset to false in outside function notifying
 		//players of the switch
 
-		//means power has been used already
-		if (this.originalBackStabberName != "nobody chosen") {
-			return 0;
-		};
-
 		this.originalBackStabberName = this.name;
 
 		var switchInd = this.findAHeroToSwitchWith(obj);
@@ -124,12 +126,14 @@ class Backstabber extends RolesMasterClass {
 			+ obj.pA[switchInd].name + ", original role: "
 			+ obj.pA[switchInd].role); */
 
+		if (switchInd === -1) { return 0; };
+
 		//backstabber player
 		obj.pA[this.index].role = obj.pA[switchInd].role;
 
 		//switched rolesObject
-		obj.rO.rolesInGame[switchInd].name = obj.pA[this.index].name;
-		obj.rO.rolesInGame[switchInd].socketID = obj.pA[this.index].socketID;
+		obj.rO.rolesInGame[switchInd].name = this.name;
+		obj.rO.rolesInGame[switchInd].socketID = this.socketID;
 
 		//new backstabber/switched player
 		obj.pA[switchInd].role = "Backstabber";
@@ -145,6 +149,16 @@ class Backstabber extends RolesMasterClass {
 		//switchInd now refers to original backstabber
 		obj.pT[obj.pA[switchInd].name] = switchInd;
 		obj.pT[obj.pA[this.index].name] = this.index;
+
+
+		return (
+			{
+				originalSID: obj.pA[switchInd].socketID,
+				originalBSNewRole: obj.pA[switchInd].role,
+				originalBSName: obj.pA[switchInd].name,
+				newSID: obj.pA[this.index].socketID
+			}
+		);
 
 
 	};
@@ -163,11 +177,11 @@ class Backstabber extends RolesMasterClass {
 
 			if (obj.pA[this.index].missionVote >= 0) {
 
-				obj.pA[this.index].missionVote += 4;
+				obj.pA[this.index].missionVote += 3.5;
 
 			} else {
 
-				obj.pA[this.index].missionVote -= 4;
+				obj.pA[this.index].missionVote -= 3.5;
 		
 			};
 
