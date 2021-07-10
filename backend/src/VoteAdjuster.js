@@ -27,6 +27,7 @@ class VoteAdjuster {
 
 	adjustVotesSaintessNotOnTeam(obj) {
 
+		obj.rO.roles["Lan"].adjustMissionVotesLanFinalHeaven(obj);
 		obj.rO.roles["Toxiturtle"].adjustMissionVotesPoisoned(obj);
 
 		obj.rO.roles["Umbra Lord"].adjustMissionVotesCorrupted(obj);
@@ -45,6 +46,9 @@ class VoteAdjuster {
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (!obj.pA[i].selectedForMission) { continue; };
+
+			//injured sets base vote power to 0
+			obj.rO.roles["Lieutenant Blitz"].adjustMissionVotesInjured(obj.pA[i]);
 
 			obj.rO.roles["Bomberman"].adjustMissionVotesBurn(obj.pA[i]);
 			obj.rO.roles["Bomberman"].adjustMissionVotesBomb(obj.pA[i]);

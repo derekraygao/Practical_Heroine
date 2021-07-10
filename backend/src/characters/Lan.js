@@ -10,6 +10,7 @@ class Lan extends RolesMasterClass {
         this.alignment = "good";
         this.team = "heroes";
 
+        this.isFinalHeavenActivated = false;
         this.finalHeavenCount = 0;
         this.intimidateTarget = "nobody chosen";
 
@@ -52,6 +53,37 @@ class Lan extends RolesMasterClass {
 
 	}; //end finalHeavenCountConverter()
 
+
+	activateFinalHeaven() {
+
+		this.isFinalHeavenActivated = true;
+
+	};
+
+
+	adjustMissionVotesLanFinalHeaven(obj) {
+
+		if (!this.isFinalHeavenActivated) { return 0; };
+
+		this.isFinalHeavenActivated = false;
+
+		if (this.finalHeavenCount == 0) {
+
+			obj.pA[this.index].missionVote = -2;
+			this.finalHeavenCount += 1;
+
+			return 0;
+
+		};
+
+		var finalHeavenMissionVote = 
+		this.finalHeavenCountToVoteConverter();
+
+		this.finalHeavenCount += 1;
+
+		obj.pA[this.index].missionVote *= finalHeavenMissionVote;
+
+	};
 
 
 	//this goes inside Controller.setPlayerMissionVote()

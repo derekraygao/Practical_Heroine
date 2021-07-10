@@ -557,7 +557,7 @@ function testBalancerPower() {
 };
 
 
-testBalancerPower()
+//testBalancerPower()
 
 
 
@@ -977,20 +977,19 @@ function testBombermanPower() {
 
 function testLieutenantBlitzPower() {
 
+	console.log("Testing Lieutenant Blitz Power - Serena, Index 2");
+
 	obj.rD.missionNo = 1;
 	//first need some mission results
 	Controller.addMissionVote(obj, 0, 1); //Derek
 	Controller.addMissionVote(obj, 1, 1); //Cloud
-	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 2, 1); //Serena Lieutenant Blitz
 	Controller.addMissionVote(obj, 3, -4); //Lucio
 	Controller.addMissionVote(obj, 4, 2); //Xing
 
 	Controller.setMissionTeam(obj, ["Derek", "Serena"]);
 	Controller.setPlayersForMission(obj);
 
-	obj.pA[0].role = "Lieutenant Blitz";
-	obj.rO.roles["Lieutenant Blitz"].inGame = true;
-	obj.rO.roles["Lieutenant Blitz"].index = 0;
 
 	obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
 	console.log("For mission #1, votes should be 1");
@@ -1012,6 +1011,61 @@ function testLieutenantBlitzPower() {
 
 
 };
+
+//testLieutenantBlitzPower();
+
+
+function testInjuredStatus() {
+
+	console.log("Testing Injured Status Power");
+
+	var ltBlitz = obj.rO.roles["Lieutenant Blitz"];
+	obj.rD.missionNo = 1;
+	//first need some mission results
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, 1); //Cloud
+	Controller.addMissionVote(obj, 2, -5); //Serena Lieutenant Blitz
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	ltBlitz.setUnitedStatesOfSmashTarget("Serena", obj);
+	AbilityManager.updateStatuses(obj);
+
+	console.log("Injured Count is: " + obj.pA[2].injuredCount);
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	console.log("");
+	console.log("Injured Status should wear off after 2 rounds");
+
+	obj.rD.missionNo = 2;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 2, -5); //Serena Lieutenant Blitz
+
+	ltBlitz.setUnitedStatesOfSmashTarget("Serena", obj);
+	console.log("Injured Count is: " + obj.pA[2].injuredCount);
+	AbilityManager.updateStatuses(obj);
+	console.log("Injured Count is: " + obj.pA[2].injuredCount);
+
+	obj.rD.missionNo = 3;
+
+	AbilityManager.updateStatuses(obj);
+	console.log("Injured Count is: " + obj.pA[2].injuredCount);
+	AbilityManager.updateStatuses(obj);
+
+	console.log("Injured Count is: " + obj.pA[2].injuredCount);
+	AbilityManager.updateStatuses(obj);
+
+
+	console.log("Injured Count is: " + obj.pA[2].injuredCount);
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+};
+
+
+//testInjuredStatus();
 
 
 
@@ -1595,7 +1649,9 @@ function testLottiePowers() {
 function testLanPowers() {
 
 	console.log("Testing Lan Powers");
-	obj.rO.roles["Lan"].index = 2;
+
+	var lan = obj.rO.roles["Lan"];
+
 	//console.log(obj.rD.missionTeam);
 
 	obj.rD.missionNo = 1;
@@ -1606,8 +1662,26 @@ function testLanPowers() {
 	Controller.addMissionVote(obj, 3, -4); //Lucio
 	Controller.addMissionVote(obj, 4, 2); //Xing
 
-	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setMissionTeam(obj, ["Serena"]);
 	Controller.setPlayersForMission(obj);
+
+	lan.activateFinalHeaven();
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	lan.activateFinalHeaven();
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+
+	Controller.addMissionVote(obj, 2, -1); //Serena
+	lan.activateFinalHeaven();
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
 
 	/*
 	obj.rO.roles["Lan"].setPositiveFinalHeavenVotePower(obj);
@@ -1631,14 +1705,16 @@ function testLanPowers() {
 
 	//obj.rO.roles["Lan"].addIntimidateTarget("Derek");
 
+	/*
 	obj.rO.roles["Lan"].beatRush("Derek", obj);
 	console.log("confused for index 0 is: " + obj.pA[0].confused);
-
+	
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+	*/
 
 };
 
-//testLanPowers();
+testLanPowers();
 
 
 function testBabyDollPowers() {
