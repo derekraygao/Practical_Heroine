@@ -522,9 +522,43 @@ function testOraclePower() {
 
 
 
-function testBalancerPower(name1, name2) {
-	console.log(obj.rO.roles["Balancer"].mysticScales(name1, name2, obj));
+function testBalancerPower() {
+
+	console.log("Testinging Balancer Powers");
+
+	var balancer = obj.rO.roles["Balancer"];
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 0); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 3); //Serena
+	Controller.addMissionVote(obj, 3, 0); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	balancer.setEquilibriumArray(["Derek", "Lucio"]);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	console.log("");
+	console.log("Equilibrium Array should be reset at this point");
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 2, 3); //Serena
+	Controller.addMissionVote(obj, 3, 2); //Lucio
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	console.log(obj.rO.roles["Balancer"].mysticScales("Serena", "Xing", obj));
 };
+
+
+testBalancerPower()
+
 
 
 
@@ -724,12 +758,13 @@ function testPsybombPower() {
 	console.log("Headache charge should be reset to 0");
 	Controller.addMissionVote(obj, 2, 1); //Serena
 
+	
 	esper.activatePsybomb();
 	console.log(Controller.missionVoteCalculation(obj));
 
 };
 
-testPsybombPower();
+//testPsybombPower();
 
 
 

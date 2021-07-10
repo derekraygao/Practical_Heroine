@@ -530,6 +530,10 @@ class Controller {
 			*/
 		}; //end for
 
+
+		negativeVoteAccumulator = obj.rO.roles["Psychologist"]
+		.adjustNegativeVotesPrediction(negativeVoteAccumulator, obj);
+
 		/*
 		console.log("Negative Vote Total BEFORE Shadow Domain Is: " 
 			+ negativeVoteAccumulator);
@@ -560,6 +564,9 @@ class Controller {
 
 		missionVoteAccumulator = obj.rO.roles["Lan"]
 		.adjustVoteSumIntimidate(missionVoteAccumulator, obj);
+
+		missionVoteAccumulator = obj.rO.roles["Balancer"]
+		.adjustVoteSumEquilibrium(missionVoteAccumulator, obj);
 
 		obj.rI.addMissionInfo(
 			obj.rD.missionNo,
