@@ -692,6 +692,50 @@ function testEsperPower() {
 };
 
 
+function testPsybombPower() {
+
+	console.log("Testing Esper's Psybomb Power");
+	console.log("Esper is index 2, Serena");
+
+	var esper = obj.rO.roles["Esper"];
+
+	obj.rD.missionNo = 1;
+	//first need some mission results
+	Controller.addMissionVote(obj, 0, null); //Derek
+	Controller.addMissionVote(obj, 1, 4); //Cloud
+	Controller.addMissionVote(obj, 2, -1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	esper.chargeUpHeadache();
+	esper.chargeUpHeadache();
+	esper.chargeUpHeadache();
+	esper.chargeUpHeadache();
+
+	esper.activatePsybomb();
+
+	//AbilityManager.updateStatuses(obj);
+
+	console.log(Controller.missionVoteCalculation(obj));
+
+	console.log("Headache charge should be reset to 0");
+	Controller.addMissionVote(obj, 2, 1); //Serena
+
+	esper.activatePsybomb();
+	console.log(Controller.missionVoteCalculation(obj));
+
+};
+
+testPsybombPower();
+
+
+
+
+
+
 function testSensorPower() {
 
 	obj.pA[0].bomb = true;

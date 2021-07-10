@@ -36,6 +36,7 @@ class VoteAdjuster {
 
 		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
 
+		obj.rO.roles["Esper"].adjustMissionVotePsybomb(obj);
 		obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
 		obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
@@ -64,14 +65,20 @@ class VoteAdjuster {
 
 		obj.rO.roles["Ichigo"].adjustVotesHolyStrike(obj);
 
-		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
-		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
-
 		obj.rO.roles["Lottie"].adjustMissionVotesPrincessAndLottie(obj);
 
-		//safeguard needs to be at the very end
+		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
+
+		obj.rO.roles["Baby Doll"].adjustMissionVotesPerishSong(obj);
+
+
+		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
+
+		//safeguard needs to be near the end
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
 
+
+		//should be very last thing
 		obj.rO.roles["Baby Doll"].adjustMissionVotesLullaby(obj);
 
 

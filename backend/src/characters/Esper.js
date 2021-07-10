@@ -12,6 +12,8 @@ class Esper extends RolesMasterClass {
         this.team = "heroes";
 
         this.telepathyArray = [];
+        this.headacheCharge = 0;
+        this.isPsybombActivated = false;
 
         this.adjectivesArray = ["Happy", "Angry", "Hopping", "Wily", "Dizzy", "Elegant", "Fancy", "Immoral", "Glorious",
         						"Bashful", "Lucky", "Crying", "Nasty", "Mean", "Pulchritudinous", "Affable", "Ardent", 
@@ -30,12 +32,86 @@ class Esper extends RolesMasterClass {
 
 	}; //end constructor
 
-	//don't need to clear array after night time, just rewrite over/reassign
-	setTelepathyArray(array) {
+	//need to clear at end of night
+	setTelepathyArray(tArray, obj) {
 
-		this.telepathyArray = array;
+		this.telepathyArray = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (tArray.includes(obj.pA[i].name)) {
+				this.telepathyArray.push(obj.pA[i]);
+			};
+
+		}; //end for
+
+	}; //end setTelepathyArray
+
+
+	chargeUpHeadache() {
+
+		this.headacheCharge += 1;
+
+		return this.headacheCharge;
 
 	};
+
+
+	activatePsybomb() {
+
+		this.isPsybombActivated = true;
+
+	};
+
+
+	psyBombVotePower() {
+
+		switch (this.headacheCharge) {
+
+			case 1:
+				return 2;
+
+			case 2:
+				return 3.5;
+
+			case 3:
+				return 5;
+
+			case 4:
+				return 7;
+
+			case 5:
+				return 8;
+
+			case 6:
+				return 10;
+
+			case 7:
+				return 12;
+
+			default:
+				return 1;
+
+		}; //end switch
+
+	}; //end psyBombVotePower
+
+
+
+	adjustMissionVotePsybomb(obj) {
+
+		if (this.isPsybombActivated) {
+
+			obj.pA[this.index].missionVote *= this.psyBombVotePower();
+
+			this.headacheCharge = 0;
+			this.isPsybombActivated = false;
+		};
+
+	};
+
+
+
 
 
 	//should be AFTER assignment of roles
@@ -86,7 +162,7 @@ class Esper extends RolesMasterClass {
 
 				othersMessage:
 
-					{
+					{	//esper's pseudonym is "Esper"
 						sender: obj.pA[index].pseudonym,
 						message: message
 					}
