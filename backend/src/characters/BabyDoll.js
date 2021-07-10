@@ -1,5 +1,5 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
-
+var {calculateNumberofTeamMembers} = require('./calculateNumberofTeamMembers.js');
 
 class BabyDoll extends RolesMasterClass {
 
@@ -35,6 +35,12 @@ class BabyDoll extends RolesMasterClass {
 	setSingTarget(name, obj) {
 
 		var missionNo = obj.rD.missionNo;
+
+		//need minimum of 3 people team...cause you need minimum 2
+		//people a team for some powers/abilities to work
+		if (calculateNumberofTeamMembers(missionNo, obj.pA.length) < 3) {
+			return 0;
+		};
 
 		//cannot choose same person twice in a row
 		if (missionNo > 1) {
