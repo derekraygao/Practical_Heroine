@@ -7,7 +7,7 @@ class Toxiturtle extends RolesMasterClass {
       	
 		super();
 
-        this.role = "Baby Doll";
+        this.role = "Toxiturtle";
         this.alignment = "evil";
         this.team = "villains";
 
