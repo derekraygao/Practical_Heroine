@@ -1,5 +1,5 @@
 
-.PP1-Baby-Doll-Container {
+.PP1-Lan-Container {
 
 	display: grid;
 	grid-template-rows: 14% 86%;
@@ -12,7 +12,7 @@
 
 }
 
-.PP1-sing-container {
+.PP1-beat-rush-container {
 
 	grid-area: action-area;
 
@@ -31,7 +31,7 @@
 
 }
 
-.PP1-sing-container select {
+.PP1-beat-rush-container select {
 	margin-right: 3%;
 }
 

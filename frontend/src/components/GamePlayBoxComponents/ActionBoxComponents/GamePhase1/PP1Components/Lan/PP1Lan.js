@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './PP1Seer.css';
+import './PP1Lan.css';
 
 import { connect } from 'react-redux';
 import {updateCharacterPowerHistory} from 'actions/updateCharacterPowerHistory.js';
@@ -9,12 +9,12 @@ import {systemMessages} from 'actions/systemMessages.js';
 import formatArrayIntoString from 'formatArrayIntoString.js';
 import socket from 'Socket.js';
 
-class PP1Seer extends React.Component {
+class PP1Lan extends React.Component {
 
   state = {
 
     usedPower: false,
-    scryTargetName: "Scry ?",
+    beatRushTarget: "Beat Rush ?",
 
   };
 
@@ -29,9 +29,15 @@ class PP1Seer extends React.Component {
 
   getSelectionChoices = () => {
 
-    const {playerList} = this.props;
+    var brList = JSON.parse(JSON.stringify(this.props.playerList));
 
-    const allPlayerSelectOptions = playerList.map((pName, index) => {
+    var q = brList.indexOf(this.props.myName);
+
+    if (q > -1) {
+      brList.splice(q, 1);
+    };
+
+    const allPlayerSelectOptions = brList.map((pName, index) => {
 
       return (
 
@@ -47,13 +53,13 @@ class PP1Seer extends React.Component {
   };
 
 
-  submitScry = () => {
+  submitBR = () => {
 
-    if (this.state.scryTargetName !== "Scry ?") {
+    if (this.state.beatRushTarget !== "Beat Rush ?") {
 
       this.setState({usedPower: true});
 
-      socket.emit("Scry", this.state.scryTargetName);
+      socket.emit("Beat Rush", this.state.beatRushTarget);
 
     };
 
@@ -66,14 +72,15 @@ class PP1Seer extends React.Component {
 
       return (
 
-      <div className="PP1-Seer-Container">
+      <div className="PP1-Lan-Container">
 
         <div className="powers-menu-bar-container orange ui buttons">
           <button className="ui button"></button>
         </div> 
 
-        <div className="PP1-scry-container">
-          You peered into {this.state.scryTargetName}'s identity. 
+        <div className="PP1-beat-rush-container">
+          You rushed {this.state.beatRushTarget} and beat him/her 
+          up, with a 75% chance of causing confused status.  
           Please wait {this.props.timer} seconds for Game 
           Phase 1 to end.
         </div>
@@ -87,22 +94,22 @@ class PP1Seer extends React.Component {
 
     return (
 
-      <div className="PP1-Seer-Container">
+      <div className="PP1-Lan-Container">
 
         <div className="powers-menu-bar-container orange ui buttons">
-          <button className="ui button">Scry</button>
+          <button className="ui button">Beat Rush</button>
         </div> 
 
 
-        <div className="PP1-scry-container">
+        <div className="PP1-beat-rush-container">
 
           <select 
             className="ui search dropdown"
-            value={this.state.scryTargetName}
-            onChange={e => this.setState({ scryTargetName: e.target.value })}
+            value={this.state.beatRushTarget}
+            onChange={e => this.setState({ beatRushTarget: e.target.value })}
           >
 
-            <option value="Scry ?" disabled selected>Scry</option>
+            <option value="Beat Rush ?" disabled selected>Beat Rush!</option>
             {this.getSelectionChoices()}
 
           </select>
@@ -110,7 +117,7 @@ class PP1Seer extends React.Component {
 
           <button 
             className="ui yellow button"
-            onClick={this.submitScry}
+            onClick={this.submitBR}
           >
             Scry!
           </button>
@@ -118,7 +125,7 @@ class PP1Seer extends React.Component {
         </div>
 
 
-      </div> //end div Umbra-Lord-Container
+      </div> //end div Lan-container
 
     ); //end return
 
@@ -133,7 +140,8 @@ class PP1Seer extends React.Component {
 const mapStateToProps = (state) => {
   
   return (
-         { 
+         {  
+            myName: state.name,
             PH: state.characterPowersHistory,
             playerList: state.playerList,
             gamePhase: state.gamePhase,
@@ -150,4 +158,4 @@ export default connect(mapStateToProps,
     addSystemMessage: systemMessages,
   }
 )
-(PP1Seer);
+(PP1Lan);
