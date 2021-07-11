@@ -25,6 +25,8 @@ class MissionVotingPhase6 extends React.Component {
   componentDidMount = () => {
 
       phase6TimerInterval = setInterval(this.timerCountdown, 1000);
+
+      automateVoteOnMission();
     
   }; //end componentDidMount
 
@@ -168,3 +170,15 @@ export default connect(mapStateToProps,
   }
 )
 (MissionVotingPhase6);
+
+
+
+function automateVoteOnMission() {
+
+  //other players are still in phase 5
+  //if (!this.props.missionTeam.includes(this.props.myName)) { return 0; };
+
+  socket.emit("Vote on Mission", "Success");
+  clearInterval(phase6TimerInterval);
+
+};

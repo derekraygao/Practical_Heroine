@@ -17,12 +17,44 @@ var testArray10 = ["John", "Lottie", "Marcus", "Noah",
 var testArray8 = ["John", "Lottie", "Marcus", "Noah", 
                    "Pear", "Lan", "Bianca", "Nugo"];
 
+
+
 class TeamLeaderChoosingTeamPhase2 extends React.Component {
 
   state = {
             submittedTeam: false
 
           };
+
+
+  componentDidMount = () => {
+
+    this.automateTeamSelection();
+
+  };
+
+
+  automateTeamSelection() {
+
+    if (this.props.teamLeaderName !== this.props.myName) { return 0; };
+
+    console.log("is automate team selection calling?");
+
+    var teamSize = calculateNumberofTeamMembers(this.props.missionNumber, this.props.playerList.length);
+    var teamArr = [];
+
+    for (var i = 0; i < teamSize; i++) {
+
+      teamArr.push(this.props.playerList[i]);
+
+    };
+
+    socket.emit("Team Leader's Proposed Team Submission", teamArr);
+
+  };
+
+
+
 
 
   submitTeamMembers = () => {
@@ -119,12 +151,6 @@ class TeamLeaderChoosingTeamPhase2 extends React.Component {
   }; //end whichActionBoxComponent()
 
 
-  componentDidMount = () => {
-
-
-  };
-
-
 
   render() {
 
@@ -158,3 +184,5 @@ const mapStateToProps = (state) => {
 
 
 export default connect(mapStateToProps, {clearMissionTeam: missionTeamList})(TeamLeaderChoosingTeamPhase2);
+
+
