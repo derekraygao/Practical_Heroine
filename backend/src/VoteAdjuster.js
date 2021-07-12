@@ -32,7 +32,6 @@ class VoteAdjuster {
 
 		obj.rO.roles["Umbra Lord"].adjustMissionVotesCorrupted(obj);
 
-		obj.rO.roles["Reverser"].adjustReverseVote(obj);
 		obj.rO.roles["Reverser"].adjustVotesMirrorWorld(obj);
 
 		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
@@ -42,6 +41,10 @@ class VoteAdjuster {
 		obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
 		obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
+
+		/*Base vote on top, then inside for loop,
+		do +/- first, then multiplication type powers
+		*/
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
@@ -55,7 +58,9 @@ class VoteAdjuster {
 
 			obj.rO.roles["Lottie"].adjustMissionVotesLottie(obj.pA[i]);
 
-			obj.rO.roles["Saintess"].adjustMissionVotesBless(obj.pA[i]); 
+			obj.rO.roles["Saintess"].adjustMissionVotesCuraga(obj.pA[i]); // +
+
+			obj.rO.roles["Saintess"].adjustMissionVotesBless(obj.pA[i]); // *
 
 			obj.rO.roles["Ranger"].adjustMissionVotesShrink(obj.pA[i]);
 
@@ -65,6 +70,11 @@ class VoteAdjuster {
 		};
 
 		obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
+
+		/*reverseVote needs to be after berserk but
+		before transcendence*/
+		obj.rO.roles["Reverser"].adjustReverseVote(obj);
+
 		obj.rO.roles["Marcus"].adjustVoteTranscendence(obj);
 
 		obj.rO.roles["Ichigo"].adjustVotesHolyStrike(obj);
@@ -75,7 +85,8 @@ class VoteAdjuster {
 
 		obj.rO.roles["Baby Doll"].adjustMissionVotesPerishSong(obj);
 
-
+		/*copycat checks inside to see if persequor
+		is target of Pear's vanish */
 		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
 
 		//safeguard needs to be near the end
@@ -95,16 +106,23 @@ class VoteAdjuster {
 	so no need to do Ichigo powers */
 	adjustVotesSaintessOnTeam(obj) {
 
+		obj.rO.roles["Lan"].adjustMissionVotesLanFinalHeaven(obj);
+		obj.rO.roles["Toxiturtle"].adjustMissionVotesPoisoned(obj);
+
+		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
+
+		obj.rO.roles["Esper"].adjustMissionVotePsybomb(obj);
 		obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
 		obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
+		obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (!obj.pA[i].selectedForMission) { continue; };
 
-			obj.rO.roles["Ranger"].adjustMissionVotesShrink(obj.pA[i]);
-
+			//curaga is + and comes before bless which is *
+			obj.rO.roles["Saintess"].adjustMissionVotesCuraga(obj.pA[i]);
 			obj.rO.roles["Saintess"].adjustMissionVotesBless(obj.pA[i]); 
 
 		}; //end for
@@ -112,11 +130,17 @@ class VoteAdjuster {
 		obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
 		obj.rO.roles["Marcus"].adjustVoteTranscendence(obj);
 
+		obj.rO.roles["Ichigo"].adjustVotesHolyStrike(obj);
+
+		obj.rO.roles["Lottie"].adjustMissionVotesPrincessAndLottie(obj);
+
 		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
+
 		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
 
-		//safeguard needs to be at the very end
+		//safeguard needs to be near the end
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
+
 
 	};
 
