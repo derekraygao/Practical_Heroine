@@ -66,6 +66,13 @@ class AbilityManager {
   }; //end updateBombermanStatuses
 
 
+  updateLieutenantBlitzStatuses(obj) {
+
+    obj.rO.roles["Lieutenant Blitz"].updateInjuredStatus(obj);
+
+  };
+
+
   updateBabyDollPowers(obj) {
 
     obj.rO.roles["Baby Doll"].setPerishSongArray(obj);
@@ -171,19 +178,24 @@ class AbilityManager {
   }; //end handleBackstabberPersequorAndHurricane
 
 
+  updateLottieAbilities(obj) {
 
-  updateSaintessStatuses(obj) {
+    var lottie = obj.rO.roles["Lottie"];
 
-    if (!obj.rO.roles["Saintess"].inGame) { return 0; };
-
-    for (var i = 0; i < obj.pA.length; i++) {
-
-      obj.pA[i].bless = false;
-      obj.pA[i].safeguard = false;
-
-    }; //end for
+    lottie.removeGroupHugAndTherapyAtEndOfRound(obj);
+    //setTherapy & GroupHug MUST come AFTER removeGroupHug&Therapy
+    lottie.setTherapyStatus(obj);
+    lottie.setGroupHugStatus(obj);
 
   };
+
+
+  updateSaintessStatuses(obj) {
+   
+    obj.rO.roles["Saintess"].removeSaintessBuffsAtEndOfRound(obj);
+    obj.rO.roles["Saintess"].adjustSomeDataWhenSaintessOnTheMissionTeam(obj);
+
+  }; //end updateSaintessStatuses(obj)
 
 
 
@@ -194,9 +206,11 @@ class AbilityManager {
   updateStatuses(obj) {
 
     this.updateSaintessStatuses(obj);
+    this.updateLottieAbilities(obj);
     
     this.updateNoahAbilities(obj);
     this.updateToxiturtleAbilities(obj)
+    this.updateLieutenantBlitzStatuses(obj);
     this.updateHecateStatuses(obj);
     this.updateBabyDollPowers(obj);
     this.updateBombermanStatuses(obj);
