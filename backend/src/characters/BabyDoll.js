@@ -51,6 +51,12 @@ class BabyDoll extends RolesMasterClass {
 
 		};
 
+		//cannot choose Saintess
+		var ind = obj.pT[name];
+		if (ind == undefined) { return 0; };
+		if (obj.pA[ind].role == "Saintess") { return 0; };
+
+
 		this.powersHistory[missionNo]["sing"] = name;
 
 	};
