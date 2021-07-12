@@ -178,6 +178,13 @@ class AbilityManager {
   }; //end handleBackstabberPersequorAndHurricane
 
 
+  updateLanAbilities(obj) {
+
+    obj.rO.roles["Lan"].removeConfusedStatusAtEndOfRound(obj);
+
+  };
+
+
   updateLottieAbilities(obj) {
 
     var lottie = obj.rO.roles["Lottie"];
@@ -207,6 +214,7 @@ class AbilityManager {
 
     this.updateSaintessStatuses(obj);
     this.updateLottieAbilities(obj);
+    this.updateLanAbilities(obj);
     
     this.updateNoahAbilities(obj);
     this.updateToxiturtleAbilities(obj)

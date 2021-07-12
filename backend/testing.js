@@ -1718,7 +1718,7 @@ function testLanPowers() {
 	Controller.addMissionVote(obj, 3, -4); //Lucio
 	Controller.addMissionVote(obj, 4, 2); //Xing
 
-	Controller.setMissionTeam(obj, ["Serena"]);
+	Controller.setMissionTeam(obj, ["Serena", "Derek"]);
 	Controller.setPlayersForMission(obj);
 
 	lan.activateFinalHeaven();
@@ -1761,12 +1761,25 @@ function testLanPowers() {
 
 	//obj.rO.roles["Lan"].addIntimidateTarget("Derek");
 
-	/*
+	
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 2, 1); //Serena
+
 	obj.rO.roles["Lan"].beatRush("Derek", obj);
 	console.log("confused for index 0 is: " + obj.pA[0].confused);
-	
+
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
-	*/
+	
+
+	console.log("");
+	console.log("Confused status should be removed");
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 2, 1); //Serena
+
+	AbilityManager.updateStatuses(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
 };
 
