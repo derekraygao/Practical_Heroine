@@ -858,13 +858,18 @@ function checkStatusConditionForSaintess(playerObject) {
 
 	console.log("corrupted: " + playerObject.corrupted);
 	console.log("soul mark: " + playerObject.soulMark);
+	console.log("poison count: " + playerObject.poisonCount);
 	console.log("bomb: " + playerObject.bomb);
 	console.log("burn count: " + playerObject.burnCount);
 	console.log("shrink count: " + playerObject.shrinkCount);
+	console.log("paralysis: " + playerObject.paralyzed);
+	console.log("frozen: " + playerObject.frozen);
+	console.log("injured count: " + playerObject.injuredCount);
 	console.log("multiplier: " + playerObject.multiplier);
 	console.log("bless: " + playerObject.bless);
 	console.log("safeguard: " + playerObject.safeguard);
-
+	console.log("");
+	console.log("Curaga boost target name: " + obj.rO.roles["Saintess"].curagaBoostTarget);
 
 };
 
@@ -875,52 +880,105 @@ function testSaintessPower() {
 	obj.rO.roles["Umbra Lord"].corrupt("Derek", obj);
 
 	obj.pA[0].soulMark = true;
+	obj.pA[0].poisonCount = 1;
 	obj.pA[0].bomb = true;
 	obj.pA[0].burnCount = 1;
+	obj.pA[0].paralyzed = true;
+	obj.pA[0].frozen = true;
 	obj.pA[0].multiplier = 2;
 	obj.pA[0].shrinkCount = 2;
+	obj.pA[0].injuredCount = 1;
 
-	//obj.pA[0].role = "Delayer";
-	//obj.rO.roles["Delayer"].delayerCount = 2;
+	//obj.rO.roles["Delayer"].delayerCount = 1;
 
 	console.log(obj.rO.roles["Saintess"].saintessSense(obj));
-
+	
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 	console.log("");
-	obj.rO.roles["Saintess"].purify("Derek", obj);
+	obj.rO.roles["Saintess"].activateHolyPower("Purify", "Derek", obj);
 	console.log("After purify");
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 	console.log("");
-	obj.rO.roles["Saintess"].esuna("Derek", obj);
+	obj.rO.roles["Saintess"].activateHolyPower("Esuna", "Derek", obj);
 	console.log("After esuna");
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+	console.log("");
+	obj.rO.roles["Saintess"].activateHolyPower("Curaga", "Derek", obj);
+	console.log("After curaga");
+	//AbilityManager.updateStatuses(obj);
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 
 	console.log("");
-	obj.rO.roles["Saintess"].dispel("Derek", obj);
+	obj.rO.roles["Saintess"].activateHolyPower("Dispel", "Derek", obj);
 	console.log("After dispel");
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 	console.log("");
-	obj.rO.roles["Saintess"].bless("Derek", obj);
+	obj.rO.roles["Saintess"].activateHolyPower("Bless", "Derek", obj);
 	console.log("After bless");
+	//AbilityManager.updateStatuses(obj);
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 	//obj.pA[0].role = "Umbra Lord"; //should not affect umbra lord
 
 	console.log("");
-	obj.rO.roles["Saintess"].safeguard("Derek", obj);
+	obj.rO.roles["Saintess"].activateHolyPower("Safeguard", "Derek", obj);
 	console.log("After safeguard");
+	//AbilityManager.updateStatuses(obj);
 	checkStatusConditionForSaintess(obj.pA[0]);
-
-	obj.pA[0].role = "Umbra Lord";
-
+	
 };
 
 
 //testSaintessPower();
+
+
+function testSaintessMissionVotingEffect() {
+
+	console.log("Testing Saintess Effect On Mission Votes");
+
+	var saintess = obj.rO.roles["Saintess"];
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, -2); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	saintess.activateHolyPower("Bless", "Derek", obj);
+	saintess.activateHolyPower("Curaga", "Derek", obj);
+	saintess.activateHolyPower("Safeguard", "Derek", obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	AbilityManager.updateStatuses(obj);
+
+	console.log("");
+	console.log("Saintess safeguard, bless and curaga should be gone");
+
+	Controller.addMissionVote(obj, 0, -2); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+};
+
+//testSaintessMissionVotingEffect();
+
+
+
+
 
 
 
@@ -1612,14 +1670,12 @@ function testLottiePowers() {
 	obj.rO.roles["Lottie"].addTherapyTarget("Derek");
 	obj.rO.roles["Lottie"].activateGroupHug();
 
-	obj.rO.roles["Lottie"].setTherapyStatus(obj);
-	obj.rO.roles["Lottie"].setGroupHugStatus(obj);
+	AbilityManager.updateStatuses(obj);
 
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
 	console.log("Now remove therapy + group hug");
-
-	obj.rO.roles["Lottie"].removeGroupHugAndTherapyAtEndOfRound(obj);
+	AbilityManager.updateStatuses(obj);
 
 	Controller.addMissionVote(obj, 0, 1); //Derek
 	Controller.addMissionVote(obj, 1, -1); //Cloud
@@ -1634,7 +1690,7 @@ function testLottiePowers() {
 	Controller.addMissionVote(obj, 0, -5); //Derek
 	Controller.addMissionVote(obj, 1, -1); //Cloud
 	Controller.addMissionVote(obj, 2, 0); //Serena
-	Controller.addMissionVote(obj, 3, 0); //Lucio
+	Controller.addMissionVote(obj, 3, -2); //Lucio
 	Controller.addMissionVote(obj, 4, 2); //Xing
 
 	console.log("Lottie turns Princess' vote positive");
@@ -1714,7 +1770,7 @@ function testLanPowers() {
 
 };
 
-testLanPowers();
+//testLanPowers();
 
 
 function testBabyDollPowers() {
