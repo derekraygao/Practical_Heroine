@@ -75,11 +75,13 @@ class Persequor extends RolesMasterClass {
 
 			return 0;
 
-		};
+		}; 
 
 
 		var copyIndex = obj.pT[this.personVoteToCopy];
+		if (copyIndex == undefined) { return 0; };
 		
+		//is this necessary?
 		if (!obj.pA[copyIndex].selectedForMission) {
 
 			obj.pA[this.index].missionVote = -1;
@@ -88,6 +90,7 @@ class Persequor extends RolesMasterClass {
 			return 0;
 
 		};
+
 
 		var copyVote = obj.pA[copyIndex].missionVote;
 
