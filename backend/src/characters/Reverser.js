@@ -11,7 +11,7 @@ class Reverser extends RolesMasterClass {
         this.alignment = "evil";
         this.team = "villains";
 
-        this.personToReverseVote = "";
+        this.personToReverseVote = "nobody chosen";
 
         this.mirrorWorldNormal = "not activated";
         this.mirrorWorldReverse = "not activated";
@@ -124,15 +124,14 @@ class Reverser extends RolesMasterClass {
 	//change this.personToReverseVote if reverser is in game
 	adjustReverseVote(obj) {
 
-		if (this.personToReverseVote == "") { return 0; };
+		if (this.personToReverseVote == "nobody chosen") { return 0; };
 
 		var reverseInd = obj.pT[this.personToReverseVote];
+		if (reverseInd == undefined) { return 0; };
 
-		if (reverseInd) {
-			obj.pA[reverseInd].missionVote *= -1;
-		};
-
-		this.personToReverseVote = "";
+		obj.pA[reverseInd].missionVote *= -1;
+		
+		this.personToReverseVote = "nobody chosen";
 
 	};
 
