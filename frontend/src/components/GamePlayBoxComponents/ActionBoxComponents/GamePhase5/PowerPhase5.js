@@ -9,7 +9,7 @@ import socket from 'Socket.js';
 import formatArrayIntoString from 'formatArrayIntoString.js';
 
 import PP5NoPower from './PowerPhase5Components/PP5NoPower.js';
-
+import PP5Marcus from './PowerPhase5Components/Marcus/PP5Marcus.js';
 
 
 var PP5TimerInterval;
@@ -65,9 +65,8 @@ class PowerPhase5 extends React.Component {
 
     switch (this.props.role) {
 
-      case 0: 
-
-        return <div></div>;
+      case "Marcus": 
+        return <PP5Marcus />;
 
       default:
         return <PP5NoPower />;
@@ -93,11 +92,17 @@ class PowerPhase5 extends React.Component {
 
     return (
 
-      <div className="PP5-wait-for-mission-team-container">
+      <div className="PP5-general-container">
 
-        Wait {this.props.timer} seconds until {this.props.teamLeader}'s 
-        &nbsp;team ({formatArrayIntoString(this.props.missionTeam)}) 
-        &nbsp;completes the mission.
+        <div className="PP5-powers-menu-bar-container orange ui buttons">
+          <button className="ui button">Wait For Mission Team</button>
+        </div> 
+
+        <div className="PP5-general-action-area-container">
+          Wait {this.props.timer} seconds until {this.props.teamLeader}'s 
+          team ({formatArrayIntoString(this.props.missionTeam)}) 
+          completes the mission.
+        </div>
 
       </div>
 
