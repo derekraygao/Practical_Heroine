@@ -654,6 +654,22 @@ class Controller {
 
 
 
+	healPlayerForVotingForFailure(playerObj) {
+
+		playerObj.burnCount = 0;
+		playerObj.bomb = false;
+
+		playerObj.shrinkCount = 0;
+		playerObj.injuredCount = 0;
+
+		playerObj.soulMark = false;
+
+
+	};
+
+
+
+
 	returnpArrayRoomAndIndex(socket) {
 
 		if (!this.socketRoom.hasOwnProperty(socket.id)) { 
@@ -743,6 +759,20 @@ class Controller {
 	}; //end isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj)
 
 
+	resetEverythingWhenTestingRoomEmpty(obj) {
+
+		obj.rD.missionNo = 0;
+		obj.rD.gamePhase = 0;
+		obj.rD.teamLeaderIndex = -1;
+		obj.rD.missionTeam = [];
+		obj.rD.missionVoteInfo = [];
+		obj.rD.teamVoteInfo = [];
+		obj.rD.numOfFailedTeamProposals = 0;
+		obj.rO = new RO.RolesObject();
+		obj.rI = new rI.ResultsInfo();
+		obj.pT = {};
+
+	};
 
 
 
@@ -784,6 +814,7 @@ class Player {
         this.invisible = false;
         this.soulMark = false;
         this.jailed = false;
+        this.injuredCount = 0;
         this.reverse = false; //is this necessary???
 
 	}; //end constructor

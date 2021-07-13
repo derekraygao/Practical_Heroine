@@ -638,6 +638,17 @@ io.on('connection', function (socket) {
     };
 
 
+    if (obj.rO.roles["Saintess"].inGame) {
+
+      io.to(`${obj.rO.roles["Saintess"].socketID}`).
+        emit("Receive Saintess Sense Array", 
+          obj.rO.roles["Saintess"].saintessSense(obj));
+
+    };
+
+
+
+
     if (obj.rO.roles["Backstabber"].activateSwitch) {
 
       var bsInfo = obj.rO.roles["Backstabber"].betray(obj);
@@ -763,6 +774,44 @@ io.on('connection', function (socket) {
   });
 
 
+  //Marcus
+  socket.on("Activate Berserk", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Marcus"].activateBerserk(obj);
+    
+    //console.log(obj.rO.roles["Marcus"].berserk);
+
+  });
+
+
+  socket.on("Invisible Spy", (spyTarget) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Pear"].spyOn(spyTarget);
+
+    //console.log("Spy on " + obj.rO.roles["Pear"].voteToExpose);
+
+  });
+
+
+  socket.on("Vanish", (vanishTarget) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Pear"].vanish(vanishTarget);
+
+    //console.log("Turn vote invisible: " + obj.rO.roles["Pear"].playerVoteToVanish);
+
+  });
+
+
+
 
   //Seer
 
@@ -833,6 +882,23 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Equilibrium", (eArr) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Balancer"].setEquilibriumArray(eArr);
+
+    /*console.log("Equilibrium Array is: " + 
+      formatArrayIntoString(obj.rO.roles["Balancer"].equilibriumArray));
+    */
+  });
+
+
+
+
+
+
   //Detective Chat
 
   socket.on("Investigate", (_name) => {
@@ -851,6 +917,14 @@ io.on('connection', function (socket) {
     socket.emit("Add System Message", investigateMessage);
 
   });
+
+
+  socket.on("Interrogation", (target) => {
+
+    console.log(target);
+
+  });
+
 
 
 
@@ -935,6 +1009,7 @@ io.on('connection', function (socket) {
   });
 
 
+  //Ranger
 
   socket.on("Scan All For One Status", (whichStatus) => {
 
@@ -955,6 +1030,24 @@ io.on('connection', function (socket) {
       socket.emit("Add System Message", scanMessage);
 
   });
+
+
+
+  //Lan 
+  socket.on("Beat Rush", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };    
+
+    obj.rO.roles["Lan"].beatRush(name, obj);
+
+    //console.log(obj.pA[obj.pT[name]].confused);
+
+  });
+
+
+
+
 
 
 
@@ -981,7 +1074,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Reverser"].activateMirrorWorld(mwType);
  
-    emitToAllSocketsInRoom(obj, "Mirorr World Activated");
+    emitToAllSocketsInRoom(obj, "Mirror World Activated");
 
   });
 
@@ -1000,14 +1093,41 @@ io.on('connection', function (socket) {
   });
 
 
+  //Baby Doll
+  socket.on("Sing", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Baby Doll"].setSingTarget(name, obj);
+
+  });
 
 
 
+  //Toxiturtle
+  socket.on("Poison Beak", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Toxiturtle"].poisonBeak(name, obj);
+
+    //console.log(obj.pA[obj.pT[name]].poisonCount);
+
+  });
 
 
 
+  //Psychologist
+  socket.on("Submit Predicted Team", (pTeamArr) => {
 
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
 
+    obj.rO.roles["Psychologist"].setPredictionArray(pTeamArr, obj);
+
+  });
 
 
 
@@ -1017,6 +1137,18 @@ io.on('connection', function (socket) {
   socket.on("disconnect", () => {
 
     console.log(socket.id + " disconnected!");
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.pA.splice(obj.index, 1);
+
+    if (obj.pA.length == 0) {
+
+      Controller.resetEverythingWhenTestingRoomEmpty(obj);
+
+    };
+
 
   });
 
@@ -1283,6 +1415,42 @@ function IchigoNotificationPower(status, name) {
 
 };
 
+
+
+/*
+The reason we need this function is because cannot pass io 
+object into other files by export/import or as a function
+argument. So can only do "socket.emit" but not "io.to" emits.
+
+stack is an array of message objects, with similar forms of:
+  {
+    "type": "everyone" or "multiplier notification" or "etc.",
+    "socketID": 
+    "destination": "Update Powers", 
+    "data": 35
+  }
+
+*/
+function MessageNotificationStack(stack) {
+
+  for (var i = 0; i < stack.length; i++) {
+
+    switch (stack[i].type) {
+
+      
+
+
+
+
+
+      default:
+        return 0;
+
+    }; //end switch
+
+  }; //end for
+
+}; //end MessageNotification Stack
 
 
 
