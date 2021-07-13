@@ -20,6 +20,15 @@ class PP5Marcus extends React.Component {
 
     socket.emit("Activate Berserk");
 
+    this.props.addSystemMessage(
+      {
+        type: "power",
+        message: ("You activated Berserk during Mission "
+        + this.props.missionNumber + ".")
+      }
+    );
+    
+
   };
 
 
@@ -40,7 +49,9 @@ class PP5Marcus extends React.Component {
           <div className="PP5-general-action-area-container">
             You used the one-time terrifying Dark elemental 
             ability of "Berserk" during Mission  
-            &nbsp;{this.props.PH["Marcus"].berserkMissionNo}.
+            &nbsp;{this.props.PH["Marcus"].berserkMissionNo}. 
+            Please wait {this.props.timer} seconds for Game 
+            Phase 5 to end.
           </div>
 
         </div>

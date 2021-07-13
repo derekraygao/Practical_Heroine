@@ -96,6 +96,16 @@ class PP5Balancer extends React.Component {
 
       socket.emit("Equilibrium", this.state.equilibriumArray);
 
+      this.props.addSystemMessage(
+        {
+          type: "power",
+          message: ("During Mission " + this.props.missionNumber 
+          + ", you examined the equilibrium between: " 
+          + formatArrayIntoString(this.state.equilibriumArray))
+        }
+      );
+
+
     };
 
 
@@ -119,7 +129,9 @@ class PP5Balancer extends React.Component {
           <div className="PP5-general-action-area-container">
             The equilibrium of the world tilts towards Darkness. 
             You used the power of equilibrium to test the balance 
-            between: {formatArrayIntoString(this.state.equilibriumArray)}.
+            between: {formatArrayIntoString(this.state.equilibriumArray)}. 
+            Please wait {this.props.timer} seconds for Game 
+            Phase 5 to end.
           </div>
 
         </div>
