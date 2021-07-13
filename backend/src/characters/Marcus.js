@@ -11,6 +11,7 @@ class Marcus extends RolesMasterClass {
         this.team = "heroes";
 
         this.berserk = "not activated";
+        this.berserkActivatedDuringWhichMission = 0;
 
 	}; //end constructor
 
@@ -21,8 +22,7 @@ class Marcus extends RolesMasterClass {
 
 		if (!this.inGame) { return 0; };
 
-		//the 12 is in case Marcus is blessed (2xs vote power)
-		if ([6, 12].includes(obj.pA[this.index].missionVote)) { return 0; };
+		if (obj.pA[this.index].missionVote > 3) { return 0; };
 
 		//both Marcus + Princess need to be on the mission team
 		if (!obj.pA[obj.rO.roles["Princess"].index].selectedForMission
@@ -34,9 +34,10 @@ class Marcus extends RolesMasterClass {
 
 
 
-	activateBerserk() {
+	activateBerserk(obj) {
 
 		this.berserk = "activated first half";
+		this.berserkActivatedDuringWhichMission = obj.rD.missionNo;
 
 	};
 
