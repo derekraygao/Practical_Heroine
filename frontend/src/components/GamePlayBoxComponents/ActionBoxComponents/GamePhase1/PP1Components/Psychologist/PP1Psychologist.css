@@ -1,0 +1,93 @@
+
+.PP1-Psychologist-Container {
+
+	display: grid;
+	grid-template-rows: 14% 86%;
+	grid-template-areas: "powers-menu"
+						 "action-area"
+						 ;
+	overflow: auto;
+}
+
+
+.PP1-prediction-container {
+
+	grid-area: action-area;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 135%;
+
+	overflow: auto;
+
+	padding-left: 2%;
+	padding-right: 2%;
+
+}
+
+
+.PP1-prediction-container-power {
+
+	grid-area: action-area;
+
+	display: grid;
+	grid-template-rows: 25% 75%;
+	grid-template-areas: "size-of-team"
+						 "buttons"
+						 ;
+
+}
+
+
+.team-size-text-container {
+
+	grid-area: size-of-team;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 120%;
+
+	padding-left: 5px;
+	padding-right: 5px;
+
+	overflow: auto;
+}
+
+
+
+.prediction-buttons-container {
+
+	grid-area: buttons;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+
+
+	min-height: 150px;
+	overflow-y: auto;
+
+}
+
+
+.prediction-buttons-container button {
+
+	margin-top: 4px !important;
+
+}
+
+
+.submit-predict-button {
+
+	margin-left: 8px !important;
+
+}
+
+
+
