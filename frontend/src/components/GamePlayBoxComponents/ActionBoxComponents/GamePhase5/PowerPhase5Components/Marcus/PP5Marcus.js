@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import './PP5Marcus.css';
 
 import {updateCharacterPowerHistory} from 'actions/updateCharacterPowerHistory.js';
 import {systemMessages} from 'actions/systemMessages.js';
