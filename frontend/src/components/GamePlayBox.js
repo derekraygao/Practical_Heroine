@@ -1,5 +1,6 @@
 import React from 'react';
 import './css/GamePlayBox.css';
+import { connect } from 'react-redux';
 
 import SystemInstructionsMenu from './GamePlayBoxComponents/SystemInstructionsMenu.js';
 import SystemMessageBox from './GamePlayBoxComponents/SystemMessageBox.js';
@@ -12,11 +13,25 @@ import ActionBox from './GamePlayBoxComponents/ActionBox.js';
 class GamePlayBox extends React.Component {
 
 
+  whichGamePlayBoxGridDesign = () => {
+
+    if ([1, 5, 6].includes(this.props.gamePhase)) {
+
+      return "game-play-box";
+
+    };
+
+      return "game-play-box-grid-with-power-menu";
+   
+  };
+
+
+
 	render() {
 
 		return (
 
-			<div className="game-play-box">
+			<div className={this.whichGamePlayBoxGridDesign()}>
 
         <SystemInstructionsMenu />
         <SystemMessageBox />
@@ -38,6 +53,27 @@ class GamePlayBox extends React.Component {
 
 
 
-}; //end class MenuBar
+}; //end class GamePlayBox
 
-export default GamePlayBox;
+
+
+
+const mapStateToProps = (state) => {
+  
+  return (
+    { 
+      gamePhase: state.gamePhase,
+    }
+  );
+
+};
+
+
+export default connect(mapStateToProps, 
+  {
+   
+  }
+)
+(GamePlayBox);
+
+

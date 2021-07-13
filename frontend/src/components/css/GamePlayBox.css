@@ -19,3 +19,24 @@
 
 }
 
+
+.game-play-box-grid-with-power-menu {
+
+	grid-area: gameplay-box;
+
+	display: grid;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: 7% 43% 7% 43%;
+
+	grid-template-areas: "system-instructions-menu     system-instructions-menu"
+						 "system-game-box                   system-game-box"
+						 "action-menu                         action-menu"
+						 "action-box                          action-box";
+
+
+	border-left: 3px solid #fbbd08;
+
+	max-height: 84vh;
+	/*max-width: 40vw;*/
+
+}
