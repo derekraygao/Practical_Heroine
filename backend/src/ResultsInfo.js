@@ -21,13 +21,13 @@ class ResultsInfo {
 		this.missionInfo = 
 		{
 
-			1: {},
-			2: {},
-			3: {},
-			4: {},
-			5: {},
-			6: {},
-			7: {}
+			1: {voteTypeArray: [], },
+			2: {voteTypeArray: [], },
+			3: {voteTypeArray: [], },
+			4: {voteTypeArray: [], },
+			5: {voteTypeArray: [], },
+			6: {voteTypeArray: [], },
+			7: {voteTypeArray: [], }
 
 		};
 
@@ -77,11 +77,27 @@ class ResultsInfo {
 
 	};
 
+	/*vote type is either: success, fail, or power
+	this is before mission vote power adjustments
+	refers to whether you clicked "success" button or 
+	"fail" button or used a power during mission voting phase
+	*/
+	addMissionVoteType(name, voteType, missionNumber) {
+
+		this.missionInfo[missionNumber].
+		voteTypeArray.push({"name": name, "voteType": voteType});
+
+	};
 
 
 	//votingArray is [{name: "Derek", vote: 5}]
 	//result is either "Success" or "Fail"
-	addMissionInfo(missionNumber, votingArray, pointTotal, result) {
+	addMissionInfo(missionNumber, votingArray, positivePointTotal, 
+		negativePointTotal, pointTotal, result) {
+
+		this.missionInfo[missionNumber].positiveTotal = positivePointTotal;
+
+		this.missionInfo[missionNumber].negativeTotal = negativePointTotal;
 
 		this.missionInfo[missionNumber].pointTotal = pointTotal;
 
@@ -99,6 +115,8 @@ class ResultsInfo {
 			missionNumber: obj.rD.missionNo,
 			teamLeader: obj.pA[obj.rD.teamLeaderIndex].name,
 			missionTeam: obj.rD.missionTeam,
+			positiveTotal: this.missionInfo[obj.rD.missionNo].positiveTotal,
+			negativeTotal: this.missionInfo[obj.rD.missionNo].negativeTotal,
 			pointTotal: this.missionInfo[obj.rD.missionNo].pointTotal,
 			result: this.missionInfo[obj.rD.missionNo].result
 		};

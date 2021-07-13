@@ -178,6 +178,14 @@ class AbilityManager {
   }; //end handleBackstabberPersequorAndHurricane
 
 
+
+  updateDetectiveChatAbilities(obj) {
+
+    obj.rO.roles["Detective Chat"].interrogate(obj);
+
+  };
+
+
   updateLanAbilities(obj) {
 
     obj.rO.roles["Lan"].removeConfusedStatusAtEndOfRound(obj);
@@ -215,6 +223,7 @@ class AbilityManager {
     this.updateSaintessStatuses(obj);
     this.updateLottieAbilities(obj);
     this.updateLanAbilities(obj);
+    this.updateDetectiveChatAbilities(obj);
     
     this.updateNoahAbilities(obj);
     this.updateToxiturtleAbilities(obj)

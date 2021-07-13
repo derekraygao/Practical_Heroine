@@ -430,12 +430,20 @@ class Controller {
 			case "Success":
 
 				obj.pA[obj.index].missionVote = 1;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Success", 
+									      obj.rD.missionNo
+									     );
 
 				break;
 
 			case "Fail":
 
 				obj.pA[obj.index].missionVote = -1;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Fail", 
+									      obj.rD.missionNo
+									     );
 
 				break;
 

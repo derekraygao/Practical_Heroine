@@ -608,6 +608,35 @@ function testDetectiveChatPower(name) {
 };
 
 
+function testDetectiveChatInterrogate() {
+
+	obj.rD.missionNo = 1;
+
+	var detective = obj.rO.roles["Detective Chat"];
+
+	console.log("Testing Detective Chat Interrogate Powers");
+
+	obj.rI.addMissionVoteType("Derek", "Success", obj.rD.missionNo);
+	obj.rI.addMissionVoteType("Cloud", "Fail", obj.rD.missionNo);
+	obj.rI.addMissionVoteType("Serena", "Fail", obj.rD.missionNo);
+	obj.rI.addMissionVoteType("Lucio", "Success", obj.rD.missionNo);
+	obj.rI.addMissionVoteType("Xing", "Power", obj.rD.missionNo);
+
+	detective.setInterrogationTarget("Xing");
+
+	AbilityManager.updateStatuses(obj);
+
+
+
+};
+
+testDetectiveChatInterrogate();
+
+
+
+
+
+
 function testAuraKnightPower(name) {
 
 	console.log(name + "'s role is: " 
