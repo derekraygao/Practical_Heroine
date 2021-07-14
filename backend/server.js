@@ -762,17 +762,6 @@ io.on('connection', function (socket) {
 
   /* POWERS */
 
-  //Umbra Lord
-
-  socket.on("Corruption", (_name) => {
-
-    var obj = Controller.returnpArrayRoomAndIndex(socket);
-    if (!obj.pA) { return 0; };
-
-    obj.rO.roles["Umbra Lord"].corrupt(_name, obj);
-
-  });
-
 
   //Marcus
   socket.on("Activate Berserk", () => {
@@ -786,6 +775,37 @@ io.on('connection', function (socket) {
 
   });
 
+
+  //Lottie
+
+  socket.on("Add Therapy Target", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Lottie"].addTherapyTarget(name);
+
+    //console.log("Therapy Target: " + obj.rO.roles["Lottie"].therapy);
+
+  });
+
+
+
+  socket.on("Use Group Hug", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Lottie"].activateGroupHug();
+    
+    //console.log("Group Hug status: " + obj.rO.roles["Lottie"].groupHugActivated);
+
+  });
+
+
+
+
+  //Pear
 
   socket.on("Invisible Spy", (spyTarget) => {
 
@@ -809,6 +829,32 @@ io.on('connection', function (socket) {
     //console.log("Turn vote invisible: " + obj.rO.roles["Pear"].playerVoteToVanish);
 
   });
+
+
+  //Lan 
+  socket.on("Beat Rush", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };    
+
+    obj.rO.roles["Lan"].beatRush(name, obj);
+
+    //console.log(obj.pA[obj.pT[name]].confused);
+
+  });
+
+
+  socket.on("Activate Intimidation", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };   
+
+    obj.rO.roles["Lan"].addIntimidateTarget(name);
+
+    console.log(obj.rO.roles["Lan"].intimidateTarget);
+
+  });
+
 
 
 
@@ -919,9 +965,14 @@ io.on('connection', function (socket) {
   });
 
 
+
   socket.on("Interrogation", (target) => {
 
-    console.log(target);
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Detective Chat"].setInterrogationTarget(target);
+
 
   });
 
@@ -1033,15 +1084,30 @@ io.on('connection', function (socket) {
 
 
 
-  //Lan 
-  socket.on("Beat Rush", (name) => {
+  socket.on("Anti-Magic Ray", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
-    if (!obj.pA) { return 0; };    
+    if (!obj.pA) { return 0; };
 
-    obj.rO.roles["Lan"].beatRush(name, obj);
+    obj.rO.roles["Ranger"].antiMagicRay(name, obj);
 
-    //console.log(obj.pA[obj.pT[name]].confused);
+    console.log("Status for " + name + " after anti-magic ray.");
+    console.log(obj.pA[obj.pT[name]]);
+
+  });
+
+
+  socket.on("Shrink Ray", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+
+    obj.rO.roles["Ranger"].setShrinkTarget(name, obj);
+
+    console.log("shrink ray target: " 
+      + obj.rO.roles["Ranger"].
+      powersHistory[obj.rD.missionNo].shrinkName);
 
   });
 
@@ -1051,7 +1117,27 @@ io.on('connection', function (socket) {
 
 
 
+
+
+
+
+
   /*Villains Powers*/
+
+
+  //Umbra Lord
+  socket.on("Corruption", (_name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Umbra Lord"].corrupt(_name, obj);
+
+    console.log("Corrupt status: " + obj.pA[obj.pT[_name]].corrupted);
+
+  });
+
+
 
   //Hecate
   socket.on("Exchange of the Spirits", (namesArr) => {
@@ -1063,6 +1149,53 @@ io.on('connection', function (socket) {
       namesArr[0], namesArr[1], obj);
 
   });
+
+
+
+  //Noah
+  socket.on("Activate Hurricane", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Noah"].activateHurricane();
+
+    console.log("Hurricane is: " + obj.rO.roles["Noah"].hurricane);
+
+  });
+
+
+  socket.on("Use Thunder Wave", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Noah"].setThunderWave(name, obj);
+
+    /*
+    console.log(obj.rO.roles["Noah"].
+      powersHistory[obj.rD.missionNo].paralyzed);
+    
+    */
+  });
+
+
+
+  socket.on("Use Ice Punch", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Noah"].setIcePunch(name, obj);
+
+    /*
+    console.log(obj.rO.roles["Noah"].
+      powersHistory[obj.rD.missionNo].frozen);
+    */
+  });
+
+
+
 
 
   //Reverser
@@ -1093,6 +1226,42 @@ io.on('connection', function (socket) {
   });
 
 
+
+  //Spiritualist
+  socket.on("Mark Player's Soul Sea", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Spiritualist"].markAPlayer(name, obj);
+
+    console.log("Soul Mark target: " + obj.rO.roles["Spiritualist"].powersHistory[obj.rD.missionNo].soulMark);
+
+  });
+
+
+  socket.on("Scan Player's Soul Sea", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    //2 element array of 2 roles: 1 actual, 1 fake
+    var roleArr = obj.rO.roles["Spiritualist"].soulScan(name, obj);
+
+    var ssMess = {
+                  type: "power",
+                  message: ("You scanned " + name
+                  + "'s soul. His/her potential role(s): "
+                  + formatArrayIntoString(roleArr) + ".")
+                 };
+
+    socket.emit("Add System Message", ssMess);
+           
+  });
+
+
+
+
   //Baby Doll
   socket.on("Sing", (name) => {
 
@@ -1102,6 +1271,20 @@ io.on('connection', function (socket) {
     obj.rO.roles["Baby Doll"].setSingTarget(name, obj);
 
   });
+
+
+  socket.on("Activate Lullaby", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Baby Doll"].activateLullaby();
+
+    console.log("Lullaby status: " + obj.rO.roles["Baby Doll"].lullabyPowerUsed);
+
+  });
+
+
 
 
 

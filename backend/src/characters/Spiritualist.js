@@ -57,7 +57,7 @@ class Spiritualist extends RolesMasterClass {
 		if (this.powersHistory[obj.rD.missionNo].soulMark == "nobody chosen") { return 0; };
 
 		var index = obj.pT[this.powersHistory[obj.rD.missionNo].soulMark];
-
+		
 		if (obj.rO.rolesInGame[index].team == "villains") { return 0; };
 		if (obj.pA[index].role == "Saintess") { return 0; };
 
