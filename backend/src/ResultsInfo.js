@@ -4,9 +4,16 @@ class ResultsInfo {
 
 	constructor() {
 
+		/*there is no 0 mission number, but I added it in 
+		case there's a problem on client side (?) and they
+		try to send data...if mission number is 0, will access
+		undefined and server will crash.
+		*/
+
 		this.teamInfo = 
 		{
 
+			0: [],
 			1: [],
 			2: [],
 			3: [],
@@ -21,6 +28,7 @@ class ResultsInfo {
 		this.missionInfo = 
 		{
 
+			0: {voteTypeArray: [], },
 			1: {voteTypeArray: [], },
 			2: {voteTypeArray: [], },
 			3: {voteTypeArray: [], },
