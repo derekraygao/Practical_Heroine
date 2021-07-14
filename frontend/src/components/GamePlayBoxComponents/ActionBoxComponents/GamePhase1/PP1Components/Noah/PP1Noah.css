@@ -1,0 +1,37 @@
+
+.PP1-Noah-Container {
+
+	display: grid;
+	grid-template-rows: 14% 86%;
+	grid-template-areas: "powers-menu"
+						 "action-area"
+						 ;
+
+	overflow: auto;
+
+
+}
+
+.PP1-hurricane-container {
+
+	grid-area: action-area;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 135%;
+	min-height: 200px;
+
+	overflow: auto;
+
+	padding-left: 2%;
+	padding-right: 2%;
+
+}
+
+.PP1-scry-container select {
+	margin-right: 3%;
+}
+
