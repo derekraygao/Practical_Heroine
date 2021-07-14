@@ -48,6 +48,31 @@ class PP1UmbraLord extends React.Component {
 
 
 
+
+  getSelectionChoices = () => {
+
+    var playerChoices = JSON.parse(JSON.stringify(this.props.playerList));
+
+    var q = playerChoices.indexOf(this.props.myName);
+
+    if (q > -1) {
+      playerChoices.splice(q, 1);
+    };
+
+    var arrayOfOptions = playerChoices.map( (pName, index) => {
+
+      return (
+        <option value={pName} key={index}>{pName}</option>
+      );
+
+    });
+
+    return arrayOfOptions;
+
+  }; //end getSelectionChoices()
+
+
+  /* changed it so Umbra Lord can choose anyone except himeself */
   getHeroSelectionChoices = () => {
 
     const {playerList, villainList} = this.props;
@@ -67,9 +92,10 @@ class PP1UmbraLord extends React.Component {
 
 
     });
+    
 
     return heroesSelectOptions;
-
+  
   };
 
 
@@ -120,7 +146,7 @@ class PP1UmbraLord extends React.Component {
           >
 
             <option value="Corrupt ?" disabled selected>Corrupt</option>
-            {this.getHeroSelectionChoices()}
+            {this.getSelectionChoices()}
 
           </select>
 
@@ -149,7 +175,8 @@ class PP1UmbraLord extends React.Component {
 const mapStateToProps = (state) => {
   
   return (
-         { 
+         {  
+            myName: state.name,
             PH: state.characterPowersHistory,
             playerList: state.playerList,
             villainList: state.villainList,
