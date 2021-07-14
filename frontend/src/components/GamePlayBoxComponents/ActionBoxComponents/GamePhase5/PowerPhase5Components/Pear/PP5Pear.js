@@ -62,7 +62,7 @@ class PP5Pear extends React.Component {
 
   getSelectionChoices = () => {
 
-    var ghostChoices = JSON.parse(JSON.stringify(this.props.playerList));
+    var ghostChoices = JSON.parse(JSON.stringify(this.props.missionTeam));
 
     var q = ghostChoices.indexOf(this.props.myName);
 
@@ -241,6 +241,7 @@ const mapStateToProps = (state) => {
          {  
             myName: state.name,
             playerList: state.playerList,
+            missionTeam: state.missionTeam,
             PH: state.characterPowersHistory,
             missionNumber: state.missionNumber,
             role: state.role,
