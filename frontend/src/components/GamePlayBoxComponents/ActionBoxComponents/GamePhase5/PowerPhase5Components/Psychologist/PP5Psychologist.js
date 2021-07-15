@@ -169,7 +169,7 @@ class PP5Psychologist extends React.Component {
         <>
 
           <select 
-            className="ui search dropdown .psychologist-select-right-margin"
+            className="ui search dropdown psychologist-select-right-margin"
             value={this.state.badTarget}
             onChange={e => this.setState({ badTarget: e.target.value })}
           >
