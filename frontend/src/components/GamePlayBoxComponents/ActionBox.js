@@ -66,7 +66,7 @@ class ActionBox extends React.Component {
 
 
       default:
-        return <div>Error!</div>;
+        return <div>Error! Inside ActionBox.js</div>;
 
 
     }; //end switch
