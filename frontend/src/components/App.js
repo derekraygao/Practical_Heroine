@@ -16,6 +16,7 @@ import {missionNumber} from '../actions/missionNumber.js';
 import {missionResultsHistory} from '../actions/missionResultsHistory.js';
 import {mainMenuSelection} from '../actions/mainMenuSelection.js';
 import {gameEndScenario} from '../actions/gameEndScenario.js';
+import {updateCharacterPowerHistory} from 'actions/updateCharacterPowerHistory.js';
 import {timer} from '../actions/timer.js';
 
 /*for character specific redux store */
@@ -30,17 +31,24 @@ import NotesBox from './MenuBarBoxComponents/NotesBox.js';
 import PlayerAndResultsBox from './MenuBarBoxComponents/PlayerAndResultsBox.js';
 import GamePlayBox from './GamePlayBox.js';
 
-
-
 import socket from '../Socket.js';
 import formatArrayIntoString from 'formatArrayIntoString.js';
 import formatSeerPowerMessage from 'formatSystemMessages/formatSeerPowerMessage.js';
 import formatAuraKnightPowerMessage from 'formatSystemMessages/formatAuraKnightPowerMessage.js';
 
 
+/*sound effects */
+var mirrorWorldAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Mirror_World.mp4");
+var singAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Sing.mp4");
+var lullabyAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Lullaby.mp4");
+var psychologistAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Psychologist.mp4");
+
 
 //for power phase 8 (night phase) timer
 var P8Interval;
+
+
+
 
 class App extends React.Component {
 
@@ -56,6 +64,14 @@ class App extends React.Component {
 
 
   componentDidMount = () => {
+
+
+    socket.on("connect", () => {
+
+      console.log("CONNECTED TO SERVER");
+
+    });
+
 
     socket.emit("TESTING ONLY: Ready For New Game");
 
@@ -132,7 +148,7 @@ class App extends React.Component {
       setTimeout(() => this.props.updateGamePhase(1), 1000);
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
-      this.props.updateTimerSeconds(600);
+      this.props.updateTimerSeconds(8);
 
     }); //end socket.on(Start Game Phase 1)
 
@@ -183,7 +199,7 @@ class App extends React.Component {
 
       if (_teamArr.includes(_name)) {
 
-        this.props.updateTimerSeconds(2);
+        this.props.updateTimerSeconds(800);
 
       } else {
 
@@ -325,9 +341,22 @@ class App extends React.Component {
     });
 
 
+    socket.on("Update Mission Team", (teamArr) => {
+
+      this.props.updateMissionTeam(teamArr);
+
+    });
+
 
 
     /*Redux Store for Character-specific Power Info */
+
+    socket.on("Receive Saintess Sense Array", (senseArr) => {
+
+      this.props.updatePowerHistory("Saintess", "senseArray", senseArr);
+
+    });
+
 
     socket.on("Receive Ranger Sense Array", (senseArr) => {
 
@@ -352,6 +381,91 @@ class App extends React.Component {
       this.addSysMess("power", auraMess);
 
     }); //end socket.on("Aura Sense Result")
+
+
+
+
+    /* Evil Team */
+
+    socket.on("Mirror World Activated", () => {
+
+      var mwMess = ("The Reverser has activated Mirror World!" +
+        " Be careful! Only the Reverser knows if base voting power will "
+        + "be reversed or not for this mission round.");
+
+      this.addSysMess("urgent", mwMess);
+
+      mirrorWorldAudio.volume = 0.1;
+      mirrorWorldAudio.play();
+
+    });
+
+
+    /*Backstabber*/
+
+    socket.on("Give Original Backstabber New Role", (newRole) => {
+
+      this.props.addPlayerRole(newRole);
+
+      this.props.updateVillainList([]);
+
+      this.addSysMess("power", 
+        "Former backstabber, your new role is " + newRole + ".");
+
+    });
+
+
+    socket.on("Give New Backstabber New Role", (newBSInfo) => {
+
+      console.log(newBSInfo);
+
+      this.props.addPlayerRole("Backstabber");
+      this.props.updateVillainList(newBSInfo.villainList);
+      this.props.updatePowerHistory("Backstabber", "originalBackstabber", newBSInfo.originalBSName);
+
+      var vTeammates = newBSInfo.villainList.filter(vName => vName !== this.props.name);
+
+      var bsMess = ( "The backstabber permanently switched roles with you!"
+        + " From now until the game's end, you will be on the villain's "
+        + "team (" + formatArrayIntoString(vTeammates) + ")." );
+
+      this.addSysMess("power", bsMess);
+
+    });
+
+
+    //Baby Doll
+    socket.on("Sing: Player Was Dropped From The Mission Team", 
+      (playerDropped) => {
+
+        var singMess = playerDropped + " was lulled asleep by a song."
+          + " He/she will be dropped from the mission team!";
+
+        this.addSysMess("urgent", singMess);
+
+        singAudio.volume = 0.2;
+        singAudio.play();
+
+    });
+
+
+    //Psychologist
+    socket.on("Psychologist Message", (messageObj) => {
+
+      this.props.addSystemMessage(messageObj);
+
+      psychologistAudio.volume = 0.15;
+      psychologistAudio.play();
+
+
+    });
+
+
+
+
+
+
+
 
 
   }; //end componentDidMount()
@@ -513,6 +627,7 @@ const mapStateToProps = (state) => {
       missionHistory: state.missionHistory,
       mainMenuSelection: state.mainMenuSelection,
       gameEndScenario: state.gameEndScenario,
+      updatePowerHistory: updateCharacterPowerHistory,
       timer: state.timer
     }
   );
@@ -537,6 +652,7 @@ export default connect(mapStateToProps,
     updateMainMenuSelection: mainMenuSelection,
     updateGameEndScenario: gameEndScenario,
     updateTimerSeconds: timer,
+    updatePowerHistory: updateCharacterPowerHistory,
     updateRangerSenseArray: rangerSenseArray,
   })
 (App);

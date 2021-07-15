@@ -10,9 +10,25 @@ import formatArrayIntoString from 'formatArrayIntoString.js';
 
 import PP5NoPower from './PowerPhase5Components/PP5NoPower.js';
 import PP5Marcus from './PowerPhase5Components/Marcus/PP5Marcus.js';
+import PP5Lottie from './PowerPhase5Components/Lottie/PP5Lottie.js';
+import PP5Lan from './PowerPhase5Components/Lan/PP5Lan.js';
+import PP5Balancer from './PowerPhase5Components/Balancer/PP5Balancer.js';
+import PP5Pear from './PowerPhase5Components/Pear/PP5Pear.js';
+import PP5DetectiveChat from './PowerPhase5Components/DetectiveChat/PP5DetectiveChat.js';
+import PP5Ranger from './PowerPhase5Components/Ranger/PP5Ranger.js';
+
+
+import PP5Noah from './PowerPhase5Components/Noah/PP5Noah.js';
+import PP5BabyDoll from './PowerPhase5Components/BabyDoll/PP5BabyDoll.js';
+import PP5Spiritualist from './PowerPhase5Components/Spiritualist/PP5Spiritualist.js';
+import PP5Reverser from './PowerPhase5Components/Reverser/PP5Reverser.js';
+import PP5Toxiturtle from './PowerPhase5Components/Toxiturtle/PP5Toxiturtle.js';
+import PP5Psychologist from './PowerPhase5Components/Psychologist/PP5Psychologist.js';
 
 
 var PP5TimerInterval;
+
+
 
 class PowerPhase5 extends React.Component {
 
@@ -67,6 +83,42 @@ class PowerPhase5 extends React.Component {
 
       case "Marcus": 
         return <PP5Marcus />;
+
+      case "Lottie":
+        return <PP5Lottie />;
+
+      case "Lan":
+        return <PP5Lan />;
+
+      case "Pear":
+        return <PP5Pear />;
+
+      case "Balancer":
+        return <PP5Balancer />;
+
+      case "Detective Chat":
+        return <PP5DetectiveChat />;
+
+      case "Ranger":
+        return <PP5Ranger />;
+
+      case "Noah":
+        return <PP5Noah />;
+
+      case "Baby Doll":
+        return <PP5BabyDoll />;
+
+      case "Spiritualist":
+        return <PP5Spiritualist />;
+
+      case "Reverser":
+        return <PP5Reverser />;
+
+      case "Toxiturtle":
+        return <PP5Toxiturtle />;
+
+      case "Psychologist":
+        return <PP5Psychologist />;
 
       default:
         return <PP5NoPower />;
