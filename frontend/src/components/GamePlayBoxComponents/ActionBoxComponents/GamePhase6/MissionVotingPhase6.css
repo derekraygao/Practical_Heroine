@@ -11,3 +11,44 @@
 	padding-right: 3%;
 
 }
+
+
+.PP6-general-container {
+
+	display: grid;
+	grid-template-rows: 14% 86%;
+	grid-template-areas: "powers-menu"
+						 "action-area"
+						 ;
+
+	overflow: auto;
+
+}
+
+.PP6-powers-menu-bar-container {
+
+	grid-area: powers-menu;
+
+}
+
+
+.PP6-general-action-area-container {
+
+	grid-area: action-area;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	flex-wrap: wrap;
+
+	overflow-y: auto;
+
+	font-size: 135%;
+
+	min-height: 175px;
+
+	padding-left: 3%;
+	padding-right: 3%;
+
+}

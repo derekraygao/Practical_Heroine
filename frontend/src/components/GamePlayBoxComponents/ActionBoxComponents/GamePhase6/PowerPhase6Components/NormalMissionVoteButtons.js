@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { systemMessages } from 'actions/systemMessages.js';
 
-import './css/NormalMissionVoteTab.css';
+import './css/NormalMissionVoteButtons.css';
 
 import socket from 'Socket.js';
 
 
 
-class NormalMissionVoteTab extends React.Component {
+class NormalMissionVoteButtons extends React.Component {
 
 
   successClick = () => {
@@ -32,23 +32,23 @@ class NormalMissionVoteTab extends React.Component {
 
     return (
 
-      <div className="normal-mission-vote-container">
+        <>
 
-        <button 
-          className="ui green button"
-          onClick={this.successClick}
-        >
-          Success
-        </button>
+          <button 
+            className="ui green button"
+            onClick={this.successClick}
+          >
+            Success
+          </button>
 
-        <button 
-          className="ui red button"
-          onClick={this.failClick}
-        >
-          Failure
-        </button>
+          <button 
+            className="ui red button"
+            onClick={this.failClick}
+          >
+            Failure
+          </button>
 
-      </div>      
+        </>   
 
     ); //end return
 
@@ -56,7 +56,7 @@ class NormalMissionVoteTab extends React.Component {
 
 
 
-}; //end class NormalMissionVoteTab
+}; //end class NormalMissionVoteButtons
 
 
 
@@ -75,4 +75,6 @@ const mapStateToProps = (state) => {
 };
 
 
-export default connect(mapStateToProps, {addSystemMessage: systemMessages})(NormalMissionVoteTab);
+export default connect(mapStateToProps, 
+  {addSystemMessage: systemMessages})
+(NormalMissionVoteButtons);

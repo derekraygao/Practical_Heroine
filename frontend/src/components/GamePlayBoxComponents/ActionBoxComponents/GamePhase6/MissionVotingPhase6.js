@@ -8,9 +8,9 @@ import { systemMessages } from 'actions/systemMessages.js';
 
 import socket from 'Socket.js';
 
-import NormalMissionVoteTab from './PowerPhase6Components/NormalMissionVoteTab.js';
-
-
+import NormalMissionVoteButtons from './PowerPhase6Components/NormalMissionVoteButtons.js';
+import PP6NoPower from './PP6NoPower.js';
+import PP6Ichigo from './PP6Ichigo';
 
 
 var phase6TimerInterval;
@@ -19,6 +19,7 @@ class MissionVotingPhase6 extends React.Component {
 
   state = {
             haveYouVoted: "not yet",
+            tabSelection: "vote"
           };
 
 
@@ -26,7 +27,7 @@ class MissionVotingPhase6 extends React.Component {
 
       phase6TimerInterval = setInterval(this.timerCountdown, 1000);
 
-      automateVoteOnMission();
+      //automateVoteOnMission();
     
   }; //end componentDidMount
 
@@ -39,6 +40,10 @@ class MissionVotingPhase6 extends React.Component {
 
 
   clearTimerAndSetVote = (voteType) => {
+
+    /*You don't clear timer, cause otherwise the timer shown to user
+    will stop working. instead, do conditional socket.emit inside
+    timerCountdown */
 
     this.setState({haveYouVoted: voteType});
 
@@ -97,32 +102,47 @@ class MissionVotingPhase6 extends React.Component {
   }; //end voteText
 
 
-  whichMissionVoteTab() {
+  whichMissionVoteComponent = () => {
 
     if (this.state.haveYouVoted !== "not yet") {
+
       return (
 
-        <div className="have-voted-on-mission-container">
-          Please wait {this.props.timer} seconds until your
-          other teammates complete the mission.
+      <div className="PP6-general-container">
+
+        <div className="PP6-powers-menu-bar-container orange ui buttons">
+          <button className="ui button">PP6: Wait For Mission Team</button>
+        </div> 
+
+        <div className="PP6-general-action-area-container">
+          {this.voteText(this.state.haveYouVoted)} Please 
+          wait {this.props.timer} seconds until the rest of the 
+          team completes the mission.
         </div>
+
+      </div>
 
       ); //end return
 
     };
 
-    switch (this.props.missionVoteTab) {
 
-      //normal success/fail vote page
-      case "mission":
-        return <NormalMissionVoteTab voted={this.clearTimerAndSetVote} />;
+    if (this.state.tabSelection == "vote") {
+
+      switch (this.props.role) {
+
+        case "Ichigo":
+          return <PP6Ichigo voted={this.clearTimerAndSetVote} />;
+
+        default:
+          return <PP6NoPower voted={this.clearTimerAndSetVote} />;
+
+      }; //end switch
 
 
-      default:
-        return <div>Error</div>;
+    }; //end if (this.state.tabSelection == "vote")
 
-    }; //end switch
-
+ 
 
 
   }; //end whichMissionVoteTab()
@@ -134,7 +154,7 @@ class MissionVotingPhase6 extends React.Component {
 
     return (
 
-      this.whichMissionVoteTab()
+      this.whichMissionVoteComponent()
 
     ); //end return
 
