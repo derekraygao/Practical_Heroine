@@ -437,6 +437,7 @@ class Controller {
 
 				break;
 
+
 			case "Fail":
 
 				obj.pA[obj.index].missionVote = -1;
@@ -447,7 +448,14 @@ class Controller {
 
 				break;
 
-			case "":
+
+			case "Power":
+
+				obj.pA[obj.index].missionVote = 0;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
 
 				break;
 
@@ -567,14 +575,15 @@ class Controller {
 		missionVoteAccumulator = negativeVoteAccumulator + positiveVoteAccumulator;
 
 
-		missionVoteAccumulator = obj.rO.roles["Ichigo"]
-		.hylianShield(missionVoteAccumulator);
-
 		missionVoteAccumulator = obj.rO.roles["Lan"]
 		.adjustVoteSumIntimidate(missionVoteAccumulator, obj);
 
 		missionVoteAccumulator = obj.rO.roles["Balancer"]
 		.adjustVoteSumEquilibrium(missionVoteAccumulator, obj);
+
+		//Hylian shield needs to be the very last thing
+		missionVoteAccumulator = obj.rO.roles["Ichigo"]
+		.hylianShield(missionVoteAccumulator);
 
 		obj.rI.addMissionInfo(
 			obj.rD.missionNo,
