@@ -9,7 +9,10 @@ class UmbraLord extends RolesMasterClass {
         this.role = "Umbra Lord";
         this.alignment = "unknown";
         this.team = "villains";
+
         this.bide = 0;
+        this.isMeteorActivated = false;
+
         this.absoluteTeamVoteYesUsed = "No"; //when demonLord uses powers, set to "Yes", then after vote calculation, set to "Used"
         this.absoluteTeamVoteNoUsed = "No";
 
@@ -39,13 +42,13 @@ class UmbraLord extends RolesMasterClass {
 
 			this.absoluteTeamVoteYesUsed = "Used";
 
-			return 1;
+			return 100;
 
 		} else if (this.absoluteTeamVoteNoUsed == "Yes") {
 
 			this.absoluteTeamVoteNoUsed = "Used";
 
-			return -1;
+			return -100;
 
 		} else {
 
@@ -74,20 +77,54 @@ class UmbraLord extends RolesMasterClass {
 	};
 
 
-	bidePower() {
+	bidePower(obj) {
 
 		this.bide += 2;
+
+
+		var sysMess = {
+						type: "power",
+						message: ("Your bide holds a charge "
+							+ "of " + this.bide + ".")
+					  };
+
+		var stackObj = {
+						type: "Individual",
+						socketID: obj.pA[this.index].socketID,
+						destination: "Add System Message",
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
+
+
 	};
 
 
-	meteor(originalVote) {
+	activateMeteor() {
 
-		var meteorPoweredVote = originalVote - this.bide;
+		this.isMeteorActivated = true;
+
+	};
+
+
+	adjustMissionVotesBideMeteor(obj) {
+
+		if (!this.isMeteorActivated) { return 0; };
+
+		if (obj.pA[this.index].missionVote >= 0) {
+
+			obj.pA[this.index].missionVote += this.bide;
+
+		} else {
+			obj.pA[this.index].missionVote -= this.bide;
+		};
+
 		this.bide = 0;
+		this.isMeteorActivated = false; 
 
-		return meteorPoweredVote;
+	}; //end adjustMissionVotesMeteor()
 
-	};
 
 	/*
 	adjustMissionVotesDevilized(obj) {

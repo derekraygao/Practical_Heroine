@@ -175,13 +175,6 @@ function demonLordAbsolutePowerTest() {
 
 function testUmbraLordPowers() {
 
-	obj.rO.roles["Umbra Lord"].bidePower();
-	console.log("Bide should be +2" + " actual power is: " 
-		+ obj.rO.roles["Umbra Lord"].bide);
-
-	obj.rO.roles["Umbra Lord"].bidePower();
-	console.log("Bide should be +4" + " actual power is: " 
-		+ obj.rO.roles["Umbra Lord"].bide);
 
 	obj.pA[3].role = "Saintess";
 
@@ -205,6 +198,49 @@ function testUmbraLordPowers() {
 		+ obj.rO.roles["Umbra Lord"].bide);
 
 };
+
+
+function testUmbraLordBideMeteor() {
+
+	console.log("Testing Umbra Lord Bide & Meteor");
+
+	var umbraLord = obj.rO.roles["Umbra Lord"];
+
+	Controller.addMissionVote(obj, obj.pT["Derek"], -1); //Derek
+	Controller.addMissionVote(obj, obj.pT["Cloud"], -1); //Cloud
+	Controller.addMissionVote(obj, obj.pT["Serena"], 0); //Serena
+	Controller.addMissionVote(obj, obj.pT["Lucio"], -8); //Lucio
+	Controller.addMissionVote(obj, obj.pT["Xing"], -5); //Xing	
+
+	Controller.setMissionTeam(obj, ["Cloud", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	umbraLord.bidePower(obj);
+	umbraLord.bidePower(obj);
+
+	//umbraLord.activateMeteor();
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.addMissionVote(obj, obj.pT["Cloud"], -1); //Cloud
+
+	umbraLord.activateMeteor();
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.addMissionVote(obj, obj.pT["Cloud"], -1); //Cloud
+	umbraLord.bidePower(obj);
+	umbraLord.activateMeteor();
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+	
+};
+
+testUmbraLordBideMeteor();
+
+
+
 
 
 function testUmbraLordIf2FailuresThenAbsoluteYesDoesNotWork() {
@@ -630,7 +666,7 @@ function testDetectiveChatInterrogate() {
 
 };
 
-testDetectiveChatInterrogate();
+//testDetectiveChatInterrogate();
 
 
 

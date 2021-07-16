@@ -36,6 +36,7 @@ class VoteAdjuster {
 
 		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
 
+		obj.rO.roles["Umbra Lord"].adjustMissionVotesBideMeteor(obj);
 		obj.rO.roles["Esper"].adjustMissionVotePsybomb(obj);
 		obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
 		obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
@@ -111,6 +112,7 @@ class VoteAdjuster {
 
 		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
 
+		obj.rO.roles["Umbra Lord"].adjustMissionVotesBideMeteor(obj);
 		obj.rO.roles["Esper"].adjustMissionVotePsybomb(obj);
 		obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
 		obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
