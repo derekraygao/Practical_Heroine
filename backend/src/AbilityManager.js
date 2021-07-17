@@ -16,6 +16,8 @@ class AbilityManager {
 
     obj.rO.roles["Noah"].adjustIcePunch(obj);
 
+    obj.rO.roles["Noah"].adjustZombieStatus(obj);
+
   }; //end updateNoahAbilities
 
 
@@ -98,6 +100,12 @@ class AbilityManager {
 
   };
 
+
+  updateKaguyaPowers(obj) {
+
+    obj.rO.roles["Kaguya"].addEntrancedStatus(obj);
+
+  };
 
 
   updateBackstabberPowers(obj) {
@@ -186,6 +194,13 @@ class AbilityManager {
   };
 
 
+  updatePearAbilities(obj) {
+
+    obj.rO.roles["Pear"].resetVanishVoteTarget();
+
+  };
+
+
   updateLanAbilities(obj) {
 
     obj.rO.roles["Lan"].removeConfusedStatusAtEndOfRound(obj);
@@ -223,6 +238,7 @@ class AbilityManager {
     this.updateSaintessStatuses(obj);
     this.updateLottieAbilities(obj);
     this.updateLanAbilities(obj);
+    this.updatePearAbilities(obj);
     this.updateDetectiveChatAbilities(obj);
     
     this.updateNoahAbilities(obj);
@@ -232,9 +248,12 @@ class AbilityManager {
     this.updateBabyDollPowers(obj);
     this.updateBombermanStatuses(obj);
     this.updateSpiritualistStatuses(obj);
+    this.updateKaguyaPowers(obj);
+    this.updateParalysisAbilitiesEffect(obj);
+    
 	  this.handleBackstabberPersequorAndHurricane(obj);
 
-    this.updateParalysisAbilitiesEffect(obj);
+    
 
   };
 

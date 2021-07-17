@@ -29,10 +29,15 @@ class VoteAdjuster {
 
 		obj.rO.roles["Lan"].adjustMissionVotesLanFinalHeaven(obj);
 		obj.rO.roles["Toxiturtle"].adjustMissionVotesPoisoned(obj);
+		obj.rO.roles["Kaguya"].adjustMissionVotesMoonblast(obj);
 
 		obj.rO.roles["Umbra Lord"].adjustMissionVotesCorrupted(obj);
 
 		obj.rO.roles["Reverser"].adjustVotesMirrorWorld(obj);
+
+		obj.rO.roles["Kaguya"].adjustMissionVotesEntranced(obj);
+
+		obj.rO.roles["Noah"].adjustMissionVotesNightmareSyndromeZombie(obj);
 
 		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
 
@@ -51,16 +56,19 @@ class VoteAdjuster {
 
 			if (!obj.pA[i].selectedForMission) { continue; };
 
-			//injured sets base vote power to 0
+			//injured sets base vote power to 0, needs to be first here
 			obj.rO.roles["Lieutenant Blitz"].adjustMissionVotesInjured(obj.pA[i]);
 
 			obj.rO.roles["Bomberman"].adjustMissionVotesBurn(obj.pA[i]);
 			obj.rO.roles["Bomberman"].adjustMissionVotesBomb(obj.pA[i]);
 
+			obj.rO.roles["Noah"].adjustMissionVotesZombieRecovered(obj.pA[i]);
+
 			obj.rO.roles["Lottie"].adjustMissionVotesLottie(obj.pA[i]);
 
 			obj.rO.roles["Saintess"].adjustMissionVotesCuraga(obj.pA[i]); // +
 
+			//below are multiplication powers 
 			obj.rO.roles["Saintess"].adjustMissionVotesBless(obj.pA[i]); // *
 
 			obj.rO.roles["Ranger"].adjustMissionVotesShrink(obj.pA[i]);

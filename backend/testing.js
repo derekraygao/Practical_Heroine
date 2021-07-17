@@ -60,6 +60,10 @@ Controller.assignPlayersTheirRoles(obj);
 Controller.roomsData["testing"].missionNo = 1;
 Controller.roomsData["testing"].teamLeaderIndex = 1;
 
+
+var kaguya = obj.rO.roles["Kaguya"];
+var noah = obj.rO.roles["Noah"];
+
 //console.log(obj.rO.rolesInGame);
 //console.log(obj.pA);
 
@@ -237,7 +241,7 @@ function testUmbraLordBideMeteor() {
 	
 };
 
-testUmbraLordBideMeteor();
+//testUmbraLordBideMeteor();
 
 
 
@@ -1962,6 +1966,49 @@ function testNoahPowers() {
 };
 
 
+function testNoahNightmareSyndrome() {
+
+	console.log("Test Noah Nightmare Syndrome Powers");
+	
+	obj.rD.missionNo = 1;
+
+
+	console.log("");
+	console.log("Testing reversed vote by zombie status");
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Derek", "Lucio", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	noah.setNightmareSyndrome("Derek", obj);
+	AbilityManager.updateStatuses(obj);
+
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+	
+
+	console.log("");
+	console.log("Testing +2.5 by recovered status");
+
+	Controller.healPlayerForVotingForFailure(obj.pA[0]);
+
+	Controller.addMissionVote(obj, 0, -1); //Derek //0
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+};
+
+
+testNoahNightmareSyndrome();
+
+
 
 function testNoahAndToxiTurtlePowersParalyzeSkip() {
 
@@ -2109,6 +2156,94 @@ function testPsychologistPowers() {
 };
 
 //testPsychologistPowers();
+
+
+
+function testKaguyaEntranced() {
+
+	console.log("Testing Kaguya Entranced Effect on Mission Votes");
+	
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 3); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek"]);
+	Controller.setPlayersForMission(obj);
+
+	kaguya.setSweetCharmTarget("Derek", obj);
+	AbilityManager.updateStatuses(obj);
+
+	kaguya.setSweetCharmTarget("Lucio", obj);
+	AbilityManager.updateStatuses(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+};
+
+
+//testKaguyaEntranced();
+
+
+
+function testKaguyaMoonblast() {
+
+	console.log("Testing Kaguya Moonblast");
+	
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	kaguya.activateMoonblast(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+
+	console.log("Moonblast should not be activated");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+};
+
+//testKaguyaMoonblast();
+
+
+
+
+function testKaguyaDarkDestiny() {
+
+	console.log("Testing Kaguya Dark Destiny Game Over");
+		
+	Controller.setMissionTeam(obj, ["Lucio", "Xing", "Serena"]);
+	//Controller.setPlayersForMission(obj);
+
+	kaguya.addDarkDestinyTarget("Xing"); 
+
+	console.log(kaguya.wasDarkDestinyFulfilled(obj));
+	console.log(kaguya.wasDarkDestinyFulfilled(obj));
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
+	console.log(kaguya.wasDarkDestinyFulfilled(obj));
+
+	Controller.setMissionTeam(obj, ["Lucio", "Xing", "Serena"]);
+	console.log(kaguya.wasDarkDestinyFulfilled(obj));
+};
+
+//testKaguyaDarkDestiny();
+
 
 
 

@@ -24,13 +24,13 @@ class Noah extends RolesMasterClass {
         */
         this.powersHistory = 
         {
-        	1: {"paralyzed": "nobody chosen", "frozen": "nobody chosen"},
-        	2: {"paralyzed": "nobody chosen", "frozen": "nobody chosen"},
-        	3: {"paralyzed": "nobody chosen", "frozen": "nobody chosen"},
-        	4: {"paralyzed": "nobody chosen", "frozen": "nobody chosen"},
-        	5: {"paralyzed": "nobody chosen", "frozen": "nobody chosen"},
-        	6: {"paralyzed": "nobody chosen", "frozen": "nobody chosen"},
-        	7: {"paralyzed": "nobody chosen", "frozen": "nobody chosen"},
+        	1: {"paralyzed": "nobody chosen", "frozen": "nobody chosen", "zombie": "nobody chosen"},
+        	2: {"paralyzed": "nobody chosen", "frozen": "nobody chosen", "zombie": "nobody chosen"},
+        	3: {"paralyzed": "nobody chosen", "frozen": "nobody chosen", "zombie": "nobody chosen"},
+        	4: {"paralyzed": "nobody chosen", "frozen": "nobody chosen", "zombie": "nobody chosen"},
+        	5: {"paralyzed": "nobody chosen", "frozen": "nobody chosen", "zombie": "nobody chosen"},
+        	6: {"paralyzed": "nobody chosen", "frozen": "nobody chosen", "zombie": "nobody chosen"},
+        	7: {"paralyzed": "nobody chosen", "frozen": "nobody chosen", "zombie": "nobody chosen"},
 
         };
 
@@ -79,6 +79,22 @@ class Noah extends RolesMasterClass {
 		};
 
 		this.powersHistory[obj.rD.missionNo].frozen = name;
+
+	};
+
+
+	/*
+		zombie = "human" is default
+		zombie = "zombie" means reverse B.V.P.
+		zombie = "recovered" means +2 to mission voting power
+	*/
+	setNightmareSyndrome(name, obj) {
+
+		if (obj.pA[obj.pT[name]].role == "Saintess") {
+			return 0;
+		};
+
+		this.powersHistory[obj.rD.missionNo].zombie = name;
 
 	};
 
@@ -145,6 +161,45 @@ class Noah extends RolesMasterClass {
 
 	}; //end useIcePunch(obj)
 
+
+
+	adjustZombieStatus(obj) {
+
+		if (this.powersHistory[obj.rD.missionNo].zombie 
+			!== "nobody chosen") {
+			
+			var zInd = obj.pT[this.powersHistory[obj.rD.missionNo].zombie];
+	
+			obj.pA[zInd].zombie = "zombie";
+
+		};
+
+	};
+
+
+	adjustMissionVotesNightmareSyndromeZombie(obj) {
+
+		if (!this.inGame) { return 0; };
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].zombie == "zombie") {
+				obj.pA[i].missionVote *= -1;
+			};
+
+		}; //end for
+
+	};
+
+
+	adjustMissionVotesZombieRecovered(playerObj) {
+
+		if (playerObj.zombie == "recovered") {
+			playerObj.missionVote += 2.5;
+			playerObj.zombie = "human";
+		};
+
+	};
 
 
 
