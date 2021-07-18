@@ -847,21 +847,33 @@ function testSensorPower() {
 	obj.pA[0].soulMark = true;
 	obj.pA[0].shrinkCount = 1;
 	obj.pA[0].multiplier = 2;
+	obj.pA[0].injuredCount = 2;
+	obj.pA[0].paralyzed = true;
+	obj.pA[0].frozen = true;
+	obj.pA[0].confused = true;
+	obj.pA[0].entranced = true;
+	obj.pA[0].zombie = "zombie";
 
 	obj.pA[1].bomb = true;
 
-	console.log("Scan Individual should have: bomb, burn, soulmark, shrink, multiplier");
-	console.log(obj.rO.roles["Sensor"].scanOne(obj.pA[0].name, obj));
+	console.log("Scan Individual should have: bomb, burn, soulmark, shrink, multiplier, confused, frozen, paralyzed, entranced, injured, and zombie");
+	obj.rO.roles["Sensor"].scanOne(obj.pA[0].name, obj)
 
 	console.log("Scan Individual should have only bomb");
-	console.log(obj.rO.roles["Sensor"].scanOne(obj.pA[1].name, obj));
+	obj.rO.roles["Sensor"].scanOne(obj.pA[1].name, obj)
 
 	console.log("Scan Individual should have nothing");
-	console.log(obj.rO.roles["Sensor"].scanOne(obj.pA[2].name, obj));
+	obj.rO.roles["Sensor"].scanOne(obj.pA[2].name, obj)
 
-	console.log(obj.rO.roles["Sensor"].scanAll("Multiplier", obj));
+	obj.rO.roles["Sensor"].scanAll("FS Bomb", obj)
+
+	obj.rO.roles["Sensor"].testResults(obj.pA[1].name, obj)
 
 };
+
+//testSensorPower("Derek");
+
+
 
 
 function testJailerPower() {
@@ -2006,7 +2018,7 @@ function testNoahNightmareSyndrome() {
 };
 
 
-testNoahNightmareSyndrome();
+//testNoahNightmareSyndrome();
 
 
 

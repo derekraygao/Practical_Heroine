@@ -1,4 +1,6 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
+var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
+var {returnStackMessageObject} = require ("./functions/returnStackMessageObject.js");
 
 class Sensor extends RolesMasterClass {
 
@@ -12,315 +14,366 @@ class Sensor extends RolesMasterClass {
 
 	}; //end constructor
 
-/*
-	scanBomb(obj) {
 
-		var bombStatusArr = [];
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].bomb) {
-
-				bombStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Bomb",
-						status: true 
-					}
-				)
-
-			} else {
-
-				bombStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Bomb",
-						status: false 
-					}
-				)
-
-			}; //end else
-
-		}; //end for
-
-		return bombStatusArr;
-
-	}; //end scanBomb
-
-
-	scanBurn(obj) {
-
-		var burnStatusArr = [];
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].burnCount > 0) {
-
-				burnStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Burn",
-						status: true 
-					}
-				)
-
-			} else {
-
-				burnStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Burn",
-						status: false 
-					}
-				)
-
-			}; //end else
-
-		}; //end for
-
-		return burnStatusArr;
-
-	}; //end scanBomb
-
-
-	scanSoulSea(obj) {
-
-		var soulSeaStatusArr = [];
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].soulMark) {
-
-				soulSeaStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Soul Mark",
-						status: true 
-					}
-				)
-
-			} else {
-
-				soulSeaStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Soul Mark",
-						status: false 
-					}
-				)
-
-			}; //end else
-
-		}; //end for
-
-		return soulSeaStatusArr;
-
-	}; //end scanBomb
-
-
-	scanShrink(obj) {
-
-		var shrinkStatusArr = [];
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].shrinkCount > 0) {
-
-				shrinkStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Shrink",
-						status: true 
-					}
-				)
-
-			} else {
-
-				shrinkStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Shrink",
-						status: false 
-					}
-				)
-
-			}; //end else
-
-		}; //end for
-
-		return shrinkStatusArr;
-
-	}; //end scanBomb
-
-
-	scanMultiplier(obj) {
-
-		var multiplierStatusArr = [];
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].multiplier > 1) {
-
-				multiplierStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Multiplier",
-						status: true 
-					}
-				)
-
-			} else {
-
-				multiplierStatusArr.push(
-					{
-						name: obj.pA[i].name,
-						condition: "Multiplier",
-						status: false 
-					}
-				)
-
-			}; //end else
-
-		}; //end for
-
-		return multiplierStatusArr;
-
-	}; //end scanBomb
-
-*/
 
 	scanBomb(obj) {
 
-		var bombArr = [];
+		var statusArr = [];
 
 		for (var i = 0; i < obj.pA.length; i++) {
 			if (obj.pA[i].bomb) {
-				bombArr.push(obj.pA[i].name);
+				statusArr.push(obj.pA[i].name);
 			};
 		};
 
-		return bombArr;
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
 
 	};
 
 
 	scanBurn(obj) {
 		
-		var burnArr = [];
+		var statusArr = [];
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (obj.pA[i].burnCount > 0) {
-				burnArr.push(obj.pA[i].name);
+				statusArr.push(obj.pA[i].name);
 			};
 
 		};
 
-		return burnArr;
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
 	};
 
 
 	scanSoulSea(obj) {
 		
-		var soulSeaArr = [];
+		var statusArr = [];
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (obj.pA[i].soulMark) {
-				soulSeaArr.push(obj.pA[i].name);
+				statusArr.push(obj.pA[i].name);
 			};
 
 		};
 
-		return soulSeaArr;
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
 	};
 
 
 
 	scanShrink(obj) {
 		
-		var shrinkArr = [];
+		var statusArr = [];
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (obj.pA[i].shrinkCount > 0) {
-				shrinkArr.push(obj.pA[i].name);
+				statusArr.push(obj.pA[i].name);
 			};
 
 		};
 
-		return shrinkArr;
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
 	};
 
 
 
 	scanMultiplier(obj) {
 		
-		var multiplierArr = [];
+		var statusArr = [];
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (obj.pA[i].multiplier > 1) {
-				multiplierArr.push(obj.pA[i].name);
+				statusArr.push(obj.pA[i].name);
 			};
 
 		};
 
-		return multiplierArr;
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
 	};
 
 
+
+	scanInjury(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].injuredCount > 0) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
+
+	scanEntrancement(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].entranced) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
+
+	/*for now, confusion not necessary since only Lan inflicts
+	it during PP1, and it only lasts that turn, and frozen also
+	only lasts one turn (though it can be detected since it 
+	is placed prior to the current turn)*/
+	scanConfusion(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].confused) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
+	scanParalysis(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].paralyzed) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
+	scanZombie(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].zombie == "zombie") {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
 
 
 
 	scanAll(condition, obj) {
 
+		var statusArr;
+
 		switch(condition) {
 
 			case "FS Bomb":
-				return this.scanBomb(obj);
+				statusArr = this.scanBomb(obj);
+				break;
 
 			case "Burn":
-				return this.scanBurn(obj);
+				statusArr = this.scanBurn(obj);
+				break;
 
 			case "Soul Mark":
-				return this.scanSoulSea(obj);
+				statusArr = this.scanSoulSea(obj);
+				break;
 
 			case "Shrink":
-				return this.scanShrink(obj);
+				statusArr = this.scanShrink(obj);
+				break;
 
 			case "Multiplier":
-				return this.scanMultiplier(obj);
+				statusArr = this.scanMultiplier(obj);
+				break;
+
+			case "Injury":
+				statusArr = this.scanInjury(obj);
+				break;
+
+			case "Entrancement":
+				statusArr = this.scanEntrancement(obj);
+				break;
+
+			case "Zombie":
+				statusArr = this.scanZombie(obj);
+				break;
 
 			default:
-				return [];
+				statusArr = [];
+				break;
 
 		}; //end switch
+
+
+		//console.log(statusArr);
+
+		var sysMess = {
+						type: "power",
+						message: ("The following players are "
+							+ "afflicted with " + "'"
+							+ condition + "': "
+							+ formatArrayIntoString(statusArr))
+							+ "."
+					  };
+
+		var stackObj = {
+						type: "Individual",
+						socketID: obj.pA[this.index].socketID,
+						destination: "Add System Message",
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);		
+
 
 	}; //end scanAll
 
 
-	scanOne(name, obj) {
+
+	getScanResultsForOnePerson(name, obj) {
 
 		var ind = obj.pT[name];
 
 		var individualStatusArr = [];
 
+		if (obj.pA[ind].corrupted) { individualStatusArr.push("Corruption"); };
 		if (obj.pA[ind].bomb) { individualStatusArr.push("Flame Seal Bomb"); };
 		if (obj.pA[ind].burnCount > 0) { individualStatusArr.push("Burn"); };
 		if (obj.pA[ind].soulMark) { individualStatusArr.push("Soul Mark"); };
 		if (obj.pA[ind].shrinkCount > 0) { individualStatusArr.push("Shrink"); };
 		if (obj.pA[ind].multiplier > 1) { individualStatusArr.push("Multiplier"); };
+		if (obj.pA[ind].injuredCount > 0) { individualStatusArr.push("Injury"); };
+		if (obj.pA[ind].entranced) { individualStatusArr.push("Entrancement"); };
+		if (obj.pA[ind].confused) { individualStatusArr.push("Confusion"); };
+		if (obj.pA[ind].zombie == "zombie") { individualStatusArr.push("Zombie"); };
+		if (obj.pA[ind].paralyzed) { individualStatusArr.push("Paralysis"); };
+		if (obj.pA[ind].frozen) { individualStatusArr.push("Freeze"); };
 
-		return (
-			{
-				name: name,
-				statusArray: individualStatusArr
-			}
-		);
+		if (individualStatusArr.length == 0) { individualStatusArr.push("Nothing"); };
 
+		return individualStatusArr;
+
+	};
+
+
+	scanOne(name, obj) {
+
+		var statusString = formatArrayIntoString(this.getScanResultsForOnePerson(name, obj));
+
+		//console.log(statusString);
+
+		var sysMess = {
+						type: "power",
+						message: (name + " has the following "
+							+ "status conditions: "
+							+ statusString + ".")
+					  };
+
+		var stackObj = {
+						type: "Individual",
+						socketID: obj.pA[this.index].socketID,
+						destination: "Add System Message",
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
 
 	}; //end scanOne
+
+
+	//voting power of -1.5 is handled in Controller.setPlayerMissionVote()
+	testResults(name, obj) {
+
+		var testResultsString = formatArrayIntoString(this.getScanResultsForOnePerson(name, obj));
+
+		//console.log(testResultsString);
+
+		var sysMess = {
+						type: "power",
+						message: ("Sensor " 
+							+ obj.pA[this.index].name 
+							+ " has your test results! "
+							+ "You suffer from the following "
+							+ "status conditions: " 
+							+ testResultsString)
+					  };
+
+		var stackObj = {
+						type: "Individual",
+						socketID: obj.pA[obj.pT[name]].socketID,
+						destination: "Add System Message",
+						data: sysMess
+					   };
+
+
+		obj.stack.push(stackObj);
+
+	};
+
 
 
 }; //end class

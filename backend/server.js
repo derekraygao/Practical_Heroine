@@ -856,6 +856,58 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Activate Final Heaven", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };  
+
+    obj.rO.roles["Lan"].activateFinalHeaven(obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
+
+
+  //Ichigo
+  socket.on("Activate Hylian Shield", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };   
+
+    obj.rO.roles["Ichigo"].activateHylianShield();
+
+    var hMess = {
+                  type: "power",
+                  message: "The Hero of Azurea, Ichigo, repels "
+                  + "evil with the Hylian Shield! If the "
+                  + "end mission vote sum is < 0, then +3 to "
+                  + "the sum, if >= 0, then -3."
+                };
+
+    emitToAllSocketsInRoom(obj, "Add System Message", hMess);
+
+    console.log("Hylian Shield Status: " + obj.rO.roles["Ichigo"].isHylianShieldActivated);
+
+  });
+
+
+  socket.on("Activate Holy Strike", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };   
+
+    obj.rO.roles["Ichigo"].activateHolyStrike();
+
+    console.log("Holy Strike Status: ", obj.rO.roles["Ichigo"].holyStrike);
+
+  });
+
+
+
+
 
 
 
@@ -1020,6 +1072,20 @@ io.on('connection', function (socket) {
   }); //end socket.on("Headache Charge")
 
 
+  socket.on("Activate Psybomb", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Esper"].activatePsybomb(obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
+
 
   //Jailer
 
@@ -1043,47 +1109,42 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    var scanInfo = obj.rO.roles["Sensor"].scanOne(pToScan, obj);
+    obj.rO.roles["Sensor"].scanOne(pToScan, obj);
 
-    if (scanInfo.statusArray.length == 0) { scanInfo.statusArray = "nothing"; };
-
-    var scanMessage = 
-      {
-        type: "power",
-        message: (pToScan + " has the following status conditions: " 
-      + formatArrayIntoString(scanInfo.statusArray))
-
-      };
-
-    socket.emit("Add System Message", scanMessage);
+    MessageNotificationStack(obj);
 
   });
 
-
-  //Ranger
 
   socket.on("Scan All For One Status", (whichStatus) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    var statusNamesArr = obj.rO.roles["Sensor"].scanAll(whichStatus, obj);
+    obj.rO.roles["Sensor"].scanAll(whichStatus, obj);
 
-    if (statusNamesArr.length == 0) { statusNamesArr = "nobody"; };
-
-    var scanMessage = 
-      {
-        type: "power",
-        message: ("The following players are afflicted with the status" 
-        + " condition '" + whichStatus + "': " + formatArrayIntoString(statusNamesArr))
-      };
-
-      socket.emit("Add System Message", scanMessage);
+    MessageNotificationStack(obj);
 
   });
 
 
 
+  socket.on("Send Test Results", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Sensor"].testResults(name, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
+
+
+  //Ranger
   socket.on("Anti-Magic Ray", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
@@ -1138,6 +1199,29 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Charge Up Bide", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Umbra Lord"].bidePower(obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+  socket.on("Meteor Blast", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Umbra Lord"].activateMeteor();   
+
+
+  });
+
+
 
   //Hecate
   socket.on("Exchange of the Spirits", (namesArr) => {
@@ -1149,6 +1233,23 @@ io.on('connection', function (socket) {
       namesArr[0], namesArr[1], obj);
 
   });
+
+
+  socket.on("Multiplication Magic", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Hecate"].setMultiplierTarget(name, obj)
+
+    obj.rO.roles["Hecate"].multiplication(obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
 
 
 
@@ -1196,6 +1297,27 @@ io.on('connection', function (socket) {
 
 
 
+  //Bomberman AKA Mr. Sun Fun
+  socket.on("Plant Flame Seal Bomb", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Bomberman"].setBombTarget(name, obj);
+
+  });
+
+
+  socket.on("Fire Punch A Player", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Bomberman"].setfirePunchTarget(name, obj);
+
+  });
+
+
 
 
   //Reverser
@@ -1210,6 +1332,22 @@ io.on('connection', function (socket) {
     emitToAllSocketsInRoom(obj, "Mirror World Activated");
 
   });
+
+
+
+  socket.on("Reverse Vote", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Reverser"].reverseVote(name);
+
+    console.log("Reverse Vote of: " + obj.rO.roles["Reverser"].personToReverseVote);
+
+  });
+
+
+
 
 
 
@@ -1302,6 +1440,21 @@ io.on('connection', function (socket) {
 
 
 
+  socket.on("Toxiturtle Glare", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };     
+
+    obj.rO.roles["Toxiturtle"].glare(name, obj);
+
+    //console.log(obj.rO.roles["Toxiturtle"].powersHistoryGlare);
+
+
+  });
+
+
+
+
   //Psychologist
   socket.on("Submit Predicted Team", (pTeamArr) => {
 
@@ -1311,6 +1464,56 @@ io.on('connection', function (socket) {
     obj.rO.roles["Psychologist"].setPredictionArray(pTeamArr, obj);
 
   });
+
+
+
+  socket.on("Pistanthrophobia", (arr) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    var mixedNames = obj.rO.roles["Psychologist"].revealOneBadOneGoodPlayer(arr);
+
+    var pMess = {
+                  type: "power",
+                  message: ("The psychologist has revealed that "
+                  + formatArrayIntoString(arr)
+                  + " are on opposite teams!")
+                };
+
+
+    emitToAllSocketsInRoom(obj, 
+                           "Psychologist Message", 
+                           pMess
+                          );
+
+  });
+
+
+
+  socket.on("Activate D.I.D.", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    var mixedRoles = obj.rO.roles["Psychologist"].revealOnePlayersRole(name, obj);
+    
+    var dMess = {
+                  type: "power",
+                  message: ("The psychologist has revealed "
+                    + name + "'s potential roles: "
+                    + formatArrayIntoString(mixedRoles)
+                    + ".")
+                };
+
+
+    emitToAllSocketsInRoom(obj, 
+                           "Psychologist Message", 
+                           dMess
+                          );
+
+  });
+
 
 
 
@@ -1605,7 +1808,7 @@ The reason we need this function is because cannot pass io
 object into other files by export/import or as a function
 argument. So can only do "socket.emit" but not "io.to" emits.
 
-stack is an array of message objects, with similar forms of:
+stack (s) is an array of message objects, with similar forms of:
   {
     "type": "everyone" or "multiplier notification" or "etc.",
     "socketID": 
@@ -1613,17 +1816,23 @@ stack is an array of message objects, with similar forms of:
     "data": 35
   }
 
-*/
-function MessageNotificationStack(stack) {
 
-  for (var i = 0; i < stack.length; i++) {
+function MessageNotificationStack(obj) {
 
-    switch (stack[i].type) {
+  console.log("function: what is stack");
+  console.log(obj.stack);
 
-      
+  for (var i = 0; i < obj.stack.length; i++) {
 
+    switch (obj.stack[i].type) {
 
+      case "Individual":
 
+        io.to(`${obj.stack[i].socketID}`).emit(
+          obj.stack[i].destination, 
+          obj.stack[i].data);
+
+        break;
 
 
       default:
@@ -1633,9 +1842,40 @@ function MessageNotificationStack(stack) {
 
   }; //end for
 
+  obj.stack = []; //reset after sending out messages
+
+  console.log("function: set stack to empty");
+  console.log(obj.stack);
+
 }; //end MessageNotification Stack
+*/
+
+function MessageNotificationStack(obj) {
+
+  while (obj.stack.length > 0) {
+
+    switch (obj.stack[0].type) {
+
+      case "Individual":
+
+        io.to(`${obj.stack[0].socketID}`).emit(
+          obj.stack[0].destination, 
+          obj.stack[0].data);
+
+        obj.stack.splice(0, 1);
+
+        break;
 
 
+      default:
+        return 0;
+
+    }; //end switch
+
+  }; //end while
+
+
+}; //end MessageNotification Stack
 
 
 
