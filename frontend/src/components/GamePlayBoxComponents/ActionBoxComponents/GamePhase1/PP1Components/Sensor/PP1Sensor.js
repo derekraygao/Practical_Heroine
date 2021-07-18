@@ -59,6 +59,9 @@ class PP1Sensor extends React.Component {
         <option value="Soul Mark">Soul Mark</option>
         <option value="Shrink">Shrink</option>
         <option value="Multiplier">Multiplier</option>
+        <option value="Injury">Injury</option>
+        <option value="Entrancement">Entrancement</option>
+        <option value="Zombie">Zombie</option>
       </>
     );
 
@@ -68,8 +71,8 @@ class PP1Sensor extends React.Component {
 
 
   submitStatusConditionScanChoice = () => {
-
-    if (this.state.senseWhichStatus !== "Which Status?") {
+  
+    if (this.state.senseWhichStatus !== "Which Status ?") {
 
       this.setState({usedPower: true});
 
