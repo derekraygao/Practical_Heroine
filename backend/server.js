@@ -439,8 +439,12 @@ io.on('connection', function (socket) {
   //this must go BEFORE Controller.setPlayersForMission
   function dropPlayerAffectedBySing(obj) {
 
+    if (!obj.rO.roles["Baby Doll"].inGame) { return 0; };
+
     var singResult = 
     obj.rO.roles["Baby Doll"].ifAsleepDropPlayerFromMission(obj);
+
+    console.log("sing result is: " + singResult);
 
     if (singResult !== "nobody was dropped") {
 
@@ -512,6 +516,8 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    console.log(obj.pA[obj.index].name + " voted for " + vote);
 
     Controller.setPlayerMissionVote(vote, obj);
 
@@ -1297,6 +1303,22 @@ io.on('connection', function (socket) {
 
 
 
+  socket.on("Cast Nightmare Syndrome", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Noah"].setNightmareSyndrome(name, obj);
+
+    /*console.log("Zombie target is: " + obj.rO.roles["Noah"].
+      powersHistory[obj.rD.missionNo].zombie);*/
+
+  });
+
+
+
+
+
   //Bomberman AKA Mr. Sun Fun
   socket.on("Plant Flame Seal Bomb", (name) => {
 
@@ -1316,6 +1338,49 @@ io.on('connection', function (socket) {
     obj.rO.roles["Bomberman"].setfirePunchTarget(name, obj);
 
   });
+
+
+  //Lieutenant Blitz
+  socket.on("United States of Smash", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Lieutenant Blitz"].setUnitedStatesOfSmashTarget(name, obj);
+
+    console.log(obj.rO.roles["Lieutenant Blitz"].powersHistory[obj.rD.missionNo]["USOS"]);
+
+
+  });
+
+
+
+  //Persequor
+
+  socket.on("Copycat a Vote", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Persequor"].copyCat(name);
+
+    console.log(obj.rO.roles["Persequor"].personVoteToCopy);
+
+
+  });
+
+
+  socket.on("Activate Identity Theft", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Persequor"].activateIdentityTheft(obj);
+
+    console.log(obj.rO.roles["Persequor"].powersHistory[obj.rD.missionNo].switchedName);
+
+  });
+
 
 
 
@@ -1408,6 +1473,8 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Baby Doll"].setSingTarget(name, obj);
 
+    //console.log("Sing target: " + obj.rO.roles["Baby Doll"].powersHistory[obj.rD.missionNo]["sing"]);
+
   });
 
 
@@ -1416,13 +1483,26 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
-    obj.rO.roles["Baby Doll"].activateLullaby();
+    obj.rO.roles["Baby Doll"].activateLullaby(obj);
 
-    console.log("Lullaby status: " + obj.rO.roles["Baby Doll"].lullabyPowerUsed);
+    MessageNotificationStack(obj);
+
+    //console.log("Lullaby status: " + obj.rO.roles["Baby Doll"].lullabyPowerUsed);
 
   });
 
 
+  socket.on("Activate Perish Song", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Baby Doll"].
+    activatePerishSong(obj.rD.missionTeam, obj);
+
+    MessageNotificationStack(obj);
+
+  });
 
 
 
@@ -1854,6 +1934,7 @@ function MessageNotificationStack(obj) {
 
   while (obj.stack.length > 0) {
 
+
     switch (obj.stack[0].type) {
 
       case "Individual":
@@ -1862,7 +1943,54 @@ function MessageNotificationStack(obj) {
           obj.stack[0].destination, 
           obj.stack[0].data);
 
-        obj.stack.splice(0, 1);
+        break;
+
+
+      case "Everyone":
+
+        for (var i = 0; i < obj.pA.length; i++) {
+
+          io.to(`${obj.pA[i].socketID}`).emit(
+          obj.stack[0].destination, 
+          obj.stack[0].data);
+
+        };
+
+        break;
+
+      //system message individual/single person
+      case "SMI":
+
+        io.to(`${obj.stack[0].socketID}`).emit(
+          "Add System Message", 
+          obj.stack[0].data);
+
+        break;
+
+
+      //system message everyone
+      case "SME":
+
+        for (var i = 0; i < obj.pA.length; i++) {
+
+            io.to(`${obj.pA[i].socketID}`).emit(
+            "Add System Message", 
+            obj.stack[0].data);
+
+        };
+
+        break;
+
+      //system message everyone music
+      case "SME Music":
+
+        for (var i = 0; i < obj.pA.length; i++) {
+
+            io.to(`${obj.pA[i].socketID}`).emit(
+            "Add System Message Music", 
+            obj.stack[0].data);
+
+        };
 
         break;
 
@@ -1871,6 +1999,9 @@ function MessageNotificationStack(obj) {
         return 0;
 
     }; //end switch
+
+
+    obj.stack.splice(0, 1);
 
   }; //end while
 

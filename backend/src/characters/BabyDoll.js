@@ -1,5 +1,7 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
 var {calculateNumberofTeamMembers} = require('./calculateNumberofTeamMembers.js');
+var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
+
 
 class BabyDoll extends RolesMasterClass {
 
@@ -50,10 +52,10 @@ class BabyDoll extends RolesMasterClass {
 			};
 
 		};
-
+	
 		//cannot choose Saintess
-		var ind = obj.pT[name];
-		if (ind == undefined) { return 0; };
+		var ind = obj.pT[name]; 
+		if (ind == undefined) { return 0; }; 
 		if (obj.pA[ind].role == "Saintess") { return 0; };
 
 
@@ -62,9 +64,28 @@ class BabyDoll extends RolesMasterClass {
 	};
 
 
-	activateLullaby() {
+	activateLullaby(obj) {
 
 		this.lullabyPowerUsed = true;
+
+
+		var sysMess = {
+						type: "urgent",
+						message: ("Baby Doll's lullaby "
+							+ "exhausts the mission team's "
+							+ "energy. The highest allowed "
+							+ "final voting power of any "
+							+ "person is +2, and the lowest "
+							+ "is -3.")
+					  };
+
+		var stackObj = {
+						type: "SME Music",
+						data: {messageObj: sysMess, song: "Lullaby"}
+					   };
+
+		obj.stack.push(stackObj);
+
 	};
 
 
@@ -72,9 +93,33 @@ class BabyDoll extends RolesMasterClass {
 
 		this.powersHistory[obj.rD.missionNo].perishSongArray = arr;
 
+		var sysMess = {
+						type: "urgent",
+						message: ("Baby Doll's perish song "
+							+ "dooms the current mission team! "
+							+ "The next time a mission team includes "
+							+ "all of the current team "
+							+ "(" + formatArrayIntoString(arr) 
+							+ ") " + ", then each of the doomed "
+							+ "teammates' final voting power will "
+							+ "be reduced to 0! Other teammates "
+							+ "will not be affected.")
+					  };
+
+		var stackObj = {
+						type: "SME Music",
+						data: {messageObj: sysMess, song: "Perish Song"}
+					   };
+
+		obj.stack.push(stackObj);
+
 	};
 
 
+	/* need to first activatePerishSong and then set it
+	inside Ability Manager, so it doesn't activate the same
+	mission you set perish song
+	*/
 	setPerishSongArray(obj) {
 
 		if (!this.inGame) { return 0; };

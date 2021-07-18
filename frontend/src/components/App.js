@@ -39,9 +39,40 @@ import formatAuraKnightPowerMessage from 'formatSystemMessages/formatAuraKnightP
 
 /*sound effects */
 var mirrorWorldAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Mirror_World.mp4");
+mirrorWorldAudio.volume = 0.1;
+
 var singAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Sing.mp4");
+singAudio.volume = 0.2;
+
 var lullabyAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Lullaby.mp4");
-var psychologistAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Psychologist.mp4");
+lullabyAudio.volume = 0.2;
+
+var perishSongAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Perish_Song.mp3");
+perishSongAudio.volume = 0.2;
+
+var psychologistAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Psychologist.mp3");
+psychologistAudio.volume = 0.15;
+
+
+function playSong(song) {
+
+  switch (song) {
+
+    case "Lullaby":
+      lullabyAudio.play();
+      break;
+
+    case "Perish Song":
+      perishSongAudio.play();
+      break;
+
+
+    default:
+      break;
+
+  }; //end switch
+
+}; //end function playSong()
 
 
 //for power phase 8 (night phase) timer
@@ -199,11 +230,11 @@ class App extends React.Component {
 
       if (_teamArr.includes(_name)) {
 
-        this.props.updateTimerSeconds(800);
+        this.props.updateTimerSeconds(1);
 
       } else {
 
-        this.props.updateTimerSeconds(40);
+        this.props.updateTimerSeconds(800);
 
       };
 
@@ -215,7 +246,7 @@ class App extends React.Component {
 
       setTimeout(() => this.props.updateGamePhase(6), 1000);
 
-      this.props.updateTimerSeconds(20);
+      this.props.updateTimerSeconds(800);
 
     }); //end socket.on("Start Game Phase 6")
 
@@ -341,9 +372,21 @@ class App extends React.Component {
     });
 
 
+    socket.on("Add System Message Music", (m) => {
+
+      this.props.addSystemMessage(m.messageObj);
+
+      playSong(m.song);
+
+    });
+
+
+
+
     socket.on("Update Mission Team", (teamArr) => {
 
       this.props.updateMissionTeam(teamArr);
+      //console.log(this.props.missionTeam);
 
     });
 
@@ -395,7 +438,6 @@ class App extends React.Component {
 
       this.addSysMess("urgent", mwMess);
 
-      mirrorWorldAudio.volume = 0.1;
       mirrorWorldAudio.play();
 
     });
@@ -443,10 +485,10 @@ class App extends React.Component {
 
         this.addSysMess("urgent", singMess);
 
-        singAudio.volume = 0.2;
         singAudio.play();
 
     });
+
 
 
     //Psychologist
@@ -454,9 +496,7 @@ class App extends React.Component {
 
       this.props.addSystemMessage(messageObj);
 
-      psychologistAudio.volume = 0.15;
       psychologistAudio.play();
-
 
     });
 
