@@ -61,8 +61,13 @@ Controller.roomsData["testing"].missionNo = 1;
 Controller.roomsData["testing"].teamLeaderIndex = 1;
 
 
+var scientist = obj.rO.roles["Scientist"];
+
 var kaguya = obj.rO.roles["Kaguya"];
 var noah = obj.rO.roles["Noah"];
+var delayer = obj.rO.roles["Delayer"];
+
+
 
 //console.log(obj.rO.rolesInGame);
 //console.log(obj.pA);
@@ -775,6 +780,44 @@ function testScientistPower() {
 };
 
 
+function testScientistHypothesis() {
+
+	console.log("Testing Scientist Hypothesis");
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	//Controller.addMissionVote(obj, 1, -1); //Cloud //1
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	Controller.addMissionVote(obj, 3, 1); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena", "Xing"]);
+	Controller.setPlayersForMission(obj);
+
+	scientist.setHypothesis(-1, 0);
+
+	console.log("Sum without hypothesis should be +1");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	//Controller.addMissionVote(obj, 1, -1); //Cloud //1
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	Controller.addMissionVote(obj, 3, 1); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	console.log("Hypothesis should not re-activate, sum should be +1");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+};
+
+testScientistHypothesis();
+
+
+
+
+
+
+
 function testEsperPower() {
 
 	obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
@@ -1272,6 +1315,61 @@ function testDelayerPower() {
 
 
 };
+
+
+
+
+function testDelayerStall() {
+
+	console.log("Testing Delayer Stall/Slow");
+		
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	delayer.stall("Lucio", obj);
+
+	console.log("With slow, should be +2 mission vote total");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	AbilityManager.updateStatuses(obj);
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+
+	//delayer.stall("Lucio", obj);
+	//if casted stall again, should be +16.25 vote totals
+
+	console.log("With slow boost, should be 9.5 mission vote total");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	AbilityManager.updateStatuses(obj);
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 2, 1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+
+	console.log("Slow boost used up, should be +5");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	console.log("Slow Target in Powers History: " + delayer.powersHistory[obj.rD.missionNo].slowTarget);
+
+};
+
+
+//testDelayerStall();
+
+
+
+
+
 
 
 //need to make sure index 2 is Persequor inside RolesObject assign roles

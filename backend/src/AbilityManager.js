@@ -68,6 +68,18 @@ class AbilityManager {
   }; //end updateBombermanStatuses
 
 
+  updateDelayerStatuses(obj) {
+
+    if (!obj.rO.roles["Delayer"].inGame) { return 0; };
+
+    obj.rO.roles["Delayer"].removeSlowEffect(obj);
+    obj.rO.roles["Delayer"].increaseDelayerCountByOne(obj);
+
+
+  };
+
+
+
   updateLieutenantBlitzStatuses(obj) {
 
     obj.rO.roles["Lieutenant Blitz"].updateInjuredStatus(obj);
@@ -186,6 +198,15 @@ class AbilityManager {
   }; //end handleBackstabberPersequorAndHurricane
 
 
+  updateScientistAbilities(obj) {
+
+    if (!obj.rO.roles["Scientist"].inGame) { return 0; };
+      
+      obj.rO.roles["Scientist"].sendVotesToScientist(obj);
+      obj.rO.roles["Scientist"].exposeVotesToEveryone(obj);
+
+  };
+
 
   updateDetectiveChatAbilities(obj) {
 
@@ -240,10 +261,12 @@ class AbilityManager {
     this.updateLanAbilities(obj);
     this.updatePearAbilities(obj);
     this.updateDetectiveChatAbilities(obj);
+    this.updateScientistAbilities(obj);
     
     this.updateNoahAbilities(obj);
     this.updateToxiturtleAbilities(obj)
     this.updateLieutenantBlitzStatuses(obj);
+    this.updateDelayerStatuses(obj);
     this.updateHecateStatuses(obj);
     this.updateBabyDollPowers(obj);
     this.updateBombermanStatuses(obj);

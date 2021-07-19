@@ -576,7 +576,11 @@ io.on('connection', function (socket) {
     }; //end switch
 
 
-  
+    /*abilitymanager needs to come BEFORE
+    you update mission number and A*/
+    AbilityManager.updateStatuses(obj);
+
+    MessageNotificationStack(obj);
 
   }); //end "Vote on Mission"
 
@@ -1180,11 +1184,29 @@ io.on('connection', function (socket) {
 
 
 
+  //Scientist
+  socket.on("Scientist Will Expose Everyone's Votes", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+  
+    obj.rO.roles["Scientist"].activateAndNotifyVotesWillBeExposed(obj);
+
+    MessageNotificationStack(obj);
+
+  });
 
 
+  socket.on("Set Hypothesis", (hypothesis) => {
 
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };   
 
+    obj.rO.roles["Scientist"].setHypothesis(hypothesis);
 
+    //console.log(obj.rO.roles["Scientist"].hypothesis);
+
+  });
 
 
 
@@ -1255,7 +1277,17 @@ io.on('connection', function (socket) {
   });
 
 
+  //Delayer
+  socket.on("Stall A Player's Vote", (name) => {
 
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Delayer"].stall(name, obj);
+
+    MessageNotificationStack(obj);
+
+  });
 
 
 
