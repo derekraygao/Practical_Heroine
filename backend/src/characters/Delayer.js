@@ -12,15 +12,131 @@ class Delayer extends RolesMasterClass {
 
         this.delayerCount = 0;
 
+        this.powersHistory = 
+        {
+        	1: {"slowTarget": "nobody chosen"},
+        	2: {"slowTarget": "nobody chosen"},
+        	3: {"slowTarget": "nobody chosen"},
+        	4: {"slowTarget": "nobody chosen"},
+        	5: {"slowTarget": "nobody chosen"},
+        	6: {"slowTarget": "nobody chosen"},
+        	7: {"slowTarget": "nobody chosen"},
+        };
+
 	}; //end constructor
+
+
+
+	stall(name, obj) {
+
+		var slowInd = obj.pT[name];
+
+		if (slowInd == undefined) { return 0; };
+
+		this.powersHistory[obj.rD.missionNo].slowTarget = name;
+
+		obj.pA[slowInd].slow = true;
+
+		
+		var sysMess = {
+						type: "urgent",
+						message: ("Time flows unceasingly, like a "
+							+ "river with no end. Delayer's stall "
+							+ "magic has inflicted you with the "
+							+ "'slow' status. For this mission "
+							+ "round only, your final voting power "
+							+ "will be 0. However, that final voting "
+							+ "power is not destroyed, but delayed. "
+							+ "The next time you vote on a mission, "
+							+ "that power x 1.5 will be added to your "
+							+ "voting power!")
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: obj.pA[slowInd].socketID,
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
+
+	};
+
+
+	adjustMissionVotesSlow(obj) {
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].slow) {
+
+				obj.pA[i].slowCharge = (obj.pA[i].missionVote * 1.5);
+				obj.pA[i].missionVote = 0;
+
+			};
+
+		};
+
+	}; //end adjustMissionVotesSlow(obj)
+
+
+	adjustMissionVotesSlowCharge(playerObj) {
+
+		if (playerObj.slowCharge !== 0) {
+
+			playerObj.missionVote += playerObj.slowCharge;
+
+			playerObj.slowCharge = 0;
+
+		};
+
+	}; //end adjustMissionVotesSlowCharge(playerObj)
+
+
+	removeSlowEffect(obj) {
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			obj.pA[i].slow = false;
+
+		};
+
+	};
+
+
+
+
+	isDelayerCountAbove0() {
+
+		return ((this.delayerCount > 0) ? true : false);
+	
+	};
+
+
+	increaseDelayerCountByOne(obj) {
+
+		this.delayerCount += 1;
+
+		var sysMess = {
+						type: "power",
+						message: ("Your delay counter is currently: "
+							+ this.delayerCount)
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: obj.pA[this.index].socketID,
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
+
+	};
+
 
 
 	adjustDelayerTeamVote(obj) {
 
-		if (!obj.rO.roles["Delayer"].inGame) { return 0; };
-
-		var delayerIndex = obj.rO.roles["Delayer"].index;
-		if (delayerIndex == -1) { return 0; };
+		if (!this.inGame) { return 0; };
 
 		var amountToAdjust = 0;
 
@@ -36,13 +152,13 @@ class Delayer extends RolesMasterClass {
 
 		amountToAdjust = Math.round((amountToAdjust + Number.EPSILON) * 100) / 100;
 
-		if (obj.pA[delayerIndex].teamVote >= 0) {
+		if (obj.pA[this.index].teamVote >= 0) {
 
-			obj.pA[delayerIndex].teamVote += amountToAdjust; 
+			obj.pA[this.index].teamVote += amountToAdjust; 
 
 		} else {
 
-			obj.pA[delayerIndex].teamVote -= amountToAdjust; 
+			obj.pA[this.index].teamVote -= amountToAdjust; 
 
 		};
 
@@ -53,23 +169,19 @@ class Delayer extends RolesMasterClass {
 	//also resets delayerCount since he is chosen for Mission
 	adjustDelayerMissionVote(obj) {
 
-		if (!obj.rO.roles["Delayer"].inGame) { return 0; };
-
-		var delayerIndex = obj.rO.roles["Delayer"].index;
-		if (delayerIndex == -1) { return 0; };
-
-		if (!obj.pA[delayerIndex].selectedForMission) { return 0; };
+		if (!this.inGame) { return 0; };
+		if (!obj.pA[this.index].selectedForMission) { return 0; };
 
 
 		var amountToAdjust = (1.5 * this.delayerCount);
 
-		if (obj.pA[delayerIndex].missionVote >= 0) {
+		if (obj.pA[this.index].missionVote >= 0) {
 
-			obj.pA[delayerIndex].missionVote += amountToAdjust;
+			obj.pA[this.index].missionVote += amountToAdjust;
 
 		} else {
 
-			obj.pA[delayerIndex].missionVote -= amountToAdjust;
+			obj.pA[this.index].missionVote -= amountToAdjust;
 
 		};
 
