@@ -1597,6 +1597,47 @@ io.on('connection', function (socket) {
 
 
 
+  //Kaguya
+
+  socket.on("Dark Destiny", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Kaguya"].addDarkDestinyTarget(name, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
+
+  socket.on("Use Sweet Charm", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Kaguya"].setSweetCharmTarget(name, obj);
+
+    //console.log("Sweet Charm Target is: " + obj.rO.roles["Kaguya"].powersHistory[obj.rD.missionNo]["sweetCharm"]);
+
+
+  });
+
+
+  socket.on("Activate Moonblast", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Kaguya"].activateMoonblast(obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
 
 
 
