@@ -9,6 +9,8 @@ import {systemMessages} from 'actions/systemMessages.js';
 import formatArrayIntoString from 'formatArrayIntoString.js';
 import socket from 'Socket.js';
 
+import PP1NoPower from '../PP1NoPower.js';
+
 
 class PP1Kaguya extends React.Component {
 
@@ -56,12 +58,22 @@ class PP1Kaguya extends React.Component {
 
       socket.emit("Dark Destiny", this.state.power1Target);
 
+      this.props.updatePower("Kaguya", "darkDestiny", this.state.power1Target);
+
     };
 
   }; //end submitPower1
 
 
   render() {
+
+    if (this.props.PH["Kaguya"].darkDestiny !== "nobody chosen"
+      || this.props.missionNumber > 5) {
+
+      return <PP1NoPower />;
+
+    };
+
 
     if (this.state.usedPower) {
 
@@ -136,6 +148,7 @@ const mapStateToProps = (state) => {
   return (
          { 
             PH: state.characterPowersHistory,
+            missionNumber: state.missionNumber,
             playerList: state.playerList,
             gamePhase: state.gamePhase,
             timer: state.timer,

@@ -1,4 +1,5 @@
 
+//false means not used, true means used
 var defaultPH = {
 
 	"Umbra Lord": {
@@ -6,9 +7,21 @@ var defaultPH = {
 					absoluteYes: "No",
 					absoluteNo: "No"
 				  },
-	"Marcus": {
 
+	"Marcus": {
+				berserkMissionNo: 0,
 			  },
+
+
+	"Saintess": {
+				  senseArray: [],
+				},
+
+	"Ichigo": {
+				shield: false,
+				strike: false,
+			  },
+
 
 	"Oracle": {
 				"1 and 1": false,
@@ -17,6 +30,52 @@ var defaultPH = {
 				"Princess": false,
 				"Roles": false
 			  },
+
+	"Noah": {
+				hurricane: 0 //missionNo it was used during
+			},
+
+	"Hecate": {
+				exchangeOfSpirits: false,
+				exchangeArray: []
+			  },
+
+	"Reverser": {
+				 mirrorWorldNormal: false,
+				 mirrorWorldReverse: false,
+				},
+
+	"Backstabber": {
+					originalBackstabber: "nobody",
+				   },
+
+	"Baby Doll": { //this is for previousSingTargets
+				   //since you cannot choose same player twice in a row
+					
+					1: "nobody chosen",
+					2: "nobody chosen",
+					3: "nobody chosen",
+					4: "nobody chosen",
+					5: "nobody chosen",
+					6: "nobody chosen",
+					7: "nobody chosen",		
+				 },
+
+	"Toxiturtle": {
+					poisonBeak: [],
+				  },
+
+	"Psychologist": {
+					 pistan: false,
+					 did: false,
+					},
+
+	"Kaguya": {
+				darkDestiny: "nobody chosen"
+			  },
+
+
+
 
 
 }; //end defaultPH
