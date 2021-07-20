@@ -35,7 +35,7 @@ class PP1Esper extends React.Component {
     var maxTelepathySize = (calculateNumberofTeamMembers(
         this.props.missionNumber, this.props.playerList.length) + 1);
 
-    if (this.state.telepathyArray.length > 0 &&
+    if (this.state.telepathyArray.length >= 2 &&
         this.state.telepathyArray.length <= maxTelepathySize) {
 
       this.setState({usedPower: true});
@@ -195,7 +195,7 @@ class PP1Esper extends React.Component {
         <div className="PP1-esper-telepathy-container">
 
           <div className="PP1-telepath-max-number-text-container">
-            Maximum Connections: {(calculateNumberofTeamMembers(this.props.missionNumber, this.props.playerList.length) + 1)}
+            Minimum 2, Maximum {(calculateNumberofTeamMembers(this.props.missionNumber, this.props.playerList.length) + 1)} Connections
           </div>
 
           <div className="PP1-telepath-buttons-container">

@@ -33,8 +33,20 @@ class ChatBox extends React.Component {
 
     var chatBoxesArr = [];
 
-    if (this.props.villainList.includes(this.props.myName)) {
+    if (this.props.villainList.includes(this.props.myName)
+      && !this.props.characterStatus.jailed) {
       chatBoxesArr.push(<VillainChatBox />);
+    };
+
+
+    if (this.props.characterStatus.selectedForTelepathy
+      && !this.props.characterStatus.jailed){
+      chatBoxesArr.push(<EsperChatBox />);
+    };
+
+
+    if (this.props.characterStatus.jailed) {
+      chatBoxesArr.push(<JailerChatBox />);
     };
 
 
@@ -88,7 +100,8 @@ const mapStateToProps = (state) => {
       gamePhase: state.gamePhase,
       playerList: state.playerList,
       villainList: state.villainList,
-      mainMenuSelection: state.mainMenuSelection
+      mainMenuSelection: state.mainMenuSelection,
+      characterStatus: state.characterStatus,
     }
   );
 

@@ -17,9 +17,12 @@ import gameEndScenarioReducer from './gameEndScenarioReducer.js';
 import mainMenuSelectionReducer from './mainMenuSelectionReducer.js';
 import powersMenuSelectionReducer from './powersMenuSelectionReducer.js';
 
+import esperChatMessageReducer from './esperChatMessageReducer.js';
 
 import characterPowersHistoryReducer from './characterPowersHistoryReducer.js';
 import rangerSenseArrayReducer from './rangerSenseArrayReducer.js';
+import characterStatusReducer from './characterStatusReducer.js';
+
 
 import timerReducer from './timerReducer.js';
 
@@ -43,7 +46,9 @@ export default combineReducers({
 	powersMenuSelection: powersMenuSelectionReducer,
 	gameEndScenario: gameEndScenarioReducer, 
 	characterPowersHistory: characterPowersHistoryReducer,
+	characterStatus: characterStatusReducer,
 	rangerSenseArray: rangerSenseArrayReducer,
 	timer: timerReducer,
+	esperChat: esperChatMessageReducer,
 
 });

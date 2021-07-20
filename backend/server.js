@@ -140,6 +140,8 @@ io.on('connection', function (socket) {
     //playerArray, then need to re-map the indices
     Controller.assignPlayersTheirRoles(obj);
 
+    obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
+
     var listOfPlayers = Controller.getListOfPlayers(obj);
 
     //sets roles on client side
@@ -222,6 +224,7 @@ io.on('connection', function (socket) {
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
     //playerArray, then need to re-map the indices
     Controller.assignPlayersTheirRoles(obj);
+
     var listOfPlayers = Controller.getListOfPlayers(obj);
 
     //sets roles on client side
@@ -262,7 +265,7 @@ io.on('connection', function (socket) {
     };
 
 
-
+    obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
 
 
   }); //end Ready For New Game
@@ -578,7 +581,7 @@ io.on('connection', function (socket) {
 
     /*abilitymanager needs to come BEFORE
     you update mission number and A*/
-    AbilityManager.updateStatuses(obj);
+    AbilityManager.updateStatusesBeforeNightPhase(obj);
 
     MessageNotificationStack(obj);
 
@@ -602,6 +605,8 @@ io.on('connection', function (socket) {
     //+1 to current Mission No. Need to update on client side too
     Controller.updateMissionNumber(obj);
 
+
+    //mission number updated in client's side
     emitToAllSocketsInRoom(obj, "Start Game Phase 8: Night Phase", obj.rD.missionNo);
 
 
@@ -625,6 +630,9 @@ io.on('connection', function (socket) {
     Controller.resetPlayerReadyStatus(obj);
 
     Controller.setGamePhase(obj, 1);
+
+
+    AbilityManager.updateStatusesAfterNightPhase(obj);
 
     //put info in Redux store because you cannot send messages
     //to an unmounted component
@@ -1050,7 +1058,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Esper"].setTelepathyArray(tArray, obj);
 
-    console.log(obj.rO.roles["Esper"].telepathyArray);
+    //console.log(obj.rO.roles["Esper"].telepathyArray);
 
     socket.emit("Add System Message",
       {
@@ -1059,6 +1067,8 @@ io.on('connection', function (socket) {
         + "communicate with: " + formatArrayIntoString(tArray)
       }
     ); //end socket.emit()
+
+    MessageNotificationStack(obj);
 
 
   }); //end socket.on("Telepathy Choices")
@@ -1094,6 +1104,39 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Receive Esper Messages", (message) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var esperRef = obj.rO.roles["Esper"];
+
+    var eMessObj = esperRef.convertEsperMessage(message, obj);
+
+    
+    var telepathyArr = esperRef.telepathyArray;
+    var telepathArrLength = telepathyArr.length;
+
+    for (var i = 0; i < telepathArrLength; i++) {
+
+      if (telepathyArr[i].role == "Esper") {
+
+        io.to(`${esperRef.socketID}`).
+          emit("Receive Esper Chat Messages", eMessObj.esperMessage);
+      
+      } else {
+
+        io.to(`${telepathyArr[i].socketID}`).
+          emit("Receive Esper Chat Messages", eMessObj.othersMessage);
+      
+      };
+
+
+    }; //end for
+
+  
+
+  }); //end socket.on("Receive Esper Messages");
 
 
 
@@ -1106,9 +1149,21 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Jailer"].jailPlayer(_jailedName);
 
-    console.log(obj.rO.roles["Jailer"].jailedPlayer);
+    //console.log(obj.rO.roles["Jailer"].jailedPlayer);
 
   });
+
+
+  socket.on("Execute A Player", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Jailer"].executeAPlayer(name);
+
+
+  });
+
 
 
 

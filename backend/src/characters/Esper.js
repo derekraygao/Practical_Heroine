@@ -33,17 +33,31 @@ class Esper extends RolesMasterClass {
 	}; //end constructor
 
 	//need to clear at end of night
+	/*selectedForTelepathy status is reset on client side 
+	automatically once night phase ends*/
 	setTelepathyArray(tArray, obj) {
 
 		this.telepathyArray = [];
+		var stackObj = {};
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
-			if (tArray.includes(obj.pA[i].name)) {
+			if (tArray.includes(obj.pA[i].name) ||
+				i == this.index) {
+
 				this.telepathyArray.push(obj.pA[i]);
-			};
+
+				this.messageHandler(
+									"Set Frontend Telepathy Status To True", 
+									obj.pA[i].socketID, 
+									obj
+								   );
+
+
+			}; //end if
 
 		}; //end for
+
 
 	}; //end setTelepathyArray
 
@@ -57,11 +71,18 @@ class Esper extends RolesMasterClass {
 	};
 
 
-	activatePsybomb() {
+	activatePsybomb(obj) {
 
 		this.isPsybombActivated = true;
 
-	};
+		this.messageHandler(
+							"Activate Psybomb", 
+							obj.pA[this.index].socketID, 
+							obj
+						   );
+
+
+	}; //end activatePsybomb
 
 
 	psyBombVotePower() {
@@ -117,10 +138,10 @@ class Esper extends RolesMasterClass {
 	//should be AFTER assignment of roles
 	assignPlayersTheirPseudonyms(obj) {
 
+		if (!obj.rO.roles["Esper"].inGame) { return 0; };
+
 		shuffle(this.adjectivesArray);
 		shuffle(this.pseudonymsArray);
-
-		if (!obj.rO.roles["Esper"].inGame) { return 0; };
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
@@ -135,7 +156,7 @@ class Esper extends RolesMasterClass {
 	}; //end assignPlayersTheirPseudonyms
 
 
-	isMessageComingFromEsper(index, obj) {
+	isMessageComingFromEsper(obj, index) {
 
 		if (obj.pA[index].role == "Esper") {
 			return (obj.pA[index].name + " (Esper)");
@@ -149,21 +170,21 @@ class Esper extends RolesMasterClass {
 
 	//pseudonyms assigned when game starts
 	//you have socketID, find index from socketID
-	convertTelepathMessage(index, message, obj) {
+	convertEsperMessage(message, obj) {
 
 		return (
 			{
 				esperMessage: 
 
 					{
-						sender: this.isMessageComingFromEsper(index, obj),
+						sender: this.isMessageComingFromEsper(obj, obj.index),
 						message: message
 					},
 
 				othersMessage:
 
 					{	//esper's pseudonym is "Esper"
-						sender: obj.pA[index].pseudonym,
+						sender: obj.pA[obj.index].pseudonym,
 						message: message
 					}
 			} //end outer object
@@ -201,6 +222,52 @@ class Esper extends RolesMasterClass {
 
 
 	}; //end maxAmountofConnections();
+
+
+	messageHandler(power, socketID, obj) {
+
+		if (power == "Set Frontend Telepathy Status To True") {
+
+			var stackObj = {
+
+								type: "Individual",
+								socketID: socketID,
+								destination: "Update Character Status",
+								data: {
+										status: "selectedForTelepathy",
+										newValue: true
+									  }
+
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		} else if (power == "Activate Psybomb") {
+
+			var sysMess = {
+							type: "power",
+							message: ("Your psybomb has a base "
+									+ "mission voting power of: " 
+									+ this.psyBombVotePower() + ".")
+						  };
+
+			var stackObj = {
+							type: "Individual",
+							socketID: socketID,
+							destination: "Add System Message",
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);
+
+		}; //end else if
+
+
+	}; //end messageHandler
+
+
+
 
 
 }; //end class
