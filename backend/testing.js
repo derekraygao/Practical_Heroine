@@ -66,6 +66,7 @@ var scientist = obj.rO.roles["Scientist"];
 var kaguya = obj.rO.roles["Kaguya"];
 var noah = obj.rO.roles["Noah"];
 var delayer = obj.rO.roles["Delayer"];
+var backstabber = obj.rO.roles["Backstabber"];
 
 
 
@@ -810,7 +811,7 @@ function testScientistHypothesis() {
 
 };
 
-testScientistHypothesis();
+//testScientistHypothesis();
 
 
 
@@ -1616,6 +1617,41 @@ function hurricaneSwitchBackStabTest() {
 
 
 //hurricaneSwitchBackStabTest();
+
+
+
+
+function testBackstabberAssassinate() {
+
+	console.log("Testing Backstabber Assassination!");
+	
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 3); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek"]);
+	Controller.setPlayersForMission(obj);
+
+	backstabber.markAMan("Derek", obj);
+	backstabber.markAMan("Lucio", obj);
+	backstabber.assassinate("Derek", obj);
+
+	//AbilityManager.updateStatuses(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));	
+
+
+	backstabber.assassinate("Lucio", obj);
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));	
+
+};
+
+testBackstabberAssassinate();
+
 
 
 

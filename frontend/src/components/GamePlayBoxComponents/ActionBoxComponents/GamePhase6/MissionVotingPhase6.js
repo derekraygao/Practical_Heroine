@@ -10,7 +10,24 @@ import socket from 'Socket.js';
 
 import NormalMissionVoteButtons from './PowerPhase6Components/NormalMissionVoteButtons.js';
 import PP6NoPower from './PP6NoPower.js';
-import PP6Ichigo from './PP6Ichigo';
+import PP6Ichigo from './PP6Ichigo.js';
+import PP6Lan from './PP6Lan.js';
+import PP6Esper from './PP6Esper.js';
+import PP6Sensor from './PP6Sensor.js';
+import PP6Scientist from './PP6Scientist.js';
+
+
+import PP6UmbraLord from './PP6UmbraLord.js';
+import PP6Hecate from './PP6Hecate.js';
+import PP6Bomberman from './PP6Bomberman.js';
+import PP6Noah from './PP6Noah.js';
+import PP6Backstabber from './PP6Backstabber.js';
+import PP6LieutenantBlitz from './PP6LieutenantBlitz.js';
+import PP6Persequor from './PP6Persequor.js';
+import PP6BabyDoll from './PP6BabyDoll.js';
+import PP6Reverser from './PP6Reverser.js';
+import PP6Kaguya from './PP6Kaguya.js';
+
 
 
 var phase6TimerInterval;
@@ -133,6 +150,48 @@ class MissionVotingPhase6 extends React.Component {
 
         case "Ichigo":
           return <PP6Ichigo voted={this.clearTimerAndSetVote} />;
+
+        case "Esper":
+          return <PP6Esper voted={this.clearTimerAndSetVote} />;
+
+        case "Lan":
+          return <PP6Lan voted={this.clearTimerAndSetVote} />;
+
+        case "Sensor":
+          return <PP6Sensor voted={this.clearTimerAndSetVote} />;
+
+        case "Scientist":
+          return <PP6Scientist voted={this.clearTimerAndSetVote} />;
+
+        case "Umbra Lord":
+          return <PP6UmbraLord voted={this.clearTimerAndSetVote} />; 
+          
+        case "Hecate":
+          return <PP6Hecate voted={this.clearTimerAndSetVote} />;  
+
+        case "Bomberman":
+          return <PP6Bomberman voted={this.clearTimerAndSetVote} />;
+
+        case "Noah":
+          return <PP6Noah voted={this.clearTimerAndSetVote} />;
+
+        case "Backstabber":
+          return <PP6Backstabber voted={this.clearTimerAndSetVote} />;
+
+        case "Lieutenant Blitz":
+          return <PP6LieutenantBlitz voted={this.clearTimerAndSetVote} />;
+
+        case "Persequor":
+          return <PP6Persequor voted={this.clearTimerAndSetVote} />;
+
+        case "Baby Doll":
+          return <PP6BabyDoll voted={this.clearTimerAndSetVote} />;
+
+        case "Reverser":
+          return <PP6Reverser voted={this.clearTimerAndSetVote} />;
+
+        case "Kaguya":
+          return <PP6Kaguya voted={this.clearTimerAndSetVote} />;
 
         default:
           return <PP6NoPower voted={this.clearTimerAndSetVote} />;

@@ -16,7 +16,20 @@ class Backstabber extends RolesMasterClass {
 
         //reset activateSwitch to false when notifying player he/she has been
         //swapped
-        this.activateSwitch = false; 
+        this.activateSwitch = false;
+        
+        this.powersHistory = 
+        {
+        	1: {"assassinate": "nobody chosen"},
+        	2: {"assassinate": "nobody chosen"},
+        	3: {"assassinate": "nobody chosen"},
+        	4: {"assassinate": "nobody chosen"},
+        	5: {"assassinate": "nobody chosen"},
+        	6: {"assassinate": "nobody chosen"},
+        	7: {"assassinate": "nobody chosen"},
+        };
+
+
 
 	}; //end constructor
 
@@ -188,6 +201,119 @@ class Backstabber extends RolesMasterClass {
 		}; //end if
 
 	}; //end adjustVoteRevenge
+
+
+	markAMan(name, obj) {
+
+		var markInd = obj.pT[name];
+
+		if (obj.pA[markInd].role == "Saintess") { return 0; };
+
+		obj.pA[markInd].markedMan = true;
+
+		this.messageHandler("mark a man", obj, obj.pA[markInd].socketID);
+
+	}; //end markAMan
+
+
+	assassinate(name, obj) {
+
+		this.powersHistory[obj.rD.missionNo]["assassinate"] = name;
+
+	};
+
+
+	adjustVoteSumAssassinate(voteSum, obj) {
+
+		if (this.powersHistory[obj.rD.missionNo]["assassinate"]
+			== "nobody chosen") { return voteSum; };
+
+		var aInd = obj.pT[this.powersHistory[obj.rD.missionNo]["assassinate"]];
+
+		if (!obj.pA[aInd].markedMan) {
+
+		 	this.messageHandler("failed assassination", obj);
+			return voteSum; 
+
+		};
+
+		obj.pA[aInd].markedMan = false;
+		
+		this.messageHandler("You were assassinated!", obj, obj.pA[aInd].socketID);
+
+		return (voteSum - 5);
+
+	}; //end adjustVoteSumAssassinate()
+
+
+
+
+	messageHandler(power, obj, socketID) {
+
+		if (power == "mark a man") {
+
+			var sysMess = {
+							type: "urgent",
+							message: ("The Assassin's Order has put "
+								+ "a bounty on your head! You're a "
+								+ "marked man! Starting next round, "
+								+ "if you and the Backstabber are on the "
+								+ "mission team together again, the "
+								+ "Backstabber can use the 'Assassinate' "
+								+ "ability on you, adding -5 to the "
+								+ "mission team's vote sum.")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		} else if (power == "failed assassination") {
+
+			var sysMess = {
+							type: "power",
+							message: ("The assassination on "
+								+ this.powersHistory[obj.rD.missionNo]["assassinate"] 
+								+ " failed!")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: obj.pA[this.index].socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		} else if (power == "You were assassinated!") {
+
+			var sysMess = {
+							type: "urgent",
+							message: ("You were assassinated! " 
+								+ "-5 to the team's mission vote "
+								+ "sum. However, you are no longer "
+								+ "a marked man!")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);
+
+		};
+
+
+
+	}; //end messageHandler
 
 
 

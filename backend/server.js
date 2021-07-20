@@ -1461,6 +1461,27 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Mark A Man", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Backstabber"].markAMan(name, obj);
+
+  });
+
+
+  socket.on("Assassinate!", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    obj.rO.roles["Backstabber"].assassinate(name, obj);
+    
+  });
+
+
+
 
   //Spiritualist
   socket.on("Mark Player's Soul Sea", (name) => {
