@@ -1,0 +1,38 @@
+.power-info-character-header {
+
+	font-size: 200%;
+	font-weight: bold;
+
+	margin-bottom: 20px;
+
+}
+
+.power-info-character-text-snippets {
+
+	margin-top: 20px;
+
+}
+
+.power-info-character-text-snippets p {
+
+	font-size: 120% !important;
+
+}
+
+
+
+.power-info-princess-status-tracker-title {
+
+	margin-top: 30px;
+	margin-bottom: 0px;
+	font-size: 130%;
+	font-weight: bold;
+
+}
+
+
+.eoSenseMarginTop {
+
+	margin-top: 3px !important;
+
+}

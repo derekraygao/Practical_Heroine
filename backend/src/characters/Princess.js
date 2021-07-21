@@ -12,6 +12,69 @@ class Princess extends RolesMasterClass {
 
 	}; //end constructor
 
+	/*this is same as Sensor */
+	getStatusesForOnePerson(playerObj) {
+
+		var individualStatusArr = [];
+
+		if (playerObj.corrupted) { individualStatusArr.push("Corruption"); };
+		if (playerObj.bomb) { individualStatusArr.push("Flame Seal Bomb"); };
+		if (playerObj.burnCount > 0) { individualStatusArr.push("Burn"); };
+		if (playerObj.soulMark) { individualStatusArr.push("Soul Mark"); };
+		if (playerObj.shrinkCount > 0) { individualStatusArr.push("Shrink"); };
+		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier"); };
+		if (playerObj.injuredCount > 0) { individualStatusArr.push("Injury"); };
+		if (playerObj.entranced) { individualStatusArr.push("Entrancement"); };
+		if (playerObj.confused) { individualStatusArr.push("Confusion"); };
+		if (playerObj.markedMan) { individualStatusArr.push("Marked Man"); };
+		if (playerObj.slow) { individualStatusArr.push("Slow"); };
+		if (playerObj.slowCharge != 0) { individualStatusArr.push("Slow Charge Boost: " + playerObj.slowCharge); };
+		if (playerObj.zombie == "zombie") { individualStatusArr.push("Zombie"); };
+		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
+		if (playerObj.paralyzed) { individualStatusArr.push("Paralysis"); };
+		if (playerObj.frozen) { individualStatusArr.push("Freeze"); };
+
+		if (individualStatusArr.length == 0) { individualStatusArr.push("No Status Effects"); };
+
+		return individualStatusArr;
+
+	};
+
+
+	updateEoSenseArray(obj) {
+
+		var eoSenseArr = [];
+		var pALength = obj.pA.length;
+
+
+		for (var i = 0; i < pALength; i++) {
+
+			eoSenseArr.push(
+				{
+					name: obj.pA[i].name,
+					statusArray: this.getStatusesForOnePerson(obj.pA[i])
+				}
+			);
+
+		}; //end for
+
+
+		var stackObj = {
+						type: "Individual",
+						socketID: this.socketID,
+						destination: "Receive Eo (Princess) Sense Array",
+						data: eoSenseArr
+					   };
+
+		obj.stack.push(stackObj);
+
+		return eoSenseArr;
+
+	};
+
+
+
+
 
 	/*Princess ALWAYS in the game, so no need to do checks
 	nameArr because for exchange of spirits, there's 2 names!
