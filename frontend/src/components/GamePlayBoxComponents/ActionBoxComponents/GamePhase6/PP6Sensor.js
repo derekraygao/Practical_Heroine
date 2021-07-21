@@ -23,11 +23,11 @@ class PP6Sensor extends React.Component {
 
     if (this.state.testResultsTarget !== "Test Results ?") {
 
-      this.props.voted("Power");
-
       socket.emit("Send Test Results", this.state.testResultsTarget);
 
       socket.emit("Vote on Mission", "Test Results");
+
+      this.props.voted("Power");
 
     };
 

@@ -61,7 +61,10 @@ Controller.roomsData["testing"].missionNo = 1;
 Controller.roomsData["testing"].teamLeaderIndex = 1;
 
 
+var princess = obj.rO.roles["Princess"];
 var scientist = obj.rO.roles["Scientist"];
+var jailer = obj.rO.roles["Jailer"];
+
 
 var kaguya = obj.rO.roles["Kaguya"];
 var noah = obj.rO.roles["Noah"];
@@ -537,6 +540,36 @@ function testPrincessPower() {
 //testPrincessPower();
 
 
+function testEoSensePower() {
+
+		console.log("Testing Eo Sense Power");
+
+		obj.pA[0].corrupted = true;
+		obj.pA[0].bomb = true
+		obj.pA[0].burnCount = 2
+		obj.pA[0].soulMark = true
+		obj.pA[0].shrinkCount = 2;
+		obj.pA[0].multiplier = 3;
+		obj.pA[0].injuredCount = 2;
+		obj.pA[0].entranced = true;
+		obj.pA[0].confused = true;
+		obj.pA[0].markedMan = true;
+		obj.pA[0].slow = true;
+		obj.pA[0].slowCharge = -5;
+		obj.pA[0].zombie = "zombie";
+		obj.pA[1].zombie = "recovered";
+		obj.pA[0].paralyzed = true;
+		obj.pA[0].frozen = true;
+
+		console.log(princess.updateEoSenseArray(obj));
+
+
+};
+
+//testEoSensePower();
+
+
+
 
 
 function testOraclePower() {
@@ -897,8 +930,12 @@ function testSensorPower() {
 	obj.pA[0].confused = true;
 	obj.pA[0].entranced = true;
 	obj.pA[0].zombie = "zombie";
+	obj.pA[0].slowCharge = 3;
+	obj.pA[0].markedMan = true;
 
 	obj.pA[1].bomb = true;
+	obj.pA[2].slowCharge = -3;
+	obj.pA[3].markedMan = true;
 
 	console.log("Scan Individual should have: bomb, burn, soulmark, shrink, multiplier, confused, frozen, paralyzed, entranced, injured, and zombie");
 	obj.rO.roles["Sensor"].scanOne(obj.pA[0].name, obj)
@@ -907,15 +944,15 @@ function testSensorPower() {
 	obj.rO.roles["Sensor"].scanOne(obj.pA[1].name, obj)
 
 	console.log("Scan Individual should have nothing");
-	obj.rO.roles["Sensor"].scanOne(obj.pA[2].name, obj)
+	obj.rO.roles["Sensor"].scanOne(obj.pA[2].name, obj);
 
-	obj.rO.roles["Sensor"].scanAll("FS Bomb", obj)
+	obj.rO.roles["Sensor"].scanAll("Marked Man", obj);
 
-	obj.rO.roles["Sensor"].testResults(obj.pA[1].name, obj)
+	obj.rO.roles["Sensor"].testResults(obj.pA[1].name, obj);
 
 };
 
-//testSensorPower("Derek");
+testSensorPower();
 
 
 
@@ -932,6 +969,34 @@ function testJailerPower() {
 
 
 };
+
+
+
+function testJailerCapitalPunishmentAndJail() {
+
+	console.log("Testing Jailer Capital Punishment");
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, -2); //Serena //2
+	Controller.addMissionVote(obj, 3, 4); //Lucio //3
+	//Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	jailer.executeAPlayer("Serena");
+	jailer.jailPlayer("Lucio");
+
+	//AbilityManager.updateStatuses(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+};
+
+//testJailerCapitalPunishmentAndJail();
+
 
 
 function testIchigoPower() {
@@ -1650,7 +1715,7 @@ function testBackstabberAssassinate() {
 
 };
 
-testBackstabberAssassinate();
+//testBackstabberAssassinate();
 
 
 

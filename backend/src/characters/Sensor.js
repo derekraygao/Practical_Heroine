@@ -203,6 +203,48 @@ class Sensor extends RolesMasterClass {
 	};
 
 
+
+	scanMarkedMan(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].markedMan) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
+	scanSlowCharge(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].slowCharge != 0) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
+
 	scanZombie(obj) {
 		
 		var statusArr = [];
@@ -258,6 +300,14 @@ class Sensor extends RolesMasterClass {
 				statusArr = this.scanEntrancement(obj);
 				break;
 
+			case "Marked Man":
+				statusArr = this.scanMarkedMan(obj);
+				break;
+
+			case "Slow Charge":
+				statusArr = this.scanSlowCharge(obj);
+				break;
+
 			case "Zombie":
 				statusArr = this.scanZombie(obj);
 				break;
@@ -269,7 +319,7 @@ class Sensor extends RolesMasterClass {
 		}; //end switch
 
 
-		//console.log(statusArr);
+		//console.log(formatArrayIntoString(statusArr));
 
 		var sysMess = {
 						type: "power",
@@ -309,9 +359,12 @@ class Sensor extends RolesMasterClass {
 		if (obj.pA[ind].injuredCount > 0) { individualStatusArr.push("Injury"); };
 		if (obj.pA[ind].entranced) { individualStatusArr.push("Entrancement"); };
 		if (obj.pA[ind].confused) { individualStatusArr.push("Confusion"); };
+		if (obj.pA[ind].markedMan) { individualStatusArr.push("Marked Man"); };
+		if (obj.pA[ind].slowCharge != 0) { individualStatusArr.push("Slow Charge"); };
 		if (obj.pA[ind].zombie == "zombie") { individualStatusArr.push("Zombie"); };
 		if (obj.pA[ind].paralyzed) { individualStatusArr.push("Paralysis"); };
 		if (obj.pA[ind].frozen) { individualStatusArr.push("Freeze"); };
+
 
 		if (individualStatusArr.length == 0) { individualStatusArr.push("Nothing"); };
 
