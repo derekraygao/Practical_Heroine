@@ -13,11 +13,11 @@ class Oracle extends RolesMasterClass {
 
         this.powerUsed = 
 				        {
-				        	1: false,
-				        	2: false,
-				        	3: false,
-				        	4: false,
-				        	5: false
+				        	"1 and 1": false,
+				        	"At Least 1 Good": false,
+				        	"At Least 1 Evil and Good": false,
+				        	"Princess": false,
+				        	"Roles": false
 				        };
 
 
@@ -34,7 +34,7 @@ class Oracle extends RolesMasterClass {
 
 			//don't put your own name inside array
 			if (obj.rO.rolesInGame[i].name == 
-				obj.rO.roles["Oracle"].name) { continue; };
+				this.name) { continue; };
 
 			if (obj.rO.rolesInGame[i].team == "heroes") {
 				heroesArray.push(obj.rO.rolesInGame[i].name);
@@ -229,6 +229,8 @@ class Oracle extends RolesMasterClass {
 	Roles
 	*/
 	prophesize(oraclePowerChoice, obj) {
+
+	  this.powerUsed[oraclePowerChoice] = true;
 
 	  switch (oraclePowerChoice) {
 
