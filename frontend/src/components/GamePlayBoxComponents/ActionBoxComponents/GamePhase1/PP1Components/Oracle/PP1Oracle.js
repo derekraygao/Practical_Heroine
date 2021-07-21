@@ -14,6 +14,8 @@ class PP1Oracle extends React.Component {
   state = {
 
     whichPowerSelection: "messages ?",
+    LDTarget: "Player ?",
+    powerMenuSelection: "Luces' Messages",
     usedPower: false,
 
   };
@@ -42,6 +44,24 @@ class PP1Oracle extends React.Component {
 
 
   }; //end submitMessage
+
+
+  submitPlayerForLD = () => {
+
+    if (this.state.LDTarget == "Player ?") { return 0; };
+
+    this.setState({usedPower: true});
+
+    socket.emit("Oracle: Light and Dark Power", this.state.LDTarget);
+
+
+    var usedPHArray = this.props.PH["Oracle"]["LightAndDarkUsedArray"];
+    usedPHArray.push(this.state.LDTarget);
+
+    this.props.updatePower("Oracle", "LightAndDarkUsedArray", usedPHArray);
+
+  }; //end submitPlayerForLD
+
 
 
   getOracleSelectionChoices = () => {
@@ -91,7 +111,7 @@ class PP1Oracle extends React.Component {
     }; //end if
 
 
-
+    /* this power was replaced with light & dark
     if (!pH["Roles"]) {
 
       oracleSelectionArr.push(
@@ -99,11 +119,126 @@ class PP1Oracle extends React.Component {
       );
 
     }; //end if
-
+    */
 
     return oracleSelectionArr;
 
   };
+
+
+  getSelectionChoices = () => {
+
+    var playerChoices = JSON.parse(JSON.stringify(this.props.playerList));
+
+    var q = playerChoices.indexOf(this.props.myName);
+
+    if (q > -1) {
+      playerChoices.splice(q, 1);
+    };
+
+    //cannot check person twice
+    var ldArr = this.props.PH["Oracle"]["LightAndDarkUsedArray"];
+
+    for (var i = 0; i < ldArr.length; i++) {
+
+      q = playerChoices.indexOf(ldArr[i]);
+
+      if (q > -1) { playerChoices.splice(q, 1); };
+
+    };
+
+
+    var arrayOfOptions = playerChoices.map( (pName, index) => {
+
+      return (
+        <option value={pName} key={index}>{pName}</option>
+      );
+
+    });
+
+    return arrayOfOptions;
+
+  }; //end getSelectionChoices()
+
+
+
+  powerMenuColor = (power) => {
+
+    if (power === this.state.powerMenuSelection) {
+      return "yellow-color";
+    };
+
+    return "";
+
+  };
+
+
+
+  returnWhichActionAreaComponent = () => {
+
+    if (this.state.powerMenuSelection == "Luces' Messages") {
+
+      return (
+
+        <>
+
+          <select 
+            className="ui search dropdown"
+            value={this.state.whichPowerSelection}
+            onChange={e => this.setState({ whichPowerSelection: e.target.value })}
+          >
+
+            <option value="messages ?" disabled selected>Messages</option>
+            {this.getOracleSelectionChoices()}
+
+          </select>
+
+
+          <button 
+            className="ui yellow button"
+            onClick={this.submitMessage}
+          >
+            Message!
+          </button>
+
+        </>
+
+      ); //end return
+
+    }; //end if powerMenuSelection == "Luces' Messages"
+
+
+
+    return (
+
+      <>
+
+          <select 
+            className="ui search dropdown"
+            value={this.state.LDTarget}
+            onChange={e => this.setState({ LDTarget: e.target.value })}
+          >
+
+            <option value="Player ?" disabled selected>Players</option>
+            {this.getSelectionChoices()}
+
+          </select>
+
+
+          <button 
+            className="ui yellow button"
+            onClick={this.submitPlayerForLD}
+          >
+            Vaticinate!
+          </button>
+
+
+      </>
+
+    ); //end return
+
+
+  }; //end returnWhichActionAreaComponent()
 
 
 
@@ -132,35 +267,34 @@ class PP1Oracle extends React.Component {
     }; //end if usedPower
 
 
+
+
     return (
 
       <div className="PP1-Oracle-Container">
 
         <div className="powers-menu-bar-container orange ui buttons">
-          <button className="ui button">Luces' Messenger</button>
+
+          <button 
+            className={`ui button ${this.powerMenuColor("Luces' Messages")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Luces' Messages"}) }
+          >
+            Luces' Messenger
+          </button>
+
+          <button 
+            className={`ui button ${this.powerMenuColor("Light & Dark")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Light & Dark"}) }
+          >
+            Light & Dark
+          </button>
+
         </div> 
 
 
         <div className="PP1-luces-messenger-container">
 
-          <select 
-            className="ui search dropdown"
-            value={this.state.whichPowerSelection}
-            onChange={e => this.setState({ whichPowerSelection: e.target.value })}
-          >
-
-            <option value="messages ?" disabled selected>Messages</option>
-            {this.getOracleSelectionChoices()}
-
-          </select>
-
-
-          <button 
-            className="ui yellow button"
-            onClick={this.submitMessage}
-          >
-            Message!
-          </button>
+          {this.returnWhichActionAreaComponent()}
 
         </div>
 
@@ -182,6 +316,7 @@ const mapStateToProps = (state) => {
   return (
          { 
             PH: state.characterPowersHistory,
+            myName: state.name,
             playerList: state.playerList,
             gamePhase: state.gamePhase,
             timer: state.timer,

@@ -1,5 +1,6 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
 var {shuffle} = require("./shuffle.js");
+var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
 
 class Oracle extends RolesMasterClass {
 
@@ -17,8 +18,30 @@ class Oracle extends RolesMasterClass {
 				        	"At Least 1 Good": false,
 				        	"At Least 1 Evil and Good": false,
 				        	"Princess": false,
-				        	"Roles": false
+				        	"Roles": false,
+				        	"LightAndDarkUsedArray": [],
 				        };
+
+
+		this.goodRoles7or9 = ["Princess", "Saintess", "Ichigo", "Marcus", 
+                              "Lottie", "Lan", "Seer", "Balancer", "Esper", 
+                              "Pear", "Detective Chat", "Aura Knight", 
+                              "Ranger", "Scientist", "Oracle", "Jailer", 
+                              "Sensor"];
+
+        //no Ichigo or Saintess
+        this.goodRoles = ["Princess", "Seer", "Balancer", "Esper", 
+                          "Pear", "Lan", "Marcus", "Lottie", 
+                          "Detective Chat", "Aura Knight", 
+                          "Ranger", "Scientist", "Oracle", 
+                          "Jailer", "Sensor"];
+
+        this.badRoles = ["Umbra Lord", "Hecate", "Bomberman", 
+                         "Lieutenant Blitz", "Reverser", "Noah",  
+                         "Delayer", "Persequor", "Baby Doll",
+                         "Spiritualist", "Backstabber", "Toxiturtle", 
+                         "Kaguya", "Psychologist"];
+
 
 
 	}; //end constructor
@@ -255,6 +278,94 @@ class Oracle extends RolesMasterClass {
 	  }; //end switch
 
 	}; //end prophesize()
+
+
+
+
+	getFalseOppositeTeamRole(team, numOfPlayers) {
+
+		if (team == "villains") {
+
+			//odd number of players
+			if (numOfPlayers % 2 == 1) {
+
+				shuffle(this.goodRoles7or9);
+				return this.goodRoles7or9[0];
+
+			};
+
+
+			shuffle(this.goodRoles);
+			return this.goodRoles[0];
+
+		}; //end if team == "villains"
+
+		//if team == heroes
+		shuffle(this.badRoles);
+		return this.badRoles[0];
+
+	}; //end getFalseOppositeTeamRole(team, numOfPlayers)
+
+
+
+	lightAndDark(name, obj) {
+
+		//can only check a player once
+		this.powerUsed["LightAndDarkUsedArray"].push(name);
+		console.log(this.powerUsed["LightAndDarkUsedArray"]);
+
+		var ldInd = obj.pT[name];
+
+		var trueRole = obj.pA[ldInd].role;
+		var falseRole = 
+		this.getFalseOppositeTeamRole(obj.rO.rolesInGame[ldInd].team, obj.pA.length);
+
+		var lightAndDarkArr = [trueRole, falseRole];
+		shuffle(lightAndDarkArr);
+
+		var ldData = {"target": name, identities: formatArrayIntoString(lightAndDarkArr)};
+		
+		//console.log(ldData);
+		
+		this.messageHandler("Light And Dark", ldData, obj);
+
+
+	}; //end lightAndDark()
+
+
+
+
+
+	messageHandler(power, data, obj) {
+
+		if (power == "Light And Dark") {
+
+			var sysMess = {
+							type: "power",
+							message: ("Luces: " + data.target 
+								+ "'s possible roles are: "
+								+ data.identities + ".")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: this.socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		}; //end if
+
+
+
+	}; //end messageHandler
+
+
+
+
+
 
 
 }; //end class

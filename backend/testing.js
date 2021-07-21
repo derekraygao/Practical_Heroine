@@ -597,10 +597,16 @@ function testOraclePower() {
 	console.log("Nothing Test");
 	console.log(obj.rO.roles["Oracle"].prophesize("None", obj));
 
+
+	console.log("Light and Dark Test");
+	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
+	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
+	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
+
 };
 
 
-//testOraclePower();
+testOraclePower();
 
 
 function testBalancerPower() {
@@ -1462,7 +1468,7 @@ function testCopycatVoteWithVanishAndSlow() {
 };
 
 
-testCopycatVoteWithVanishAndSlow();
+//testCopycatVoteWithVanishAndSlow();
 
 
 
