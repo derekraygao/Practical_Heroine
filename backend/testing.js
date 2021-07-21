@@ -64,13 +64,13 @@ Controller.roomsData["testing"].teamLeaderIndex = 1;
 var princess = obj.rO.roles["Princess"];
 var scientist = obj.rO.roles["Scientist"];
 var jailer = obj.rO.roles["Jailer"];
-
+var pear = obj.rO.roles["Pear"];
 
 var kaguya = obj.rO.roles["Kaguya"];
 var noah = obj.rO.roles["Noah"];
 var delayer = obj.rO.roles["Delayer"];
 var backstabber = obj.rO.roles["Backstabber"];
-
+var persequor = obj.rO.roles["Persequor"];
 
 
 //console.log(obj.rO.rolesInGame);
@@ -600,6 +600,8 @@ function testOraclePower() {
 };
 
 
+//testOraclePower();
+
 
 function testBalancerPower() {
 
@@ -952,7 +954,7 @@ function testSensorPower() {
 
 };
 
-testSensorPower();
+//testSensorPower();
 
 
 
@@ -1435,6 +1437,32 @@ function testDelayerStall() {
 
 
 
+
+
+function testCopycatVoteWithVanishAndSlow() {
+
+	console.log("Testing Copycat Vote Power With Vanish + Slow");
+		
+	Controller.addMissionVote(obj, 0, -2); //Derek //0
+	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 1); //Serena //2 Persequor
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3 Pear
+	//Controller.addMissionVote(obj, 4, -2); //Xing //4 Delayer
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	delayer.stall("Derek", obj);
+	//pear.vanish("Derek");
+
+	//persequor.copyCat("Derek");
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+};
+
+
+testCopycatVoteWithVanishAndSlow();
 
 
 

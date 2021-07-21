@@ -66,6 +66,7 @@ class Persequor extends RolesMasterClass {
 		//if (!this.inGame) { return 0; };
 		if (this.personVoteToCopy == "nobody chosen") { return 0; };
 
+		//Pear Vanish Power Adjustment
 		if ([this.name, this.personVotetoCopy].
 			includes(obj.rO.roles["Pear"].playerVoteToVanish)) {
 
@@ -90,6 +91,19 @@ class Persequor extends RolesMasterClass {
 			return 0;
 
 		};
+
+
+		//Slow Power Adjustment
+		if (obj.pA[copyIndex].slow) {
+
+			obj.pA[this.index].missionVote = 0;
+
+			this.personVoteToCopy = "nobody chosen";
+
+			return 0;
+
+		};
+
 
 
 		var copyVote = obj.pA[copyIndex].missionVote;

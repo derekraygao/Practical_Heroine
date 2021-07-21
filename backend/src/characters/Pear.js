@@ -67,6 +67,21 @@ class Pear extends RolesMasterClass {
 	};
 
 
+	/*inside AbilityManager
+		Reason this is inside AbilityManager and not inside
+		adjustMissionVotesVanish is because Persequor ability 
+		comes after and Persequor copycat checks if persequor
+		was the target of vanish. If she is, then she sets her
+		copycat vote to 0, since vanish is supposed to take effect
+		AFTER copycat, but we can't put it after copycat cause 
+		copycat needs to copy someone else's vote. What if the 
+		copied person was the target of vanish then???
+	*/
+	resetVanishVoteTarget() {
+
+		this.playerVoteToVanish = "nobody chosen";
+
+	};
 
 
 }; //end class
