@@ -90,6 +90,11 @@ var {randomName} = require('./random_name.js');
 var {shuffle} = require("./src/characters/shuffle.js");
 var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
 
+
+
+
+
+
 //EVERY SERVER MESSAGE (socket.on) GOES INSIDE THE io.on
 io.on('connection', function (socket) {
 
@@ -140,7 +145,6 @@ io.on('connection', function (socket) {
     //playerArray, then need to re-map the indices
     Controller.assignPlayersTheirRoles(obj);
 
-    obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
 
     var listOfPlayers = Controller.getListOfPlayers(obj);
 
@@ -180,6 +184,10 @@ io.on('connection', function (socket) {
         );
 
     };
+
+
+    AbilityManager.updateInfoStartOfGame(obj);
+    MessageNotificationStack(obj);
 
 
   }); //end TESTING ONLY: Ready For New Game
@@ -225,6 +233,7 @@ io.on('connection', function (socket) {
     //playerArray, then need to re-map the indices
     Controller.assignPlayersTheirRoles(obj);
 
+
     var listOfPlayers = Controller.getListOfPlayers(obj);
 
     //sets roles on client side
@@ -265,7 +274,10 @@ io.on('connection', function (socket) {
     };
 
 
-    obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
+    
+    AbilityManager.updateInfoStartOfGame(obj);
+    MessageNotificationStack(obj);
+
 
 
   }); //end Ready For New Game
@@ -282,17 +294,19 @@ io.on('connection', function (socket) {
     if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };
 
     /* ready for next phase */
-
     Controller.resetPlayerReadyStatus(obj);
+
+    Controller.setGamePhase(obj, 2);
 
     //starting teamLeader Index is -1, and chooseOnly +1 to index
     var teamLeaderName = Controller.chooseOnlyConnectedTeamLeader(obj);
 
-
-    Controller.setGamePhase(obj, 2);
     //on client side, also set gamePhase to 2
     emitToTeamLeaderChoosingTeam(obj, teamLeaderName);
 
+
+    AbilityManager.updateStatusesAfterGamePhase1(obj);
+    MessageNotificationStack(obj);
 
   });
 
@@ -557,7 +571,7 @@ io.on('connection', function (socket) {
         emitToAllSocketsInRoom(
           obj, 
           "Game Over. Villians Win! Roles & Identities Revealed!", 
-          Controller.getAllIdentitiesAndTheirRoles()
+          obj.rO.getAllIdentitiesAndTheirRoles()
         );
 
         break;

@@ -192,6 +192,39 @@ class Delayer extends RolesMasterClass {
 	}; //end adjustDelayerMissionVote
 
 
+
+	notifyPrincessDelayerIsInTheGame(obj) {
+
+		if (!this.inGame) { return 0; };
+
+		var sysMess = {
+						type: "urgent",
+						message: ("Eo: Watch out, John! Delayer is "
+							+ "in the game! His team and mission power "
+							+ "grows each time he is NOT selected for "
+							+ "the mission team. If Delayer is not "
+							+ "selected for a mission team by Mission "
+							+ "5, the Villains will have enough team "
+							+ "voting power to reject every single "
+							+ "team proposal, thus resulting in "
+							+ "the Villains' victory!")
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: obj.rO.roles["Princess"].socketID,
+						data: sysMess
+					   };
+
+
+		obj.stack.push(stackObj);
+
+
+	}; //end notifyPrincessDelayerIsInTheGame(obj)
+
+
+
+
 }; //end class
 
 

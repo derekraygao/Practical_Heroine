@@ -198,6 +198,15 @@ class AbilityManager {
   }; //end handleBackstabberPersequorAndHurricane
 
 
+  updateJailerAbilities(obj) {
+
+    if (!obj.rO.roles["Jailer"].inGame) { return 0; };
+
+    obj.rO.roles["Jailer"].resetJailedPlayerAtEndOfNight();
+
+  };
+
+
   updateScientistAbilities(obj) {
 
     if (!obj.rO.roles["Scientist"].inGame) { return 0; };
@@ -251,10 +260,27 @@ class AbilityManager {
 
 
 
+  /*Actual Functions to Put In Server.js */
+
+  updateInfoStartOfGame(obj) {
+
+    obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
+    obj.rO.roles["Delayer"].notifyPrincessDelayerIsInTheGame(obj);
+
+  };
 
 
 
-  updateStatuses(obj) {
+  updateStatusesAfterGamePhase1(obj) {
+
+    obj.rO.roles["Princess"].updateEoSenseArray(obj);
+
+  };
+
+
+  updateStatusesBeforeNightPhase(obj) {
+
+    obj.rO.roles["Princess"].updateEoSenseArray(obj);
 
     this.updateSaintessStatuses(obj);
     this.updateLottieAbilities(obj);
@@ -274,11 +300,20 @@ class AbilityManager {
     this.updateKaguyaPowers(obj);
     this.updateParalysisAbilitiesEffect(obj);
     
-	  this.handleBackstabberPersequorAndHurricane(obj);
+	  
 
     
-
   };
+
+
+
+  updateStatusesAfterNightPhase(obj) {
+
+    this.updateJailerAbilities(obj);
+    this.handleBackstabberPersequorAndHurricane(obj);
+    
+  };
+
 
 
 
