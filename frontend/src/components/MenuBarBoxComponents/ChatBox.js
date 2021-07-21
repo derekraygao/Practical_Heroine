@@ -25,6 +25,45 @@ class ChatBox extends React.Component {
   }; //end componentDidMount
 
 
+  /*Don't show telepathy if jailed UNLESS the target is 
+  the jailer
+  */
+  showTelepathyChat = () => {
+
+    if (this.props.role == "Jailer"
+      && this.props.characterStatus.selectedForTelepathy) {
+
+      return true;
+
+    };
+
+
+    if (this.props.characterStatus.selectedForTelepathy
+      && !this.props.characterStatus.jailed) {
+
+      return true;
+
+    };
+
+    return false;
+
+  };
+
+
+
+  showVillainChat = () => {
+
+    if (this.props.characterStatus.jailed) {
+      return false;
+    };
+
+    if (this.props.villainList.includes(this.props.myName)) {
+      return true;
+    };
+
+    return false;
+
+  };
 
 
   displayWhichSpecialChatBoxes = () => {
@@ -33,14 +72,13 @@ class ChatBox extends React.Component {
 
     var chatBoxesArr = [];
 
-    if (this.props.villainList.includes(this.props.myName)
-      && !this.props.characterStatus.jailed) {
+
+    if (this.showVillainChat()) {
       chatBoxesArr.push(<VillainChatBox />);
     };
 
 
-    if (this.props.characterStatus.selectedForTelepathy
-      && !this.props.characterStatus.jailed){
+    if (this.showTelepathyChat()){
       chatBoxesArr.push(<EsperChatBox />);
     };
 

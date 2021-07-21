@@ -5,6 +5,8 @@
 
 	display: flex;
 
+	height: 8%;
+
 	overflow: auto;
 	max-height: 10% !important;
 

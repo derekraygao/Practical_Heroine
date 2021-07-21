@@ -61,7 +61,9 @@ class PP1Jailer extends React.Component {
       this.props.addSystemMessage(
         {
           type: "power",
-          message: ("You jailed " + this.state.jailTargetName + ".")
+          message: ("You jailed " + this.state.jailTargetName + "."
+            + " For this mission round only, his/her base voting "
+            + "power will be 0!")
         }
       );
 

@@ -18,6 +18,8 @@ class VillainChatBox extends React.Component {
 
   };
 
+/* ended up storing messages in redux for long-term storage,
+otherwise once this component unmounts, everything is lost!
   componentDidMount = () => {
 
     socket.on("Villain Chat Message From Server To Client", 
@@ -34,7 +36,7 @@ class VillainChatBox extends React.Component {
 
 
   }; //end componentDidMount
-
+*/
 
 
   componentWillUpdate() {
@@ -48,7 +50,7 @@ class VillainChatBox extends React.Component {
 
     if (isScrollAtBottom) {
 
-      var scrollElem = document.querySelector('.normal-chat-box-messages');
+      var scrollElem = document.querySelector('#villain-chat-box-messages-id');
 
       scrollElem.scrollTop = scrollElem.scrollHeight;
 
@@ -60,9 +62,9 @@ class VillainChatBox extends React.Component {
 
   returnListOfMessages() {
 
-    const vMessageList = this.state.vChatMessageList.map((m, index) => {
+    const vMessageList = this.props.villainMessagesArray.map((m, index) => {
 
-        return (<li key={index}>{m.name + ": " + m.message}</li>);
+        return (<li key={index}>{m.sender + ": " + m.message}</li>);
 
     }); //end messageList =
 
@@ -83,7 +85,7 @@ class VillainChatBox extends React.Component {
           Villain Chat
         </div>
 
-        <div className="normal-chat-box-messages">
+        <div className="normal-chat-box-messages" id="villain-chat-box-messages-id">
           <ul>
             {this.returnListOfMessages()}
           </ul>
@@ -116,7 +118,8 @@ const mapStateToProps = (state) => {
       gamePhase: state.gamePhase,
       playerList: state.playerList,
       villainList: state.villainList,
-      mainMenuSelection: state.mainMenuSelection
+      mainMenuSelection: state.mainMenuSelection,
+      villainMessagesArray: state.villainChatArray,
     }
   );
 
@@ -135,7 +138,7 @@ var isScrollAtBottom;
 
 function checkIfScrollAtBottom() {
 
-  var scrollElem = document.querySelector('.normal-chat-box-messages');
+  var scrollElem = document.querySelector('#villain-chat-box-messages-id');
 
   /*
   console.log("scrollElem.scrollHeight is: ", scrollElem.scrollHeight);

@@ -31,7 +31,7 @@ class EsperChatBox extends React.Component {
 
     if (isScrollAtBottom) {
 
-      var scrollElem = document.querySelector('.normal-chat-box-messages');
+      var scrollElem = document.querySelector('#esper-chat-box-messages-id');
 
       scrollElem.scrollTop = scrollElem.scrollHeight;
 
@@ -66,7 +66,7 @@ class EsperChatBox extends React.Component {
           Telepathy
         </div>
 
-        <div className="normal-chat-box-messages">
+        <div className="normal-chat-box-messages" id="esper-chat-box-messages-id">
           <ul>
             {this.returnListOfMessages()}
           </ul>
@@ -120,7 +120,7 @@ var isScrollAtBottom;
 
 function checkIfScrollAtBottom() {
 
-  var scrollElem = document.querySelector('.normal-chat-box-messages');
+  var scrollElem = document.querySelector('#esper-chat-box-messages-id');
 
   /*
   console.log("scrollElem.scrollHeight is: ", scrollElem.scrollHeight);

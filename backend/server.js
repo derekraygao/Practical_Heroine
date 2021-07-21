@@ -751,21 +751,23 @@ io.on('connection', function (socket) {
   }); //end socket.on("Normal Chat")
 
 
+  /*for villain chat, even if jailed, you'll still receive messages
+  and be able to read them when you are not jailed */
   socket.on("Villain Chat", (vChatMess) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
-    if (obj.rO.rolesInGame[obj.index].team === "heroes") { return 0; };
+    if (obj.rO.rolesInGame[obj.index].team == "heroes") { return 0; };
 
 
-    var _vMessage = {name: obj.pA[obj.index].name, message: vChatMess};
+    var _vMessage = {sender: obj.pA[obj.index].name, message: vChatMess};
 
     for (var i = 0; i < obj.pA.length; i++) {
       
       if (obj.rO.rolesInGame[i].team === "villains") {
 
         io.to(`${obj.pA[i].socketID}`).
-        emit("Villain Chat Message From Server To Client", _vMessage);
+        emit("Receive Villain Chat Messages", _vMessage);
 
       };
 
@@ -1109,7 +1111,10 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.rO.roles["Esper"].telepathyArray[0] == undefined) { return 0; };
+
     var esperRef = obj.rO.roles["Esper"];
+    var jailerRef = obj.rO.roles["Jailer"];
 
     var eMessObj = esperRef.convertEsperMessage(message, obj);
 
@@ -1119,9 +1124,11 @@ io.on('connection', function (socket) {
 
     for (var i = 0; i < telepathArrLength; i++) {
 
+      if (telepathyArr[i].name == jailerRef.jailedPlayer) { continue; };
+
       if (telepathyArr[i].role == "Esper") {
 
-        io.to(`${esperRef.socketID}`).
+        io.to(`${telepathyArr[i].socketID}`).
           emit("Receive Esper Chat Messages", eMessObj.esperMessage);
       
       } else {
@@ -1149,9 +1156,23 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Jailer"].jailPlayer(_jailedName);
 
-    //console.log(obj.rO.roles["Jailer"].jailedPlayer);
+    /*On Client side, need to set both jailer + client status as
+    "jailed" since the jailed status gets set to false 
+    automatically after night phase, in case jailer doesn't
+    choose anyone */
+
+    var jailStatusUpdate = {status: "jailed", newValue: true};
+
+    //To Jailer
+    socket.emit("Update Character Status", jailStatusUpdate);
+
+    //To Prisoner
+    io.to(`${obj.pA[obj.pT[_jailedName]].socketID}`).
+      emit("Update Character Status", jailStatusUpdate);
+
 
   });
+
 
 
   socket.on("Execute A Player", (name) => {
@@ -1160,6 +1181,30 @@ io.on('connection', function (socket) {
     if (!obj.pA) { return 0; };
 
     obj.rO.roles["Jailer"].executeAPlayer(name);
+
+
+  });
+
+
+  socket.on("Client To Server Jailer Messages", (jMess) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    var jailerRef = obj.rO.roles["Jailer"];
+    var prisonerRef = obj.pA[obj.pT[jailerRef.jailedPlayer]];
+
+
+    if (jailerRef.jailedPlayer == "nobody chosen") { return 0; };
+
+
+    var jMessObj = jailerRef.convertJailerMessage(jMess, obj);
+
+    io.to(`${jailerRef.socketID}`).
+      emit("Receive Jailer Chat Messages", jMessObj.messForJailer);
+
+    io.to(`${prisonerRef.socketID}`).
+      emit("Receive Jailer Chat Messages", jMessObj.messForPrisoner);
 
 
   });
