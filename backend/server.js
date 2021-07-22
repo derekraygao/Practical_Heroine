@@ -780,6 +780,8 @@ io.on('connection', function (socket) {
       
       if (obj.rO.rolesInGame[i].team === "villains") {
 
+        if (obj.pA[i].role == "???") { continue; };
+
         io.to(`${obj.pA[i].socketID}`).
         emit("Receive Villain Chat Messages", _vMessage);
 
@@ -846,9 +848,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    obj.rO.roles["Pear"].spyOn(spyTarget);
+    obj.rO.roles["Pear"].spyOn(spyTarget, obj);
 
-    //console.log("Spy on " + obj.rO.roles["Pear"].voteToExpose);
+    MessageNotificationStack(obj);
 
   });
 
@@ -863,6 +865,7 @@ io.on('connection', function (socket) {
     //console.log("Turn vote invisible: " + obj.rO.roles["Pear"].playerVoteToVanish);
 
   });
+
 
 
   //Lan 
@@ -992,6 +995,21 @@ io.on('connection', function (socket) {
     socket.emit("Add System Message", oMess);
 
   });
+
+
+
+  socket.on("Oracle: Light and Dark Power", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Oracle"].lightAndDark(name, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
 
 
   //Balancer

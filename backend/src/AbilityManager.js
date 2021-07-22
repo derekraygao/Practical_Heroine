@@ -198,6 +198,7 @@ class AbilityManager {
   }; //end handleBackstabberPersequorAndHurricane
 
 
+
   updateJailerAbilities(obj) {
 
     if (!obj.rO.roles["Jailer"].inGame) { return 0; };
@@ -226,7 +227,10 @@ class AbilityManager {
 
   updatePearAbilities(obj) {
 
+    if (!obj.rO.roles["Pear"].inGame) { return 0; };
+
     obj.rO.roles["Pear"].resetVanishVoteTarget();
+    obj.rO.roles["Pear"].expose(obj);
 
   };
 
@@ -310,7 +314,10 @@ class AbilityManager {
   updateStatusesAfterNightPhase(obj) {
 
     this.updateJailerAbilities(obj);
+    obj.rO.roles["Esper"].resetTelepathyArrayAtEndOfRound();
+
     this.handleBackstabberPersequorAndHurricane(obj);
+
     
   };
 

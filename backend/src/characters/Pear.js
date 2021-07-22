@@ -20,9 +20,11 @@ class Pear extends RolesMasterClass {
 
 
 
-	spyOn(name) {
+	spyOn(name, obj) {
 
 		this.voteToExpose = name;
+
+		this.messageHandler("Spy", "", obj);
 
 	};
 
@@ -30,7 +32,7 @@ class Pear extends RolesMasterClass {
 	expose(obj) {
 
 		if (this.voteToExpose == "nobody chosen") 
-			{ return "expose power not used"; };
+			{ return 0; };
 
 		var exposeVoteInfo = 
 
@@ -41,7 +43,7 @@ class Pear extends RolesMasterClass {
 
 		this.voteToExpose = "nobody chosen";
 
-		return exposeVoteInfo;
+		this.messageHandler("Expose", exposeVoteInfo, obj);
 
 	};
 
@@ -82,6 +84,58 @@ class Pear extends RolesMasterClass {
 		this.playerVoteToVanish = "nobody chosen";
 
 	};
+
+
+
+	messageHandler(power, data, obj) {
+
+		if (power == "Spy") {
+
+			var sysMess = {
+							type: "urgent",
+							message: ("An invisible Spectre spies "
+								+ "on the mission team! One player's "
+								+ "final voting power will be exposed "
+								+ "to everyone! Be careful of how you "
+								+ "vote!")
+						  };
+
+			var stackObj = {
+							type: "SME Music",
+							data: {messageObj: sysMess, song: "Invisible Spy"}
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		};
+
+
+		if (power == "Expose") {
+
+			var sysMess = {
+							type: "power",
+							message: ("The invisible Spectre has "
+								+ "revealed that " + data.name 
+								+ "'s final voting power was: "
+								+ data.vote + ".")
+						  };
+
+			var stackObj = {
+							type: "SME",
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);
+
+		}; //end if Power == "Expose"
+
+
+
+
+	}; //end messageHandler
+
+
 
 
 }; //end class
