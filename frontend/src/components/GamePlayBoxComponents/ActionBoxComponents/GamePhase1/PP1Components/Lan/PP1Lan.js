@@ -61,7 +61,17 @@ class PP1Lan extends React.Component {
 
       socket.emit("Beat Rush", this.state.beatRushTarget);
 
-    };
+      this.props.addSystemMessage(
+        {
+          type: "power",
+          message: ("You rushed at " + this.state.beatRushTarget
+            + " and beat him/her up, inflicting 'Confusion' on him/her! " 
+            + "For this mission round only, there is a 75% chance "
+            + "his/her base mission voting power will be reversed!")
+        }
+      ); //end addSystemMessage
+
+    }; //end if beatRushTarget !== "Beat Rush ?"
 
   }; //end submitScry
 

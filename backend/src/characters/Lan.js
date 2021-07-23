@@ -54,9 +54,26 @@ class Lan extends RolesMasterClass {
 	}; //end finalHeavenCountConverter()
 
 
-	activateFinalHeaven() {
+	activateFinalHeaven(obj) {
 
 		this.isFinalHeavenActivated = true;
+
+		var sysMess = {
+						type: "power",
+						message: ("Final Heaven's base "
+							+ "mission voting power is: "
+							+ this.finalHeavenCountToVoteConverter()
+							+ ".")
+					  };
+
+		var stackObj = {
+						type: "Individual",
+						socketID: obj.pA[this.index].socketID,
+						destination: "Add System Message",
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
 
 	};
 
@@ -126,8 +143,10 @@ class Lan extends RolesMasterClass {
 
 		obj.pA[ind].confused = true;
 
+		this.messageHandler("Beat Rush", obj.pA[ind].socketID, obj);
 
 	};
+
 
 	removeConfusedStatusAtEndOfRound(obj) {
 
@@ -188,13 +207,73 @@ class Lan extends RolesMasterClass {
 
 			voteSum += 1.5;
 
+			this.messageHandler("Intimidate", 
+								{"target": obj.pA[intimidateInd].name, result: "Success!"}, 
+								obj);
+
 		} else {
+
 			voteSum -= 1.5;
+
+			this.messageHandler("Intimidate", 
+								{"target": obj.pA[intimidateInd].name, result: "Failure!"}, 
+								obj);
+
 		};
+
 
 		return voteSum;
 
-	};
+	}; //end adjustVoteSumIntimidate(voteSum, obj)
+
+
+
+	messageHandler(power, data, obj) {
+
+		if (power == "Beat Rush") {
+
+			var sysMess = {
+							type: "urgent",
+							message: ("Lan rushes at you and beats you up! "
+								+ "For this mission round only, "
+								+ "you will suffer from 'Confusion'. There is "
+								+ "a 75% chance your mission base voting power "
+								+ "will be reversed.")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: data,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);	
+
+
+
+		} else if (power == "Intimidate") {
+
+			var sysMess = {
+							type: "power",
+							message: ("Intimidation against "
+								+ data.target + ": "
+								+ data.result)
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: this.socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);			
+
+		};
+
+
+
+	}; //end messageHandler
+
 
 
 
