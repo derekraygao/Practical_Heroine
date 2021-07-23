@@ -65,6 +65,7 @@ var princess = obj.rO.roles["Princess"];
 var scientist = obj.rO.roles["Scientist"];
 var jailer = obj.rO.roles["Jailer"];
 var pear = obj.rO.roles["Pear"];
+var lottie = obj.rO.roles["Lottie"];
 
 var kaguya = obj.rO.roles["Kaguya"];
 var noah = obj.rO.roles["Noah"];
@@ -567,6 +568,8 @@ function testEoSensePower() {
 		obj.pA[0].therapy = true;
 		obj.pA[0].groupHug = true;
 
+		obj.rO.roles["Saintess"].curagaBoostTarget = "Xing";
+
 		console.log(princess.updateEoSenseArray(obj));
 
 
@@ -656,7 +659,7 @@ function testStarPracticalPowers() {
 };
 
 
-testStarPracticalPowers();
+//testStarPracticalPowers();
 
 
 
@@ -2074,12 +2077,12 @@ function testLottiePowers() {
 	obj.rO.roles["Lottie"].addTherapyTarget("Derek");
 	obj.rO.roles["Lottie"].activateGroupHug();
 
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
 	console.log("Now remove therapy + group hug");
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj)
 
 	Controller.addMissionVote(obj, 0, 1); //Derek
 	Controller.addMissionVote(obj, 1, -1); //Cloud
@@ -2099,10 +2102,14 @@ function testLottiePowers() {
 
 	console.log("Lottie turns Princess' vote positive");
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	lottie.notifyJohnOfLottiesIdentity(obj);
+
 };
 
 
-//testLottiePowers();
+testLottiePowers();
 
 
 

@@ -1,4 +1,6 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
+var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
+var {shuffle} = require("./shuffle.js");
 
 class Lottie extends RolesMasterClass {
 
@@ -48,7 +50,8 @@ class Lottie extends RolesMasterClass {
 		//missionTeam is array of names 
 		for (var i = 0; i < obj.rD.missionTeam.length; i++) {
 
-			if (obj.rD.missionTeam[i] == this.name) { continue; };
+			//changed it so group hug works for Lottie too
+			//if (obj.rD.missionTeam[i] == this.name) { continue; };
 
 			obj.pA[obj.pT[obj.rD.missionTeam[i]]].groupHug = true;
 
@@ -112,6 +115,39 @@ class Lottie extends RolesMasterClass {
 		};
 
 	};
+
+
+
+	notifyJohnOfLottiesIdentity(obj) {
+
+		if (!this.inGame) { return 0; };
+
+		var lottieIdentity = [this.name];
+
+		if (obj.rO.roles["Persequor"].inGame) {
+			lottieIdentity.push(obj.rO.roles["Persequor"].name);
+
+			shuffle(lottieIdentity);
+		};
+
+		var lottieIdentity = formatArrayIntoString(lottieIdentity);
+
+
+		var sysMess = {
+						type: "urgent",
+						message: ("John! Lottie's "
+							+ "identity is: " + lottieIdentity)
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: obj.rO.roles["Princess"].socketID,
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);	
+
+	}; //end notifyJohnOfLottiesIdentity()
 
 
 
