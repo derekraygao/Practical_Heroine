@@ -561,12 +561,21 @@ function testEoSensePower() {
 		obj.pA[0].paralyzed = true;
 		obj.pA[0].frozen = true;
 
+		obj.pA[0].safeguard = true;
+		obj.pA[0].bless = true;
+		obj.pA[0].heartacheDefense = true;
+		obj.pA[0].therapy = true;
+		obj.pA[0].groupHug = true;
+
 		console.log(princess.updateEoSenseArray(obj));
 
 
 };
 
-//testEoSensePower();
+testEoSensePower();
+
+
+
 
 function testStarPracticalPowers() {
 

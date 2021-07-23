@@ -26,7 +26,7 @@ class Princess extends RolesMasterClass {
 		if (playerObj.burnCount > 0) { individualStatusArr.push("Burn"); };
 		if (playerObj.soulMark) { individualStatusArr.push("Soul Mark"); };
 		if (playerObj.shrinkCount > 0) { individualStatusArr.push("Shrink"); };
-		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier"); };
+		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
 		if (playerObj.injuredCount > 0) { individualStatusArr.push("Injury"); };
 		if (playerObj.entranced) { individualStatusArr.push("Entrancement"); };
 		if (playerObj.confused) { individualStatusArr.push("Confusion"); };
@@ -37,6 +37,13 @@ class Princess extends RolesMasterClass {
 		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
 		if (playerObj.paralyzed) { individualStatusArr.push("Paralysis"); };
 		if (playerObj.frozen) { individualStatusArr.push("Freeze"); };
+
+		if (playerObj.safeguard) { individualStatusArr.push("Safeguard"); };
+		if (playerObj.bless) { individualStatusArr.push("Bless"); };
+		if (playerObj.heartacheDefense) { individualStatusArr.push("Heartache Defense"); };
+		if (playerObj.therapy) { individualStatusArr.push("Therapy +3.5"); };
+		if (playerObj.groupHug) { individualStatusArr.push("Group Hug +1.25"); };
+
 
 		if (individualStatusArr.length == 0) { individualStatusArr.push("No Status Effects"); };
 
