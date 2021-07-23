@@ -28,6 +28,20 @@ class PP6LieutenantBlitz extends React.Component {
 
       socket.emit("Vote on Mission", "Power");
 
+
+      this.props.addSystemMessage(
+        {
+          type: "power",
+          message: ("You charged up all your might into a single, "
+          + "powerful punch! United States of Smash! "
+          + "Starting next round, and for the "
+          + "next 2 rounds, " + this.state.smashTarget 
+          + " will suffer from the 'Injury' status; his/her "
+          + "base voting power will be reduced to 0!") 
+        }
+      );
+
+
       this.props.voted("Power");
 
     };
