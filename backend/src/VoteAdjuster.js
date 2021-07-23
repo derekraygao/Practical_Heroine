@@ -27,6 +27,7 @@ class VoteAdjuster {
 
 	adjustVotesSaintessNotOnTeam(obj) {
 
+		//base voting powers adjustment
 		obj.rO.roles["Lan"].adjustMissionVotesLanFinalHeaven(obj);
 		obj.rO.roles["Toxiturtle"].adjustMissionVotesPoisoned(obj);
 		obj.rO.roles["Kaguya"].adjustMissionVotesMoonblast(obj);
@@ -34,8 +35,6 @@ class VoteAdjuster {
 		obj.rO.roles["Umbra Lord"].adjustMissionVotesCorrupted(obj);
 
 		obj.rO.roles["Reverser"].adjustVotesMirrorWorld(obj);
-
-		obj.rO.roles["Kaguya"].adjustMissionVotesEntranced(obj);
 
 		obj.rO.roles["Noah"].adjustMissionVotesNightmareSyndromeZombie(obj);
 
@@ -48,10 +47,11 @@ class VoteAdjuster {
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
 		obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
 
-		/*Base vote on top, then inside for loop,
-		do +/- first, then multiplication type powers
-		*/
+		/*jailed needs to be the last thing since it changes
+		base vote power to 0! */
+		obj.rO.roles["Jailer"].adjustMissionVotesJailed(obj);
 
+		/* First +/- power adjustment, then multiplication * */
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (!obj.pA[i].selectedForMission) { continue; };
@@ -62,9 +62,14 @@ class VoteAdjuster {
 			obj.rO.roles["Bomberman"].adjustMissionVotesBurn(obj.pA[i]);
 			obj.rO.roles["Bomberman"].adjustMissionVotesBomb(obj.pA[i]);
 
+			obj.rO.roles["Delayer"].adjustMissionVotesSlowCharge(obj.pA[i]);
+
 			obj.rO.roles["Noah"].adjustMissionVotesZombieRecovered(obj.pA[i]);
 
+
 			obj.rO.roles["Lottie"].adjustMissionVotesLottie(obj.pA[i]);
+
+			obj.rO.roles["Princess"].adjustMissionVotesHeartacheDefense(obj.pA[i]);
 
 			obj.rO.roles["Saintess"].adjustMissionVotesCuraga(obj.pA[i]); // +
 
@@ -80,9 +85,10 @@ class VoteAdjuster {
 
 		obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
 
-		/*reverseVote needs to be after berserk but
+		/*reversing powers need to be after berserk but 
 		before transcendence*/
 		obj.rO.roles["Reverser"].adjustReverseVote(obj);
+		obj.rO.roles["Kaguya"].adjustMissionVotesEntranced(obj);
 
 		obj.rO.roles["Marcus"].adjustVoteTranscendence(obj);
 
@@ -98,13 +104,15 @@ class VoteAdjuster {
 		is target of Pear's vanish */
 		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
 
+
 		//safeguard needs to be near the end
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
 
-
-		//should be very last thing
+		//should be 2nd to last
 		obj.rO.roles["Baby Doll"].adjustMissionVotesLullaby(obj);
 
+		//very last thing
+		obj.rO.roles["Delayer"].adjustMissionVotesSlow(obj);
 
 	}; //end adjustMissionVotesSaintessNotOnTeam()
 
@@ -126,6 +134,10 @@ class VoteAdjuster {
 		obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
 		obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
+
+		/*jailed needs to be the last thing since it changes
+		base vote power to 0! */
+		obj.rO.roles["Jailer"].adjustMissionVotesJailed(obj);
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
@@ -162,6 +174,8 @@ class VoteAdjuster {
 
 		obj.rO.roles["Ranger"].adjustTeamVotesShrink(obj);
 		obj.rO.roles["Saintess"].adjustTeamVotesBless(obj);
+
+		obj.rO.roles["Princess"].adjustTeamVotesStarPractical(obj);
 
 	}; //end adjustTeamVotes
 

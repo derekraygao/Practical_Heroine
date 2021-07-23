@@ -89,7 +89,7 @@ Controller.addTeamVote(obj, 4, 1);
 //output 2
 
 */
-console.log(Controller.wasTeamAccepted(obj));
+//console.log(Controller.wasTeamAccepted(obj));
 //console.log(Controller.teamVoteCalculation(obj));
 //console.log(Controller.roomsData["testing"].teamVoteInfo);
 
@@ -568,6 +568,87 @@ function testEoSensePower() {
 
 //testEoSensePower();
 
+function testStarPracticalPowers() {
+
+	console.log("Test Star Practical Powers");
+
+	obj.index = 0;
+	
+	Controller.addMissionVote(obj, 0, 1); //Derek Star Practical //0
+	Controller.setPlayerMissionVote("Starlight Shuriken", obj);
+
+	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+	//Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Derek", "Lucio", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log("With Starlight Shuriken (+3), mission vote total should be: 5");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	Controller.addMissionVote(obj, 3, 3); //Lucio //3
+	//Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	princess.setHeartacheDefenseTarget("Serena");
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
+
+	console.log("With Heartache Defense, mission vote total should be: 8");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	obj.pA[0].corrupted = true;
+	obj.pA[0].bomb = true
+	obj.pA[0].burnCount = 2
+	obj.pA[0].soulMark = true
+	obj.pA[0].shrinkCount = 2;
+	obj.pA[0].multiplier = 3;
+	obj.pA[0].injuredCount = 2;
+	obj.pA[0].entranced = true;
+	obj.pA[0].confused = true;
+	obj.pA[0].markedMan = true;
+	obj.pA[0].slow = true;
+	obj.pA[0].slowCharge = -5;
+	obj.pA[0].zombie = "zombie";
+	obj.pA[1].zombie = "recovered";
+	obj.pA[0].paralyzed = true;
+	obj.pA[0].frozen = true;
+	
+	princess.starHealingActivation("Derek", obj);
+
+	//console.log(obj.pA[0]);
+
+	obj.rO.roles["Delayer"].delayerCount = 4;
+	console.log("delayer count BEFORE healing is: " + obj.rO.roles["Delayer"].delayerCount);
+
+	princess.starHealingActivation("Xing", obj);
+	console.log("delayer count AFTER healing is: " + obj.rO.roles["Delayer"].delayerCount);
+
+	
+	princess.starPrismPower(obj);
+
+	obj.rD.missionNo = 2;
+
+	Controller.addTeamVote(obj, 0, 3); //Derek
+	Controller.addTeamVote(obj, 1, null); //Cloud
+	Controller.addTeamVote(obj, 2, -3); //Serena
+	Controller.addTeamVote(obj, 3, -1); //Lucio
+	Controller.addTeamVote(obj, 4, -1); //Xing
+	
+	console.log(Controller.wasTeamAccepted(obj));
+	//console.log(Controller.teamVoteCalculation(obj));
+	console.log(Controller.roomsData["testing"].teamVoteInfo);
+
+};
+
+
+testStarPracticalPowers();
+
 
 
 
@@ -606,7 +687,7 @@ function testOraclePower() {
 };
 
 
-testOraclePower();
+//testOraclePower();
 
 
 function testBalancerPower() {

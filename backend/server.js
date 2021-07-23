@@ -799,6 +799,42 @@ io.on('connection', function (socket) {
   /* POWERS */
 
 
+  //Princess
+  socket.on("Star Prism Power", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Princess"].starPrismPower(obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+  socket.on("Star Healing Activation", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Princess"].starHealingActivation(name, obj);
+
+    MessageNotificationStack(obj); console.log(obj.pA);
+
+  });
+
+
+  socket.on("Heartache Defense", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Princess"].setHeartacheDefenseTarget(name);
+
+  });
+
+
+
   //Marcus
   socket.on("Activate Berserk", () => {
 

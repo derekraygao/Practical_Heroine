@@ -10,6 +10,10 @@ class Princess extends RolesMasterClass {
         this.alignment = "unknown";
         this.team = "heroes";
 
+        this.transformed = 0;
+
+        this.heartacheDefenseTarget = "nobody chosen";
+
 	}; //end constructor
 
 	/*this is same as Sensor */
@@ -71,6 +75,188 @@ class Princess extends RolesMasterClass {
 		return eoSenseArr;
 
 	};
+
+
+	starPrismPower(obj) {
+		/*transformed is 4, not 3, since updateTransformationCount
+		will automatically subtract 1 before updating client */
+		this.transformed = 4; 
+
+		this.messageHandler("Star Prism Power", "", obj);
+
+	};
+
+	//done right before Game Phase 1
+	updateTransformationCount(obj) {
+
+		if (this.transformed == 0) { return 0; };
+
+		this.transformed -= 1;
+
+		this.messageHandler("Update Transformation Count", "", obj);
+
+	};
+
+
+
+	starHealingActivation(name, obj) {
+
+		var shInd = obj.pT[name];
+
+		if (obj.pA[shInd].role == "Umbra Lord") { return 0; };
+
+		obj.pA[shInd].corrupted = false;
+		obj.pA[shInd].bomb = false;
+		obj.pA[shInd].burnCount = 0;
+		obj.pA[shInd].poisonCount = 0;
+		obj.pA[shInd].shrinkCount = 0;
+		obj.pA[shInd].injuredCount = 0;
+		obj.pA[shInd].soulMark = false;
+		obj.pA[shInd].markedMan = false;
+		obj.pA[shInd].entranced = false;
+		obj.pA[shInd].confused = false;
+		obj.pA[shInd].slow = false;
+		obj.pA[shInd].slowCharge = 0;
+
+
+		if (obj.pA[shInd].zombie == "zombie") {
+			obj.pA[shInd].zombie = "recovered";
+		};
+
+
+		if (obj.pA[shInd].role == "Delayer") {
+			obj.rO.roles["Delayer"].delayerCount = 0;
+		};
+
+		//no need to notify yourself
+		if (name == this.name) { return 0; };
+
+		this.messageHandler("Star Healing Activation", 
+							obj.pA[shInd].socketID, 
+							obj);
+
+	}; //end starHealingActivation(name, obj)
+
+
+
+	setHeartacheDefenseTarget(name) {
+
+		this.heartacheDefenseTarget = name;
+
+	};
+
+
+	updateHeartacheDefense(obj) {
+
+		for (var i = 0; i < obj.pA.length; i++) {
+			if (obj.pA[i].heartacheDefense) {
+				obj.pA[i].heartacheDefense = false;
+			};
+		};
+
+
+		if (this.heartacheDefenseTarget !== "nobody chosen") {
+		
+			var hdInd = obj.pT[this.heartacheDefenseTarget];
+
+			if (obj.pA[hdInd].role == "Umbra Lord") {
+
+				this.heartacheDefenseTarget = "nobody chosen";
+
+			} else {
+
+				obj.pA[hdInd].heartacheDefense = true;
+
+				this.heartacheDefenseTarget = "nobody chosen";
+
+			};
+
+		}; //end if heartacheDefense !== "nobody chosen"
+
+	}; //end updateHeartacheDefense
+
+
+	adjustMissionVotesHeartacheDefense(playerObj) {
+
+		if (playerObj.heartacheDefense) {
+			playerObj.missionVote += 5;
+		};
+
+	};
+
+
+
+	adjustTeamVotesStarPractical(obj) {
+
+		if (this.transformed > 0) {
+
+			obj.pA[this.index].teamVote *= 2;
+
+		};
+
+	}; //end adjustTeamVotesStarPractical(obj)
+
+
+	messageHandler(power, data, obj) {
+
+		if (power == "Star Prism Power") {
+
+			var sysMess = {
+							type: "power",
+							message: ("Loud and strange music "
+								+ "reverberates in the air! Could it "
+								+ "be? Oh, yes! Star Practical has "
+								+ "arrived! Evil doers beware! "
+								+ "In the name of the stars, I will "
+								+ "punish you!")
+						  };
+
+			var stackObj = {
+							type: "SME Music",
+							data: {messageObj: sysMess, song: "Star Prism Power"}
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		} else if (power == "Star Healing Activation") {
+
+			var sysMess = {
+							type: "urgent",
+							message: ("You hear a yell of " 
+							+ "'Star Healing Activation!'. Powerful "
+							+ "light energy envelopes you and purifies "
+							+ "all negative status conditions!")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: data,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);	
+
+		} else if (power == "Update Transformation Count") {
+
+			var stackObj = {
+							type: "Individual",
+							socketID: this.socketID,
+							destination: "Update Character Powers History",
+							data: {role: "Princess", 
+								   power: "transformed",
+								   newValue: this.transformed
+								  }
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		}; //end else if
+
+
+	}; //end messageHandler
+
 
 
 

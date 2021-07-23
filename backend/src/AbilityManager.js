@@ -285,6 +285,7 @@ class AbilityManager {
   updateStatusesBeforeNightPhase(obj) {
 
     obj.rO.roles["Princess"].updateEoSenseArray(obj);
+    obj.rO.roles["Princess"].updateHeartacheDefense(obj);
 
     this.updateSaintessStatuses(obj);
     this.updateLottieAbilities(obj);
@@ -314,7 +315,11 @@ class AbilityManager {
   updateStatusesAfterNightPhase(obj) {
 
     this.updateJailerAbilities(obj);
+
     obj.rO.roles["Esper"].resetTelepathyArrayAtEndOfRound();
+
+    obj.rO.roles["Princess"].updateTransformationCount(obj);
+
 
     this.handleBackstabberPersequorAndHurricane(obj);
 
