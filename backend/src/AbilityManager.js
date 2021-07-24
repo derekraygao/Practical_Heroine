@@ -311,6 +311,8 @@ class AbilityManager {
   updateStatusesAfterGamePhase1(obj) {
 
     obj.rO.roles["Saintess"].activateHolyPower(obj);
+    obj.rO.roles["Sensor"].sendScanResultsToSensor(obj);
+
     obj.rO.roles["Princess"].updateEoSenseArray(obj);
 
   };
@@ -319,6 +321,7 @@ class AbilityManager {
   //before mission number changes
   updateStatusesBeforeNightPhase(obj) {
 
+    //needs to be first thing
     this.resetCertainStatuses(obj);
 
     obj.rO.roles["Princess"].updateEoSenseArray(obj);

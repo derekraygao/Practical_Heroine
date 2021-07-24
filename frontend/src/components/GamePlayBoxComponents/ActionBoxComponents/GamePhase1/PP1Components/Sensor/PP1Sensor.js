@@ -62,6 +62,7 @@ class PP1Sensor extends React.Component {
         <option value="Injury">Injury</option>
         <option value="Entrancement">Entrancement</option>
         <option value="Marked Man">Marked Man</option>
+        <option value="Slow">Slow</option>
         <option value="Slow Charge">Slow Charge</option>
         <option value="Zombie">Zombie</option>
       </>
@@ -74,26 +75,55 @@ class PP1Sensor extends React.Component {
 
   submitStatusConditionScanChoice = () => {
   
-    if (this.state.senseWhichStatus !== "Which Status ?") {
+    if (this.state.senseWhichStatus == "Which Status ?") { return 0; };
 
-      this.setState({usedPower: true});
+    this.setState({usedPower: true});
 
-      socket.emit("Scan All For One Status", this.state.senseWhichStatus);
-
+    var scanObj = {
+      "scanType": "Scan All",
+      "target": "nobody chosen",
+      "condition": this.state.senseWhichStatus
     };
+
+    socket.emit("Sensor Scan", scanObj);
+
+
+    this.props.addSystemMessage(
+      {
+        type: "power",
+        message: ("You submitted your samples for analysis! "
+        + "You'll get your results after Game Phase 1 "
+        + "has ended.")
+      }
+    );
+
 
   }; //end submitScry
 
 
   submitIndividualScan = () => {
 
-    if (this.state.senseIndividualTarget !== "Individual ?") {
+    if (this.state.senseIndividualTarget == "Individual ?") { return 0; };
 
-      this.setState({usedPower: true});
+    this.setState({usedPower: true});
 
-      socket.emit("Individual Scan", this.state.senseIndividualTarget);
-
+    var scanObj = {
+      "scanType": "Scan Individual",
+      "target": this.state.senseIndividualTarget,
+      "condition": "none"
     };
+
+    socket.emit("Sensor Scan", scanObj);
+
+    this.props.addSystemMessage(
+      {
+        type: "power",
+        message: ("You submitted your samples for analysis! "
+        + "You'll get your results after Game Phase 1 "
+        + "has ended.")
+      }
+    );
+   
 
   }; //end submitScry
 

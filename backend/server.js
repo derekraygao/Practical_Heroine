@@ -912,6 +912,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Lan"].beatRush(name, obj);
 
+    MessageNotificationStack(obj);
     //console.log(obj.pA[obj.pT[name]].confused);
 
   });
@@ -924,7 +925,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Lan"].addIntimidateTarget(name);
 
-    console.log(obj.rO.roles["Lan"].intimidateTarget);
+    //console.log(obj.rO.roles["Lan"].intimidateTarget);
 
   });
 
@@ -941,6 +942,18 @@ io.on('connection', function (socket) {
   });
 
 
+
+  //Saintess
+  //sInfo = {"power":, "target":}
+  socket.on("Use Saintess Holy Powers", (sInfo) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };  
+
+    obj.rO.roles["Saintess"].setSaintessPower(sInfo, obj);
+
+
+  });
 
 
 
@@ -1282,26 +1295,12 @@ io.on('connection', function (socket) {
 
   //Sensor
 
-  socket.on("Individual Scan", (pToScan) => {
+  socket.on("Sensor Scan", (scanObj) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    obj.rO.roles["Sensor"].scanOne(pToScan, obj);
-
-    MessageNotificationStack(obj);
-
-  });
-
-
-  socket.on("Scan All For One Status", (whichStatus) => {
-
-    var obj = Controller.returnpArrayRoomAndIndex(socket);
-    if (!obj.pA) { return 0; };
-
-    obj.rO.roles["Sensor"].scanAll(whichStatus, obj);
-
-    MessageNotificationStack(obj);
+    obj.rO.roles["Sensor"].setScan(scanObj, obj);
 
   });
 
@@ -1390,7 +1389,8 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Umbra Lord"].corrupt(_name, obj);
 
-    console.log("Corrupt status: " + obj.pA[obj.pT[_name]].corrupted);
+    //console.log(obj.pA[obj.pT[_name]]);
+    //console.log("Corrupt status: " + obj.pA[obj.pT[_name]].corrupted);
 
   });
 
@@ -1858,6 +1858,20 @@ io.on('connection', function (socket) {
 
   });
 
+
+
+  //testing only
+  socket.on("Test Freeze", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    var targetIndex = obj.pT[target];
+
+    obj.pA[targetIndex].frozen = true;
+    console.log(obj.pA[targetIndex]);
+
+  });
 
 
 

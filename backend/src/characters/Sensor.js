@@ -12,7 +12,25 @@ class Sensor extends RolesMasterClass {
         this.alignment = "good";
         this.team = "heroes";
 
+        //scanType is "Scan All" or "Scan Individual"
+        this.powersHistory = {
+        						1: {"scanType": "none", "target": "nobody chosen", "condition": "none"},
+        						2: {"scanType": "none", "target": "nobody chosen", "condition": "none"},
+        						3: {"scanType": "none", "target": "nobody chosen", "condition": "none"},
+        						4: {"scanType": "none", "target": "nobody chosen", "condition": "none"},
+        						5: {"scanType": "none", "target": "nobody chosen", "condition": "none"},
+        						6: {"scanType": "none", "target": "nobody chosen", "condition": "none"},
+        						7: {"scanType": "none", "target": "nobody chosen", "condition": "none"},
+        					 };
+
 	}; //end constructor
+
+
+	setScan(scanObj, obj) {
+
+		this.powersHistory[obj.rD.missionNo] = scanObj;
+
+	};
 
 
 
@@ -224,6 +242,26 @@ class Sensor extends RolesMasterClass {
 	};
 
 
+	scanSlow(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].slow) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
 	scanSlowCharge(obj) {
 		
 		var statusArr = [];
@@ -265,6 +303,29 @@ class Sensor extends RolesMasterClass {
 	};
 
 
+	//Ability Manager After Power Phase 1
+	sendScanResultsToSensor(obj) {
+
+		if (!this.inGame) { return 0; };
+
+		var scanObj = this.powersHistory[obj.rD.missionNo];
+
+		if (scanObj["scanType"] == "none")
+			{ return 0; };
+
+
+		if (scanObj["scanType"] == "Scan Individual") {
+
+			this.scanOne(scanObj["target"], obj);
+
+		} else if (scanObj["scanType"] == "Scan All") {
+
+			this.scanAll(scanObj["condition"], obj);
+		};
+
+
+	}; //end sendScanResultsToSensor(obj)
+
 
 	scanAll(condition, obj) {
 
@@ -302,6 +363,10 @@ class Sensor extends RolesMasterClass {
 
 			case "Marked Man":
 				statusArr = this.scanMarkedMan(obj);
+				break;
+
+			case "Slow":
+				statusArr = this.scanSlow(obj);
 				break;
 
 			case "Slow Charge":
@@ -360,6 +425,7 @@ class Sensor extends RolesMasterClass {
 		if (obj.pA[ind].entranced) { individualStatusArr.push("Entrancement"); };
 		if (obj.pA[ind].confused) { individualStatusArr.push("Confusion"); };
 		if (obj.pA[ind].markedMan) { individualStatusArr.push("Marked Man"); };
+		if (obj.pA[ind].slow) { individualStatusArr.push("Slow"); };
 		if (obj.pA[ind].slowCharge != 0) { individualStatusArr.push("Slow Charge"); };
 		if (obj.pA[ind].zombie == "zombie") { individualStatusArr.push("Zombie"); };
 		if (obj.pA[ind].paralyzed) { individualStatusArr.push("Paralysis"); };

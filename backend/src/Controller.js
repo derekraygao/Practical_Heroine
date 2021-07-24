@@ -26,6 +26,7 @@ class Controller {
 			numOfFailedTeamProposals: 0,
 			rolesObject: new RO.RolesObject(),
 			results: new rI.ResultsInfo(),
+			messageStack: [],
 			playerTracker: {} //{name: index in player array} //populated in assignPlayersTheirRoles
 
 		};
@@ -445,6 +446,7 @@ class Controller {
 									      "Fail", 
 									      obj.rD.missionNo
 									     );
+				this.healPlayerForVotingForFailure(obj.pA[obj.index]);
 
 				break;
 
@@ -459,10 +461,93 @@ class Controller {
 
 				break;
 
-			default:
+			//for Umbra Lord
+			case "Bide":
+
+				obj.pA[obj.index].missionVote = 1;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
 
 				break;
 
+
+			//for Princess
+			case "Star Prism Power": 
+				obj.pA[obj.index].missionVote = -2.5;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
+				break;
+
+			
+			case "Starlight Shuriken": 
+				obj.pA[obj.index].missionVote = 3;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
+				break;
+
+
+
+			//for Sensor
+			case "Test Results":
+
+				obj.pA[obj.index].missionVote = -1.5;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
+
+				break;
+
+
+			//for Noah
+			case "Nightmare Syndrome":
+
+				obj.pA[obj.index].missionVote = 2;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
+
+				break;
+
+			//for BabyDoll
+			case "Perish Song":
+
+				obj.pA[obj.index].missionVote = 2;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
+
+				break;
+
+			//for Kaguya
+			case "Sweet Charm":
+
+				obj.pA[obj.index].missionVote = 1;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
+
+				break;
+
+
+			default:
+
+				obj.pA[obj.index].missionVote = 1;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Success", 
+									      obj.rD.missionNo
+									     );
+
+				break;
 
 
 		}; //end switch
@@ -540,10 +625,10 @@ class Controller {
 				}
 
 			);
-			/*
+			
 			console.log(obj.pA[i].name + " final vote after adjustments is: " 
 				+ obj.pA[i].missionVote); 
-			*/
+			
 		}; //end for
 
 
@@ -580,6 +665,16 @@ class Controller {
 
 		missionVoteAccumulator = obj.rO.roles["Balancer"]
 		.adjustVoteSumEquilibrium(missionVoteAccumulator, obj);
+
+		missionVoteAccumulator = obj.rO.roles["Scientist"]
+		.adjustVoteSumHypothesis(missionVoteAccumulator, obj);
+
+		missionVoteAccumulator = obj.rO.roles["Jailer"]
+		.adjustVoteSumCapitalPunishment(missionVoteAccumulator, obj);
+
+		missionVoteAccumulator = obj.rO.roles["Backstabber"]
+		.adjustVoteSumAssassinate(missionVoteAccumulator, obj);
+
 
 		//Hylian shield needs to be the very last thing
 		missionVoteAccumulator = obj.rO.roles["Ichigo"]
@@ -681,6 +776,16 @@ class Controller {
 
 		playerObj.soulMark = false;
 
+		playerObj.entranced = false;
+
+		if (playerObj.zombie == "zombie") {
+			playerObj.zombie = "recovered";
+		};
+
+
+
+		/* no point for frozen/paralysis since
+		they only last one turn */
 
 	};
 
@@ -719,6 +824,7 @@ class Controller {
 				rI: this.roomsData[this.socketRoom[socket.id]].results,
 				rD: this.roomsData[this.socketRoom[socket.id]],
 				pT: this.roomsData[this.socketRoom[socket.id]].playerTracker,
+				stack: this.roomsData[this.socketRoom[socket.id]].messageStack,
 				index: index
 			}
 		);
@@ -787,6 +893,7 @@ class Controller {
 		obj.rD.numOfFailedTeamProposals = 0;
 		obj.rO = new RO.RolesObject();
 		obj.rI = new rI.ResultsInfo();
+		obj.stack = [];
 		obj.pT = {};
 
 	};
@@ -808,30 +915,43 @@ class Player {
 		this.roomMaster = _roomMaster;
 		this.ready = false;
 		this.connected = true; //if disconnected, change to false
+		
 		this.role = "";
 		this.isTeamLeader = false;
 		this.selectedForMission = false;
+		this.teamVote = null; 
 		this.missionVote = null;
-        this.shrinkCount = 0; //default is 0
-        this.burnCount = 0; //default is 0
-        this.teamVote = null; 
         this.princessChoice = "";
+
         this.corrupted = false;
+        this.soulMark = false; //spiritualist
         this.poisonCount = 0;
+        this.zombie = "human";
+
         this.bomb = false;
-        this.paralyzed = false;
-        this.frozen = false;
-        this.selectedForTelepathy = false;
+       	this.burnCount = 0; //default is 0
+       	this.frozen = false;
+       	this.paralyzed = false;
+       	this.confused = false;
+       	this.entranced = false;
+
+       	this.injuredCount = 0;
+       	this.markedMan = false; //backstabber
+
+        this.slow = false;
+        this.slowCharge = 0;
+        this.shrinkCount = 0; //default is 0
         this.multiplier = 1; //default 1: needs to be 1 (and not 0) so you can stack multiplication powers
+        
         this.safeguard = false; //safeguard and bless gets reset in resetallplayerinfo
         this.bless = false; //default is 1 changed to false.
+        this.heartacheDefense = false;
         this.therapy = false;
         this.groupHug = false;
-        this.confused = false;
+        
         this.invisible = false;
-        this.soulMark = false;
         this.jailed = false;
-        this.injuredCount = 0;
+        this.selectedForTelepathy = false;
         this.reverse = false; //is this necessary???
 
 	}; //end constructor
