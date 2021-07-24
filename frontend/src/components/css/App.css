@@ -20,6 +20,29 @@
 }
 
 
+.grid-container-main-frozen {
+
+	display: grid;
+	grid-template-columns: 20% 40% 20% 20%;
+	grid-template-rows: 8% 8% auto;
+
+	grid-template-areas: "title          description       room-buttons       room-buttons "
+						 "menu-bar        menu-bar          menu-bar            menu-bar"
+						 "chat-box        chat-box         gameplay-box       gameplay-box"
+						 ;
+
+
+	height: 100vh;
+	width: 100vw;
+
+	background-image: url(./frozen_background.jpg); 
+	background-repeat: no-repeat;
+  	background-size: 100% 100%;
+
+}
+
+
+
 .grid-container-main-night {
 
 	display: grid;

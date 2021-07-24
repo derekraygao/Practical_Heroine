@@ -39,7 +39,7 @@ class PP1UmbraLord extends React.Component {
         "Umbra Lord", "corruption", this.state.corruptionTarget);
 
       socket.emit("Corruption", this.state.corruptionTarget);
-
+ 
     }; //end if
 
     // do nothing

@@ -43,6 +43,37 @@ class AbilityManager {
   }; //end updateParalysisAbilitiesEffect(obj)
 
 
+  //needs to be before you reset frozen to false
+  handleFrozenStatusTrue(playerObj, obj) {
+
+    if (!playerObj.frozen) { return 0; };
+      
+      var stackObj = {
+
+        type: "Individual",
+        socketID: playerObj.socketID,
+        destination: "Update Character Status",
+        data: {status: "frozen", newValue: false}
+  
+      };
+
+      obj.stack.push(stackObj);
+
+  }; //end handleFrozenStatusTrue()
+
+
+  resetCertainStatuses(obj) {
+
+    for (var i = 0; i < obj.pA.length; i++) {
+
+      this.handleFrozenStatusTrue(obj.pA[i], obj);
+      obj.pA[i].frozen = false;
+
+    };
+
+  }; //end resetCertainStatuses
+
+
 
   updateHecateStatuses(obj) {
 
@@ -270,19 +301,25 @@ class AbilityManager {
 
     obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
     obj.rO.roles["Delayer"].notifyPrincessDelayerIsInTheGame(obj);
+    obj.rO.roles["Lottie"].notifyJohnOfLottiesIdentity(obj);
 
   };
 
 
-
+  /*activateHolyPower should be before updateEoSenseArray
+  so Princess has the most up to date info */
   updateStatusesAfterGamePhase1(obj) {
 
+    obj.rO.roles["Saintess"].activateHolyPower(obj);
     obj.rO.roles["Princess"].updateEoSenseArray(obj);
 
   };
 
 
+  //before mission number changes
   updateStatusesBeforeNightPhase(obj) {
+
+    this.resetCertainStatuses(obj);
 
     obj.rO.roles["Princess"].updateEoSenseArray(obj);
     obj.rO.roles["Princess"].updateHeartacheDefense(obj);

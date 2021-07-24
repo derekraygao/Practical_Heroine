@@ -7,7 +7,10 @@ import {timer} from 'actions/timer.js';
 import socket from 'Socket.js';
 
 import PP1NoPower from './PP1Components/PP1NoPower.js';
+import PP1Frozen from './PP1Components/PP1Frozen.js';
 import PP1UsedPower from './PP1Components/PP1UsedPower.js';
+
+
 import PP1Seer from './PP1Components/Seer/PP1Seer.js';
 import PP1Balancer from './PP1Components/Balancer/PP1Balancer.js';
 import PP1AuraKnight from './PP1Components/Aura Knight/PP1AuraKnight.js';
@@ -18,12 +21,21 @@ import PP1Lan from './PP1Components/Lan/PP1Lan.js';
 import PP1Esper from './PP1Components/Esper/PP1Esper.js';
 import PP1Jailer from './PP1Components/Jailer/PP1Jailer.js';
 import PP1Sensor from './PP1Components/Sensor/PP1Sensor.js';
+import PP1Saintess from './PP1Components/Saintess/PP1Saintess.js';
+
+
 
 import PP1UmbraLord from './PP1Components/Umbra Lord/PP1UmbraLord.js';
+import PP1Noah from './PP1Components/Noah/PP1Noah.js';
 import PP1Hecate from './PP1Components/Hecate/PP1Hecate.js';
+import PP1Delayer from './PP1Components/Delayer/PP1Delayer.js';
 import PP1Reverser from './PP1Components/Reverser/PP1Reverser.js';
 import PP1Backstabber from './PP1Components/Backstabber/PP1Backstabber.js';
 import PP1BabyDoll from './PP1Components/Baby Doll/PP1BabyDoll.js';
+import PP1Toxiturtle from './PP1Components/Toxiturtle/PP1Toxiturtle.js';
+import PP1Psychologist from './PP1Components/Psychologist/PP1Psychologist.js';
+import PP1Kaguya from './PP1Components/Kaguya/PP1Kaguya.js';
+
 
 
 var timerInterval;
@@ -79,10 +91,14 @@ class PowerPhase1 extends React.Component {
   whichPowerPhase1Component = () => {
 
     if (this.state.usedPower) {
-
       return <></>;
-
     };
+
+
+    if (this.props.characterStatus["frozen"]) {
+      return <PP1Frozen />;
+    };
+
 
     switch (this.props.role) {
 
@@ -122,11 +138,20 @@ class PowerPhase1 extends React.Component {
       case "Sensor":
         return <PP1Sensor />;
 
+      case "Saintess":
+        return <PP1Saintess />;
+
       case "Umbra Lord":
         return <PP1UmbraLord />;
 
+      case "Noah":
+        return <PP1Noah />;
+
       case "Hecate":
         return <PP1Hecate />;
+
+      case "Delayer":
+        return <PP1Delayer />;
 
       case "Reverser":
         return <PP1Reverser />;
@@ -137,6 +162,14 @@ class PowerPhase1 extends React.Component {
       case "Baby Doll":
         return <PP1BabyDoll />;
 
+      case "Toxiturtle":
+        return <PP1Toxiturtle />;
+
+      case "Psychologist":
+        return <PP1Psychologist />;
+
+      case "Kaguya":
+        return <PP1Kaguya />;
 
       default:
         return <PP1NoPower />;
@@ -167,7 +200,8 @@ class PowerPhase1 extends React.Component {
 const mapStateToProps = (state) => {
   
   return (
-         { 
+         {  
+            characterStatus: state.characterStatus,
             role: state.role,
             timer: state.timer
          }

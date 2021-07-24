@@ -144,20 +144,19 @@ class Noah extends RolesMasterClass {
 
 	adjustIcePunch(obj) {
 
-		if (obj.rD.missionNo != 1) {
+		var freezeTarget = this.powersHistory[obj.rD.missionNo].frozen;
 
-			if (this.powersHistory[(obj.rD.missionNo - 1)].frozen != "nobody chosen") {
-				obj.pA[obj.pT[this.powersHistory[(obj.rD.missionNo - 1)].frozen]].frozen = false;
-			};
+		if (freezeTarget == "nobody chosen") { return 0; };
+		
+		var fInd = obj.pT[freezeTarget];
 
-		}; //end if missionNo != 1
+		obj.pA[fInd].frozen = true;
 
-		if (this.powersHistory[obj.rD.missionNo].frozen != "nobody chosen") {
-
-			obj.pA[obj.pT[this.powersHistory[obj.rD.missionNo].frozen]].frozen = true;
-
-		};
-
+		this.messageHandler(
+							"Freeze Target", 
+							obj.pA[fInd].socketID, 
+							obj
+						   );
 
 	}; //end useIcePunch(obj)
 
@@ -218,29 +217,6 @@ class Noah extends RolesMasterClass {
 	}; //end getNoahPowersHistoryName
 
 
-	thawPlayer() {
-
-		if (this.icePunchTarget.name == "nobody chosen") {
-			return {};
-		};
-
-		var frozenPlayerInfo = {
-								 role: this.icePunchTarget.role,
-								 socketID: this.icePunchTarget.socketID
-							   }
-
-
-		this.icePunchTarget = {
-								name: "nobody chosen",
-								role: "",
-								socketID: ""
-							  }
-
-		return frozenPlayerInfo;
-
-	};
-
-
 
 
 	reMapIndicesAfterShuffling(obj) {
@@ -270,6 +246,43 @@ class Noah extends RolesMasterClass {
 		obj.rO.rolesInGame = tempRolesArray;
 
 	};
+
+
+
+
+	messageHandler(power, data, obj) {
+
+		//data for Freeze Target is target's socketID
+		if (power == "Freeze Target") {
+
+			var stackObj1 = {
+							type: "Individual",
+							socketID: data,
+							destination: "Update Character Status",
+							data: {status: "frozen", newValue: true}
+						   };
+
+			var stackObj2 = {
+							type: "SMI",
+							socketID: data,
+							data: {
+									type: "urgent",
+									message: ("You were frozen! For "
+									+ "Mission " + (obj.rD.missionNo + 1)
+									+ ", you won't be able to use any "
+									+ "of your powers!")
+								  }
+						   };
+
+			obj.stack.push(stackObj1);
+			obj.stack.push(stackObj2);
+
+		}; 
+
+
+	}; //end messageHandler
+
+
 
 
 

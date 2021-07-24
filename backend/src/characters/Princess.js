@@ -17,7 +17,7 @@ class Princess extends RolesMasterClass {
 	}; //end constructor
 
 	/*this is same as Sensor */
-	getStatusesForOnePerson(playerObj) {
+	getStatusesForOnePerson(playerObj, obj) {
 
 		var individualStatusArr = [];
 
@@ -44,6 +44,12 @@ class Princess extends RolesMasterClass {
 		if (playerObj.therapy) { individualStatusArr.push("Therapy +3.5"); };
 		if (playerObj.groupHug) { individualStatusArr.push("Group Hug +1.25"); };
 
+		
+		if (obj.rO.roles["Saintess"].curagaBoostTarget
+			== playerObj.name) {
+			individualStatusArr.push("Curaga Boost +3");
+		};
+
 
 		if (individualStatusArr.length == 0) { individualStatusArr.push("No Status Effects"); };
 
@@ -63,7 +69,7 @@ class Princess extends RolesMasterClass {
 			eoSenseArr.push(
 				{
 					name: obj.pA[i].name,
-					statusArray: this.getStatusesForOnePerson(obj.pA[i])
+					statusArray: this.getStatusesForOnePerson(obj.pA[i], obj)
 				}
 			);
 

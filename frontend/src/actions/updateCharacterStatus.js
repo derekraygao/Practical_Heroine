@@ -1,5 +1,5 @@
 
-//{role: "Umbra Lord", power: "corruption", newValue: ""}
+//{"status": , newValue: ""}
 export const updateCharacterStatus = (status, newValue) => {
 
 	return (

@@ -575,7 +575,7 @@ function testEoSensePower() {
 
 };
 
-testEoSensePower();
+//testEoSensePower();
 
 
 
@@ -1163,6 +1163,35 @@ function checkStatusConditionForSaintess(playerObject) {
 	console.log("Curaga boost target name: " + obj.rO.roles["Saintess"].curagaBoostTarget);
 
 };
+
+//checkStatusConditionForSaintess(obj.pA[0]);
+
+
+function isStatusNormalCheckForSaintess() {
+
+		//obj.pA[0].corrupted = true;
+		//obj.pA[0].bomb = true
+		//obj.pA[0].burnCount = 2
+		//obj.pA[0].soulMark = true
+		//obj.pA[0].shrinkCount = 2;
+		//obj.pA[0].multiplier = 3;
+		//obj.pA[0].injuredCount = 2;
+		//obj.pA[0].entranced = true;
+		//obj.pA[0].confused = true;
+		//obj.pA[0].markedMan = true;
+		//obj.pA[0].slow = true;
+		//obj.pA[0].slowCharge = -5;
+		//obj.pA[0].zombie = "zombie";
+		//obj.pA[0].zombie = "recovered";
+		//obj.pA[0].paralyzed = true;
+		//obj.pA[0].frozen = true;
+
+		console.log(obj.rO.roles["Saintess"].isStatusNormal(0, obj));
+
+};
+
+isStatusNormalCheckForSaintess();
+
 
 
 function testSaintessPower() {
@@ -2109,7 +2138,7 @@ function testLottiePowers() {
 };
 
 
-testLottiePowers();
+//testLottiePowers();
 
 
 
