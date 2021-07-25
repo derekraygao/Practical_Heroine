@@ -147,47 +147,10 @@ class Lan extends RolesMasterClass {
 
 	};
 
-
-	removeConfusedStatusAtEndOfRound(obj) {
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			obj.pA[i].confused = false;
-
-		};
-
-	};
+	//confused mission vote adjuster handled inside VoteAdjuster.js
+	//confusion removed in AbilityManager
 
 
-	_75PercentChanceTrue() {
-
-		var ranNum = (Math.floor(Math.random() * 4) + 1);
-
-		if (ranNum === 4) {
-			return false;
-		};
-
-		return true;
-
-	};
-
-
-	adjustMissionVotesConfused(obj) {
-
-		if (!this.inGame) { return 0; };
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (!obj.pA[i].confused) { continue; };
-
-			if (this._75PercentChanceTrue()) {
-				obj.pA[i].missionVote *= -1;
-			};
-
-		}; //end for
-
-
-	}; //end adjustMissionVotesConfused(obj) 
 
 	//don't really need to check if both players are on mission team
 	//since intimidate only allows you to select on mission team...

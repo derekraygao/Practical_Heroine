@@ -9,6 +9,39 @@ class VoteAdjuster {
 
 
 
+	_75PercentChanceTrue() {
+
+		var ranNum = (Math.floor(Math.random() * 4) + 1);
+
+		if (ranNum === 4) {
+			return false;
+		};
+
+		return true;
+
+	};
+
+
+	adjustMissionVotesConfusion(obj) {
+
+		var forLength = obj.pA.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (!obj.pA[i].confused) { continue; };
+
+			if (this._75PercentChanceTrue()) {
+				obj.pA[i].missionVote *= -1;
+			};
+
+
+		}; //end for
+
+	}; //end adjustMissionVotesWithStatuses
+
+
+
+
 	adjustMissionVotes(obj) {
 
 		if (obj.rO.roles["Saintess"].inGame 
@@ -38,7 +71,7 @@ class VoteAdjuster {
 
 		obj.rO.roles["Noah"].adjustMissionVotesNightmareSyndromeZombie(obj);
 
-		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
+		this.adjustMissionVotesConfusion(obj);
 
 		obj.rO.roles["Umbra Lord"].adjustMissionVotesBideMeteor(obj);
 		obj.rO.roles["Esper"].adjustMissionVotePsybomb(obj);

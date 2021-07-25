@@ -66,6 +66,8 @@ var scientist = obj.rO.roles["Scientist"];
 var jailer = obj.rO.roles["Jailer"];
 var pear = obj.rO.roles["Pear"];
 var lottie = obj.rO.roles["Lottie"];
+var lan = obj.rO.roles["Lan"];
+var seer = obj.rO.roles["Seer"];
 
 var kaguya = obj.rO.roles["Kaguya"];
 var noah = obj.rO.roles["Noah"];
@@ -2744,3 +2746,47 @@ function testAbilityManager() {
 };
 
 //testAbilityManager();
+
+
+
+function testConfusionPowers() {
+
+	console.log("Testing Confusion Powers");
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 2); //Serena //2
+	Controller.addMissionVote(obj, 3, 5); //Lucio //3
+	//Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	lan.beatRush("Derek", obj);
+	seer.flash("Serena", obj);
+		
+	console.log("Derek confused status is: " + obj.pA[0].confused);
+	console.log("Serena confused status is: " + obj.pA[2].confused);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
+	console.log("");
+	console.log("Confused Status should be removed!");
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 2, 2); //Serena //2
+	Controller.addMissionVote(obj, 3, 5); //Lucio //3
+
+	console.log("Derek confused status is: " + obj.pA[0].confused);
+	console.log("Serena confused status is: " + obj.pA[2].confused);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+};
+
+
+//testConfusionPowers();

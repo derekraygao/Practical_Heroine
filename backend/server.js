@@ -1011,6 +1011,20 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Flash", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Seer"].flash(target, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
+
   //Aura Knight
   socket.on("Sense Aura", (_name) => {
 

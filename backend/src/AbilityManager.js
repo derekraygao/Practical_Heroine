@@ -8,7 +8,6 @@ class AbilityManager {
   }; //end constructor
 
 
-
   //need to be careful WHEN mission no is updated
   updateNoahAbilities(obj) {
 
@@ -68,6 +67,8 @@ class AbilityManager {
 
       this.handleFrozenStatusTrue(obj.pA[i], obj);
       obj.pA[i].frozen = false;
+
+      obj.pA[i].confused = false;
 
     };
 
@@ -266,11 +267,6 @@ class AbilityManager {
   };
 
 
-  updateLanAbilities(obj) {
-
-    obj.rO.roles["Lan"].removeConfusedStatusAtEndOfRound(obj);
-
-  };
 
 
   updateLottieAbilities(obj) {
@@ -329,7 +325,7 @@ class AbilityManager {
 
     this.updateSaintessStatuses(obj);
     this.updateLottieAbilities(obj);
-    this.updateLanAbilities(obj);
+
     this.updatePearAbilities(obj);
     this.updateDetectiveChatAbilities(obj);
     this.updateScientistAbilities(obj);
