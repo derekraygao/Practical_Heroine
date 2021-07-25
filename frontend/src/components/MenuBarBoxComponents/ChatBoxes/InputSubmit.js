@@ -20,7 +20,7 @@ class InputSubmit extends React.Component {
 
 
   onChatClick = () => {
-    console.log(this.state.term);
+    //console.log(this.state.term);
 
     if (this.state.term !== "") {
       socket.emit(this.state.socketDestination, this.state.term);
@@ -34,7 +34,7 @@ class InputSubmit extends React.Component {
 
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      console.log(this.state.term);
+      //console.log(this.state.term);
 
       if (this.state.term !== "") {
         socket.emit(this.state.socketDestination, this.state.term);
