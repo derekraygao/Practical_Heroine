@@ -250,6 +250,8 @@ class AbilityManager {
   };
 
 
+
+
   updateDetectiveChatAbilities(obj) {
 
     obj.rO.roles["Detective Chat"].interrogate(obj);
@@ -320,15 +322,14 @@ class AbilityManager {
     //needs to be first thing
     this.resetCertainStatuses(obj);
 
-    obj.rO.roles["Princess"].updateEoSenseArray(obj);
-    obj.rO.roles["Princess"].updateHeartacheDefense(obj);
-
     this.updateSaintessStatuses(obj);
     this.updateLottieAbilities(obj);
 
     this.updatePearAbilities(obj);
     this.updateDetectiveChatAbilities(obj);
     this.updateScientistAbilities(obj);
+
+    obj.rO.roles["Aura Knight"].addAuraBoost(obj);
     
     this.updateNoahAbilities(obj);
     this.updateToxiturtleAbilities(obj)
@@ -342,7 +343,8 @@ class AbilityManager {
     this.updateParalysisAbilitiesEffect(obj);
     
 	  
-
+    obj.rO.roles["Princess"].updateEoSenseArray(obj);
+    obj.rO.roles["Princess"].updateHeartacheDefense(obj);
     
   };
 

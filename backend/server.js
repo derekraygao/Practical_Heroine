@@ -1038,6 +1038,20 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Aura Boost", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Aura Knight"].setAuraBoostTarget(name, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
+
   //Oracle
   socket.on("Oracle Message", (oraclePowerChoice) => {
 

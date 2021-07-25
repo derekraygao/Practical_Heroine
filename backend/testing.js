@@ -68,6 +68,9 @@ var pear = obj.rO.roles["Pear"];
 var lottie = obj.rO.roles["Lottie"];
 var lan = obj.rO.roles["Lan"];
 var seer = obj.rO.roles["Seer"];
+var aura = obj.rO.roles["Aura Knight"];
+var oracle = obj.rO.roles["Oracle"];
+var detective = obj.rO.roles["Detective"];
 
 var kaguya = obj.rO.roles["Kaguya"];
 var noah = obj.rO.roles["Noah"];
@@ -833,6 +836,41 @@ function testAuraKnightPower(name) {
 
 	console.log(obj.rO.roles["Aura Knight"].readAura(name, obj));
 };
+
+//testAuraKnightPower();
+
+
+function testAuraKnightBoost() {
+
+	console.log("Testing Aura Knight Boost Power");
+
+	Controller.addMissionVote(obj, 0, -2); //Derek
+	Controller.addMissionVote(obj, 1, 4); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Xing", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+
+	aura.setAuraBoostTarget("Derek", obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	obj.rD.missionNo = 2;
+
+	Controller.addMissionVote(obj, 0, 0); //Derek
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+};
+
+testAuraKnightBoost();
 
 
 

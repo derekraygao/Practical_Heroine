@@ -40,6 +40,31 @@ class VoteAdjuster {
 	}; //end adjustMissionVotesWithStatuses
 
 
+	//for Hecate + Aura Knight
+	adjustMissionVotesBoost(obj) {
+
+		var forLength = obj.pA.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (obj.pA[i].boost == 0) { continue; };
+
+			if (obj.pA[i].missionVote >= 0) {
+
+				obj.pA[i].missionVote += obj.pA[i].boost;
+				obj.pA[i].boost = 0;
+
+			} else {
+
+				obj.pA[i].missionVote -= obj.pA[i].boost;
+				obj.pA[i].boost = 0;
+
+			}; //end else
+
+		}; //end for
+
+	}; //adjustMissionVotesBoost
+
 
 
 	adjustMissionVotes(obj) {
@@ -79,6 +104,9 @@ class VoteAdjuster {
 		obj.rO.roles["Delayer"].adjustDelayerMissionVote(obj);
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
 		obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
+
+		
+		this.adjustMissionVotesBoost(obj);
 
 		/*jailed needs to be the last thing since it changes
 		base vote power to 0! */
