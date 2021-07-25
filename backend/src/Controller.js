@@ -461,6 +461,7 @@ class Controller {
 
 				break;
 
+
 			//for Umbra Lord
 			case "Bide":
 
@@ -491,6 +492,17 @@ class Controller {
 									     );
 				break;
 
+
+
+			case "Power (-1)":
+
+				obj.pA[obj.index].missionVote = -1;
+				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
+									      "Power", 
+									      obj.rD.missionNo
+									     );
+
+				break;
 
 
 			//for Sensor

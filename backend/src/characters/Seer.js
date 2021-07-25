@@ -31,15 +31,21 @@ class Seer extends RolesMasterClass {
 
 		var statusArrayForSeerPower = [];
 
-		if (obj.pA[ind].devilized) { statusArrayForSeerPower.push("devilized"); };
+		/*
+		if (obj.rO.roles["Umbra Lord"].isPlayerDevilized(obj.pA[ind].name)) 
+			{ statusArrayForSeerPower.push("devilized"); };
+		*/
+
+		if (obj.rO.roles["Delayer"].isDelayerCountAbove0())
+			{ statusArrayForSeerPower.push("delay power"); };
+
+		if (obj.pA[ind].corrupted) { statusArrayForSeerPower.push("corruption"); };
 
 		if (obj.pA[ind].bomb) { statusArrayForSeerPower.push("flame seal bomb"); };
 
 		if (obj.pA[ind].soulMark) { statusArrayForSeerPower.push("soul mark"); };
 
 		if (obj.pA[ind].multiplier > 1) { statusArrayForSeerPower.push("multiplier"); };
-
-		if (obj.pA[ind].delayerCount > 0) { statusArrayForSeerPower.push("delay power"); };
 
 		if (obj.pA[ind].shrinkCount > 0) { statusArrayForSeerPower.push("shrink"); };
 
@@ -151,14 +157,50 @@ class Seer extends RolesMasterClass {
 				}
 			);
 
-		} else {
+		}; //end if
 
-			return (this.getRole(obj, ind));
 
-		};
+		return this.getRole(obj, ind);
+
 
 
 	}; //end scry
+
+
+
+
+	flash(target, obj) {
+
+		var pObj = obj.pA[obj.pT[target]];
+
+		if (["Umbra Lord", "Saintess"].includes(pObj.role)) { return 0; };
+
+		pObj.confused = true;
+
+		this.messageHandler(pObj.socketID, obj);
+
+	};
+
+
+
+	messageHandler(socketID, obj) {
+
+		var sysMess = {
+						type: "power",
+						message: "The Seer used his/her gift of the 'Sight' to flash you with blinding light! For this mission, you are inflicted with the 'Confusion' status, meaning there is a 75% chance your base voting power will be reversed!"
+					  };
+
+		var stackObj = {
+						type: "Individual",
+						socketID: socketID,
+						destination: "Add System Message",
+						data: sysMess
+					   };
+
+
+		obj.stack.push(stackObj);
+
+	};
 
 
 

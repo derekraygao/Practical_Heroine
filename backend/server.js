@@ -819,7 +819,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Princess"].starHealingActivation(name, obj);
 
-    MessageNotificationStack(obj); console.log(obj.pA);
+    MessageNotificationStack(obj); //console.log(obj.pA);
 
   });
 
