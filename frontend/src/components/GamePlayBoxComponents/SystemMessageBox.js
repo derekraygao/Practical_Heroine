@@ -106,6 +106,10 @@ class SystemMessageBox extends React.Component {
 
         return (<li key={index} style={{color: "#a332c9", fontSize: "115%", marginTop: "5px"}}>{m.message}</li>);
 
+      } else if (m.type === "oracle message") {
+
+        return (<li key={index} style={{color: "#730099", fontSize: "108%", marginTop: "2px"}}>{m.message}</li>);
+
       } else {
 
         return (<li key={index} style={{color: "black"}}>Error - not a recognized message type</li>);

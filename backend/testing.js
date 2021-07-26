@@ -701,10 +701,45 @@ function testOraclePower() {
 	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
 	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
 
+	obj.rO.roles["Oracle"].lightAndDark("Cloud", obj);
+
 };
 
 
 //testOraclePower();
+
+
+function testOracleLuciniteGuess() {
+
+	console.log("Testing Oracle's Lucinite Guess");
+
+	Controller.addMissionVote(obj, 0, 0); //Derek Princess
+	Controller.addMissionVote(obj, 1, -1); //Cloud Umbra Lord
+	Controller.addMissionVote(obj, 2, 3); //Serena Ranger
+	Controller.addMissionVote(obj, 3, 0); //Lucio Persequor
+	Controller.addMissionVote(obj, 4, 2); //Xing Baby Doll
+
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	oracle.setLuciniteGuess(2);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	Controller.addMissionVote(obj, 0, 0); //Derek Princess
+	Controller.addMissionVote(obj, 2, 3); //Serena Ranger
+	Controller.addMissionVote(obj, 3, 0); //Lucio Persequor
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+};
+
+
+//testOracleLuciniteGuess();
+
+
+
 
 
 function testBalancerPower() {
@@ -870,7 +905,7 @@ function testAuraKnightBoost() {
 
 };
 
-testAuraKnightBoost();
+//testAuraKnightBoost();
 
 
 

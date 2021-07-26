@@ -12,6 +12,8 @@ class Oracle extends RolesMasterClass {
         this.alignment = "good";
         this.team = "heroes";
 
+        this.numberOfLucinites = -1;
+
         this.powerUsed = 
 				        {
 				        	"1 and 1": false,
@@ -310,9 +312,11 @@ class Oracle extends RolesMasterClass {
 
 	lightAndDark(name, obj) {
 
+		if (this.powerUsed["LightAndDarkUsedArray"].includes(name)) { return 0; };
+
 		//can only check a player once
 		this.powerUsed["LightAndDarkUsedArray"].push(name);
-		console.log(this.powerUsed["LightAndDarkUsedArray"]);
+		//console.log(this.powerUsed["LightAndDarkUsedArray"]);
 
 		var ldInd = obj.pT[name];
 
@@ -325,7 +329,7 @@ class Oracle extends RolesMasterClass {
 
 		var ldData = {"target": name, identities: formatArrayIntoString(lightAndDarkArr)};
 		
-		//console.log(ldData);
+		console.log(ldData);
 		
 		this.messageHandler("Light And Dark", ldData, obj);
 
@@ -333,6 +337,85 @@ class Oracle extends RolesMasterClass {
 	}; //end lightAndDark()
 
 
+
+	setLuciniteGuess(number) {
+
+		this.numberOfLucinites = number;
+
+	};
+
+
+
+
+	adjustVoteSumLucinite(voteSum, obj) {
+
+		if (this.numberOfLucinites == -1) { return voteSum; };
+
+		var numHeroes = 0;
+		var forLength = obj.rD.missionTeam.length;
+
+		//calculate # of heroes & villains on the mission team
+		for (var i = 0 ; i < forLength; i++) {
+
+			if (obj.rO.rolesInGame[obj.pT[obj.rD.missionTeam[i]]].team
+				== "heroes") {
+
+				numHeroes += 1;
+
+			};
+
+		}; //end for 
+
+		console.log("Lucinite Guess, Number of Heroes: " + numHeroes);
+
+		if (numHeroes == this.numberOfLucinites) {
+
+			voteSum += 2;
+
+			this.messageHandler("Lucinites Guess", 
+				{guess: this.numberOfLucinites, result: "You have correctly ascertained the number of followers! For your piety, we have awarded +2 to the mission team's vote sum!"}, 
+				obj
+			);
+
+
+		} else {
+
+			voteSum -= 2;
+
+			this.messageHandler("Lucinites Guess", 
+				{guess: this.numberOfLucinites, result: "Your vision is blurred, your ears occluded! Evil has invaded the sanctity of these holy grounds. For your incorrect guess, -2 to the mission team's vote sum!"}, 
+				obj
+			);
+
+		}; //end else
+
+
+		this.numberOfLucinites = -1;
+
+		return voteSum;
+
+	}; //end adjustVoteSumIntimidate(voteSum, obj)
+
+
+
+	deliverPrivateMessage(messageObj, obj) {
+
+		var receiverObj = obj.pA[obj.pT[messageObj.receiver]];
+
+		var sysMess = {
+						type: "oracle message",
+						message: ("Oracle: " + messageObj.message)
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: receiverObj.socketID,
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
+
+	};
 
 
 
@@ -356,7 +439,25 @@ class Oracle extends RolesMasterClass {
 			obj.stack.push(stackObj);
 
 
-		}; //end if
+		} else if (power == "Lucinites Guess") {
+
+
+			var sysMess = {
+							type: "power",
+							message: ("Luces: Oracle, you guessed that the current mission team has " + data.guess + " heroes. " + data.result)
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: this.socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);
+
+
+
+		}; //end if power == LucinitesGuess
 
 
 

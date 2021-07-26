@@ -1088,6 +1088,29 @@ io.on('connection', function (socket) {
 
 
 
+  socket.on("Oracle: Lucinite Guess Number", (number) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Oracle"].setLuciniteGuess(number);
+
+  });
+
+
+  //messageObj = {receiver: "name", message: "Hi there."}
+  socket.on("Oracle: Deliver Private Message", (messageObj) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Oracle"].deliverPrivateMessage(messageObj, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
 
   //Balancer
   socket.on("Weighing of Souls", (_bArr) => {
