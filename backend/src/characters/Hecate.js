@@ -12,33 +12,116 @@ class Hecate extends RolesMasterClass {
         this.team = "villains";
 
         this.multiplicationFactorArray = [1, 2, 2, 2, 2, 2, 3, 3, 3, 4];
+        this.metronomeChoices = ["F.S. Bomb", "Burn", 
+        						 "Injury", "Paralysis", "Freeze", 
+        						 "Zombie", "Slow", "Confusion",
+        						 "Bless", "Safeguard"];
+       
+
+       /* is keeping track of exchange array necessary?
+        power can only be used once */
+        this.powersHistory = 
+        {
+        	1: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
+        	2: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
+        	3: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
+        	4: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
+        	5: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
+        	6: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
+        	7: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
+        };
+
+        this.exchangePowerUsed = false;
+
 
 	}; //end constructor
 
 
-	multiplication(name, obj) {
 
-		var index = obj.pT[name];
+	setMultiplierTarget(name, obj) {
+
+		this.powersHistory[obj.rD.missionNo].multiplierTarget = name;
+
+	};
+
+
+	//check to see if Hecate is in the game occurs in AbilityManager
+	multiplication(obj) {
+
+		if (this.powersHistory[obj.rD.missionNo].multiplierTarget == "nobody chosen") 
+			{ return 0; };
+
+		var index = obj.pT[this.powersHistory[obj.rD.missionNo].multiplierTarget];
 		shuffle(this.multiplicationFactorArray);
 
 		obj.pA[index].multiplier *= this.multiplicationFactorArray[0];
 
-		return this.multiplicationFactorArray[0];
+
+		var sysMess = {
+						type: "power",
+						message: (obj.pA[index].name + "'s power "
+							+ "has been increased by "
+							+ this.multiplicationFactorArray[0]
+							+ "xs.")
+					  };
+
+		var stackObj = {
+						type: "Individual",
+						socketID: obj.pA[this.index].socketID,
+						destination: "Add System Message",
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
 
 	};
 
+
+	adjustMissionVotesMultiplication(playerObj) {
+		//if (!this.inGame) { return 0; };
+		if (playerObj.multiplier <= 1) { return 0; };
+
+		playerObj.missionVote *= playerObj.multiplier;
+
+		playerObj.multiplier = 1;
+
+	};
+
+
+
+	setMetronomeTargetAndPower(name, obj) {
+
+		var mInd = obj.pT[name];
+
+		//10 possible statuses
+		var rndInt = (Math.floor(Math.random() * 10));
+
+		this.powersHistory["metronome"]["target"] = name;
+		this.powersHistory["metronome"]["power"] 
+		= this.metronomeChoices[rndInt];
+
+	};
+
+
+
 	exchangeOfTheSpirits(name1, name2, obj) {
+
+		this.powersHistory[obj.rD.missionNo].exchange = [name1, name2];
+		this.exchangePowerUsed = true;
 
 		var index1 = obj.pT[name1];
 		var index2 = obj.pT[name2];
 
-		if (obj.pA[index1].role == "Saintess" || 
-			obj.pA[index2].role == "Saintess") {
+		if (["Saintess", "Umbra Lord"].includes(obj.pA[index1].role) ||
+			["Saintess", "Umbra Lord"].includes(obj.pA[index2].role)) {
+
 			return 0;
+
 		};
 
+
 		var tempStatusHolder = {
-									devilized: obj.pA[index1].devilized,
+									corrupted: obj.pA[index1].corrupted,
 									soulMark: obj.pA[index1].soulMark,
 									multiplier: obj.pA[index1].multiplier,
 									burnCount: obj.pA[index1].burnCount,
@@ -49,7 +132,7 @@ class Hecate extends RolesMasterClass {
 						   	   };
 
 		//put player 2 status into player 1
-		obj.pA[index1].devilized = obj.pA[index2].devilized;
+		obj.pA[index1].corrupted = obj.pA[index2].corrupted;
 		obj.pA[index1].soulMark = obj.pA[index2].soulMark;
 		obj.pA[index1].multiplier = obj.pA[index2].multiplier;
 		obj.pA[index1].burnCount = obj.pA[index2].burnCount;
@@ -59,7 +142,7 @@ class Hecate extends RolesMasterClass {
 		obj.pA[index1].safeguard = obj.pA[index2].safeguard;
 
 		//put player 1 status into player 2
-		obj.pA[index2].devilized = tempStatusHolder.devilized;
+		obj.pA[index2].corrupted = tempStatusHolder.corrupted;
 		obj.pA[index2].soulMark = tempStatusHolder.soulMark;
 		obj.pA[index2].multiplier = tempStatusHolder.multiplier;
 		obj.pA[index2].burnCount = tempStatusHolder.burnCount;
