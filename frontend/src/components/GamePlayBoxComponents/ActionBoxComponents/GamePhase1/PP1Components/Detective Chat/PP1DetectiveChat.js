@@ -22,6 +22,8 @@ class PP1DetectiveChat extends React.Component {
 
     usedPower: false,
     investigateTarget: "Investigate ?",
+    XXNTarget: "Power2 ?",
+    powerMenuSelection: "Investigate"
 
   };
 
@@ -30,6 +32,52 @@ class PP1DetectiveChat extends React.Component {
 
   }; //end componentDidMount
 
+
+  getXXNSelectionChoices = () => {
+
+    var playerChoices = JSON.parse(JSON.stringify(this.props.playerList));
+
+
+    var q = playerChoices.indexOf(this.props.myName);
+    if (q > -1) { playerChoices.splice(q, 1); };
+
+
+    var arrayOfOptions = playerChoices.map( (pName, index) => {
+
+      return (
+        <option value={pName} key={index}>{pName}</option>
+      );
+
+    });
+
+
+    return arrayOfOptions;
+
+  }; //end getSelectionChoices()
+
+
+  submitXXNRequest = () => {
+
+    if (this.state.XXNTarget == "Power2 ?") { return 0; };
+
+    this.setState({usedPower: true});
+
+    socket.emit("Send Cross Examination Request", this.state.XXNTarget);
+
+    this.props.addSystemMessage(
+      {
+        type: "power",
+        message: ("The trial begins! You decided to 'Cross Examine' "
+          + this.state.XXNTarget + ". If he/she pleads 'Not Guilty' "
+          + "to his/her crimes, then +5 to the mission team's "
+          + "vote sum. However, a guilty plea results in -5 to the "
+          + "mission vote sum! If " + this.state.XXNTarget
+          + " is not selected for the mission team, then this power "
+          + "has no effect.")  
+      }
+    );
+
+  };
 
 
 
@@ -67,49 +115,85 @@ class PP1DetectiveChat extends React.Component {
 
     };
 
-  }; //end submitScry
+  }; //end submitInvestigation
 
 
-  render() {
 
-    if (this.props.missionNumber === 1) {
-      return <PP1NoPower />; 
-    }; 
+  powerMenuColor = (power) => {
+
+    if (power === this.state.powerMenuSelection) {
+      return "yellow-color";
+    };
+
+    return "";
+
+  };
 
 
-    if (this.state.usedPower) {
+  returnWhichPowerMenuButtons = () => {
+
+    /*You cannot investigate anyone for Mission 1 since nobody has
+    any voting history */
+    if (this.props.missionNumber == 1) {
 
       return (
 
-      <div className="PP1-Detective-Chat-Container">
-
         <div className="powers-menu-bar-container orange ui buttons">
-          <button className="ui button"></button>
+          <button className="ui button">Cross Examination</button>
         </div> 
-
-        <div className="PP1-investigate-container">
-          You investigated {this.state.investigateTarget}. 
-          Please wait {this.props.timer} seconds for Game 
-          Phase 1 to end.
-        </div>
-
-      </div>
 
       ); //end return
 
-    }; //end if usedPower
+    }; //end if missionNumber == 1
+
+
+    //nobody chosen is default; XXN can only be used once
+    if (this.props.PH["Detective Chat"]
+      ["Cross Examination Target"] !== "nobody chosen") {
+
+      return (
+
+        <button className="ui button">Investigate</button>
+
+      ); //end return
+
+    };
 
 
     return (
 
-      <div className="PP1-Detective-Chat-Container">
+      <>
 
-        <div className="powers-menu-bar-container orange ui buttons">
-          <button className="ui button">Investigate</button>
-        </div> 
+          <button 
+            className={`ui button ${this.powerMenuColor("Investigate")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Investigate"}) }
+          >
+            Investigate
+          </button>
+
+          <button 
+            className={`ui button ${this.powerMenuColor("XXN")}`}
+            onClick={ () => this.setState({powerMenuSelection: "XXN"}) }
+          >
+            XXN
+          </button>
+
+     </>
+          
+    ); //end return
 
 
-        <div className="PP1-investigate-container">
+  }; //end returnWhichPowerMenuButtons
+
+
+  returnWhichActionAreaComponent = () => {
+
+    if (this.state.powerMenuSelection == "Investigate"
+      && this.props.missionNumber != 1) {
+
+      return (
+
+        <>
 
           <select 
             className="ui search dropdown"
@@ -130,6 +214,90 @@ class PP1DetectiveChat extends React.Component {
             Investigate!
           </button>
 
+        </>
+
+
+      ); //end return
+
+    }; //end if powerMenuSelection == "Investigate"
+
+
+
+    return (
+
+      <>
+
+        <select 
+          className="ui search dropdown"
+          value={this.state.XXNTarget}
+          onChange={e => this.setState({ XXNTarget: e.target.value })}
+        >
+
+          <option value="Power2 ?" disabled selected>XXN</option>
+          {this.getXXNSelectionChoices()}
+
+        </select>
+
+
+        <button 
+          className="ui yellow button"
+          onClick={this.submitXXNRequest}
+        >
+          Cross Exam!
+        </button>
+
+      </>
+
+    ); //end return
+
+
+  }; //end returnWhichActionAreaComponent()
+
+
+
+
+
+  render() {
+
+    if (this.state.usedPower) {
+
+      return (
+
+      <div className="PP1-Detective-Chat-Container">
+
+        <div className="powers-menu-bar-container orange ui buttons">
+          <button className="ui button"></button>
+        </div> 
+
+        <div className="PP1-investigate-container">
+          You used your analytical and deductive abilities. Paired 
+          with the might of the Enlustrian law, you are a powerful 
+          foe to evil! Please wait {this.props.timer} seconds 
+          for Game Phase 1 to end.
+        </div>
+
+      </div>
+
+      ); //end return
+
+    }; //end if usedPower
+
+
+    return (
+
+      <div className="PP1-Detective-Chat-Container">
+
+        <div className="powers-menu-bar-container orange ui buttons">
+          
+          {this.returnWhichPowerMenuButtons()}
+
+        </div> 
+
+
+        <div className="PP1-investigate-container">
+
+          {this.returnWhichActionAreaComponent()}
+
         </div>
 
 
@@ -149,6 +317,7 @@ const mapStateToProps = (state) => {
   
   return (
          {  
+            PH: state.characterPowersHistory,
             myName: state.name,
             missionTeam: state.missionTeam,
             missionNumber: state.missionNumber,

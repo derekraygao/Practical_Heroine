@@ -1181,6 +1181,27 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Send Cross Examination Request", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Detective Chat"].setCrossExaminationTarget(target, obj);
+
+  });
+
+
+  socket.on("Cross Examination Plea", (plea) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Detective Chat"].setCrossExaminationPlea(plea, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
 
 
   /* Esper Powers */

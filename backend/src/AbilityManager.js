@@ -252,13 +252,6 @@ class AbilityManager {
 
 
 
-  updateDetectiveChatAbilities(obj) {
-
-    obj.rO.roles["Detective Chat"].interrogate(obj);
-
-  };
-
-
   updatePearAbilities(obj) {
 
     if (!obj.rO.roles["Pear"].inGame) { return 0; };
@@ -311,6 +304,8 @@ class AbilityManager {
     obj.rO.roles["Saintess"].activateHolyPower(obj);
     obj.rO.roles["Sensor"].sendScanResultsToSensor(obj);
 
+    obj.rO.roles["Detective Chat"].sendCrossExaminationRequest(obj);
+
     obj.rO.roles["Princess"].updateEoSenseArray(obj);
 
   };
@@ -326,10 +321,10 @@ class AbilityManager {
     this.updateLottieAbilities(obj);
 
     this.updatePearAbilities(obj);
-    this.updateDetectiveChatAbilities(obj);
     this.updateScientistAbilities(obj);
 
     obj.rO.roles["Aura Knight"].addAuraBoost(obj);
+    obj.rO.roles["Detective Chat"].sendInterrogationResults(obj);
     
     this.updateNoahAbilities(obj);
     this.updateToxiturtleAbilities(obj)

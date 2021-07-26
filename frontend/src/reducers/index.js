@@ -16,8 +16,11 @@ import missionResultsHistoryReducer from './missionResultsHistoryReducer.js';
 import gameEndScenarioReducer from './gameEndScenarioReducer.js';
 import mainMenuSelectionReducer from './mainMenuSelectionReducer.js';
 import powersMenuSelectionReducer from './powersMenuSelectionReducer.js';
+import crossExamBoolReducer from './crossExamBoolReducer.js';
 
 import esperChatMessageReducer from './esperChatMessageReducer.js';
+import jailerChatMessageReducer from './jailerChatMessageReducer.js';
+import villainChatMessageReducer from './villainChatMessageReducer.js';
 
 import characterPowersHistoryReducer from './characterPowersHistoryReducer.js';
 import rangerSenseArrayReducer from './rangerSenseArrayReducer.js';
@@ -50,5 +53,8 @@ export default combineReducers({
 	rangerSenseArray: rangerSenseArrayReducer,
 	timer: timerReducer,
 	esperChat: esperChatMessageReducer,
+	jailerChatArray: jailerChatMessageReducer,
+	villainChatArray: villainChatMessageReducer,
+	crossExamBool: crossExamBoolReducer,
 
 });

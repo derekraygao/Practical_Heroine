@@ -8,6 +8,11 @@ var defaultPH = {
 					absoluteNo: "No"
 				  },
 
+	"Princess": {
+				  eoSenseArray: [],
+				  transformed: 0,
+				},
+
 	"Marcus": {
 				berserkMissionNo: 0,
 			  },
@@ -28,8 +33,14 @@ var defaultPH = {
 				"At Least 1 Good": false,
 				"At Least 1 Evil and Good": false,
 				"Princess": false,
-				"Roles": false
+				"Roles": false,
+				"LightAndDarkUsedArray": [],
 			  },
+
+
+	"Detective Chat": {
+						"Cross Examination Target": "nobody chosen"
+					  },
 
 	"Noah": {
 				hurricane: 0 //missionNo it was used during
@@ -39,6 +50,16 @@ var defaultPH = {
 				exchangeOfSpirits: false,
 				exchangeArray: []
 			  },
+
+	"Delayer": {
+	        	 1: {"slowTarget": "nobody chosen"},
+	        	 2: {"slowTarget": "nobody chosen"},
+	        	 3: {"slowTarget": "nobody chosen"},
+	        	 4: {"slowTarget": "nobody chosen"},
+	        	 5: {"slowTarget": "nobody chosen"},
+	        	 6: {"slowTarget": "nobody chosen"},
+	        	 7: {"slowTarget": "nobody chosen"},
+        	   },
 
 	"Reverser": {
 				 mirrorWorldNormal: false,

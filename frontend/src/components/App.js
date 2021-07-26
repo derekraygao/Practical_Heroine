@@ -16,8 +16,20 @@ import {missionNumber} from '../actions/missionNumber.js';
 import {missionResultsHistory} from '../actions/missionResultsHistory.js';
 import {mainMenuSelection} from '../actions/mainMenuSelection.js';
 import {gameEndScenario} from '../actions/gameEndScenario.js';
-import {updateCharacterPowerHistory} from 'actions/updateCharacterPowerHistory.js';
 import {timer} from '../actions/timer.js';
+
+import {updateCharacterPowerHistory} from 'actions/updateCharacterPowerHistory.js';
+import {updateCharacterStatus} from 'actions/updateCharacterStatus.js';
+import {newCharacterStatus} from 'actions/newCharacterStatus.js';
+
+
+import {villainChatMessage} from '../actions/villainChatMessage.js';
+import {esperChatMessage} from '../actions/esperChatMessage.js';
+import {jailerChatMessage} from '../actions/jailerChatMessage.js';
+
+
+import {crossExamBool} from '../actions/crossExamBool.js';
+
 
 /*for character specific redux store */
 import {rangerSenseArray} from '../actions/rangerSenseArray.js';
@@ -29,7 +41,11 @@ import MenuBar from './MenuBar.js';
 import ChatBox from './MenuBarBoxComponents/ChatBox.js';
 import NotesBox from './MenuBarBoxComponents/NotesBox.js';
 import PlayerAndResultsBox from './MenuBarBoxComponents/PlayerAndResultsBox.js';
+import PowersInfoBox from './MenuBarBoxComponents/PowersInfoBox.js';
+
 import GamePlayBox from './GamePlayBox.js';
+
+import CrossExaminationBox from './CrossExaminationBox.js';
 
 import socket from '../Socket.js';
 import formatArrayIntoString from 'formatArrayIntoString.js';
@@ -53,6 +69,18 @@ perishSongAudio.volume = 0.2;
 var psychologistAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Psychologist.mp3");
 psychologistAudio.volume = 0.15;
 
+var darkDestinyAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Dark_Destiny.mp3");
+darkDestinyAudio.volume = 0.15;
+
+var scientistExposeAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Scientist_Expose.mp3");
+scientistExposeAudio.volume = 0.15;
+
+var spyAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Invisible_Spy.mp3");
+spyAudio.volume = 0.15;
+
+var starPrismPowerAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Star_Prism_Power.mp3");
+starPrismPowerAudio.volume = 0.1;
+
 
 function playSong(song) {
 
@@ -66,6 +94,21 @@ function playSong(song) {
       perishSongAudio.play();
       break;
 
+    case "Dark Destiny":
+      darkDestinyAudio.play();
+      break;
+
+    case "Scientist Expose":
+      scientistExposeAudio.play();
+      break;
+
+    case "Invisible Spy":
+      spyAudio.play();
+      break;
+
+    case "Star Prism Power":
+      starPrismPowerAudio.play();
+      break;
 
     default:
       break;
@@ -127,7 +170,7 @@ class App extends React.Component {
 
       this.props.addSystemMessage(
         {
-          type: "normal",
+          type: "urgent",
           message: sysMessage
         }
       );
@@ -147,7 +190,7 @@ class App extends React.Component {
 
       var villainString = "Princess, the villains are: " + formatArrayIntoString(villainsArr);
 
-      this.props.addSystemMessage({type: "normal", message: villainString});
+      this.props.addSystemMessage({type: "urgent", message: villainString});
 
     });
 
@@ -157,7 +200,7 @@ class App extends React.Component {
       var princessIdentityString = "Marcus, the princess's identity is: " + 
                       formatArrayIntoString(princessArr);
 
-      this.props.addSystemMessage({type: "normal", message: princessIdentityString});
+      this.props.addSystemMessage({type: "urgent", message: princessIdentityString});
       
     });
 
@@ -169,9 +212,10 @@ class App extends React.Component {
       var villainString = "Villains! Your team is composed of: " + 
                            formatArrayIntoString(this.props.villainList);
 
-      this.props.addSystemMessage({type: "normal", message: villainString});
+      this.props.addSystemMessage({type: "urgent", message: villainString});
       
     });
+
 
     //for very first game phase 1, it's trigged by start game
     socket.on("Start Game Phase 1: Power Phase 1", () => {
@@ -180,6 +224,15 @@ class App extends React.Component {
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
       this.props.updateTimerSeconds(8);
+
+      this.props.updateCharacterStatus(
+        {"status": "jailed", "newValue": false}
+      );
+
+      this.props.updateCharacterStatus(
+        {"status": "selectedForTelepathy", "newValue": false}
+      );
+
 
     }); //end socket.on(Start Game Phase 1)
 
@@ -234,7 +287,7 @@ class App extends React.Component {
 
       } else {
 
-        this.props.updateTimerSeconds(800);
+        this.props.updateTimerSeconds(1);
 
       };
 
@@ -246,7 +299,7 @@ class App extends React.Component {
 
       setTimeout(() => this.props.updateGamePhase(6), 1000);
 
-      this.props.updateTimerSeconds(800);
+      this.props.updateTimerSeconds(700);
 
     }); //end socket.on("Start Game Phase 6")
 
@@ -262,9 +315,6 @@ class App extends React.Component {
 
     socket.on("Start Game Phase 7: Mission Ended", () => {
 
-      console.log("Starting Game Phase 7 activated in app");
-      console.log("App.js mission history game phase 7");
-      console.log(this.props.missionHistory);
 
       setTimeout(() => this.props.updateGamePhase(7), 1000);
 
@@ -276,6 +326,7 @@ class App extends React.Component {
     socket.on("Start Game Phase 8: Night Phase", (_missionNo) => {
 
       setTimeout(() => this.props.updateGamePhase(8), 1000);
+
       this.props.updateMissionNumber(_missionNo);
       this.props.updateTimerSeconds(2);
       this.props.updateMainMenuSelection("player & results");
@@ -284,6 +335,15 @@ class App extends React.Component {
 
       setTimeout(() => P8Interval = setInterval(this.powerPhase8TimerCountdown, 1000), 1000);
     
+
+      this.props.addSystemMessage(
+        {
+          type: "new mission",
+          message: ("Mission " + this.props.missionNumber)
+        }
+      );
+
+
     }); //end socket.on("Start Game Phase 8")
 
 
@@ -391,6 +451,14 @@ class App extends React.Component {
     });
 
 
+    /*Update characterPowersHistory in Redux Store*/
+    socket.on("Update Character Powers History", (p) => {
+
+      this.props.updatePowerHistory(p.role, p.power, p.newValue);
+
+    });
+
+
 
     /*Redux Store for Character-specific Power Info */
 
@@ -401,11 +469,22 @@ class App extends React.Component {
     });
 
 
+
+    socket.on("Receive Eo (Princess) Sense Array", (eoSenseArr) => {
+
+      this.props.updatePowerHistory("Princess", "eoSenseArray", eoSenseArr);
+
+    });
+
+
+
     socket.on("Receive Ranger Sense Array", (senseArr) => {
 
       this.props.updateRangerSenseArray(senseArr);
 
     });
+
+
 
 
     socket.on("Scry Info From Server", (scryInfo) => {
@@ -425,6 +504,12 @@ class App extends React.Component {
 
     }); //end socket.on("Aura Sense Result")
 
+
+    socket.on("Display Cross Examination Popup", () => {
+
+      this.props.updateXXNBool(true);
+
+    });
 
 
 
@@ -480,8 +565,9 @@ class App extends React.Component {
     socket.on("Sing: Player Was Dropped From The Mission Team", 
       (playerDropped) => {
 
-        var singMess = playerDropped + " was lulled asleep by a song."
-          + " He/she will be dropped from the mission team!";
+        var singMess = playerDropped + " was lulled asleep by "
+          + "Baby Doll's song. He/she will be dropped from " 
+          + "the mission team!";
 
         this.addSysMess("urgent", singMess);
 
@@ -501,11 +587,33 @@ class App extends React.Component {
     });
 
 
+    socket.on("Receive Villain Chat Messages", (messageObj) => {
+
+      this.props.addVillainMessage(messageObj);
+
+    });
+
+
+    socket.on("Receive Esper Chat Messages", (messageObj) => {
+
+      this.props.addEsperMessage(messageObj);
+
+    });
+
+
+    socket.on("Receive Jailer Chat Messages", (messageObj) => {
+
+      this.props.addJailerMessage(messageObj);
+
+    });
 
 
 
+    socket.on("Update Character Status", (s) => {
 
+      this.props.updateCharacterStatus(s.status, s.newValue);
 
+    });
 
 
   }; //end componentDidMount()
@@ -600,6 +708,10 @@ class App extends React.Component {
       return "grid-container-main-night";
     };
 
+    if (this.props.characterStatus["frozen"]) {
+      return "grid-container-main-frozen";
+    };
+
     return "grid-container-main"
 
   };  
@@ -632,10 +744,13 @@ class App extends React.Component {
         <ChatBox />
         <NotesBox />
         <PlayerAndResultsBox />
+        <PowersInfoBox />
         
         {this.gamePlayBoxArea()}
 
-
+        {this.props.XXNBool &&
+          <CrossExaminationBox />
+        }
 
       </div> //end grid-container
 
@@ -658,6 +773,7 @@ const mapStateToProps = (state) => {
     { 
       name: state.name,
       role: state.role,
+      characterStatus: state.characterStatus,
       gamePhase: state.gamePhase,
       missionNumber: state.missionNumber,
       teamLeader: state.teamLeader,
@@ -667,8 +783,8 @@ const mapStateToProps = (state) => {
       missionHistory: state.missionHistory,
       mainMenuSelection: state.mainMenuSelection,
       gameEndScenario: state.gameEndScenario,
-      updatePowerHistory: updateCharacterPowerHistory,
-      timer: state.timer
+      timer: state.timer,
+      XXNBool: state.crossExamBool,
     }
   );
 
@@ -693,7 +809,13 @@ export default connect(mapStateToProps,
     updateGameEndScenario: gameEndScenario,
     updateTimerSeconds: timer,
     updatePowerHistory: updateCharacterPowerHistory,
+    updateCharacterStatus: updateCharacterStatus,
+    replaceNewCharStatus: newCharacterStatus,
     updateRangerSenseArray: rangerSenseArray,
+    addEsperMessage: esperChatMessage,
+    addJailerMessage: jailerChatMessage,
+    addVillainMessage: villainChatMessage,
+    updateXXNBool: crossExamBool,
   })
 (App);
 

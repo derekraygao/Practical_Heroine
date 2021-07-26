@@ -1,0 +1,79 @@
+
+.cross-examination-background {
+
+	position: fixed;
+
+	width: 100vw;
+	height: 100vh;
+
+	background: rgba(0, 0, 0, 0.5);
+
+	z-index: 100;
+
+}
+
+
+.cross-examination-container {
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	max-height: 75%;
+	width: 60%;
+
+	position: absolute;
+	top: 50%;
+	left: 50%; 
+	transform: translate(-50%, -50%);
+
+	overflow-y: auto;
+
+	background-color: white;
+
+	padding-top: 10px;
+	padding-bottom: 7px;
+	padding-left: 7px;
+	padding-right: 7px;
+
+}
+
+
+.cross-examination-header {
+
+	font-size: 150%;
+	font-weight: bold;
+
+	margin-bottom: 10px;
+
+}
+
+
+.detective-chat-picture {
+
+	max-height: 140px;
+	margin-bottom: 7px;
+
+}
+
+
+
+.cross-examination-instructions {
+
+	display: flex;
+	max-height: 50%;
+	overflow-y: auto;
+
+	font-size: 110%;
+
+	margin-bottom: 15px;
+
+}
+
+
+
+.cross-examination-button-container {
+
+
+
+}
