@@ -1508,13 +1508,21 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    obj.rO.roles["Hecate"].setMultiplierTarget(name, obj)
-
-    obj.rO.roles["Hecate"].multiplication(obj);
-
-    MessageNotificationStack(obj);
+    obj.rO.roles["Hecate"].setMultiplierTarget(name, obj);
 
   });
+
+
+  socket.on("Spell Boost", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Hecate"].setSpellBoostTarget(name, obj);
+
+  });
+
+
 
 
   //Delayer

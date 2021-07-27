@@ -22,13 +22,13 @@ class Hecate extends RolesMasterClass {
         power can only be used once */
         this.powersHistory = 
         {
-        	1: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
-        	2: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
-        	3: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
-        	4: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
-        	5: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
-        	6: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
-        	7: {"multiplierTarget": "nobody chosen", "exchange": [], "metronome": {target: "nobody chosen", power: "none"}},
+        	1: {"multiplierTarget": "nobody chosen", "boostTarget": "nobody chosen", "metronome": {target: "nobody chosen", power: "none"}},
+        	2: {"multiplierTarget": "nobody chosen", "boostTarget": "nobody chosen", "metronome": {target: "nobody chosen", power: "none"}},
+        	3: {"multiplierTarget": "nobody chosen", "boostTarget": "nobody chosen", "metronome": {target: "nobody chosen", power: "none"}},
+        	4: {"multiplierTarget": "nobody chosen", "boostTarget": "nobody chosen", "metronome": {target: "nobody chosen", power: "none"}},
+        	5: {"multiplierTarget": "nobody chosen", "boostTarget": "nobody chosen", "metronome": {target: "nobody chosen", power: "none"}},
+        	6: {"multiplierTarget": "nobody chosen", "boostTarget": "nobody chosen", "metronome": {target: "nobody chosen", power: "none"}},
+        	7: {"multiplierTarget": "nobody chosen", "boostTarget": "nobody chosen", "metronome": {target: "nobody chosen", power: "none"}},
         };
 
         this.exchangePowerUsed = false;
@@ -89,6 +89,48 @@ class Hecate extends RolesMasterClass {
 
 
 
+
+	setSpellBoostTarget(name, obj) {
+
+		this.powersHistory[obj.rD.missionNo].boostTarget = name;
+
+	};
+
+
+	getRandomBoost() {
+
+		var rndInt = Math.floor(Math.random() * 3);
+
+		if (rndInt == 0) {
+			return 1;
+		} else {
+			return 3;
+		};
+
+	};
+
+
+	addSpellBoost(obj) {
+
+		if (this.powersHistory[obj.rD.missionNo].boostTarget == "nobody chosen") 
+			{ return 0; };
+
+		var bPlayerObj = obj.pA[obj.pT[this.powersHistory[obj.rD.missionNo].boostTarget]];
+
+		var boostAmount = this.getRandomBoost();
+
+		bPlayerObj.boost += boostAmount;
+
+		this.messageHandler("Boost", 
+							{"name": bPlayerObj.name, "boost": boostAmount},
+							obj
+						   );
+
+	}; //end addSpellBoost(obj)
+
+
+
+
 	setMetronomeTargetAndPower(name, obj) {
 
 		var mInd = obj.pT[name];
@@ -106,7 +148,6 @@ class Hecate extends RolesMasterClass {
 
 	exchangeOfTheSpirits(name1, name2, obj) {
 
-		this.powersHistory[obj.rD.missionNo].exchange = [name1, name2];
 		this.exchangePowerUsed = true;
 
 		var index1 = obj.pT[name1];
@@ -154,6 +195,32 @@ class Hecate extends RolesMasterClass {
 		return ("Exchanged the statuses of " + name1 + " and " + name2);
 
 	};
+
+
+
+	messageHandler(power, data, obj) {
+
+		if (power == "Boost") {
+
+			var sysMess = {
+							type: "power",
+							message: ("You gave " + data.name + " a boost of " + data.boost + "!")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: this.socketID,
+							data: sysMess
+						   };
+
+
+			obj.stack.push(stackObj);	
+
+		};
+
+
+	}; //end messageHandler()
+
 
 
 

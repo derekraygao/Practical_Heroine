@@ -15,24 +15,36 @@ class PP6Hecate extends React.Component {
 
   state = {
             powerMenuSelection: "Vote",
-            multiplyTarget: "Multiply ?",
+            powerTarget1: "Power1 ?",
+            powerTarget2: "Power2 ?",
           };
 
 
 
-  clickButton = () => {
+  clickButtonPower1 = () => {
 
-    if (this.state.multiplyTarget !== "Multiply ?") {
+    if (this.state.powerTarget1 == "Power1 ?") { return 0; };
 
-      this.props.voted("Power");
-
-      socket.emit("Multiplication Magic", this.state.multiplyTarget);
+      socket.emit("Multiplication Magic", this.state.powerTarget1);
 
       socket.emit("Vote on Mission", "Power");
 
-    };
+      this.props.voted("Power");
 
-  }; //end clickStrike
+  }; //end clickButtonPower1
+
+
+  clickButtonPower2 = () => {
+
+    if (this.state.powerTarget2 == "Power2 ?") { return 0; };
+
+      socket.emit("Spell Boost", this.state.powerTarget2);
+
+      socket.emit("Vote on Mission", "Power");
+
+      this.props.voted("Power");
+
+  };
 
 
   getSelectionChoices = () => {
@@ -75,30 +87,64 @@ class PP6Hecate extends React.Component {
     };
 
 
+    if (this.state.powerMenuSelection == "Multiplication") {
+
+      return (
+
+        <>
+
+          <select 
+            className="ui search dropdown"
+            value={this.state.powerTarget1}
+            onChange={e => this.setState({ powerTarget1: e.target.value })}
+          >
+
+            <option value="Power1 ?" disabled selected>Multiply</option>
+            {this.getSelectionChoices()}
+
+          </select>
+
+          <button 
+            className="ui button yellow"
+            onClick={this.clickButtonPower1}
+          >
+            Multiply!
+          </button>
+
+        </>
+
+      ); //end return
+
+    }; //end if (this.state.powerMenuSelection == "Multiplication")
+
+
+
     return (
-      <>
 
-        <select 
-          className="ui search dropdown"
-          value={this.state.multiplyTarget}
-          onChange={e => this.setState({ multiplyTarget: e.target.value })}
-        >
+        <>
 
-          <option value="Multiply ?" disabled selected>Multiply</option>
-          {this.getSelectionChoices()}
+          <select 
+            className="ui search dropdown"
+            value={this.state.powerTarget2}
+            onChange={e => this.setState({ powerTarget2: e.target.value })}
+          >
 
-        </select>
+            <option value="Power2 ?" disabled selected>Boost</option>
+            {this.getSelectionChoices()}
 
-        <button 
-          className="ui button yellow"
-          onClick={this.clickButton}
-        >
-          Multiply!
-        </button>
+          </select>
 
-      </>
+          <button 
+            className="ui button yellow"
+            onClick={this.clickButtonPower2}
+          >
+            Boost!
+          </button>
+
+        </>
 
     ); //end return
+
 
 
 
@@ -121,11 +167,20 @@ class PP6Hecate extends React.Component {
             Vote
           </button>
 
+
           <button 
             className={`ui button ${this.powerMenuColor("Multiplication")}`}
             onClick={ () => this.setState({powerMenuSelection: "Multiplication"}) }
           >
             Multiplication
+          </button>
+
+
+          <button 
+            className={`ui button ${this.powerMenuColor("Boost")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Boost"}) }
+          >
+            Spell Boost
           </button>
 
         </div> 
@@ -137,7 +192,7 @@ class PP6Hecate extends React.Component {
 
         </div>
 
-      </div> //end div PP5-general-container
+      </div> //end div PP6-general-container
 
     ); //end return
 

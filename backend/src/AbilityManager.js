@@ -81,6 +81,7 @@ class AbilityManager {
     if (!obj.rO.roles["Hecate"].inGame) { return 0; };
 
     obj.rO.roles["Hecate"].multiplication(obj);
+    obj.rO.roles["Hecate"].addSpellBoost(obj);
 
   }; //end updateHecateStatuses
 
