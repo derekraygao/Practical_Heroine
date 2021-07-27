@@ -875,6 +875,18 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Gossip", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Lottie"].getGossipInfo(target, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
 
 
   //Pear

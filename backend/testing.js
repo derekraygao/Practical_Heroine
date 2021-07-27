@@ -2216,6 +2216,67 @@ function testLottiePowers() {
 //testLottiePowers();
 
 
+function testLottieGossip() {
+
+	console.log("Test Lottie Gossip Power");
+
+	console.log(obj.rI.missionInfo);
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	
+	Controller.resetDataAtEndOfMission(obj);
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	obj.rD.missionNo = 2;
+	Controller.addMissionVote(obj, 0, 5); //Derek
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.resetDataAtEndOfMission(obj);
+
+	Controller.setMissionTeam(obj, ["Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	obj.rD.missionNo = 3;
+	Controller.addMissionVote(obj, 0, -1); //Derek
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.resetDataAtEndOfMission(obj);
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	obj.rD.missionNo = 4;
+	Controller.addMissionVote(obj, 0, 5); //Derek
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	lottie.getGossipInfo("Cloud", obj);
+
+};
+
+/*Don't forget you only get Mission 1 to (current mission - 1)
+vote history since you are on the not selected for mission team
+*/
+//testLottieGossip();
+
+
+
+
 
 function testLanPowers() {
 

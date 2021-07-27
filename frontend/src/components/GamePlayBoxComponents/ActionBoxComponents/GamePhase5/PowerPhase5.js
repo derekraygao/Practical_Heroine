@@ -29,6 +29,9 @@ import PP5Toxiturtle from './PowerPhase5Components/Toxiturtle/PP5Toxiturtle.js';
 import PP5Psychologist from './PowerPhase5Components/Psychologist/PP5Psychologist.js';
 
 
+/*Not on Mission Team*/
+
+import PP5NotSelectedForMissionLottie from './NotSelectedForMissionPowers/PP5NotSelectedForMissionLottie.js';
 
 
 var PP5TimerInterval;
@@ -123,9 +126,6 @@ class PowerPhase5 extends React.Component {
       case "Spiritualist":
         return <PP5Spiritualist />;
 
-      case "Reverser":
-        return <PP5Reverser />;
-
       case "Toxiturtle":
         return <PP5Toxiturtle />;
 
@@ -141,6 +141,50 @@ class PowerPhase5 extends React.Component {
   }; //end whichPowerAndRole
 
 
+
+
+  whichPowerAndRoleNotOnTheTeam = () => {
+
+
+    if (this.props.characterStatus["frozen"]) {
+      return <PP5Frozen />;
+    };
+
+
+
+    switch (this.props.role) {
+
+      case "Lottie":
+        return <PP5NotSelectedForMissionLottie />;
+
+
+      default:
+
+        return (
+
+          <div className="PP5-general-container">
+
+            <div className="PP5-powers-menu-bar-container orange ui buttons">
+              <button className="ui button">Wait For Mission Team</button>
+            </div> 
+
+            <div className="PP5-general-action-area-container">
+              Wait {this.props.timer} seconds until {this.props.teamLeader}'s 
+              team ({formatArrayIntoString(this.props.missionTeam)}) 
+              completes the mission.
+            </div>
+
+          </div>
+
+        ); //end return
+
+    }; //end switch
+
+  }; //end whichPowerAndRoleNotOnTheTeam
+
+
+
+
   selectedForMissionTeamOrNot = () => {
 
     //need to assign to variables. Using includes 
@@ -154,24 +198,8 @@ class PowerPhase5 extends React.Component {
 
     };
 
-    return (
 
-      <div className="PP5-general-container">
-
-        <div className="PP5-powers-menu-bar-container orange ui buttons">
-          <button className="ui button">Wait For Mission Team</button>
-        </div> 
-
-        <div className="PP5-general-action-area-container">
-          Wait {this.props.timer} seconds until {this.props.teamLeader}'s 
-          team ({formatArrayIntoString(this.props.missionTeam)}) 
-          completes the mission.
-        </div>
-
-      </div>
-
-
-    ); //end return
+    return this.whichPowerAndRoleNotOnTheTeam();
 
   }; //end selectedForMissionTeamOrNot()
 
