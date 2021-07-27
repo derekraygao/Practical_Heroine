@@ -177,12 +177,12 @@ class Seer extends RolesMasterClass {
 
 		pObj.confused = true;
 
-		this.messageHandler(pObj.socketID, obj);
+		//this.messageHandler(pObj.socketID, obj);
 
 	};
 
 
-
+	/*
 	messageHandler(socketID, obj) {
 
 		var sysMess = {
@@ -202,7 +202,7 @@ class Seer extends RolesMasterClass {
 
 	};
 
-
+	*/
 
 }; //end class
 

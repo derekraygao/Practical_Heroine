@@ -118,13 +118,13 @@ class Scientist extends RolesMasterClass {
 
 		};
 
-
+		
 		if (counter == this.hypothesis.number) {
 
-			voteSum += 1.5;
+			voteSum += 2.5;
 
 		} else {
-			voteSum -= 1.5;
+			voteSum -= 2;
 		};
 
 
