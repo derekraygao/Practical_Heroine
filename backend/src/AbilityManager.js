@@ -324,6 +324,7 @@ class AbilityManager {
     this.updatePearAbilities(obj);
     this.updateScientistAbilities(obj);
 
+    obj.rO.roles["Marcus"].counterEspionage(obj);
     obj.rO.roles["Aura Knight"].addAuraBoost(obj);
     obj.rO.roles["Detective Chat"].sendInterrogationResults(obj);
     

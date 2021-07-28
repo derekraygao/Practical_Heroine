@@ -62,6 +62,7 @@ Controller.roomsData["testing"].teamLeaderIndex = 1;
 
 
 var princess = obj.rO.roles["Princess"];
+var marcus = obj.rO.roles["Marcus"];
 var scientist = obj.rO.roles["Scientist"];
 var jailer = obj.rO.roles["Jailer"];
 var pear = obj.rO.roles["Pear"];
@@ -966,6 +967,34 @@ function testPearPower() {
 };
 
 
+
+function testPearNatureTelepathy() {
+
+	console.log("Testing Pear's Nature Telepathy!");
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 3); //Serena //2
+	Controller.addMissionVote(obj, 3, 5); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Derek"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	obj.rD.missionNo = 2;
+
+	pear.natureTelepathy("Lucio", obj);
+
+};
+
+//testPearNatureTelepathy();
+
+
+
+
+
 function testScientistPower() {
 
 	obj.rD.missionNo = 1;
@@ -1003,7 +1032,7 @@ function testScientistHypothesis() {
 	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena", "Xing"]);
 	Controller.setPlayersForMission(obj);
 
-	scientist.setHypothesis(-1, 0);
+	scientist.setHypothesis({type: -1, number: 0});
 
 	console.log("Sum without hypothesis should be +1");
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
@@ -2121,6 +2150,62 @@ function testMarcusPower() {
 
 
 };
+
+
+
+function testMarcusCounterEspionage() {
+
+	console.log("Testing Marcus' Counter Espionage");
+
+	obj.rD.missionNo = 1;
+
+	obj.index = 0;
+	Controller.setPlayerMissionVote("Power", obj);
+	obj.index = 1;
+	Controller.setPlayerMissionVote("Success", obj);
+
+	Controller.setMissionTeam(obj, ["Serena", "Derek", "Cloud"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.resetDataAtEndOfMission(obj);
+	obj.rD.missionNo = 2;
+
+	obj.index = 0;
+	Controller.setPlayerMissionVote("Fail", obj);
+	obj.index = 1;
+	Controller.setPlayerMissionVote("Power", obj);
+
+	Controller.setMissionTeam(obj, ["Serena", "Derek", "Cloud"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+
+	Controller.resetDataAtEndOfMission(obj);
+	obj.rD.missionNo = 3;
+
+	obj.index = 0;
+	Controller.setPlayerMissionVote("Power", obj);
+
+	Controller.setMissionTeam(obj, ["Xing", "Cloud"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	
+	marcus.setCounterEspionageTarget("Derek");
+	marcus.counterEspionage(obj);
+	
+
+};
+
+//testMarcusCounterEspionage();
+
+
 
 
 function testMarcusBodyguard() {

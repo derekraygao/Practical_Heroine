@@ -848,6 +848,19 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("Set Counter Espionage Target", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Marcus"].setCounterEspionageTarget(target);
+
+  });
+
+
+
+
+
   //Lottie
 
   socket.on("Add Therapy Target", (name) => {
@@ -913,6 +926,19 @@ io.on('connection', function (socket) {
     //console.log("Turn vote invisible: " + obj.rO.roles["Pear"].playerVoteToVanish);
 
   });
+
+
+  socket.on("Nature Telepathy", (name) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Pear"].natureTelepathy(name, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
 
 
 

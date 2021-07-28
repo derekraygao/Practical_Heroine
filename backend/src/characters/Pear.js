@@ -87,6 +87,44 @@ class Pear extends RolesMasterClass {
 
 
 
+	natureTelepathy(name, obj) {
+
+		//you always investigate previous mission during power phase 1
+		var prevMissionNo = (obj.rD.missionNo - 1);
+
+		//form is: [{name: , vote: }]
+		var prevMVoteArr = obj.rI.missionInfo[prevMissionNo].votingArray;
+		if (!prevMVoteArr) { return 0; };
+
+		var prevVote = 0;
+
+		for (var i = 0; i < prevMVoteArr.length; i++) {
+
+			if (prevMVoteArr[i].name == name) {
+				prevVote = prevMVoteArr[i].vote
+			};
+
+		}; //end for
+
+
+		if ([-1, 0, 1].includes(prevVote)) {
+
+			prevVote = "-1, 0, or 1";
+
+		};
+
+		console.log("Nature Telepathy. Previous Vote For " + name + ": " + prevVote);
+
+		this.messageHandler("Nature Telepathy", 
+							{name: name, missionNo: prevMissionNo, vote: prevVote}, 
+							obj
+						   );
+
+
+	}; //end natureTelepathy()
+
+
+
 	messageHandler(power, data, obj) {
 
 		if (power == "Spy") {
@@ -108,14 +146,12 @@ class Pear extends RolesMasterClass {
 			obj.stack.push(stackObj);
 
 
-		};
 
-
-		if (power == "Expose") {
+		} else if (power == "Expose") {
 
 			var sysMess = {
 							type: "power",
-							message: ("The invisible Spectre has "
+							message: ("The invisible Spectre (Pear) has "
 								+ "revealed that " + data.name 
 								+ "'s final voting power was: "
 								+ data.vote + ".")
@@ -128,7 +164,26 @@ class Pear extends RolesMasterClass {
 
 			obj.stack.push(stackObj);
 
-		}; //end if Power == "Expose"
+
+
+		} else if (power == "Nature Telepathy") {
+
+
+			var sysMess = {
+							type: "power",
+							message: ("For Mission " + data.missionNo + ", " + data.name + "'s final voting power was: " + data.vote + ".")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: this.socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		}; //end if power == "Nature Telepathy"
 
 
 
