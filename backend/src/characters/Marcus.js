@@ -1,4 +1,8 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
+var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
+var {shuffle} = require("./shuffle.js");
+
+
 
 class Marcus extends RolesMasterClass {
 
@@ -12,6 +16,8 @@ class Marcus extends RolesMasterClass {
 
         this.berserk = "not activated";
         this.berserkActivatedDuringWhichMission = 0;
+
+        this.counterEspionageTarget = "nobody chosen";
 
 	}; //end constructor
 
@@ -61,7 +67,7 @@ class Marcus extends RolesMasterClass {
 
 
 		if (this.berserk == "activated first half") {
-
+			//console.log("Did berserk get activated");
 			obj.pA[this.index].missionVote = 6;
 
 			obj.rO.roles["Saintess"].
@@ -72,6 +78,113 @@ class Marcus extends RolesMasterClass {
 
 
 	}; //end berserk
+
+
+	setCounterEspionageTarget(target) {
+
+		this.counterEspionageTarget = target;
+
+	};
+
+
+	//[{"name": name, "voteType": voteType}]
+	getActions(arr) {
+
+		var forLength = arr.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (arr[i].name == this.counterEspionageTarget) {
+				return arr[i].voteType;
+			};
+
+		};
+
+		return "Nothing";
+	};
+
+
+	counterEspionage(obj) {
+
+		if (this.counterEspionageTarget == "nobody chosen") { return 0; };
+
+		//Marcus cannot be on the mission team
+		if (obj.pA[this.index].selectedForMission) {
+			this.counterEspionageTarget = "nobody chosen";
+			return 0;
+		};
+		
+		//Target MUST be on the mission team
+		if (!obj.pA[obj.pT[this.counterEspionageTarget]].selectedForMission) {
+			this.counterEspionageTarget = "nobody chosen";
+			return 0;
+		};
+		
+
+		var missionInfo = obj.rI.missionInfo;
+		var voteActionsHistory = [];
+		//missionNo + 1 since you also want current mission Info
+		var numOfMissions = (obj.rD.missionNo + 1);
+		var action;
+
+		for (var i = 1; i < numOfMissions; i++) {
+
+			action = this.getActions(missionInfo[i].voteTypeArray);
+
+			if (action == "Nothing") { continue; };
+
+			voteActionsHistory.push(action);
+
+		}; //end for
+
+
+		if (voteActionsHistory.length == 0) {
+
+			this.messageHandler("No Action History", obj);
+
+			this.counterEspionageTarget = "nobody chosen";
+
+			return 0;
+		};
+
+
+		shuffle(voteActionsHistory);
+
+		voteActionsHistory = formatArrayIntoString(voteActionsHistory);
+
+		//console.log(voteActionsHistory);
+		/*messageHandler needs to come before resetting counterEspionageTarget
+		to nobody chosen, since messageHandler uses that variable
+		*/
+		this.messageHandler(voteActionsHistory, obj);
+
+		this.counterEspionageTarget = "nobody chosen";
+
+	}; //end counterEspionage(name, obj)
+
+
+
+	messageHandler(actionHistoryString, obj) {
+
+
+		var sysMess = {
+						type: "power",
+						message: (this.counterEspionageTarget + "'s history of actions taken on the mission team, randomized: " + actionHistoryString + ".")
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: this.socketID,
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
+
+
+	};
+
+
+
 
 
 	bodyguardNameSwitch(name, obj) {
@@ -146,6 +259,8 @@ class Marcus extends RolesMasterClass {
 		}; //end switch
 
 	}; //end bodyguardNotification()
+
+
 
 
 

@@ -22,7 +22,7 @@ import PP1Esper from './PP1Components/Esper/PP1Esper.js';
 import PP1Jailer from './PP1Components/Jailer/PP1Jailer.js';
 import PP1Sensor from './PP1Components/Sensor/PP1Sensor.js';
 import PP1Saintess from './PP1Components/Saintess/PP1Saintess.js';
-
+import PP1Marcus from './PP1Components/Marcus/PP1Marcus.js';
 
 
 import PP1UmbraLord from './PP1Components/Umbra Lord/PP1UmbraLord.js';
@@ -106,7 +106,7 @@ class PowerPhase1 extends React.Component {
         return <PP1NoPower />;
 
       case "Marcus":
-        return <PP1NoPower />;
+        return <PP1Marcus />;
 
       case "Seer":
         return <PP1Seer />;
