@@ -70,22 +70,6 @@ class Bomberman extends RolesMasterClass {
 	};
 	
 
-	//check to see if character is in game occurs in Ability Manager
-	increaseBurnCounter(obj) {
-
-		//if (!this.inGame) { return 0; };
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].burnCount <= 0) { continue; };
-
-			obj.pA[i].burnCount += 1;
-
-		};
-
-
-	}; //end increaseBurnCounter(obj)
-
 
 
 	adjustMissionVotesBurn(playerObj) {
@@ -103,10 +87,12 @@ class Bomberman extends RolesMasterClass {
 
 	adjustMissionVotesBomb(playerObj) {
 
-		if (!this.inGame) { return 0; };
+		//if (!this.inGame) { return 0; };
 		if (!playerObj.bomb) { return 0; };
 
-		playerObj.missionVote -= 3.5;
+		playerObj.missionVote -= 3;
+
+		playerObj.bomb = false;
 
 		this.didBombBlowUpThisMission = true;
 

@@ -67,14 +67,6 @@ class LieutenantBlitz extends RolesMasterClass {
 
 		if (!this.inGame) { return 0; };
 
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].injuredCount > 0) {
-				obj.pA[i].injuredCount -= 1;
-			};
-
-		}; //end for
-
 		var usosInd = obj.pT[this.powersHistory[obj.rD.missionNo]["USOS"]];
 
 		if (usosInd !== undefined) {

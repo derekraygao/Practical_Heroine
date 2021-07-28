@@ -92,17 +92,6 @@ class Delayer extends RolesMasterClass {
 	}; //end adjustMissionVotesSlowCharge(playerObj)
 
 
-	removeSlowEffect(obj) {
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			obj.pA[i].slow = false;
-
-		};
-
-	};
-
-
 
 
 	isDelayerCountAbove0() {

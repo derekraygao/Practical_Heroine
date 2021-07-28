@@ -291,12 +291,14 @@ class Saintess extends RolesMasterClass {
 
 		this.curagaBoostTarget = "nobody chosen";
 
+		/*
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			obj.pA[i].bless = false;
 			obj.pA[i].safeguard = false;
 
 		};
+		*/
 
 	}; //end removeSaintessBuffsAtEndofRound(obj)
 
