@@ -10,6 +10,16 @@ class Ranger extends RolesMasterClass {
         this.alignment = "good";
         this.team = "heroes";
 
+        this.powersHistory = 
+        {
+        	1: {"shrinkName": "nobody chosen"},
+        	2: {"shrinkName": "nobody chosen"},
+        	3: {"shrinkName": "nobody chosen"},
+        	4: {"shrinkName": "nobody chosen"},
+        	5: {"shrinkName": "nobody chosen"},
+        	6: {"shrinkName": "nobody chosen"},
+        };
+
 	}; //end constructor
 
 
@@ -61,7 +71,16 @@ class Ranger extends RolesMasterClass {
 
 		if (obj.pA[ind].role == "Saintess") { return 0; };
 
-		obj.pA[ind].devilized = false;
+		/*
+		if (obj.rO.roles["Umbra Lord"].isPlayerDevilized(name)) { 
+
+			obj.rO.roles["Umbra Lord"].devilConversionChoice 
+			= "power used and purified";
+
+		};
+		*/
+
+		obj.pA[ind].corrupted = false;
 		obj.pA[ind].shrinkCount = 0;
 		obj.pA[ind].burnCount = false;
 		obj.pA[ind].poisoned = false;
@@ -78,11 +97,19 @@ class Ranger extends RolesMasterClass {
 		};
 
 		if (obj.rO.rolesInGame[ind].role == "Delayer") {
-			obj.rO.roles["Delayer"].delayCount = 0;
+			obj.rO.roles["Delayer"].delayerCount = 0;
 		};
 
 
 	}; //end antiMagicRay
+
+
+
+	setShrinkTarget(name, obj) {
+
+		this.powersHistory[obj.rD.missionNo].shrinkName = name;
+
+	};
 
 
 	//when power targets, maybe do (if shrinkCount == 0) then set to -1,
@@ -91,12 +118,62 @@ class Ranger extends RolesMasterClass {
 	//then you set shrinkCount to 2, so the power starts NEXT mission
 	shrinkRay(name, obj) {
 
-		var ind = obj.pT[name];
+		if (this.powersHistory[obj.rD.missionNo].shrinkName == "nobody chosen") {
+			return 0;
+		};
+
+		var ind = obj.pT[this.powersHistory[obj.rD.missionNo].shrinkName];
+
 		if (obj.pA[ind].role == "Saintess") { return 0; };
 		
 		obj.pA[ind].shrinkCount += 2;
 
 	};
+
+
+	adjustShrinkCount(obj) {
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].shrinkCount > 0) {
+				obj.pA[i].shrinkCount -= 1;
+			};
+
+		};
+
+	}; //end adjustShrinkCount
+
+
+
+	//is inGame necessary (?) since it's impossible to change shrinkCount
+	//unless Ranger is in the game
+	adjustMissionVotesShrink(playerObj) {
+
+		//if (!this.inGame) { return 0; };
+
+		if (playerObj.shrinkCount <= 0) { return 0; };
+
+		playerObj.missionVote = (playerObj.missionVote / 2);
+
+	}; //adjustMissionVotesShrink()
+
+
+	adjustTeamVotesShrink(obj) {
+
+		//if (!this.inGame) { return 0; };
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].shrinkCount <= 0) { continue; };
+
+			obj.pA[i].teamVote = (obj.pA[i].teamVote / 2);
+
+		};
+
+	}; //adjustTeamVotesShrink()
+
+
+
 
 
 }; //end class
