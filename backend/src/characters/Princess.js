@@ -26,7 +26,6 @@ class Princess extends RolesMasterClass {
 		if (playerObj.burnCount > 0) { individualStatusArr.push("Burn"); };
 		if (playerObj.soulMark) { individualStatusArr.push("Soul Mark"); };
 		if (playerObj.shrinkCount > 0) { individualStatusArr.push("Shrink"); };
-		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
 		if (playerObj.injuredCount > 0) { individualStatusArr.push("Injury"); };
 		if (playerObj.entranced) { individualStatusArr.push("Entrancement"); };
 		if (playerObj.confused) { individualStatusArr.push("Confusion"); };
@@ -37,6 +36,9 @@ class Princess extends RolesMasterClass {
 		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
 		if (playerObj.paralyzed) { individualStatusArr.push("Paralysis"); };
 		if (playerObj.frozen) { individualStatusArr.push("Freeze"); };
+
+		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
+		if (playerObj.boost > 0) { individualStatusArr.push("Boost: ±" + playerObj.boost); };
 
 		if (playerObj.safeguard) { individualStatusArr.push("Safeguard"); };
 		if (playerObj.bless) { individualStatusArr.push("Bless"); };
