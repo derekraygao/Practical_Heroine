@@ -49,7 +49,7 @@ class EoSenseTable extends React.Component {
 
     return (
 
-      <table class="ui inverted orange table eoSenseMarginTop">
+      <table class="ui inverted orange table SenseTableMargin">
 
         <thead>
           <tr>

@@ -21,9 +21,11 @@
 
 
 
-.power-info-princess-status-tracker-title {
+.power-info-status-tracker-title {
 
-	margin-top: 30px;
+	align-self: flex-start;
+
+	margin-top: 5px;
 	margin-bottom: 0px;
 	font-size: 130%;
 	font-weight: bold;
@@ -31,8 +33,9 @@
 }
 
 
-.eoSenseMarginTop {
+.SenseTableMargin {
 
 	margin-top: 3px !important;
+	margin-bottom: 25px !important;
 
 }
