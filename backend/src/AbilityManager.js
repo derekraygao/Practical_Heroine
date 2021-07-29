@@ -446,7 +446,7 @@ class AbilityManager {
 
   }; //end updateSpiritualistStatuses
 
-
+  /* Not needed due to hurricane + backstabber + persequor?
   updatePersequorPowers(obj) {
 
     if (!obj.rO.roles["Persequor"].inGame) { return 0; };
@@ -454,7 +454,7 @@ class AbilityManager {
     obj.rO.roles["Persequor"].switchBackIdentities(obj);
     obj.rO.roles["Persequor"].identityTheft(obj);
 
-  };
+  }; */
 
 
   updateKaguyaPowers(obj) {
@@ -656,6 +656,8 @@ class AbilityManager {
 	  
     obj.rO.roles["Princess"].updateEoSenseArray(obj);
     obj.rO.roles["Princess"].updateHeartacheDefense(obj);
+
+    this.handleBackstabberPersequorAndHurricane(obj);
     
   };
 
@@ -669,8 +671,6 @@ class AbilityManager {
 
     obj.rO.roles["Princess"].updateTransformationCount(obj);
 
-
-    this.handleBackstabberPersequorAndHurricane(obj);
 
     
   };

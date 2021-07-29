@@ -54,7 +54,7 @@ class Backstabber extends RolesMasterClass {
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (obj.rO.rolesInGame[i].team == "villains") { continue; };
-			if (["Princess", "Saintess"].includes(obj.pA[i].role)) { continue; };
+			if (["Princess", "Saintess", "???"].includes(obj.pA[i].role)) { continue; };
 
 			heroesIndicesArr.push(i);
 		};
@@ -129,8 +129,7 @@ class Backstabber extends RolesMasterClass {
 	betray(obj) {
 
 		if (!this.activateSwitch) { return 0; };
-		//activateSwitch reset to false in outside function notifying
-		//players of the switch
+		this.activateSwitch = false;
 
 		this.originalBackStabberName = this.name;
 
@@ -160,10 +159,37 @@ class Backstabber extends RolesMasterClass {
 		//once playerArray is switched, it matches up with rolesObject
 
 		//switchInd now refers to original backstabber
-		obj.pT[obj.pA[switchInd].name] = switchInd;
-		obj.pT[obj.pA[this.index].name] = this.index;
+		obj.pT[this.originalBackStabberName] = switchInd;
+		obj.pT[this.name] = this.index;
 
 
+
+		this.backstabberSwitchMessageHandler(
+			"Give New Backstabber Info", 
+
+			this.socketID,
+
+			{
+				originalBSName: obj.pA[switchInd].name,
+	            villainList: obj.rO.getVillainsIdentities()
+			}, 
+
+			obj
+		);
+
+
+		this.backstabberSwitchMessageHandler(
+			"Give Original Backstabber New Info", 
+
+			obj.pA[switchInd].socketID,
+
+			obj.pA[switchInd].role, 
+
+			obj
+		);
+
+
+		/*
 		return (
 			{
 				originalSID: obj.pA[switchInd].socketID,
@@ -172,7 +198,7 @@ class Backstabber extends RolesMasterClass {
 				newSID: obj.pA[this.index].socketID
 			}
 		);
-
+		*/
 
 	};
 
@@ -309,11 +335,57 @@ class Backstabber extends RolesMasterClass {
 
 			obj.stack.push(stackObj);
 
+
+		};
+
+
+	}; //end messageHandler
+
+
+
+
+	backstabberSwitchMessageHandler(power, socketID, data, obj) {
+
+
+		if (power == "Give New Backstabber Info") {
+
+
+			var stackObj = {
+				              type: "Individual",
+				              socketID: socketID,
+				              destination: "Give New Backstabber New Role",
+				              data: data
+			       		    };
+
+
+			obj.stack.push(stackObj);
+
+
+
+		} else if (power == "Give Original Backstabber New Info") {
+
+
+			var stackObj = {
+					          type: "Individual",
+					          socketID: socketID,
+					          destination: "Give Original Backstabber New Role",
+					          data: data
+				   			};
+
+
+			obj.stack.push(stackObj);
+
+
 		};
 
 
 
-	}; //end messageHandler
+	}; //end backstabberSwitchMessageHandler()
+
+
+
+
+
 
 
 

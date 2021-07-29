@@ -26,8 +26,6 @@ class Bomberman extends RolesMasterClass {
         	6: {"bombTarget": "nobody chosen", "firePunchTarget": "nobody chosen"},
         };
 
-        //reset this to false when notifying players that a bomb has exploded
-        this.didBombBlowUpThisMission = false;
 
 	}; //end constructor
 
@@ -85,7 +83,7 @@ class Bomberman extends RolesMasterClass {
 
 
 
-	adjustMissionVotesBomb(playerObj) {
+	adjustMissionVotesBomb(playerObj, obj) {
 
 		//if (!this.inGame) { return 0; };
 		if (!playerObj.bomb) { return 0; };
@@ -94,11 +92,28 @@ class Bomberman extends RolesMasterClass {
 
 		playerObj.bomb = false;
 
-		this.didBombBlowUpThisMission = true;
+		this.messageHandler(obj);
 
 	};
 
 
+
+	messageHandler(obj) {
+
+		var sysMess = {
+						type: "power",
+						message: ("BOOM! Uh oh! Looks like a flame seal bomb exploded on the mission! The player who was afflicted with the bomb had -3 added to his/her voting power!")
+					  };
+
+		var stackObj = {
+						type: "SME Music",
+						data: {messageObj: sysMess, song: "Bomb Explosion"}
+					   };
+
+		obj.stack.push(stackObj);
+
+
+	}; //end messageHandler
 
 
 }; //end class

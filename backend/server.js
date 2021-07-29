@@ -650,7 +650,7 @@ io.on('connection', function (socket) {
 
     //put info in Redux store because you cannot send messages
     //to an unmounted component
-    updateInfoForPowersOnClientSide(obj);
+    //updateInfoForPowersOnClientSide(obj);
 
     emitToAllSocketsInRoom(obj, "Start Game Phase 1: Power Phase 1", "");
 
@@ -680,7 +680,7 @@ io.on('connection', function (socket) {
 
 
 
-
+    
     if (obj.rO.roles["Backstabber"].activateSwitch) {
 
       var bsInfo = obj.rO.roles["Backstabber"].betray(obj);

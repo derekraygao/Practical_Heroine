@@ -1918,11 +1918,15 @@ function logArrays() {
 
 function hurricaneSwitchBackStabTest() {
 
+	console.log("Before any switching");
+
+	logArrays();
+
 	obj.rO.roles["Noah"].activateHurricane();
 	obj.rO.roles["Persequor"].activateIdentityTheft(obj);
 	obj.rO.roles["Backstabber"].backstab();
 
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	console.log("After Switching");
 
@@ -1931,7 +1935,7 @@ function hurricaneSwitchBackStabTest() {
 	obj.rD.missionNo += 1;
 
 	obj.rO.roles["Backstabber"].backstab();
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	console.log("");
 	console.log("Mission +1, switched back persequor");
@@ -1940,7 +1944,7 @@ function hurricaneSwitchBackStabTest() {
 	console.log("");
 	obj.rD.missionNo += 1;
 	obj.rO.roles["Persequor"].activateIdentityTheft(obj);
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	console.log("");
 	console.log("switched again");
@@ -1948,7 +1952,7 @@ function hurricaneSwitchBackStabTest() {
 
 	
 	obj.rD.missionNo += 1;
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	console.log("");
 	console.log("Switched Back");
@@ -1957,7 +1961,7 @@ function hurricaneSwitchBackStabTest() {
 };
 
 
-//hurricaneSwitchBackStabTest();
+hurricaneSwitchBackStabTest();
 
 
 

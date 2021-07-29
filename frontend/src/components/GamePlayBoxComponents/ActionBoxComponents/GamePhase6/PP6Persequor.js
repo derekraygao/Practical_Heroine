@@ -173,7 +173,7 @@ class PP6Persequor extends React.Component {
           className="ui button yellow"
           onClick={this.clickButtonPower2}
         >
-          Random!
+          Channel!
         </button>
 
       </>

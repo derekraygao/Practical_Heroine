@@ -178,19 +178,22 @@ class Persequor extends RolesMasterClass {
 
 		/* Reason we had to use a dummy name of "switch with somebody" 
 		is because Noah's hurricane will mess up indices order */
-		this.powersHistory[obj.rD.missionNo].switchedName = 
-		obj.pA[this.findAHeroToSwitchWith(obj)].name;
 
+		var switchedInd = this.findAHeroToSwitchWith(obj);
+		var currentMN = obj.rD.missionNo;
 
-		var switchedInd = obj.pT[this.powersHistory[obj.rD.missionNo].switchedName];
+		this.powersHistory[currentMN].switchedName = 
+		obj.pA[switchedInd].name;
+
 
 		/*console.log("Persequor switch is " + obj.pA[switchedInd].name 
 			+ ", whose role is: " + obj.pA[switchedInd].role); */
 
-		this.powersHistory[obj.rD.missionNo].switchedName = obj.pA[switchedInd].name;
-		this.powersHistory[obj.rD.missionNo].originalRole = obj.pA[switchedInd].role;
-		this.powersHistory[obj.rD.missionNo].socketID = obj.pA[switchedInd].socketID;
-		this.powersHistory[obj.rD.missionNo].originalIndex = switchedInd;
+			
+		this.powersHistory[currentMN].switchedName = obj.pA[switchedInd].name;
+		this.powersHistory[currentMN].originalRole = obj.pA[switchedInd].role;
+		this.powersHistory[currentMN].socketID = obj.pA[switchedInd].socketID;
+		//this.powersHistory[currentMN].originalIndex = switchedInd;
 
 		obj.pA[this.index].role = obj.pA[switchedInd].role;
 
@@ -215,11 +218,27 @@ class Persequor extends RolesMasterClass {
 		obj.rO.roles["Unknown"].index = this.index;
 		/* Now change obj.pT which maps player names and indices in rolesInGame */
 
+		//this.name still refers to perseqour name
 		obj.pT[this.name] = switchedInd;
 		obj.pT[obj.pA[this.index].name] = this.index;
 
 
-	};
+		this.handleSwitchIdentityAndSwitchBack("Switch", 
+			{
+				newRole: obj.pA[switchedInd].role,
+				socketID: obj.pA[switchedInd].socketID
+			},
+
+			{
+				newRole: "???",
+				socketID: obj.pA[this.index].socketID
+			},
+
+			obj
+		);
+
+
+	}; //end IdentityTheft
 
 
 	//this needs to occur right before night phase/night chat
@@ -234,8 +253,9 @@ class Persequor extends RolesMasterClass {
 
 		//right now, this.index refers to ??? and switched player
 		//switchedIndex refers to where Persequor currently is
+		//persequor's name + socketID still refer to original
 		var switchedIndex = obj.pT[this.name];
-		var originalRole = this.powersHistory[(obj.rD.missionNo -1)].originalRole;
+		var originalRole = obj.pA[switchedIndex].role; //this.powersHistory[(obj.rD.missionNo -1)].originalRole;
 		
 		//switched, non-persequor player
 		obj.pA[this.index].role = originalRole;
@@ -244,16 +264,33 @@ class Persequor extends RolesMasterClass {
 		obj.rO.roles[originalRole].name = obj.pA[this.index].name;
 		obj.rO.roles[originalRole].socketID = obj.pA[this.index].socketID;
 
+		//change ??? back to "Persequor"
 		obj.rO.rolesInGame[this.index] = this.persequorRoleObjectReference;
 
 		/* swap playerObjects back */
+		/*this.index refers to victim, switchedIndex refers to persequor*/
 		var tempPersequorPlayerObject = obj.pA[switchedIndex];
 		obj.pA[switchedIndex] = obj.pA[this.index];
 		obj.pA[this.index] = tempPersequorPlayerObject;
 
-
+		/*switched refers to victim and this.index refers to persequor*/
 		obj.pT[this.name] = this.index;
 		obj.pT[this.powersHistory[(obj.rD.missionNo -1)].switchedName] = switchedIndex;
+
+
+		this.handleSwitchIdentityAndSwitchBack("Switch Back",
+			{
+				socketID: this.socketID,
+				newRole: "Persequor"
+			},
+
+			{
+				socketID: obj.pA[switchedIndex].socketID,
+				newRole: originalRole
+			},
+
+			obj
+		);
 
 
 	}; //end switchBackIdentities
@@ -306,6 +343,84 @@ class Persequor extends RolesMasterClass {
 		obj.stack.push(stackObj);
 
 	}; //end messageHandler
+
+
+
+	handleSwitchIdentityAndSwitchBack(power, persequor, victim, obj) {
+
+	  if (power == "Switch") {
+
+	      var stackObj1 = {
+				              type: "Individual",
+				              socketID: persequor.socketID,
+				              destination: "Swap Identities",
+				              data: persequor.newRole
+	               		  };
+
+
+	      var stackObj2 = {
+				              type: "SMI",
+				              socketID: persequor.socketID,
+				              data: {
+					                  type: "urgent",
+					                  message: ("You stole the role of " + persequor.newRole + " from a Hero! For this mission round only, you will have access to all of his/her powers, leaving your victim powerless!")
+				                    }
+	               		  };
+
+
+	      var stackObj3 = {
+				              type: "Individual",
+				              socketID: victim.socketID,
+				              destination: "Swap Identities",
+				              data: victim.newRole
+	               		  };
+
+
+	      var stackObj4 = {
+
+				              type: "SMI",
+				              socketID: victim.socketID,
+				              data: {
+					                  type: "urgent",
+					                  message: ("Oops. You shouldn't have lost your passport, clicked on that suspicious weblink, or responded to that phishing email! Your identity was stolen! Persequor has stolen your identity and powers for this mission round only, leaving you as a powerless nobody '???'!")
+					                }
+	               		  };
+
+
+	      obj.stack.push(stackObj1);
+	      obj.stack.push(stackObj2);
+	      obj.stack.push(stackObj3);
+	      obj.stack.push(stackObj4);
+
+
+	      return 0;
+	  }; //end if power == Switch
+
+
+
+      var stackObj1 = {
+			              type: "Individual",
+			              socketID: persequor.socketID,
+			              destination: "Swap Identities",
+			              data: persequor.newRole
+               		  };
+
+
+      var stackObj2 = {
+			              type: "Individual",
+			              socketID: victim.socketID,
+			              destination: "Swap Identities",
+			              data: victim.newRole
+               		  };
+
+
+
+
+      obj.stack.push(stackObj1);
+      obj.stack.push(stackObj2);
+
+
+	}; //end handleSwitchIdentityAndSwitchBack()
 
 
 	/*

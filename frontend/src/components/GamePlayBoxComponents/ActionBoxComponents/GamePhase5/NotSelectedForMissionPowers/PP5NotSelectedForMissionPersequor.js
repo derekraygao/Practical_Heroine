@@ -24,6 +24,13 @@ class PP5NotSelectedForMissionPersequor extends React.Component {
 
       socket.emit("Activate Identity Theft");
 
+      this.props.addSystemMessage(
+        {
+         type: "power",
+         message: "No matter how real, eventually the dream must end. Like a reflection - outwardly the same as reality, but in its truest nature, an illusion. You will steal the identity of a random hero for the next mission round only!"
+        }
+      );
+
   }; //end submitButtonPower1
 
 

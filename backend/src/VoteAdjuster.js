@@ -121,7 +121,7 @@ class VoteAdjuster {
 			obj.rO.roles["Lieutenant Blitz"].adjustMissionVotesInjured(obj.pA[i]);
 
 			obj.rO.roles["Bomberman"].adjustMissionVotesBurn(obj.pA[i]);
-			obj.rO.roles["Bomberman"].adjustMissionVotesBomb(obj.pA[i]);
+			obj.rO.roles["Bomberman"].adjustMissionVotesBomb(obj.pA[i], obj);
 
 			obj.rO.roles["Delayer"].adjustMissionVotesSlowCharge(obj.pA[i]);
 
