@@ -15,52 +15,45 @@ class PP6Persequor extends React.Component {
 
   state = {
             powerMenuSelection: "Vote",
-            copycatTarget: "Copycat ?",
+            powerTarget1: "Power1 ?",
+            powerTarget2: "Power2 ?",
           };
 
 
 
-  clickButtonCopycat = () => {
+  clickButtonPower1 = () => {
 
-    if (this.state.copycatTarget !== "Copycat ?") {
+    if (this.state.powerTarget1 == "Power1 ?") { return 0; };
 
-      socket.emit("Copycat a Vote", this.state.copycatTarget);
-
-      socket.emit("Vote on Mission", "Power");
-
-      this.props.addSystemMessage(
-        {
-          type: "power",
-          message: ("Stop right there, copycat! For Mission " 
-            + this.props.missionNumber + ", your final voting "
-            + "power will be equal to " + this.state.copycatTarget
-            + "'s final voting power, except guaranteed negative.")
-        }
-      );
-
-      this.props.voted("Power");
-
-    };
-
-  }; //end clickButtonCopycat
-
-
-
-  clickButtonIdentityTheft = () => {
-
-    socket.emit("Activate Identity Theft");
+    socket.emit("Copycat a Vote", this.state.powerTarget1);
 
     socket.emit("Vote on Mission", "Power");
 
     this.props.addSystemMessage(
-        {
-          type: "power",
-          message: ("You will steal the identity of "
-            + "a random hero for Mission " + 
-            (this.props.missionNumber + 1) + ".")
-        }
-      );
+      {
+        type: "power",
+        message: ("Stop right there, copycat! For Mission " 
+          + this.props.missionNumber + ", your final voting "
+          + "power will be equal to " + this.state.powerTarget1
+          + "'s final voting power, except guaranteed negative.")
+      }
+    );
 
+
+    this.props.voted("Power");
+
+
+  }; //end clickButtonPower1
+
+
+
+  clickButtonPower2 = () => {
+
+    if (this.state.powerTarget2 == "Power2 ?") { return 0; };
+
+    socket.emit("Use Metronome", this.state.powerTarget2);
+
+    socket.emit("Vote on Mission", "Power");
 
     this.props.voted("Power");
 
@@ -77,6 +70,25 @@ class PP6Persequor extends React.Component {
     if (q > -1) {
       playerChoices.splice(q, 1);
     };
+
+    var arrayOfOptions = playerChoices.map( (pName, index) => {
+
+      return (
+        <option value={pName} key={index}>{pName}</option>
+      );
+
+    });
+
+    return arrayOfOptions;
+
+  }; //end getSelectionChoices()
+
+
+
+  getSelectionChoicesIncludingSelf = () => {
+
+    var playerChoices = JSON.parse(JSON.stringify(this.props.missionTeam));
+
 
     var arrayOfOptions = playerChoices.map( (pName, index) => {
 
@@ -113,21 +125,34 @@ class PP6Persequor extends React.Component {
 
     };
 
-    if (this.state.powerMenuSelection == "Identity Theft") {
+    if (this.state.powerMenuSelection == "Copycat") {
 
       return (
+        <>
 
-        <button 
-          className="ui button yellow"
-          onClick={this.clickButtonIdentityTheft}
-        >
-          Steal Identity!
-        </button>
+          <select 
+            className="ui search dropdown"
+            value={this.state.powerTarget1}
+            onChange={e => this.setState({ powerTarget1: e.target.value })}
+          >
 
+            <option value="Power1 ?" disabled selected>Copycat</option>
+            {this.getSelectionChoices()}
+
+          </select>
+
+          <button 
+            className="ui button yellow"
+            onClick={this.clickButtonPower1}
+          >
+            Copy!
+          </button>
+
+        </>
 
       ); //end return
 
-    }; //end if == identity theft
+    }; //end if == Copycat
 
 
     return (
@@ -135,20 +160,20 @@ class PP6Persequor extends React.Component {
 
         <select 
           className="ui search dropdown"
-          value={this.state.copycatTarget}
-          onChange={e => this.setState({ copycatTarget: e.target.value })}
+          value={this.state.powerTarget2}
+          onChange={e => this.setState({ powerTarget2: e.target.value })}
         >
 
-          <option value="Copycat ?" disabled selected>Copycat</option>
-          {this.getSelectionChoices()}
+          <option value="Power2 ?" disabled selected>Targets</option>
+          {this.getSelectionChoicesIncludingSelf()}
 
         </select>
 
         <button 
           className="ui button yellow"
-          onClick={this.clickButtonCopycat}
+          onClick={this.clickButtonPower2}
         >
-          Copy!
+          Random!
         </button>
 
       </>
@@ -184,10 +209,10 @@ class PP6Persequor extends React.Component {
           </button>
 
           <button 
-            className={`ui button ${this.powerMenuColor("Identity Theft")}`}
-            onClick={ () => this.setState({powerMenuSelection: "Identity Theft"}) }
+            className={`ui button ${this.powerMenuColor("Metronome")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Metronome"}) }
           >
-            Identity Theft
+            Metronome
           </button>
 
         </div> 

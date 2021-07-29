@@ -32,7 +32,7 @@ import PP5Psychologist from './PowerPhase5Components/Psychologist/PP5Psychologis
 /*Not on Mission Team*/
 
 import PP5NotSelectedForMissionLottie from './NotSelectedForMissionPowers/PP5NotSelectedForMissionLottie.js';
-
+import PP5NotSelectedForMissionPersequor from './NotSelectedForMissionPowers/PP5NotSelectedForMissionPersequor.js';
 
 var PP5TimerInterval;
 
@@ -156,6 +156,9 @@ class PowerPhase5 extends React.Component {
 
       case "Lottie":
         return <PP5NotSelectedForMissionLottie />;
+
+      case "Persequor":
+        return <PP5NotSelectedForMissionPersequor />;
 
 
       default:

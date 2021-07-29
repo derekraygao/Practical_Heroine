@@ -609,7 +609,6 @@ io.on('connection', function (socket) {
     /*abilitymanager needs to come BEFORE
     you update mission number and A*/
     AbilityManager.updateStatusesBeforeNightPhase(obj);
-
     MessageNotificationStack(obj);
 
 

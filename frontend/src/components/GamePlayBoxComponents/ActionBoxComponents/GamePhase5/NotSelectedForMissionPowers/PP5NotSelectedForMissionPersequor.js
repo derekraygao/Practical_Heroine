@@ -10,11 +10,9 @@ import formatArrayIntoString from 'formatArrayIntoString.js';
 
 
 
-class PP5NotSelectedForMissionLottie extends React.Component {
+class PP5NotSelectedForMissionPersequor extends React.Component {
 
   state = {
-            powerTarget1: "Power1 ?",
-            powerMenuSelection: "Therapy",
             usedPower: false,
           };
 
@@ -22,46 +20,11 @@ class PP5NotSelectedForMissionLottie extends React.Component {
 
   submitButtonPower1 = () => {
 
-    if (this.state.powerTarget1 == "Power1 ?") { return 0; };
-
       this.setState({usedPower: true});
 
-      socket.emit("Gossip", this.state.powerTarget1);
+      socket.emit("Activate Identity Theft");
 
   }; //end submitButtonPower1
-
-
-  /*players who are NOT on the mission team */
-  getSelectionChoices = () => {
-
-    var playerChoices = JSON.parse(JSON.stringify(this.props.playerList));
-    var missionTeamArr = this.props.missionTeam;
-    var nonMissionPlayers = [];
-
-    for (var i = 0; i < playerChoices.length; i++) {
-
-      if (playerChoices[i] == this.props.myName) { continue; };
-      if (missionTeamArr.includes(playerChoices[i])) { continue; };
-
-      nonMissionPlayers.push(playerChoices[i]);
-
-    };
-
-
-    const allPlayerSelectOptions = nonMissionPlayers.map((pName, index) => {
-
-      return (
-
-        <option value={pName}>{pName}</option>
-
-      ); //end return
-
-
-    });
-
-    return allPlayerSelectOptions;
-
-  };
 
 
 
@@ -72,23 +35,11 @@ class PP5NotSelectedForMissionLottie extends React.Component {
 
       <>
 
-        <select 
-          className="ui search dropdown"
-          value={this.state.powerTarget1}
-          onChange={e => this.setState({ powerTarget1: e.target.value })}
-        >
-
-          <option value="Power1 ?" disabled selected>N.D.A.</option>
-          {this.getSelectionChoices()}
-
-        </select>
-
-
         <button
           className="ui button yellow PP5-margin-left"
           onClick={this.submitButtonPower1}
         >
-          Gossip
+          Steal Identity!
         </button>
 
       </>
@@ -100,10 +51,9 @@ class PP5NotSelectedForMissionLottie extends React.Component {
 
 
 
-
   render() {
 
-    if (this.state.usedPower || this.props.missionNumber == 1) {
+    if (this.state.usedPower) {
 
       return (
 
@@ -134,7 +84,7 @@ class PP5NotSelectedForMissionLottie extends React.Component {
       <div className="PP5-general-container">
 
         <div className="PP5-powers-menu-bar-container orange ui buttons">
-          <button className="ui button">Gossip</button>
+          <button className="ui button">Identity Theft</button>
         </div> 
 
 
@@ -163,8 +113,8 @@ const mapStateToProps = (state) => {
          {  
             myName: state.name,
             playerList: state.playerList,
-            missionTeam: state.missionTeam,
             teamLeader: state.teamLeader,
+            missionTeam: state.missionTeam,
             PH: state.characterPowersHistory,
             missionNumber: state.missionNumber,
             role: state.role,
@@ -181,4 +131,4 @@ export default connect(mapStateToProps,
     addSystemMessage: systemMessages,
   }
 )
-(PP5NotSelectedForMissionLottie);
+(PP5NotSelectedForMissionPersequor);

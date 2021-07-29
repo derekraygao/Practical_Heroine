@@ -28,6 +28,16 @@ class Persequor extends RolesMasterClass {
 	        };
 	    */
 
+	    //20 choices
+        this.metronomeChoices = ["F.S. Bomb", "F.S. Bomb", "Burn", 
+        				 "Burn", "Injury", "Injury", "Paralysis", 
+        				 "Paralysis", "Freeze", "Freeze", "Zombie", 
+        				 "Slow", "Confusion", "Confusion", "Shrink", 
+						 "Shrink", "Boost", "Multiplier", "Bless", 
+						 "Safeguard"];
+
+
+
 	    this.personVoteToCopy = "nobody chosen";
 
 	    this.persequorRoleObjectReference = {};
@@ -46,7 +56,11 @@ class Persequor extends RolesMasterClass {
 
         };
 
+
+
 	}; //end constructor
+
+
 
 
 	copyCat(personToCopy) {
@@ -246,6 +260,52 @@ class Persequor extends RolesMasterClass {
 
 
 
+	metronome(target, obj) {
+
+		var rndInt = (Math.floor(Math.random() * 20));
+
+		var rndFactor = (Math.floor(Math.random() * 4) + 1);
+
+		var statusObj = {
+						 "target": target,
+						 "effect": this.metronomeChoices[rndInt],
+						 "factor": rndFactor
+						};
+
+		if (!["Saintess", "Umbra Lord"].includes(obj.pA[obj.pT[target]].role)) {
+			obj.sE.push(statusObj);
+		};
+		
+
+		this.messageHandler("Metronome", statusObj, obj);
+
+
+	}; //end metronome
+
+
+
+	messageHandler(power, data, obj) {
+
+		var powerString = "";
+
+		if (["Multiplier", "Boost"].includes(power)) {
+			powerString = " (" + data.factor + ")";
+		};
+
+		var sysMess = {
+						type: "power",
+						message: ("The power of metronome inflicts '" + data.effect + powerString + "' on " + data.target + "!")
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: this.socketID,
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
+
+	}; //end messageHandler
 
 
 	/*

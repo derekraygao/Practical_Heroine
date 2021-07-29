@@ -1752,6 +1752,22 @@ function testPersequorPower() {
 };
 
 
+
+function testPersequorMetronome() {
+
+	persequor.metronome("Derek", obj);
+
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
+	
+	console.log(princess.updateEoSenseArray(obj));
+
+
+};
+
+//testPersequorMetronome();
+
+
+
 function switchTest() {
 
 

@@ -4,8 +4,336 @@ class AbilityManager {
 
   constructor() {
 
-  
+
+
   }; //end constructor
+
+
+  updateStatusConditions(obj) {
+
+    for (var i = 0; i < obj.pA.length; i++) {
+
+      this.handleFrozenStatusTrue(obj.pA[i], obj);
+      obj.pA[i].frozen = false;
+
+      obj.pA[i].confused = false;
+
+      obj.pA[i].paralyzed = false;
+
+      obj.pA[i].slow = false;
+
+
+      obj.pA[i].bless = false;
+      obj.pA[i].safeguard = false;
+
+
+      if (obj.pA[i].burnCount > 0) {
+        obj.pA[i].burnCount += 1;
+      };
+
+
+      if (obj.pA[i].shrinkCount > 0) {
+        obj.pA[i].shrinkCount -= 1;
+      };
+
+
+      if (obj.pA[i].injuredCount > 0) {
+        obj.pA[i].injuredCount -= 1;
+      };
+
+
+    }; //end for 
+
+  }; //end resetCertainStatuses
+
+
+
+  //obj.sE = [{target: "Derek", effect: "Freeze", factor: 2}]
+  handleStatusEffectsArray(obj) {
+
+    var forLength = obj.sE.length;
+
+    for (var i = 0; i < forLength; i++) {
+
+      switch (obj.sE[i].effect) {
+
+
+        case "Soul Mark":
+          this.applySoulMark(obj.sE[i].target, obj);
+          break;
+
+        case "Poison":
+          this.applyPoison(obj.sE[i].target, obj.sE[i].factor, obj);
+          break;
+
+        case "Zombie":
+          this.applyZombie(obj.sE[i].target, obj);
+          break;
+
+
+
+        case "Burn":
+          this.applyBurn(obj.sE[i].target, obj);
+          break;
+
+        case "F.S. Bomb":
+          this.applyFSBomb(obj.sE[i].target, obj);
+          break;
+
+        case "Freeze":
+          this.applyFreeze(obj.sE[i].target, obj);
+          break;
+
+        case "Paralysis":
+          this.applyParalysis(obj.sE[i].target, obj);
+          break;
+
+        case "Confusion":
+          this.applyConfusion(obj.sE[i].target, obj);
+          break;
+
+        case "Entrancement":
+          this.applyEntrancement(obj.sE[i].target, obj);
+          break;
+
+
+
+        case "Injury":
+          this.applyInjury(obj.sE[i].target, obj);
+          break;
+
+        case "Bounty":
+          this.applyBounty(obj.sE[i].target, obj);
+          break;
+
+
+
+        case "Slow":
+          this.applySlow(obj.sE[i].target, obj);
+          break;
+
+        case "Shrink":
+          this.applyShrink(obj.sE[i].target, obj);
+          break;
+
+        case "Multiplier":
+          this.applyMultiplier(obj.sE[i].target, obj.sE[i].factor, obj);
+          break;
+
+        case "Boost":
+          this.applyBoost(obj.sE[i].target, obj.sE[i].factor, obj);
+          break;
+
+
+
+        case "Safeguard":
+          this.applySafeguard(obj.sE[i].target, obj);
+          break;
+
+        case "Bless":
+          this.applyBless(obj.sE[i].target, obj);
+          break;
+
+        case "Heartache Defense": 
+          this.applyHeartacheDefense(obj.sE[i].target, obj);
+          break;
+
+        case "Therapy":
+          this.applyTherapy(obj.sE[i].target, obj);
+          break;
+
+        case "Group Hug":
+          this.applyGroupHug(obj.sE[i].target, obj);
+          break;
+
+
+
+        default:
+          break;
+
+      }; //end switch
+
+    }; //end for
+
+    /*array is cleared inside 
+    Controller.resetDataAtEndOfMission*/
+
+  }; //end applyStatusEffects
+
+
+
+  applySoulMark(target, obj) {
+
+    obj.pA[obj.pT[target]].soulMark = true;
+
+  };
+
+
+  applyPoison(target, factor, obj) {
+
+    obj.pA[obj.pT[target]].poisonCount += factor;
+
+  };
+
+
+  applyZombie(target, obj) {
+
+    obj.pA[obj.pT[target]].zombie = "zombie";
+
+  };
+
+
+
+
+  applyFSBomb(target, obj) {
+
+    obj.pA[obj.pT[target]].bomb = true;
+
+  };
+
+
+  applyBurn(target, obj) {
+
+    obj.pA[obj.pT[target]].burnCount += 1;
+
+  };
+
+
+  applyFreeze(target, obj) {
+
+    var targetPObj = obj.pA[obj.pT[target]];
+
+    targetPObj.frozen = true;
+
+      var stackObj1 = {
+              type: "Individual",
+              socketID: targetPObj.socketID,
+              destination: "Update Character Status",
+              data: {status: "frozen", newValue: true}
+               };
+
+      var stackObj2 = {
+              type: "SMI",
+              socketID: targetPObj.socketID,
+              data: {
+                  type: "urgent",
+                  message: ("You were frozen! For "
+                  + "Mission " + (obj.rD.missionNo + 1)
+                  + ", you won't be able to use any "
+                  + "of your powers!")
+                  }
+               };
+
+      obj.stack.push(stackObj1);
+      obj.stack.push(stackObj2);
+
+  };
+
+
+  applyParalysis(target, obj) {
+
+    obj.pA[obj.pT[target]].paralyzed = true;
+
+  };
+
+
+  applyConfusion(target, obj) {
+
+    obj.pA[obj.pT[target]].confused = true;
+
+  };
+
+
+  applyEntrancement(target, obj) {
+
+    obj.pA[obj.pT[target]].entranced = true;
+
+  };
+
+
+
+
+  applyInjury(target, obj) {
+
+    obj.pA[obj.pT[target]].injuredCount += 2;
+
+  };
+
+
+  applyBounty(target, obj) {
+
+    obj.pA[obj.pT[target]].markedMan = true;
+
+  };
+
+
+
+
+  applySlow(target, obj) {
+
+    obj.pA[obj.pT[target]].slow = true;
+
+  };
+
+
+  applyShrink(target, obj) {
+
+    obj.pA[obj.pT[target]].shrinkCount += 2;
+
+  };
+
+
+  applyMultiplier(target, factor, obj) {
+
+    obj.pA[obj.pT[target]].multiplier *= factor;
+
+  };
+
+
+  applyBoost(target, factor, obj) {
+    
+    obj.pA[obj.pT[target]].boost += factor;
+
+  };
+
+
+
+
+
+  applySafeguard(target, obj) {
+
+    obj.pA[obj.pT[target]].safeguard = true;
+
+  };
+
+
+  applyBless(target, obj) {
+
+    obj.pA[obj.pT[target]].bless = true;
+
+  };
+
+
+  applyHeartacheDefense(target, obj) {
+
+    obj.pA[obj.pT[target]].heartacheDefense = true;
+
+  };
+
+
+  applyTherapy(target, obj) {
+
+    obj.pA[obj.pT[target]].therapy = true;
+
+  };
+
+
+  applyGroupHug(target, obj) {
+
+    obj.pA[obj.pT[target]].groupHug = true;
+
+  };
+
 
 
   //need to be careful WHEN mission no is updated
@@ -33,9 +361,6 @@ class AbilityManager {
 
   updateParalysisAbilitiesEffect(obj) {
 
-    obj.rO.roles["Noah"].removeThunderWaveEffect(obj);
-    obj.rO.roles["Toxiturtle"].adjustGlareRemoveParalysis(obj);
-
     obj.rO.roles["Noah"].addThunderWaveEffect(obj);
     obj.rO.roles["Toxiturtle"].adjustGlareSetParalysis(obj);
 
@@ -61,18 +386,7 @@ class AbilityManager {
   }; //end handleFrozenStatusTrue()
 
 
-  resetCertainStatuses(obj) {
 
-    for (var i = 0; i < obj.pA.length; i++) {
-
-      this.handleFrozenStatusTrue(obj.pA[i], obj);
-      obj.pA[i].frozen = false;
-
-      obj.pA[i].confused = false;
-
-    };
-
-  }; //end resetCertainStatuses
 
 
 
@@ -92,7 +406,6 @@ class AbilityManager {
 
     //increaseBurnCounter needs to go before firePunch, otherwise
     //the person gets double burned
-    obj.rO.roles["Bomberman"].increaseBurnCounter(obj);
 
     obj.rO.roles["Bomberman"].plantBomb(obj);
     obj.rO.roles["Bomberman"].firePunch(obj);
@@ -105,9 +418,7 @@ class AbilityManager {
 
     if (!obj.rO.roles["Delayer"].inGame) { return 0; };
 
-    obj.rO.roles["Delayer"].removeSlowEffect(obj);
     obj.rO.roles["Delayer"].increaseDelayerCountByOne(obj);
-
 
   };
 
@@ -314,9 +625,12 @@ class AbilityManager {
 
   //before mission number changes
   updateStatusesBeforeNightPhase(obj) {
-
+    
     //needs to be first thing
-    this.resetCertainStatuses(obj);
+    this.updateStatusConditions(obj);
+
+    //this applies status effects
+    this.handleStatusEffectsArray(obj);
 
     this.updateSaintessStatuses(obj);
     this.updateLottieAbilities(obj);
