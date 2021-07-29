@@ -593,12 +593,6 @@ io.on('connection', function (socket) {
     }; //end switch
 
 
-    /*abilitymanager needs to come BEFORE
-    you update mission number and A*/
-    AbilityManager.updateStatusesBeforeNightPhase(obj);
-
-    MessageNotificationStack(obj);
-
   }); //end "Vote on Mission"
 
 
@@ -610,7 +604,14 @@ io.on('connection', function (socket) {
 
     Controller.setPlayerReady(obj);
 
-    if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; };    
+    if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; }; 
+
+    /*abilitymanager needs to come BEFORE
+    you update mission number and A*/
+    AbilityManager.updateStatusesBeforeNightPhase(obj);
+
+    MessageNotificationStack(obj);
+
 
     Controller.resetDataAtEndOfMission(obj);
 
@@ -1699,6 +1700,17 @@ io.on('connection', function (socket) {
 
   });
 
+
+  socket.on("Use Metronome", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Persequor"].metronome(target, obj);
+
+    MessageNotificationStack(obj);
+
+  });
 
 
 
