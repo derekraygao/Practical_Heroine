@@ -288,7 +288,7 @@ class Persequor extends RolesMasterClass {
 
 		var powerString = "";
 
-		if (["Multiplier", "Boost"].includes(power)) {
+		if (["Multiplier", "Boost"].includes(data.effect)) {
 			powerString = " (" + data.factor + ")";
 		};
 
