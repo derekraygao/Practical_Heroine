@@ -2,6 +2,8 @@ var {RolesMasterClass} = require("./RolesMasterClass.js");
 var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
 var {shuffle} = require("./shuffle.js");
 
+
+
 class Lottie extends RolesMasterClass {
 
 	constructor() {
@@ -117,6 +119,67 @@ class Lottie extends RolesMasterClass {
 	};
 
 
+	//votingArray is [{name: "Derek", vote: 5}]
+	getFinalVotePowerFromVotingArray(name, arr) {
+
+		var forLength = arr.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (arr[i].name == name) {
+				return arr[i].vote;
+			};
+
+		};
+
+		return "Nothing";
+
+	};
+
+
+	getGossipInfo(target, obj) {
+
+		var missionInfo = obj.rI.missionInfo;
+		var votePowerHistory = [];
+		var currentMissionNo = obj.rD.missionNo;
+		var votePower;
+
+		//start at Mission 1 and end at current Mission - 1
+		for (var i = 1; i < currentMissionNo; i++) {
+
+			votePower = this.getFinalVotePowerFromVotingArray(
+				target, missionInfo[i].votingArray
+			);
+
+
+			if (votePower == "Nothing") { continue; };
+			
+
+			votePowerHistory.push(votePower);
+
+		};
+
+
+		if (votePowerHistory.length == 0) {
+			
+			this.messageHandler(target, "No Voting History", obj);
+
+			return 0;
+
+		};
+
+
+		shuffle(votePowerHistory);
+
+		votePowerHistory = formatArrayIntoString(votePowerHistory);
+
+		this.messageHandler(target, votePowerHistory, obj);
+
+
+	}; //end getGossipInfo(target, obj)
+
+
+
 
 	notifyJohnOfLottiesIdentity(obj) {
 
@@ -148,6 +211,25 @@ class Lottie extends RolesMasterClass {
 		obj.stack.push(stackObj);	
 
 	}; //end notifyJohnOfLottiesIdentity()
+
+
+
+	messageHandler(target, voteString, obj) {
+
+		var sysMess = {
+						type: "power",
+						message: ("I have it on good authority that Countess Rozecraft fakes her Alshani accent. Hmm? Oh. " + target + "'s voting power history is: " + voteString + ".")
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: this.socketID,
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);			
+
+	};
 
 
 
