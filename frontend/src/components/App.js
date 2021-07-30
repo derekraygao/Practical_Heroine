@@ -81,6 +81,23 @@ spyAudio.volume = 0.15;
 var starPrismPowerAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Star_Prism_Power.mp3");
 starPrismPowerAudio.volume = 0.1;
 
+var bombExplosionAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Explosion.mp3");
+bombExplosionAudio.volume = 0.15;
+
+
+/*Game Over Music */
+var hVictory = new Audio(process.env.PUBLIC_URL + "/sounds/Heroes_Victory.mp4");
+hVictory.volume = 0.15;
+
+var vVictoryGeneral = new Audio(process.env.PUBLIC_URL + "/sounds/Villains_Victory_General.mp3");
+vVictoryGeneral.volume = 0.05;
+
+var vVictoryDarkDestiny = new Audio(process.env.PUBLIC_URL + "/sounds/Villains_Victory_Dark_Destiny.mp3");
+vVictoryDarkDestiny.volume = 0.15;
+
+
+
+
 
 function playSong(song) {
 
@@ -108,6 +125,10 @@ function playSong(song) {
 
     case "Star Prism Power":
       starPrismPowerAudio.play();
+      break;
+
+    case "Bomb Explosion":
+      bombExplosionAudio.play();
       break;
 
     default:
@@ -223,7 +244,7 @@ class App extends React.Component {
       setTimeout(() => this.props.updateGamePhase(1), 1000);
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
-      this.props.updateTimerSeconds(8);
+      this.props.updateTimerSeconds(30);
 
       this.props.updateCharacterStatus(
         {"status": "jailed", "newValue": false}
@@ -374,6 +395,64 @@ class App extends React.Component {
       this.props.addSystemMessage({type: "big and orange", message: "The Heroes Win!!!"});
       this.revealAllIdentitiesAndRoles(allInfo);
 
+      hVictory.play();
+
+    });
+
+
+
+    //allInfo = [{name:, role:, team:}, {}]
+    //4/7 wins
+    socket.on("Game Over. Villians Win! Roles & Identities Revealed!", 
+      (allInfo) => {
+
+      setTimeout(() => this.props.updateGamePhase(10), 1000);
+
+      this.props.updateGameEndScenario(
+        {winners: "villains", scenario: "4/7"}
+      );
+
+
+      this.props.addSystemMessage(
+        {
+          type: "big and purple", 
+          message: "The Villains Win!!! They succeeded in sabotaging 4 missions total!"
+        }
+      );      
+
+
+      this.revealAllIdentitiesAndRoles(allInfo);
+
+
+      vVictoryGeneral.play();
+
+    });
+
+
+
+    socket.on( "Game Over. Villains Win 3 Consecutively!", 
+      (allInfo) => {
+
+      setTimeout(() => this.props.updateGamePhase(10), 1000);
+
+      this.props.updateGameEndScenario(
+        {winners: "villains", scenario: "3xs"}
+      );
+
+
+      this.props.addSystemMessage(
+        {
+          type: "big and purple", 
+          message: "The Villains Win!!! They succeeded in sabotaging 3 consecutive missions!"
+        }
+      );      
+
+
+      this.revealAllIdentitiesAndRoles(allInfo);
+
+
+      vVictoryGeneral.play();
+
     });
 
 
@@ -387,6 +466,7 @@ class App extends React.Component {
         {winners: "villains", scenario: "correct guess"}
       );
 
+
       this.props.addSystemMessage(
         {
           type: "big and purple", 
@@ -394,7 +474,11 @@ class App extends React.Component {
         }
       );      
 
+
       this.revealAllIdentitiesAndRoles(allInfo);
+
+
+      vVictoryGeneral.play();
 
     });
 
@@ -419,7 +503,40 @@ class App extends React.Component {
 
       this.revealAllIdentitiesAndRoles(allInfo);
 
+      vVictoryGeneral.play();
+
     });
+
+
+
+    //allInfo = [{name:, role:, team:}, {}]
+    socket.on("Start Game Phase 10: Game Over. Dark Destiny Fulfilled!", 
+      (data) => {
+
+      setTimeout(() => this.props.updateGamePhase(10), 1000);
+
+      this.props.updateGameEndScenario(
+        {winners: "villains", scenario: "dark destiny"}
+      );
+
+
+      this.props.addSystemMessage(
+        {
+          type: "big and purple", 
+          message: ("The Villains Win!!! "
+            + data.darkDestinyTarget + "'s dark destiny "
+            + "was fulfilled!")
+        }
+      );      
+
+
+      this.revealAllIdentitiesAndRoles(data.allInfo);
+
+
+      vVictoryDarkDestiny.play();
+
+    });
+
 
 
 
@@ -554,9 +671,21 @@ class App extends React.Component {
 
       var bsMess = ( "The backstabber permanently switched roles with you!"
         + " From now until the game's end, you will be on the villain's "
-        + "team (" + formatArrayIntoString(vTeammates) + ")." );
+        + "team (" + formatArrayIntoString(vTeammates) + "). Sorry this "
+        + "had to happen to you! Bob said something about giving up crime "
+        + "and wanting to set a good example for his little brother.... " 
+        + "You know, the one with congenital electroplasia - "
+        + "very sad story. T_T");
 
       this.addSysMess("power", bsMess);
+
+    });
+
+
+    //Persequor
+    socket.on("Swap Identities", (newRole) => {
+
+      this.props.addPlayerRole(newRole);
 
     });
 
