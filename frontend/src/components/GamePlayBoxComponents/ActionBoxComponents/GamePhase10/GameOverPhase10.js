@@ -47,7 +47,7 @@ class GameOverPhase10 extends React.Component {
 
 
       case "4/7":
-        return ("The villains sabotaged 4/7 missions! Aezurea and"
+        return ("The villains sabotaged 4 missions! Azurea and"
           + " the entire Cosmic Void move closer to the Nothingness."
           + " When ready for a new game, click the ready button below."
           + " New people can join from the lobby.");
@@ -62,8 +62,23 @@ class GameOverPhase10 extends React.Component {
       case "correct guess":
         return ("The villains killed Princess Serenity (John)!"
           + " It seems Fate truly cannot be defied. When ready for"
-          + " a new game, click the ready button below. New People can"
+          + " a new game, click the ready button below. New people can"
           + " join from the lobby.");
+
+
+      case "dark destiny":
+        return ("Winged Gryffin: Throughout history, there are those " 
+          + "who have called the rule of the Luces to be tyrannical. "
+          + "They who believe that man's fate is his own right. But "
+          + "this incessant cycle of rebellion is meaningless. Fate is "
+          + "not changed so easily. A dark destiny is a very force "
+          + "of nature. Can you banish the clouds? Calm the waves? "
+          + "Perhaps...it is said that only the legendary Moon "
+          + "Princess has the power to change one's fate. "
+          + "Unfortunately for you, your destiny was to lose to "
+          + "the villains. When ready for a new game, "
+          + "click the ready button below. New people can join from the "
+          + "lobby.");
 
 
     }; //end switch

@@ -141,7 +141,7 @@ class ResultsInfo {
 
 		if (threeWins == "Evil 3xs") {
 
-			return "Villains Win!";
+			return "Villains Win 3 Consecutively!";
 
 		} else if (threeWins == "Good 3xs") {
 
@@ -176,7 +176,7 @@ class ResultsInfo {
 
 		} else if (failedMissionCount >= 4) {
 
-			return "Villains Win!";
+			return "Villains Win 4xs!";
 
 		} else {
 

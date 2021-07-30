@@ -354,6 +354,31 @@ io.on('connection', function (socket) {
     var teamCase = Controller.wasTeamAccepted(obj);
 
 
+    /*Dark Destiny */
+    if (obj.rO.roles["Kaguya"].wasDarkDestinyFulfilled(obj)) {
+
+      Controller.setGamePhase(obj, 10);
+
+      updateTeamHistoryResults(obj);
+
+      var DDInfo = {
+                      allInfo: obj.rO.getAllIdentitiesAndTheirRoles(),
+                      darkDestinyTarget: obj.rO.roles["Kaguya"].darkDestinyTarget
+                   };
+
+      emitToAllSocketsInRoom(
+          obj, 
+          "Start Game Phase 10: Game Over. Dark Destiny Fulfilled!",
+          DDInfo
+      );
+      
+
+      return 0;
+
+    }; //end wasDarkDestinyFulfilled
+
+
+
     switch (teamCase) {
 
       case "Successful Team Proposal":
@@ -562,7 +587,23 @@ io.on('connection', function (socket) {
 
         break;
 
-      case "Villains Win!":
+
+      case "Villains Win 3 Consecutively!":
+
+        console.log("Villains Win!");
+
+        Controller.setGamePhase(obj, 10);
+
+        emitToAllSocketsInRoom(
+          obj, 
+          "Game Over. Villains Win 3 Consecutively!", 
+          obj.rO.getAllIdentitiesAndTheirRoles()
+        );
+
+        break;
+
+
+      case "Villains Win 4xs!":
 
         console.log("Villains Win!");
 
@@ -575,6 +616,7 @@ io.on('connection', function (socket) {
         );
 
         break;
+
 
       case "Nobody Has Won Yet.":
 
@@ -1003,6 +1045,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Ichigo"].activateHylianShield();
 
+    /*
     var hMess = {
                   type: "power",
                   message: "The Hero of Azurea, Ichigo, repels "
@@ -1014,7 +1057,7 @@ io.on('connection', function (socket) {
     emitToAllSocketsInRoom(obj, "Add System Message", hMess);
 
     console.log("Hylian Shield Status: " + obj.rO.roles["Ichigo"].isHylianShieldActivated);
-
+    */
   });
 
 

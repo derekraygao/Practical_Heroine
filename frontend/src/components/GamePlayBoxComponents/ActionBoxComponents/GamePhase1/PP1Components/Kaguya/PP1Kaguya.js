@@ -68,6 +68,7 @@ class PP1Kaguya extends React.Component {
   render() {
 
     if (this.props.PH["Kaguya"].darkDestiny !== "nobody chosen"
+      || this.props.missionNumber == 1 
       || this.props.missionNumber > 5) {
 
       return <PP1NoPower />;

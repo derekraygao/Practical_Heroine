@@ -39,29 +39,15 @@ class Kaguya extends RolesMasterClass {
 
 		this.darkDestinyTarget = name;
 
-		var sysMess = {
-						type: "urgent",
-						message: ("Fate cannot be denied. The moon "
-							+ "casts a shadow upon a certain player. "
-							+ "His/her dark destiny will result in "
-							+ "the villains' automatic victory if "
-							+ "he/she is chosen for the mission team " 
-							+ "3 consecutive times! The doomed player "
-							+ "can be villain or hero!")
-					  };
-
-		var stackObj = {
-						type: "SME Music",
-						data: {messageObj: sysMess, song: "Dark Destiny"}
-					   };
-
-		obj.stack.push(stackObj);
+		this.messageHandler("Activate Dark Destiny", "", obj);
 
 	};
 
 
 	//must come after mission team array is finalized
 	wasDarkDestinyFulfilled(obj) {
+
+		if (this.darkDestinyTarget == "nobody chosen") { return 0; };
 
 		if (obj.rD.missionTeam.includes(this.darkDestinyTarget)) {
 
@@ -187,7 +173,50 @@ class Kaguya extends RolesMasterClass {
 	};
 
 
+	messageHandler(power, data, obj) {
 
+		if (power == "Activate Dark Destiny") {
+
+
+			var sysMess = {
+							type: "urgent",
+							message: ("Fate cannot be denied. The moon "
+								+ "casts a shadow upon a certain player. "
+								+ "His/her dark destiny will result in "
+								+ "the villains' automatic victory if "
+								+ "he/she is chosen for the mission team " 
+								+ "3 consecutive times! The doomed player "
+								+ "can be villain or hero!")
+						  };
+
+			var stackObj = {
+							type: "SME Music",
+							data: {messageObj: sysMess, song: "Dark Destiny"}
+						   };
+
+			obj.stack.push(stackObj);
+
+
+
+			sysMess = {
+						type: "urgent",
+						message: ("Eo: John! Watch out! The laws of fate are being twisted! I sense a dark destiny surrounding " + this.darkDestinyTarget + ". Don't let him/her be on the Mission Team for 3 consecutive times! Otherwise the villains win!")
+					  };
+
+			stackObj = {
+						type: "SMI",
+						socketID: obj.rO.roles["Princess"].socketID,
+						data: sysMess
+					   };
+
+
+			obj.stack.push(stackObj);	
+
+
+		}; //end if
+
+
+	}; //end messageHandler()
 
 
 

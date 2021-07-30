@@ -23,7 +23,7 @@ import PP1Jailer from './PP1Components/Jailer/PP1Jailer.js';
 import PP1Sensor from './PP1Components/Sensor/PP1Sensor.js';
 import PP1Saintess from './PP1Components/Saintess/PP1Saintess.js';
 import PP1Marcus from './PP1Components/Marcus/PP1Marcus.js';
-
+import PP1Pear from './PP1Components/Pear/PP1Pear.js';
 
 import PP1UmbraLord from './PP1Components/Umbra Lord/PP1UmbraLord.js';
 import PP1Noah from './PP1Components/Noah/PP1Noah.js';
@@ -107,6 +107,9 @@ class PowerPhase1 extends React.Component {
 
       case "Marcus":
         return <PP1Marcus />;
+
+      case "Pear":
+        return <PP1Pear />;
 
       case "Seer":
         return <PP1Seer />;

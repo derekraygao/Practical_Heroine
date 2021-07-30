@@ -1,18 +1,46 @@
+
+
 .villain-guess-princess-container {
 
-	display: flex;
-	
-	justify-content: center;
-	align-items: center;
+	display: grid;
 
-	overflow: auto;
-
-	padding-left: 2%;
-	padding-right: 2%;
+	grid-template-rows: 40% 60%;
+	grid-template-areas: "guess-text"
+						 "guess-buttons"
+						 ;
 
 }
 
-.villain-guess-princess-container select {
+
+.villain-guess-princess-text-container {
+
+	grid-area: guess-text;
+
+	display: flex;
+	align-items: center;
+
+	font-size: 133%;
+
+	padding-right: 2%;
+	padding-left: 2%;
+}
+
+
+.villain-guess-princess-buttons-container {
+
+	grid-area: guess-buttons;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+
+	margin-top: 3%;
+
+}
+
+
+
+.villain-guess-princess-buttons-container select {
 	margin-right: 2.5%;
 }
 

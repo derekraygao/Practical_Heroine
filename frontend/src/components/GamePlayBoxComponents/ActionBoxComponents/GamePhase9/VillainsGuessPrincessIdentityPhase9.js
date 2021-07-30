@@ -86,23 +86,37 @@ class VillainsGuessPrincessIdentityPhase9 extends React.Component {
 
       <div className="villain-guess-princess-container">
 
-        <select 
-          className="ui search dropdown"
-          value={this.state.princessGuess}
-          onChange={e => this.setState({ princessGuess: e.target.value })}
-        >
 
-          <option value="princess name ?" disabled selected>Princess</option>
-          {this.returnPrincessIdentitySelectionChoices()}
+        <div className="villain-guess-princess-text-container">
+          Villains! This is your last chance to win! If you 
+          successfully guess the identity of the princess, 
+          victory is yours! If discord exists, then majority 
+          rules!
+        </div>
 
-        </select>
 
-        <button 
-          className="ui yellow button"
-          onClick={this.submitPrincessGuess}
-        >
-          Submit
-        </button>
+        <div className="villain-guess-princess-buttons-container">
+
+          <select 
+            className="ui search dropdown"
+            value={this.state.princessGuess}
+            onChange={e => this.setState({ princessGuess: e.target.value })}
+          >
+
+            <option value="princess name ?" disabled selected>Princess</option>
+            {this.returnPrincessIdentitySelectionChoices()}
+
+          </select>
+
+          <button 
+            className="ui yellow button"
+            onClick={this.submitPrincessGuess}
+          >
+            Submit
+          </button>
+
+        </div>
+
 
       </div>
 
