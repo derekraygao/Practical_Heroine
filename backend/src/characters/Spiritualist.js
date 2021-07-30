@@ -12,18 +12,19 @@ class Spiritualist extends RolesMasterClass {
         this.alignment = "evil";
         this.team = "villains";
 
-        //refers to number of players
-        this.heroesArrayFor5 = ["Marcus", "Ichigo", "Balancer", 
-        						"Detective Chat", "Ranger", "Pear", "Esper", 
-        						"Scientist", "Sensor", "Jailer"];
+        /*Don't have Saintess, Princess, Oracle, Aura Knight
+        or Seer, since those are special roles that are handled
+        differently */
+        this.goodRolesOdd = ["Ichigo", "Marcus", "Lottie", "Lan", 
+        					 "Balancer", "Esper", "Pear", 
+        					 "Detective Chat", "Ranger", 
+        					 "Scientist", "Jailer"];
 
-        this.heroesArrayFor6810 = ["Marcus", "Balancer", "Detective Chat", 
-        						   "Ranger", "Pear", "Esper", "Scientist", 
-        						   "Sensor", "Jailer"];
-
-        this.heroesArrayFor79 = ["Marcus", "Ichigo", "Balancer", 
-        						 "Detective Chat", "Ranger", "Pear",
-        						 "Esper", "Scientist", "Sensor", "Jailer"];
+        //no Ichigo
+        this.goodRolesEven = ["Marcus", "Lottie", "Lan", 
+        					 "Balancer", "Esper", "Pear", 
+        					 "Detective Chat", "Ranger", 
+        					 "Scientist", "Jailer"];
 
 
         /*numbers refer to mission round the power was used, but the powers
@@ -105,43 +106,27 @@ class Spiritualist extends RolesMasterClass {
 
 	returnRandomHeroChar(char, numOfPlayers) {
 
-		if (numOfPlayers == 5) {
+		if ((numOfPlayers % 2) == 1) {
 
-			shuffle(this.heroesArrayFor5);
+			shuffle(this.goodRolesOdd);
 
 			//this to avoid choosing same role as actual role
-			if (this.heroesArrayFor5[0] == char) {
-				return this.heroesArrayFor5[1];
+			if (this.goodRolesOdd[0] == char) {
+				return this.goodRolesOdd[1];
 			} else {
-				return this.heroesArrayFor5[0];
+				return this.goodRolesOdd[0];
 			};
 
 		};
 
 
-		if ([6, 8, 10].includes(numOfPlayers)) {
+		shuffle(this.goodRolesEven);
 
-			shuffle(this.heroesArrayFor6810);
-
-			if (this.heroesArrayFor6810[0] == char) {
-				return this.heroesArrayFor6810[1];
-			} else {
-				return this.heroesArrayFor6810[0];
-			};
-
-		};
-
-
-		if ([7, 9].includes(numOfPlayers)) {
-
-			shuffle(this.heroesArrayFor79);
-
-			if (this.heroesArrayFor79[0] == char) {
-				return this.heroesArrayFor79[1];
-			} else {
-				return this.heroesArrayFor79[0];
-			};
-
+		//this to avoid choosing same role as actual role
+		if (this.goodRolesEven[0] == char) {
+			return this.goodRolesEven[1];
+		} else {
+			return this.goodRolesEven[0];
 		};
 
 
