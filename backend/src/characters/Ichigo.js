@@ -23,16 +23,23 @@ class Ichigo extends RolesMasterClass {
 		this.isHylianShieldActivated = true;
 	};
 
+
 	hylianShield(voteTotal) {
 
 		if (!this.isHylianShieldActivated) { return voteTotal; };
-
+		
+		this.isHylianShieldActivated = false;
+		
 		if (voteTotal < 0) {
-			voteTotal += 3;
-		} else {
-			voteTotal -= 3;
-		};
 
+			voteTotal += 3.5;
+
+		} else {
+
+			voteTotal -= 3.5;
+
+		};
+		
 		return voteTotal;
 
 	};
@@ -65,6 +72,77 @@ class Ichigo extends RolesMasterClass {
 		this.holyStrike = "used";
 
 	};
+
+
+
+
+	getStatusesForOnePerson(playerObj, obj) {
+
+		var individualStatusArr = [];
+
+		if (playerObj.corrupted) { individualStatusArr.push("Corruption"); };
+		if (playerObj.bomb) { individualStatusArr.push("Flame Seal Bomb"); };
+		if (playerObj.burnCount > 0) { individualStatusArr.push("Burn"); };
+		if (playerObj.soulMark) { individualStatusArr.push("Soul Mark"); };
+		if (playerObj.shrinkCount > 0) { individualStatusArr.push("Shrink"); };
+		if (playerObj.injuredCount > 0) { individualStatusArr.push("Injury"); };
+		if (playerObj.entranced) { individualStatusArr.push("Entrancement"); };
+		if (playerObj.confused) { individualStatusArr.push("Confusion"); };
+		if (playerObj.markedMan) { individualStatusArr.push("Marked Man"); };
+		if (playerObj.slow) { individualStatusArr.push("Slow"); };
+		if (playerObj.slowCharge != 0) { individualStatusArr.push("Slow Charge Boost: " + playerObj.slowCharge); };
+		if (playerObj.zombie == "zombie") { individualStatusArr.push("Zombie"); };
+		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
+		if (playerObj.paralyzed) { individualStatusArr.push("Paralysis"); };
+		if (playerObj.frozen) { individualStatusArr.push("Freeze"); };
+
+		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
+		if (playerObj.boost > 0) { individualStatusArr.push("Boost: ±" + playerObj.boost); };
+
+		if (playerObj.safeguard) { individualStatusArr.push("Safeguard"); };
+		if (playerObj.bless) { individualStatusArr.push("Bless"); };
+		if (playerObj.heartacheDefense) { individualStatusArr.push("Heartache Defense"); };
+		if (playerObj.therapy) { individualStatusArr.push("Therapy +3.5"); };
+		if (playerObj.groupHug) { individualStatusArr.push("Group Hug +1.25"); };
+
+		
+		if (obj.rO.roles["Saintess"].curagaBoostTarget
+			== playerObj.name) {
+			individualStatusArr.push("Curaga Boost +3");
+		};
+
+
+		if (individualStatusArr.length == 0) { individualStatusArr.push("No Status Effects"); };
+
+		return individualStatusArr;
+
+	};
+
+
+	updateNaviSenseInfo(obj) {
+
+		if (!this.inGame) { return 0; };
+
+		var naviSenseInfo = 
+			{
+				name: this.name,
+				statusArray: this.getStatusesForOnePerson(obj.pA[this.index], obj)
+			};
+
+
+		var stackObj = {
+						type: "Individual",
+						socketID: this.socketID,
+						destination: "Update Character Powers History",
+						data: {role: "Ichigo", power: "naviSenseInfo", newValue: naviSenseInfo}
+					   };
+
+		obj.stack.push(stackObj);
+
+		//return naviSenseInfo;
+	};
+
+
 
 
 
