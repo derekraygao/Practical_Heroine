@@ -23,31 +23,38 @@ class AuraKnight extends RolesMasterClass {
 	}; //end constructor
 
 
-	isThereAStatusCondition(obj, ind) {
+	isThereAStatusCondition(playerObj, obj) {
 
-		var statusArrayForAuraKnightPower = [];
+		var individualStatusArr = [];
 
-		/*
-		if (obj.rO.roles["Umbra Lord"].isPlayerDevilized(obj.pA[ind].name)) 
-			{ statusArrayForAuraKnightPower.push("devilized"); };
-		*/
+		if (playerObj.role == "Delayer") {
 
-		if (obj.rO.roles["Delayer"].isDelayerCountAbove0())
-			{ statusArrayForAuraKnightPower.push("delay power"); };
+			if (obj.rO.roles["Delayer"].delayerCount > 0) {
+				individualStatusArr.push("Temporal Charge (Delayer)");
+			};
 
-		if (obj.pA[ind].corrupted) { statusArrayForAuraKnightPower.push("corruption"); };
+		};
+		
+		if (playerObj.corrupted) { individualStatusArr.push("Corruption"); };
+		if (playerObj.bomb) { individualStatusArr.push("Flame Seal Bomb"); };
+		if (playerObj.burnCount > 0) { individualStatusArr.push("Burn"); };
+		if (playerObj.soulMark) { individualStatusArr.push("Soul Mark"); };
+		if (playerObj.shrinkCount > 0) { individualStatusArr.push("Shrink"); };
+		if (playerObj.injuredCount > 0) { individualStatusArr.push("Injury"); };
+		if (playerObj.entranced) { individualStatusArr.push("Entrancement"); };
+		if (playerObj.confused) { individualStatusArr.push("Confusion"); };
+		if (playerObj.markedMan) { individualStatusArr.push("Marked Man"); };
+		if (playerObj.slow) { individualStatusArr.push("Slow"); };
+		if (playerObj.slowCharge != 0) { individualStatusArr.push("Slow Charge Boost: " + playerObj.slowCharge); };
+		if (playerObj.zombie == "zombie") { individualStatusArr.push("Zombie"); };
+		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
+		if (playerObj.paralyzed) { individualStatusArr.push("Paralysis"); };
+		if (playerObj.frozen) { individualStatusArr.push("Freeze"); };
 
-		if (obj.pA[ind].bomb) { statusArrayForAuraKnightPower.push("flame seal bomb"); };
+		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
+		if (playerObj.boost > 0) { individualStatusArr.push("Boost: ±" + playerObj.boost); };
 
-		if (obj.pA[ind].soulMark) { statusArrayForAuraKnightPower.push("soul mark"); };
-
-		if (obj.pA[ind].multiplier > 1) { statusArrayForAuraKnightPower.push("multiplier"); };
-
-		if (obj.pA[ind].shrinkCount > 0) { statusArrayForAuraKnightPower.push("shrink"); };
-
-		if (obj.pA[ind].burnCount > 0) { statusArrayForAuraKnightPower.push("burn"); };
-
-		return statusArrayForAuraKnightPower;
+		return individualStatusArr;
 
 	};
 
@@ -55,7 +62,7 @@ class AuraKnight extends RolesMasterClass {
 	readAura(name, obj) {
 
 		var ind = obj.pT[name];
-		var statusArr = this.isThereAStatusCondition(obj, ind);
+		var statusArr = this.isThereAStatusCondition(obj.pA[ind], obj);
 
 		if (statusArr.length > 0) {
 
