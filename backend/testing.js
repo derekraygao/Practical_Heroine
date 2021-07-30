@@ -454,6 +454,10 @@ function testSeerPower() {
 	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
 	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
 	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));	
 
 	console.log("Testing Seer Power on Umbra Lord Role");
 	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
@@ -462,7 +466,9 @@ function testSeerPower() {
 	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));	
 	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
 	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
-
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));	
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
+	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
 
 	obj.pA[0].devilized = true;
 	obj.pA[0].soulMark = true;
@@ -470,6 +476,8 @@ function testSeerPower() {
 	obj.pA[1].shrinkCount = 2;
 	obj.pA[1].multiplier = 4;
 
+	console.log("");
+	console.log("With Status Conditions");
 	console.log(obj.rO.roles["Seer"].scry(obj, "Derek"));
 	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
 
@@ -481,6 +489,8 @@ function testSeerPower() {
 
 };
 
+
+testSeerPower();
 
 
 function rolesInGame() {
@@ -567,6 +577,8 @@ function testEoSensePower() {
 		obj.pA[1].zombie = "recovered";
 		obj.pA[0].paralyzed = true;
 		obj.pA[0].frozen = true;
+
+		obj.pA[0].boost = 3;
 
 		obj.pA[0].safeguard = true;
 		obj.pA[0].bless = true;
@@ -860,20 +872,33 @@ function testDetectiveChatInterrogate() {
 
 function testAuraKnightPower(name) {
 
-	console.log(name + "'s role is: " 
-		+ obj.rO.rolesInGame[obj.pT[name]].role 
-		+ " and alignment is: " + obj.rO.rolesInGame[obj.pT[name]].alignment);
 
 	console.log(obj.rO.roles["Aura Knight"].readAura(name, obj));
 
-	obj.pA[obj.pT[name]].burnCount = 2;
-	obj.pA[obj.pT[name]].devilized = true;
-	obj.pA[obj.pT[name]].delayerCount = 2;
+		obj.pA[3].corrupted = true;
+		obj.pA[3].bomb = true
+		obj.pA[3].burnCount = 2
+		obj.pA[3].soulMark = true
+		obj.pA[3].shrinkCount = 2;
+		obj.pA[3].multiplier = 3;
+		obj.pA[3].injuredCount = 2;
+		obj.pA[3].entranced = true;
+		obj.pA[3].confused = true;
+		obj.pA[3].markedMan = true;
+		obj.pA[3].slow = true;
+		obj.pA[3].slowCharge = -5;
+		obj.pA[3].zombie = "zombie";
+		obj.pA[3].zombie = "recovered";
+		obj.pA[3].paralyzed = true;
+		obj.pA[3].frozen = true;
+		obj.pA[3].boost = 3;
+		obj.pA[3].delayerCount = 2;
 
 	console.log(obj.rO.roles["Aura Knight"].readAura(name, obj));
 };
 
-//testAuraKnightPower();
+//testAuraKnightPower("Lucio");
+
 
 
 function testAuraKnightBoost() {
@@ -1245,6 +1270,39 @@ function testIchigoPower() {
 
 
 //testIchigoPower();
+
+function testIchigoNaviSense() {
+
+		obj.pA[2].corrupted = true;
+		obj.pA[2].bomb = true
+		obj.pA[2].burnCount = 2
+		obj.pA[2].soulMark = true
+		obj.pA[2].shrinkCount = 2;
+		obj.pA[2].multiplier = 3;
+		obj.pA[2].injuredCount = 2;
+		obj.pA[2].entranced = true;
+		obj.pA[2].confused = true;
+		obj.pA[2].markedMan = true;
+		obj.pA[2].slow = true;
+		obj.pA[2].slowCharge = -5;
+		//obj.pA[2].zombie = "zombie";
+		obj.pA[2].zombie = "recovered";
+		obj.pA[2].paralyzed = true;
+		obj.pA[2].frozen = true;
+
+		obj.pA[2].safeguard = true;
+		obj.pA[2].bless = true;
+		obj.pA[2].heartacheDefense = true;
+		obj.pA[2].therapy = true;
+		obj.pA[2].groupHug = true;
+		
+
+		console.log(obj.rO.roles["Ichigo"].updateNaviSenseInfo(obj));
+
+};
+
+testIchigoNaviSense();
+
 
 
 function checkStatusConditionForSaintess(playerObject) {
@@ -1961,7 +2019,7 @@ function hurricaneSwitchBackStabTest() {
 };
 
 
-hurricaneSwitchBackStabTest();
+//hurricaneSwitchBackStabTest();
 
 
 

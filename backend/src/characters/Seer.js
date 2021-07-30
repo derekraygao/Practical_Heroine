@@ -11,49 +11,67 @@ class Seer extends RolesMasterClass {
         this.alignment = "good";
         this.team = "heroes";
 
-    	this.goodRoles7or9 = ["Princess", "Saintess", "Ichigo", "Seer", "balancer", 
-    					"telepath", "ghost", "Marcus", "detective", "aura", 
-    					"ranger", "scientist", "oracle", "jailer", "sensor"];
 
-    	this.goodRoles = ["Princess", "Seer", "balancer", "telepath", "ghost", 
-    					"Marcus", "detective", "aura", "ranger", "scientist", 
-    					"oracle", "jailer", "sensor"];
+        this.goodRolesOdd = ["Princess", "Saintess", "Ichigo", "Marcus", 
+                              "Lottie", "Lan", "Seer", "Balancer", "Esper", 
+                              "Pear", "Detective Chat", "Aura Knight", 
+                              "Ranger", "Scientist", "Oracle", "Jailer", 
+                              "Sensor"];
+
+        //no Ichigo or Saintess
+        this.goodRoles = ["Princess", "Seer", "Balancer", "Esper", 
+                          "Pear", "Lan", "Marcus", "Lottie", 
+                          "Detective Chat", "Aura Knight", 
+                          "Ranger", "Scientist", "Oracle", 
+                          "Jailer", "Sensor"];
+
+        this.badRoles = ["Umbra Lord", "Hecate", "Bomberman", 
+                         "Lieutenant Blitz", "Reverser", "Noah",  
+                         "Delayer", "Persequor", "Baby Doll",
+                         "Spiritualist", "Backstabber", "Toxiturtle", 
+                         "Kaguya", "Psychologist"];
 
 
-    	this.badRoles = ["Umbra Lord", "hecate", "exploder", "alpha", "reverser", 
-                     	"delayer", "ditto", "spiritualist", "Back Stabber"];
 
 	}; //end constructor
 
 
 
-	isThereAStatusCondition(obj, ind) {
+	isThereAStatusCondition(playerObj, obj) {
 
-		var statusArrayForSeerPower = [];
+		var individualStatusArr = [];
 
-		/*
-		if (obj.rO.roles["Umbra Lord"].isPlayerDevilized(obj.pA[ind].name)) 
-			{ statusArrayForSeerPower.push("devilized"); };
-		*/
+		if (playerObj.role == "Delayer") {
 
-		if (obj.rO.roles["Delayer"].isDelayerCountAbove0())
-			{ statusArrayForSeerPower.push("delay power"); };
+			if (obj.rO.roles["Delayer"].delayerCount > 0) {
+				individualStatusArr.push("Temporal Charge (Delayer)");
+			};
 
-		if (obj.pA[ind].corrupted) { statusArrayForSeerPower.push("corruption"); };
+		};
+		
+		if (playerObj.corrupted) { individualStatusArr.push("Corruption"); };
+		if (playerObj.bomb) { individualStatusArr.push("Flame Seal Bomb"); };
+		if (playerObj.burnCount > 0) { individualStatusArr.push("Burn"); };
+		if (playerObj.soulMark) { individualStatusArr.push("Soul Mark"); };
+		if (playerObj.shrinkCount > 0) { individualStatusArr.push("Shrink"); };
+		if (playerObj.injuredCount > 0) { individualStatusArr.push("Injury"); };
+		if (playerObj.entranced) { individualStatusArr.push("Entrancement"); };
+		if (playerObj.confused) { individualStatusArr.push("Confusion"); };
+		if (playerObj.markedMan) { individualStatusArr.push("Marked Man"); };
+		if (playerObj.slow) { individualStatusArr.push("Slow"); };
+		if (playerObj.slowCharge != 0) { individualStatusArr.push("Slow Charge Boost: " + playerObj.slowCharge); };
+		if (playerObj.zombie == "zombie") { individualStatusArr.push("Zombie"); };
+		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
+		if (playerObj.paralyzed) { individualStatusArr.push("Paralysis"); };
+		if (playerObj.frozen) { individualStatusArr.push("Freeze"); };
 
-		if (obj.pA[ind].bomb) { statusArrayForSeerPower.push("flame seal bomb"); };
+		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
+		if (playerObj.boost > 0) { individualStatusArr.push("Boost: ±" + playerObj.boost); };
 
-		if (obj.pA[ind].soulMark) { statusArrayForSeerPower.push("soul mark"); };
-
-		if (obj.pA[ind].multiplier > 1) { statusArrayForSeerPower.push("multiplier"); };
-
-		if (obj.pA[ind].shrinkCount > 0) { statusArrayForSeerPower.push("shrink"); };
-
-		if (obj.pA[ind].burnCount > 0) { statusArrayForSeerPower.push("burn"); };
-
-		return statusArrayForSeerPower;
+		return individualStatusArr;
 
 	};
+
 
 
 	_75PercentChance() {
@@ -77,11 +95,11 @@ class Seer extends RolesMasterClass {
 
 
 		//if bad role, then return good role
-		if ([5, 7, 9].includes(obj.pA.length)) {
+		if ((obj.pA.length % 2) == 1) {
 
-			shuffle(this.goodRoles7or9);
+			shuffle(this.goodRolesOdd);
 
-			return (this.goodRoles7or9[0]);
+			return (this.goodRolesOdd[0]);
 
 		} else {
 
@@ -129,7 +147,7 @@ class Seer extends RolesMasterClass {
 	scry(obj, name) {
 
 		var ind = obj.pT[name];
-		var statusArray = this.isThereAStatusCondition(obj, ind);
+		var statusArray = this.isThereAStatusCondition(obj.pA[ind], obj);
 
 
 		if (obj.rD.missionNo == 7) {
