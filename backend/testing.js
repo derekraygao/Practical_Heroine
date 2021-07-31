@@ -62,6 +62,7 @@ Controller.roomsData["testing"].teamLeaderIndex = 1;
 
 
 var princess = obj.rO.roles["Princess"];
+var saintess = obj.rO.roles["Saintess"];
 var marcus = obj.rO.roles["Marcus"];
 var scientist = obj.rO.roles["Scientist"];
 var jailer = obj.rO.roles["Jailer"];
@@ -72,7 +73,9 @@ var seer = obj.rO.roles["Seer"];
 var aura = obj.rO.roles["Aura Knight"];
 var oracle = obj.rO.roles["Oracle"];
 var detective = obj.rO.roles["Detective"];
-
+var ranger = obj.rO.roles["Ranger"];
+	
+var umbraLord = obj.rO.roles["Umbra Lord"];
 var kaguya = obj.rO.roles["Kaguya"];
 var noah = obj.rO.roles["Noah"];
 var delayer = obj.rO.roles["Delayer"];
@@ -490,7 +493,7 @@ function testSeerPower() {
 };
 
 
-testSeerPower();
+//testSeerPower();
 
 
 function rolesInGame() {
@@ -957,11 +960,102 @@ function testRangerPower(name) {
 
 };
 
-/*console.log(Controller.roomsData["testing"].teamVoteInfo);
 
-console.log(Controller.missionVoteCalculation(obj));
-console.log(Controller.roomsData["testing"].missionVoteInfo);
-*/
+
+function testRangerSensing() {
+
+	console.log("Test Ranger Sensing & Anti Mana Ray");
+
+		//obj.pA[0].corrupted = true;
+		//obj.pA[0].bomb = true
+		//obj.pA[0].burnCount = 2
+		//obj.pA[0].soulMark = true
+		//obj.pA[0].shrinkCount = 2; does not check for this
+		//obj.pA[0].multiplier = 2;
+		//obj.pA[0].injuredCount = 2;
+		//obj.pA[0].entranced = true;
+		//obj.pA[0].confused = true;
+		//obj.pA[0].markedMan = true;
+		//obj.pA[0].slow = true;
+		//obj.pA[0].slowCharge = -5;
+		//obj.pA[0].zombie = "zombie";
+		//obj.pA[0].paralyzed = true;
+		//obj.pA[0].frozen = true;
+
+		//obj.pA[0].boost = 2;
+
+		console.log(ranger.sense(obj));
+
+
+
+};
+
+
+//testRangerSensing();
+
+
+function testRangerAntiManaRay() {
+
+	console.log("Test Ranger Anti Mana Ray");
+
+		//obj.pA[3].name == "Lucio"
+
+		console.log(princess.updateEoSenseArray(obj)[3]);
+
+		obj.pA[3].corrupted = true;
+		obj.pA[3].bomb = true
+		obj.pA[3].burnCount = 2
+		obj.pA[3].soulMark = true
+		obj.pA[3].shrinkCount = 2;
+		obj.pA[3].multiplier = 3;
+		obj.pA[3].injuredCount = 2;
+		obj.pA[3].entranced = true;
+		obj.pA[3].confused = true;
+		obj.pA[3].markedMan = true;
+		obj.pA[3].slow = true;
+		obj.pA[3].slowCharge = -5;
+		obj.pA[3].zombie = "zombie";
+		obj.pA[3].zombie = "recovered";
+		obj.pA[3].paralyzed = true;
+		obj.pA[3].frozen = true;
+
+		obj.pA[3].boost = 3;
+
+		obj.pA[3].safeguard = true;
+		obj.pA[3].bless = true;
+		obj.pA[3].heartacheDefense = true;
+		obj.pA[3].therapy = true;
+		obj.pA[3].groupHug = true;
+
+		delayer.delayerCount = 3;
+		umbraLord.bide = 3;
+		saintess.curagaBoostTarget = "Lucio";
+
+		console.log(princess.updateEoSenseArray(obj)[3]);
+		console.log("Delayer Charge is: " + delayer.delayerCount);
+		console.log("Umbra Lord Bide is: " + umbraLord.bide);
+		console.log("Saintess Curaga Boost Target is: " + saintess.curagaBoostTarget);
+
+		ranger.antiManaRay("Lucio", obj);
+
+		console.log("");
+		console.log("After Anti-Mana Ray");
+		console.log("");
+
+		console.log(princess.updateEoSenseArray(obj)[3]);
+		console.log("");
+
+		console.log("Delayer Charge is: " + delayer.delayerCount);
+		console.log("Umbra Lord Bide is: " + umbraLord.bide);
+		console.log("Saintess Curaga Boost Target is: " + saintess.curagaBoostTarget);
+
+
+};
+
+
+testRangerAntiManaRay();
+
+
 
 
 function testPearPower() {
@@ -1301,7 +1395,7 @@ function testIchigoNaviSense() {
 
 };
 
-testIchigoNaviSense();
+//testIchigoNaviSense();
 
 
 
@@ -2124,6 +2218,33 @@ function testSpiritualistPower() {
 };
 
 //testSpiritualistPower();
+
+
+function testSoulScan() {
+
+	console.log("Testing Spiritualist Soul Scan");
+	console.log("");
+
+	console.log("Actual Role is: " + obj.pA[3].role);
+	console.log("");
+
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+	console.log(obj.rO.roles["Spiritualist"].soulScan("Lucio", obj));
+
+};
+
+//testSoulScan();
 
 
 //Need to set Serena as backstabber inside RolesObject assignroles

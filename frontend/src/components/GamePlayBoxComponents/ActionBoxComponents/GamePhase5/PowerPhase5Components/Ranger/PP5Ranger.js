@@ -10,26 +10,26 @@ import socket from 'Socket.js';
 class PP5Ranger extends React.Component {
 
   state = {
-            antiMagicTarget: "Anti Magic ?",
+            antiManaTarget: "Anti Mana ?",
             shrinkTarget: "Shrink ?",
-            powerMenuSelection: "Anti Magic",
+            powerMenuSelection: "Anti Mana",
             usedPower: false,
           };
 
 
-  submitButtonAntiMagicClick = () => {
+  submitButtonAntiManaClick = () => {
 
-    if (this.state.antiMagicTarget !== "Anti Magic ?") {
+    if (this.state.antiManaTarget !== "Anti Mana ?") {
 
       this.setState({usedPower: true});
 
-      socket.emit("Anti-Magic Ray", this.state.antiMagicTarget);
+      socket.emit("Anti-Mana Ray", this.state.antiManaTarget);
 
       this.props.addSystemMessage(
         {
           type: "power",
           message: ("You used a forbidden michaneka to blast " 
-          + this.state.antiMagicTarget + " with an anti-magic ray!")
+          + this.state.antiManaTarget + " with an anti-mana ray!")
         }
       ); //end addSystemMessage
 
@@ -50,7 +50,9 @@ class PP5Ranger extends React.Component {
         {
           type: "power",
           message: ("You shrunk " + this.state.shrinkTarget 
-            + "'s team & mission voting power for 2 turns!")
+            + " for 2 turns! "
+            + "His/her team & mission voting power will be "
+            + "halved!")
         }
       ); //end addSystemMessage
 
@@ -103,7 +105,7 @@ class PP5Ranger extends React.Component {
 
   returnWhichActionAreaComponent = () => {
 
-    if (this.state.powerMenuSelection == "Anti Magic") {
+    if (this.state.powerMenuSelection == "Anti Mana") {
 
       return (
 
@@ -111,11 +113,11 @@ class PP5Ranger extends React.Component {
 
           <select 
             className="ui search dropdown"
-            value={this.state.antiMagicTarget}
-            onChange={e => this.setState({ antiMagicTarget: e.target.value })}
+            value={this.state.antiManaTarget}
+            onChange={e => this.setState({ antiManaTarget: e.target.value })}
           >
 
-            <option value="Anti Magic ?" disabled selected>Anti-Magic</option>
+            <option value="Anti Mana ?" disabled selected>Anti-Mana</option>
             {this.getSelectionChoices()}
 
           </select>
@@ -123,9 +125,9 @@ class PP5Ranger extends React.Component {
 
           <button
             className="ui button yellow PP5-margin-left"
-            onClick={this.submitButtonAntiMagicClick}
+            onClick={this.submitButtonAntiManaClick}
           >
-            Anti-Magic Blast!
+            Blast!
           </button>
 
 
@@ -204,10 +206,10 @@ class PP5Ranger extends React.Component {
         <div className="PP5-powers-menu-bar-container orange ui buttons">
           
           <button 
-            className={`ui button ${this.powerMenuColor("Anti Magic")}`}
-            onClick={ () => this.setState({powerMenuSelection: "Anti Magic"}) }
+            className={`ui button ${this.powerMenuColor("Anti Mana")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Anti Mana"}) }
           >
-            Anti-Magic Ray
+            Anti-Mana Ray
           </button>
           <button 
             className={`ui button ${this.powerMenuColor("Shrink")}`}

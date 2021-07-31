@@ -18,33 +18,52 @@ class Ranger extends RolesMasterClass {
         	4: {"shrinkName": "nobody chosen"},
         	5: {"shrinkName": "nobody chosen"},
         	6: {"shrinkName": "nobody chosen"},
+        	7: {"shrinkName": "nobody chosen"},
         };
 
 	}; //end constructor
 
 
-	rangerSensing(_playerObject, _rolesObject) {
+	rangerSensing(playerObj, obj) {
 
-		if (_rolesObject.role == "Delayer") {
-			if (_rolesObject.delayerCount > 0) { return "delayer power"; };
+		if (playerObj.role == "Delayer") {
+			if (obj.rO.roles["Delayer"].delayerCount > 0) { return "status"; };
 		};
 
-		if (_playerObject.bomb) { return "status"; };
-		if (_playerObject.soulMark) { return "status"; };
-		if (_playerObject.burnCount > 0) { return "status"; };
-		if (_playerObject.multiplier > 1) { return "status"; };
-		if (_playerObject.bless > 1) { return "status"; };
-		if (_playerObject.safeguard) { return "status"; };
-
-		if (_rolesObject.role == "Umbra Lord") {
-			if (_rolesObject.bide != 0) { return "status"; };
+		if (playerObj.role == "Umbra Lord") {
+			if (obj.rO.roles["Umbra Lord"].bide > 0) { return "status"; };
 		};
+
+
+		if (playerObj.corrupted) { return "status"; };
+		if (playerObj.soulMark) { return "status"; };
+		if (playerObj.poisonCount > 0) { return "status"; };
+		if (playerObj.zombie == "zombie") { return "status"; };
+
+		if (playerObj.bomb) { return "status"; };
+		if (playerObj.burnCount > 0) { return "status"; };
+		if (playerObj.frozen) { return "status"; };
+		if (playerObj.paralyzed) { return "status"; };
+		if (playerObj.confused) { return "status"; };
+		if (playerObj.entranced) { return "status"; };
+
+		if (playerObj.injuredCount > 0) { return "status"; };
+		if (playerObj.markedMan) { return "status"; };
+
+		if (playerObj.slow) { return "status"; };
+		if (playerObj.slowCharge != 0) { return "status"; };
+		if (playerObj.multiplier > 1) { return "status"; };
+		if (playerObj.boost > 0) { return "status"; };
 
 		return "no status";
+
 	};
 
 
-	sense(obj) {
+	updateRangerSenseArray(obj) {
+
+		if (!this.inGame) { return 0; };
+		if (obj.rD.missionNo == 1) { return 0; };
 
 		var senseArr = [];
 
@@ -53,61 +72,108 @@ class Ranger extends RolesMasterClass {
 			senseArr.push(
 				{
 					name: obj.pA[i].name,
-					status: this.rangerSensing(obj.pA[i], 
-						obj.rO.rolesInGame[i])	
+					status: this.rangerSensing(obj.pA[i], obj)	
 				}
 			);
 
 		}; //end for
 
-		return senseArr;
 
-	};
+		this.messageHandler("Update Ranger Sense Array", 
+
+							{
+								role: "Ranger",
+								power: "senseArray",
+								newValue: senseArr
+							}, 
+
+							obj
+						   );
 
 
-	antiMagicRay(name, obj) {
+	}; //end updateRangerSenseArray()
 
-		var ind = obj.pT[name];
 
-		if (obj.pA[ind].role == "Saintess") { return 0; };
+	antiManaRay(name, obj) {
 
-		/*
-		if (obj.rO.roles["Umbra Lord"].isPlayerDevilized(name)) { 
+		var pObj = obj.pA[obj.pT[name]];
 
-			obj.rO.roles["Umbra Lord"].devilConversionChoice 
-			= "power used and purified";
+		if (pObj.role == "Saintess") { return 0; };
 
-		};
-		*/
 
-		obj.pA[ind].corrupted = false;
-		obj.pA[ind].shrinkCount = 0;
-		obj.pA[ind].burnCount = false;
-		obj.pA[ind].poisoned = false;
-		obj.pA[ind].bomb = false;
-		obj.pA[ind].multiplier = 1;
-		obj.pA[ind].safeguard = false;
-		obj.pA[ind].bless = false;
-		obj.pA[ind].invisible = false;
-		obj.pA[ind].soulMark = false;
-		obj.pA[ind].reverse = false;
+		pObj.soulMark = false;
+		pObj.poisonCount = 0;
+		pObj.zombie = "human";
 
-		if (obj.rO.rolesInGame[ind].role == "Umbra Lord") {
+		pObj.bomb = false;
+		pObj.burnCount = 0;
+		pObj.paralyzed = false; //is this necessary? since anti mana ray occurs in power phase 2, paralysis effect only works during team leader choosing stage
+		pObj.confused = false;
+		pObj.entranced = false;
+
+		pObj.injuredCount = 0;
+		pObj.markedMan = false;
+
+		pObj.slow = false;
+		pObj.slowCharge = 0;
+		pObj.multiplier = 1;
+		pObj.boost = 0;
+
+
+		pObj.safeguard = false;
+		pObj.bless = false;
+		pObj.heartacheDefense = false;
+		pObj.therapy = false;
+		pObj.groupHug = false;
+
+
+		if (pObj.role == "Umbra Lord") {
 			obj.rO.roles["Umbra Lord"].bide = 0;
 		};
 
-		if (obj.rO.rolesInGame[ind].role == "Delayer") {
+
+		if (pObj.role == "Delayer") {
 			obj.rO.roles["Delayer"].delayerCount = 0;
 		};
 
 
-	}; //end antiMagicRay
+		if (obj.rO.roles["Saintess"].curagaBoostTarget
+			== pObj.name) {
+
+			obj.rO.roles["Saintess"].curagaBoostTarget = "nobody chosen";
+
+		};
+
+
+
+		if (pObj.frozen) {
+
+			pObj.frozen = false;
+
+			this.messageHandler("Unfreeze", {socketID: pObj.socketID}, obj);
+
+		};
+
+		
+		this.messageHandler("Anti-Mana Ray", {socketID: pObj.socketID}, obj);
+
+	}; //end antiManaRay
 
 
 
 	setShrinkTarget(name, obj) {
 
 		this.powersHistory[obj.rD.missionNo].shrinkName = name;
+
+		var statusObj = {
+						 "target": name,
+						 "effect": "Shrink",
+						 "factor": 0
+						};
+
+		if (obj.pA[obj.pT[name]].role !== "Saintess") {
+			obj.sE.push(statusObj);
+		};
 
 	};
 
@@ -171,6 +237,61 @@ class Ranger extends RolesMasterClass {
 		};
 
 	}; //adjustTeamVotesShrink()
+
+
+
+
+	messageHandler(power, data, obj) {
+
+		if (power == "Anti-Mana Ray") {
+
+			var sysMess = {
+							type: "power",
+							message: ("You were blasted by the Yellow Mana Ranger's Anti-Mana Ray! All status conditions, good & bad (except 'Corruption' & 'Shrink'), have been nullified!")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: data.socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);	
+
+
+
+		} else if (power == "Unfreeze") {
+
+
+			var stackObj = {
+
+							type: "Individual",
+							socketID: data.socketID,
+							destination: "Update Character Status",
+							data: {status: "frozen", newValue: false}
+
+						   };
+
+			obj.stack.push(stackObj);
+
+
+
+		} else if (power == "Update Ranger Sense Array") {
+
+			var stackObj = {
+							type: "Individual",
+							socketID: this.socketID,
+							destination: "Update Character Powers History",
+							data: data
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		};
+
+
+	}; //end messageHandler
 
 
 

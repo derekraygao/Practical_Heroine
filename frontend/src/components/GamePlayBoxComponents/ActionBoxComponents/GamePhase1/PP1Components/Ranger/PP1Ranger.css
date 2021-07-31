@@ -21,6 +21,8 @@
 	justify-content: center;
 	align-items: center;
 
+	flex-wrap: wrap;
+
 	font-size: 135%;
 	min-height: 200px;
 

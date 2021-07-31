@@ -689,6 +689,7 @@ io.on('connection', function (socket) {
 
 
     AbilityManager.updateStatusesAfterNightPhase(obj);
+    MessageNotificationStack(obj);
 
     //put info in Redux store because you cannot send messages
     //to an unmounted component
@@ -704,12 +705,6 @@ io.on('connection', function (socket) {
 
     //send to App.js and redux store, because component
     //has not been mounted yet
-    if (obj.rO.roles["Ranger"].inGame) {
-
-      io.to(`${obj.rO.roles["Ranger"].socketID}`).
-        emit("Receive Ranger Sense Array", 
-          obj.rO.roles["Ranger"].sense(obj));
-    };
 
 
     if (obj.rO.roles["Saintess"].inGame) {
@@ -1475,15 +1470,17 @@ io.on('connection', function (socket) {
 
 
   //Ranger
-  socket.on("Anti-Magic Ray", (name) => {
+  socket.on("Anti-Mana Ray", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    obj.rO.roles["Ranger"].antiMagicRay(name, obj);
+    obj.rO.roles["Ranger"].antiManaRay(name, obj);
 
-    console.log("Status for " + name + " after anti-magic ray.");
-    console.log(obj.pA[obj.pT[name]]);
+    MessageNotificationStack(obj);
+
+    //console.log("Status for " + name + " after anti-magic ray.");
+    //console.log(obj.pA[obj.pT[name]]);
 
   });
 
@@ -1496,9 +1493,11 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Ranger"].setShrinkTarget(name, obj);
 
+    /*
     console.log("shrink ray target: " 
       + obj.rO.roles["Ranger"].
       powersHistory[obj.rD.missionNo].shrinkName);
+    */
 
   });
 
@@ -2381,7 +2380,6 @@ function MessageNotificationStack(obj) {
 function MessageNotificationStack(obj) {
 
   while (obj.stack.length > 0) {
-
 
     switch (obj.stack[0].type) {
 

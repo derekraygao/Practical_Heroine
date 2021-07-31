@@ -620,6 +620,8 @@ class AbilityManager {
 
     obj.rO.roles["Princess"].updateEoSenseArray(obj);
 
+    obj.rO.roles["Ichigo"].updateNaviSenseInfo(obj);
+
   };
 
 
@@ -653,12 +655,18 @@ class AbilityManager {
     this.updateKaguyaPowers(obj);
     this.updateParalysisAbilitiesEffect(obj);
     
-	  
-    obj.rO.roles["Princess"].updateEoSenseArray(obj);
     obj.rO.roles["Princess"].updateHeartacheDefense(obj);
 
+
+    /*put switch BEFORE update status arrays because 
+    Persequor/Backstabber might steal Ranger/Princess role
+    */
     this.handleBackstabberPersequorAndHurricane(obj);
+
+    obj.rO.roles["Princess"].updateEoSenseArray(obj);
+    obj.rO.roles["Ichigo"].updateNaviSenseInfo(obj);
     
+  
   };
 
 
@@ -670,6 +678,8 @@ class AbilityManager {
     obj.rO.roles["Esper"].resetTelepathyArrayAtEndOfRound();
 
     obj.rO.roles["Princess"].updateTransformationCount(obj);
+
+    obj.rO.roles["Ranger"].updateRangerSenseArray(obj);
 
 
     

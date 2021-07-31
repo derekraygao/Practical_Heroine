@@ -36,16 +36,28 @@ class PP1Ranger extends React.Component {
   };
 
 
+  statusButtonText = (senseObj) => {
+
+    if (senseObj.status == "status") {
+      return (senseObj.name + " (-)");
+    };
+
+    return (senseObj.name + " (+)");
+
+  };
+
+
   getStatusButtonsForPlayers = () => {
 
-    const senseButtons = this.props.rangerSenseArray.map((statusObj, index) => {
+    const senseButtons = this.props.PH["Ranger"]["senseArray"].map((statusObj, index) => {
 
       return (
 
         <button 
           className={`ui ${this.statusButtonColor(statusObj)} button`}
+          key={index}
         > 
-          {statusObj.name}
+          {this.statusButtonText(statusObj)}
         </button>
 
       ); //end return
@@ -96,7 +108,8 @@ class PP1Ranger extends React.Component {
 const mapStateToProps = (state) => {
   
   return (
-         { 
+         {  
+            PH: state.characterPowersHistory,
             myName: state.name,
             missionNumber: state.missionNumber,
             playerList: state.playerList,
