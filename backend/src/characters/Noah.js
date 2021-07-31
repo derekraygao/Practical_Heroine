@@ -44,16 +44,37 @@ class Noah extends RolesMasterClass {
 
 	};
 
+
+	newPlayerOrderList(obj) {
+
+		var newOrder = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+			newOrder.push(obj.pA[i].name);
+		};
+
+		return newOrder;
+	};
+
 	//don't need to check if in game
 	//only way to change hurricane is if Noah is in game
 	useHurricane(obj) {
 
+		/*is the if hurricane activated necessary?
+		isn't it checked in Ability Manager?
+		*/
 		if (this.hurricane == "activated") {
 
 			shuffle(obj.pA);
 			this.reMapIndicesAfterShuffling(obj);
 
 			this.hurricane = "used";
+
+			this.messageHandler(
+								"Update Player List After Hurricane", 
+								this.newPlayerOrderList(obj), 
+								obj
+						   	   );
 
 		};
 
@@ -277,7 +298,36 @@ class Noah extends RolesMasterClass {
 			obj.stack.push(stackObj1);
 			obj.stack.push(stackObj2);
 
-		}; 
+
+		} else if (power == "Update Player List After Hurricane") {
+
+			var stackObj = {
+							type: "Everyone",
+							destination: "Update Player List",
+							data: data
+						   };
+
+			obj.stack.push(stackObj);
+
+
+
+			var sysMess = {
+							type: "power",
+							message: ("King Noah summoned a terrifying hurricane! Great gusts of wind permanently shuffled the Team Leader order, randomly!")
+						  };
+
+			stackObj = {
+						type: "SME Music",
+						data: {messageObj: sysMess, song: "Hurricane"}
+					   };
+
+
+			obj.stack.push(stackObj);
+
+
+		}; //end else if
+
+
 
 
 	}; //end messageHandler

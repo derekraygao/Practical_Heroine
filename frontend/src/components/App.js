@@ -84,6 +84,10 @@ starPrismPowerAudio.volume = 0.1;
 var bombExplosionAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Explosion.mp3");
 bombExplosionAudio.volume = 0.15;
 
+var hurricaneAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Hurricane.mp3");
+hurricaneAudio.volume = 0.10;
+
+
 
 /*Game Over Music */
 var hVictory = new Audio(process.env.PUBLIC_URL + "/sounds/Heroes_Victory.mp4");
@@ -130,6 +134,9 @@ function playSong(song) {
     case "Bomb Explosion":
       bombExplosionAudio.play();
       break;
+
+    case "Hurricane":
+      hurricaneAudio.play();
 
     default:
       break;
@@ -244,7 +251,7 @@ class App extends React.Component {
       setTimeout(() => this.props.updateGamePhase(1), 1000);
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
-      this.props.updateTimerSeconds(30);
+      this.props.updateTimerSeconds(4);
 
       this.props.updateCharacterStatus(
         {"status": "jailed", "newValue": false}
@@ -304,11 +311,11 @@ class App extends React.Component {
 
       if (_teamArr.includes(_name)) {
 
-        this.props.updateTimerSeconds(1);
+        this.props.updateTimerSeconds(15);
 
       } else {
 
-        this.props.updateTimerSeconds(1);
+        this.props.updateTimerSeconds(50);
 
       };
 
@@ -566,6 +573,15 @@ class App extends React.Component {
       //console.log(this.props.missionTeam);
 
     });
+
+
+
+    socket.on("Update Player List", (newPlayerList) => {
+
+      this.props.updatePlayerList(newPlayerList);
+
+    });
+  
 
 
     /*Update characterPowersHistory in Redux Store*/
