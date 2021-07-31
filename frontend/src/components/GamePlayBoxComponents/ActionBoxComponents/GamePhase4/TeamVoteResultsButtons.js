@@ -13,6 +13,9 @@ class TeamVoteResultsButtons extends React.Component {
 
   sortVoteArray = (arr) => {
 
+    if (["Absolute Yes", "Absolute No"].includes(arr[0].vote)) 
+      { return arr; };
+
     var sortedArray = [];
 
     for (let i = 0; i < arr.length; i++) {
@@ -40,14 +43,48 @@ class TeamVoteResultsButtons extends React.Component {
 
   voteButtonColor = (info) => {
 
-    return (info.vote === "Accept" ? "green" : "red");
+    switch (info.vote) {
 
-  };
+      case "Accept":
+        return "green";
+
+      case "Reject":
+        return "red";
+
+      case "Absolute Yes":
+        return "teal";
+
+      case "Absolute No":
+        return "orange";
+
+      default:
+        return "";
+
+    }; //end switch
+
+  }; //end voteButtonColor()
 
 
   voteButtonText = (info) => {
 
-    return (info.vote === "Accept" ? (info.name + " (+)") : (info.name + " (-)"));
+    switch (info.vote) {
+
+      case "Accept":
+        return (info.name + " (+)");
+
+      case "Reject":
+        return (info.name + " (-)");
+
+      case "Absolute Yes":
+        return (info.name + " (++)");
+
+      case "Absolute No":
+        return (info.name + " (--)");
+
+      default:
+        return info.name;
+
+    }; //end switch
 
   };
 
@@ -56,7 +93,9 @@ class TeamVoteResultsButtons extends React.Component {
 
     var latestInd = (this.props.teamVoteInfo[this.props.missionNo].length - 1);
     var teamVoteInfoArray = this.props.teamVoteInfo[this.props.missionNo][latestInd].votingInfo;
+    
     var sortedArray = this.sortVoteArray(teamVoteInfoArray);
+  
 
     const voteButtonsArr = sortedArray.map((info, index) => {
 
@@ -72,9 +111,10 @@ class TeamVoteResultsButtons extends React.Component {
 
     }); //end const voteButtonsArr =
 
+
     return voteButtonsArr;
 
-  }; //end generateTD()
+  }; //end voteButtons()
 
 
 

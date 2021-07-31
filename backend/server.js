@@ -375,6 +375,8 @@ io.on('connection', function (socket) {
 
       return 0;
 
+      /*No need to notify of umbra lord's absolute acceptance
+      because he cannot use the power if darkDestinyCount >= 2*/
     }; //end wasDarkDestinyFulfilled
 
 
@@ -443,6 +445,8 @@ io.on('connection', function (socket) {
 
     }; //end switch
 
+
+    MessageNotificationStack(obj);
 
 
   }); //end "Vote on Team Leader's Proposed Team"
@@ -1568,6 +1572,33 @@ io.on('connection', function (socket) {
 
 
   });
+
+
+
+  socket.on("Absolute Acceptance", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Umbra Lord"].useAbsoluteTeamYesPower(obj);
+
+    //MessageNotificationStack(obj);
+
+  });
+
+
+
+  socket.on("Absolute Rejection", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+    
+    obj.rO.roles["Umbra Lord"].useAbsoluteTeamNoPower();
+
+    //MessageNotificationStack(obj);
+
+  });
+
 
 
 

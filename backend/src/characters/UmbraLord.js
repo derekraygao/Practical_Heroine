@@ -24,31 +24,42 @@ class UmbraLord extends RolesMasterClass {
 	//power fails if Evil has won two missions
 	useAbsoluteTeamYesPower(obj) {
 
-		if (obj.rI.didEvilWinTwoMissions()) { return 0; };
+		if (!obj.rI.canAbsoluteYesBeUsed(obj)) { return 0; };
 
 		this.absoluteTeamVoteYesUsed = "Yes";
+
+		
+
 	};
 
 
 	useAbsoluteTeamNoPower() {
+
 		this.absoluteTeamVoteNoUsed = "Yes";
+
 	};
 
 
 
-	adjustVotesWithUmbraLordAbsolutePower(vote) {
+	adjustVotesWithUmbraLordAbsolutePower(vote, obj) {
 
 		if (this.absoluteTeamVoteYesUsed == "Yes") {
 
 			this.absoluteTeamVoteYesUsed = "Used";
 
+			this.messageHandler("Absolute Yes", obj);
+
 			return 100;
+
 
 		} else if (this.absoluteTeamVoteNoUsed == "Yes") {
 
 			this.absoluteTeamVoteNoUsed = "Used";
 
+			this.messageHandler("Absolute No", obj);
+
 			return -100;
+
 
 		} else {
 
@@ -162,15 +173,60 @@ class UmbraLord extends RolesMasterClass {
 	};
 
 
-	/*
-	adjustMissionVotesDevilized(playerObj) {
+	messageHandler(power, obj) {
 
-		if (!playerObj.devilized) { return 0; };
+		if (power == "Absolute Yes") {
 
-		playerObj.missionVote *= -1;
 
-	}; */
+			var stackObj = {
+							type: "Individual",
+							socketID: this.socketID,
+							destination: "Update Character Powers History",
+							data: {
+									role: "Umbra Lord",
+									power: "absoluteTeamVoteYesUsed",
+									newValue: "Used"
+								  }
+						   };
 
+			obj.stack.push(stackObj);
+
+
+
+			var sysMess = {
+							type: "urgent",
+							message: ("Umbra Lord: Charge forth! This team is accepted! You say I have no honor for disregarding your wishes? Joke. Does honor feed you? Protect you? Honor is a costly luxury only for the privileged. Luckily for you, I can only forcefully accept a team once per game!")
+						  };
+
+				stackObj = {
+							type: "SME Music",
+							data: {messageObj: sysMess, song: "Absolute Acceptance"}
+						   };
+
+			obj.stack.push(stackObj);
+
+
+
+		} else if (power == "Absolute No") {
+
+
+			var sysMess = {
+							type: "urgent",
+							message: ("Umbra Lord: Unfair of me to forcefully reject your team? Fairness and justice are simply arbitrary notions of the self righteous and weak. Luckily for you, I can only forcefully reject a team once per game.")
+						  };
+
+			var stackObj = {
+							type: "SME Music",
+							data: {messageObj: sysMess, song: "Absolute Rejection"}
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		}; //end else if
+
+
+	}; //end messageHandler()
 
 
 	wasAbsolutePowerYesAlreadyUsed() {

@@ -225,12 +225,14 @@ class ResultsInfo {
 
 
 	//for Umbra Lord Absolute Yes Power
-	didEvilWinTwoMissions() {
+	didEvilWinThreeMissions(obj) {
+
+		if (obj.rD.missionNo < 4) { return false; };
 
 		var numOfFailures = 0;
 
 		//no need to check Mission 7
-		for (var i = 1; i < 7; i++) {
+		for (var i = 1; i < obj.rD.missionNo; i++) {
 
 			if (this.missionInfo[i].result == "Fail") {
 				numOfFailures += 1;
@@ -238,9 +240,50 @@ class ResultsInfo {
 
 		}; //end for
 
-		return ((numOfFailures >= 2) ? true : false);
+		return ((numOfFailures >= 3) ? true : false);
 
-	}; //end didEvilWinTwoMissions
+	}; //end didEvilWinThreeMissions
+
+
+	/*prevent 3 in a row
+	no need to check for mission 1 + 2 */
+	didEvilWinLastTwoMissions(obj) {
+
+		var currentMN = obj.rD.missionNo;
+		if (currentMN < 3) { return false; };
+
+		if (this.missionInfo[(currentMN - 2)].result == "Fail"
+			&& this.missionInfo[(currentMN - 1)].result == "Fail") {
+
+			return true;
+
+		}; //end if
+
+		return false;
+
+	};
+
+
+	canAbsoluteYesBeUsed(obj) {
+
+		if (this.didEvilWinLastTwoMissions(obj)) {
+			return false;
+		};
+
+
+		if (this.didEvilWinThreeMissions(obj)) {
+			return false;
+		};
+
+
+		if (obj.rO.roles["Kaguya"].darkDestinyCount == 2) { 
+			return false; 
+		};
+
+		return true;
+
+	};
+
 
 
 }; //end class ResultsInfo

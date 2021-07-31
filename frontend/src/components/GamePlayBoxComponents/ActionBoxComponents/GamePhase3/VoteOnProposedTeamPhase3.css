@@ -42,41 +42,6 @@
 }
 
 
-
-.vote-on-team-button-container-ul {
-
-	grid-area: vote-buttons;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	align-content: center;
-	flex-wrap: wrap;
-
-	overflow-y: auto;
-
-	padding-bottom: 1%;
-
-}
-
-.vote-on-team-button-container-ul button {
-
-	margin-top: 1% !important;
-
-}
-
-
-.vote-on-team-container-umbra-lord {
-
-	display: grid;
-	grid-template-rows: 35% 65%;
-
-	grid-template-areas: "instructions"
-						 "vote-buttons";
-	
-}
-
-
 .submitted-team-vote-container {
 
 	display: flex;
@@ -91,3 +56,64 @@
 	padding-right: 3%;
 
 }
+
+
+
+
+.vote-on-team-container-umbra-lord {
+
+	display: grid;
+	grid-template-rows: 40% 30% 30%;
+
+	grid-template-areas: "instructions"
+						 "vote-buttons"
+						 "vote-buttons-absolute"
+						 ;
+	
+}
+
+
+.vote-on-team-button-container-ul {
+
+	grid-area: vote-buttons;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	flex-wrap: wrap;
+
+	padding-bottom: 1%;
+
+}
+
+
+.vote-on-team-button-container-absolute {
+
+	grid-area: vote-buttons-absolute;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	flex-wrap: wrap;
+
+	padding-bottom: 3%;
+	margin-top: 9px;
+
+}
+
+
+.vote-on-team-button-container-ul button {
+
+	margin-top: 5px !important;
+
+}
+
+
+.vote-on-team-button-container-absolute button {
+
+	margin-top: 5px !important;
+
+}
+

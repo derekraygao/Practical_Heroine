@@ -161,7 +161,7 @@ function demonLordAbsolutePowerTest() {
 	Controller.roomsData["testing"].teamLeaderIndex = 0;
 
 	console.log("Used Absolute Vote Yes");
-	obj.rO.roles["Umbra Lord"].useAbsoluteTeamYesPower();
+	obj.rO.roles["Umbra Lord"].useAbsoluteTeamYesPower(obj);
 	console.log(Controller.wasTeamAccepted(obj));
 	console.log(obj.rI.getLatestTeamVotingInfo(1));
 
@@ -180,7 +180,7 @@ function demonLordAbsolutePowerTest() {
 
 
 	console.log("Used Absolute Vote No");
-	obj.rO.roles["Umbra Lord"].useAbsoluteTeamNoPower();
+	obj.rO.roles["Umbra Lord"].useAbsoluteTeamNoPower(obj);
 	console.log(Controller.wasTeamAccepted(obj));
 	console.log(obj.rI.getLatestTeamVotingInfo(1));
 
@@ -193,7 +193,31 @@ function demonLordAbsolutePowerTest() {
 	console.log(Controller.wasTeamAccepted(obj));
 	console.log(obj.rI.getLatestTeamVotingInfo(1));
 
+
+	console.log("");
+	console.log("");
+
+	console.log("Can Absolute Yes Be Used Test");
+	console.log("");
+
+	
+	obj.rI.addMissionInfo(1, [], 0, 0, 0, "Fail");
+	obj.rI.addMissionInfo(2, [], 0, 0, 0, "Fail");
+	obj.rI.addMissionInfo(3, [], 0, 0, 0, "Success");
+	obj.rI.addMissionInfo(4, [], 0, 0, 0, "Fail");
+
+	obj.rD.missionNo = 5;
+	console.log("Can Absolute Yes Be Used: " + obj.rI.canAbsoluteYesBeUsed(obj));
+
+	console.log("");
+	console.log("Kaguya Dark Destiny is 2");
+	kaguya.darkDestinyCount = 2;
+
+	console.log("Can Absolute Yes Be Used, Kaguya: " + obj.rI.canAbsoluteYesBeUsed(obj));
 };
+
+demonLordAbsolutePowerTest();
+
 
 
 function testUmbraLordPowers() {
@@ -1053,7 +1077,7 @@ function testRangerAntiManaRay() {
 };
 
 
-testRangerAntiManaRay();
+//testRangerAntiManaRay();
 
 
 

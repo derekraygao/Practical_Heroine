@@ -19,7 +19,7 @@ class ViewTeamVoteResultsPhase4 extends React.Component {
 
   componentDidMount = () => {
 
-    socket.emit("Ready To Start Power Phase 2 and Game Phase 5");
+    //socket.emit("Ready To Start Power Phase 2 and Game Phase 5");
 
   }; //end componentDidMount
 
@@ -50,7 +50,7 @@ class ViewTeamVoteResultsPhase4 extends React.Component {
     return (
 
       <button 
-        className="ui button"
+        className="ui button yellow"
         onClick={this.doneViewingOnClick}
       >
         Done Viewing
@@ -66,9 +66,14 @@ class ViewTeamVoteResultsPhase4 extends React.Component {
     var latestInd = (this.props.teamVoteInfo[this.props.missionNo].length - 1);
     var result = this.props.teamVoteInfo[this.props.missionNo][latestInd].result;
 
-    return (result === "Accepted" ? true : false);
+    if (["Accepted", "Absolute Accepted"].includes(result)) {
+      return true;
+    };
+
+    return false;
 
   }; //end wasTeamApproved()
+
 
 
   teamVoteResultsText = () => {

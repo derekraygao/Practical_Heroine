@@ -87,6 +87,12 @@ bombExplosionAudio.volume = 0.15;
 var hurricaneAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Hurricane.mp3");
 hurricaneAudio.volume = 0.10;
 
+var absoluteAcceptanceAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Absolute_Acceptance.mp4");
+absoluteAcceptanceAudio.volume = 0.10;
+
+var absoluteRejectionAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Absolute_Rejection.mp4");
+absoluteRejectionAudio.volume = 0.10;
+
 
 
 /*Game Over Music */
@@ -106,6 +112,14 @@ vVictoryDarkDestiny.volume = 0.15;
 function playSong(song) {
 
   switch (song) {
+
+    case "Absolute Acceptance":
+      absoluteAcceptanceAudio.play();
+      break;
+
+    case "Absolute Rejection":
+      absoluteRejectionAudio.play();
+      break;
 
     case "Lullaby":
       lullabyAudio.play();

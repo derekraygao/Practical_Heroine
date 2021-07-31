@@ -22,11 +22,11 @@ class PP6UmbraLord extends React.Component {
 
   clickBide = () => {
 
-    this.props.voted("Power");
-
     socket.emit("Charge Up Bide");
 
     socket.emit("Vote on Mission", "Bide");
+
+    this.props.voted("Power");
 
   }; //end clickBide()
 
