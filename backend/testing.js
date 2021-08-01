@@ -1599,24 +1599,43 @@ function testHecatePower() {
 
 	obj.rO.roles["Hecate"].setMultiplierTarget("Derek", obj);
 
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	console.log("Derek multiplication is now: " + obj.pA[0].multiplier);
 
 	obj.pA[0].corrupted = true;
-	obj.pA[0].soulMark = true;
-	obj.pA[0].burnCount = 3;
-	obj.pA[0].shrinkCount = 5;
-	obj.pA[0].bomb = true;
-	obj.pA[0].bless = true;
+	obj.pA[0].bomb = true
+	obj.pA[0].burnCount = 2
+	obj.pA[0].soulMark = true
+	obj.pA[0].shrinkCount = 2;
+	obj.pA[0].multiplier = 3;
+	obj.pA[0].injuredCount = 2;
+	obj.pA[0].entranced = true;
+	obj.pA[0].confused = true;
+	obj.pA[0].markedMan = true;
+	obj.pA[0].slow = true;
+	obj.pA[0].slowCharge = -5;
+	obj.pA[0].zombie = "zombie";
+	obj.pA[1].zombie = "recovered";
+	obj.pA[0].paralyzed = true;
+	obj.pA[0].frozen = true;
+
+	obj.pA[0].boost = 3;
+
 	obj.pA[0].safeguard = true;
+	obj.pA[0].bless = true;
+	obj.pA[0].heartacheDefense = true;
+	obj.pA[0].therapy = true;
+	obj.pA[0].groupHug = true;
 
+	obj.rO.roles["Saintess"].curagaBoostTarget = "Derek";
 
-	obj.rO.roles["Hecate"].exchangeOfTheSpirits("Derek", "Cloud", obj);
+	obj.rO.roles["Hecate"].exchangeOfTheSpirits("Derek", "Serena", obj);
 
 	console.log("Status after exchange of spirits");
-	console.log(obj.pA[0]);
-	console.log(obj.pA[1]);
+	console.log("");
+
+	console.log(princess.updateEoSenseArray(obj));
 
 };
 

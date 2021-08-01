@@ -12,10 +12,6 @@ class Hecate extends RolesMasterClass {
         this.team = "villains";
 
         this.multiplicationFactorArray = [1, 2, 2, 2, 2, 2, 3, 3, 3, 4];
-        this.metronomeChoices = ["F.S. Bomb", "Burn", 
-        						 "Injury", "Paralysis", "Freeze", 
-        						 "Zombie", "Slow", "Confusion",
-        						 "Bless", "Safeguard"];
        
 
        /* is keeping track of exchange array necessary?
@@ -148,6 +144,8 @@ class Hecate extends RolesMasterClass {
 
 	exchangeOfTheSpirits(name1, name2, obj) {
 
+		if (this.exchangePowerUsed) { return 0; };
+
 		this.exchangePowerUsed = true;
 
 		var index1 = obj.pT[name1];
@@ -164,33 +162,105 @@ class Hecate extends RolesMasterClass {
 		var tempStatusHolder = {
 									corrupted: obj.pA[index1].corrupted,
 									soulMark: obj.pA[index1].soulMark,
-									multiplier: obj.pA[index1].multiplier,
-									burnCount: obj.pA[index1].burnCount,
-									shrinkCount: obj.pA[index1].shrinkCount,
+									poisonCount: obj.pA[index1].poisonCount,
+									zombie: obj.pA[index1].zombie,
+
 									bomb: obj.pA[index1].bomb,
+									burnCount: obj.pA[index1].burnCount,
+									frozen: obj.pA[index1].frozen,
+									paralyzed: obj.pA[index1].paralyzed,
+									confused: obj.pA[index1].confused,
+									entranced: obj.pA[index1].entranced,
+
+									injuredCount: obj.pA[index1].injuredCount,
+									markedMan: obj.pA[index1].markedMan,
+
+									slow: obj.pA[index1].slow,
+									slowCharge: obj.pA[index1].slowCharge,
+									shrinkCount: obj.pA[index1].shrinkCount,
+									multiplier: obj.pA[index1].multiplier,
+									boost: obj.pA[index1].boost,
+
+									safeguard: obj.pA[index1].safeguard,
 									bless: obj.pA[index1].bless,
-									safeguard: obj.pA[index1].safeguard
+									heartacheDefense: obj.pA[index1].heartacheDefense,
+									therapy: obj.pA[index1].therapy,
+									groupHug: obj.pA[index1].groupHug,
+									
 						   	   };
 
 		//put player 2 status into player 1
 		obj.pA[index1].corrupted = obj.pA[index2].corrupted;
 		obj.pA[index1].soulMark = obj.pA[index2].soulMark;
-		obj.pA[index1].multiplier = obj.pA[index2].multiplier;
-		obj.pA[index1].burnCount = obj.pA[index2].burnCount;
-		obj.pA[index1].shrinkCount = obj.pA[index2].shrinkCount;
-		obj.pA[index1].bomb = obj.pA[index2].bomb;
-		obj.pA[index1].bless = obj.pA[index2].bless;
-		obj.pA[index1].safeguard = obj.pA[index2].safeguard;
+		obj.pA[index1].poisonCount = obj.pA[index2].poisonCount;
+		obj.pA[index1].zombie = obj.pA[index2].zombie;
 
-		//put player 1 status into player 2
+		obj.pA[index1].bomb = obj.pA[index2].bomb;
+		obj.pA[index1].burnCount = obj.pA[index2].burnCount;
+		obj.pA[index1].frozen = obj.pA[index2].frozen;
+		obj.pA[index1].paralyzed = obj.pA[index2].paralyzed; 
+		obj.pA[index1].confused = obj.pA[index2].confused;
+		obj.pA[index1].entranced = obj.pA[index2].entranced;
+
+		obj.pA[index1].injuredCount = obj.pA[index2].injuredCount;
+		obj.pA[index1].markedMan = obj.pA[index2].markedMan;
+
+		obj.pA[index1].slow = obj.pA[index2].slow;
+		obj.pA[index1].slowCharge = obj.pA[index2].slowCharge;
+		obj.pA[index1].shrinkCount = obj.pA[index2].shrinkCount;
+		obj.pA[index1].multiplier = obj.pA[index2].multiplier;
+		obj.pA[index1].boost = obj.pA[index2].boost;
+		
+		obj.pA[index1].safeguard = obj.pA[index2].safeguard;
+		obj.pA[index1].bless = obj.pA[index2].bless;
+		obj.pA[index1].heartacheDefense = obj.pA[index2].heartacheDefense;
+		obj.pA[index1].therapy = obj.pA[index2].therapy;
+		obj.pA[index1].groupHug = obj.pA[index2].groupHug;
+
+
+		//put Player 1 Status into Player 2
+
 		obj.pA[index2].corrupted = tempStatusHolder.corrupted;
 		obj.pA[index2].soulMark = tempStatusHolder.soulMark;
-		obj.pA[index2].multiplier = tempStatusHolder.multiplier;
-		obj.pA[index2].burnCount = tempStatusHolder.burnCount;
-		obj.pA[index2].shrinkCount = tempStatusHolder.shrinkCount;
+		obj.pA[index2].poisonCount = tempStatusHolder.poisonCount;
+		obj.pA[index2].zombie = tempStatusHolder.zombie;
+
 		obj.pA[index2].bomb = tempStatusHolder.bomb;
-		obj.pA[index2].bless = tempStatusHolder.bless;
+		obj.pA[index2].burnCount = tempStatusHolder.burnCount;
+		obj.pA[index2].frozen = tempStatusHolder.frozen;
+		obj.pA[index2].paralyzed = tempStatusHolder.paralyzed; 
+		obj.pA[index2].confused = tempStatusHolder.confused;
+		obj.pA[index2].entranced = tempStatusHolder.entranced;
+
+		obj.pA[index2].injuredCount = tempStatusHolder.injuredCount;
+		obj.pA[index2].markedMan = tempStatusHolder.markedMan;
+
+		obj.pA[index2].slow = tempStatusHolder.slow;
+		obj.pA[index2].slowCharge = tempStatusHolder.slowCharge;
+		obj.pA[index2].shrinkCount = tempStatusHolder.shrinkCount;
+		obj.pA[index2].multiplier = tempStatusHolder.multiplier;
+		obj.pA[index2].boost = tempStatusHolder.boost;
+		
 		obj.pA[index2].safeguard = tempStatusHolder.safeguard;
+		obj.pA[index2].bless = tempStatusHolder.bless;
+		obj.pA[index2].heartacheDefense = tempStatusHolder.heartacheDefense;
+		obj.pA[index2].therapy = tempStatusHolder.therapy;
+		obj.pA[index2].groupHug = tempStatusHolder.groupHug;
+
+
+		if (obj.rO.roles["Saintess"].curagaBoostTarget
+			== obj.pA[index1].name) { 
+
+			obj.rO.roles["Saintess"].curagaBoostTarget = obj.pA[index2].name;
+			
+
+		} else if (obj.rO.roles["Saintess"].curagaBoostTarget
+			== obj.pA[index2].name) {
+
+			obj.rO.roles["Saintess"].curagaBoostTarget = obj.pA[index1].name;
+			
+		};
+
 
 		return ("Exchanged the statuses of " + name1 + " and " + name2);
 
