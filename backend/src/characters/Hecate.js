@@ -12,7 +12,7 @@ class Hecate extends RolesMasterClass {
         this.team = "villains";
 
         this.multiplicationFactorArray = [1, 2, 2, 2, 2, 2, 3, 3, 3, 4];
-       
+       	
 
        /* is keeping track of exchange array necessary?
         power can only be used once */
@@ -28,6 +28,7 @@ class Hecate extends RolesMasterClass {
         };
 
         this.exchangePowerUsed = false;
+        this.exchangeArray = [];
 
 
 	}; //end constructor
@@ -142,14 +143,81 @@ class Hecate extends RolesMasterClass {
 
 
 
-	exchangeOfTheSpirits(name1, name2, obj) {
 
+
+	handleFrozenExchange(pObj1, pObj2, obj) {
+
+		if (!pObj1.frozen && !pObj2.frozen) { return 0; };
+		if (pObj1.frozen && pObj2.frozen) { return 0; };
+		
+
+		if (pObj1.frozen) {
+
+		   var stackObj1 = {
+							type: "Individual",
+							socketID: pObj1.socketID,
+							destination: "Update Character Status",
+							data: {status: "frozen", newValue: false}
+						   };
+
+		   var stackObj2 = {
+							type: "Individual",
+							socketID: pObj2.socketID,
+							destination: "Update Character Status",
+							data: {status: "frozen", newValue: true}
+						   };
+
+			obj.stack.push(stackObj1);
+			obj.stack.push(stackObj2);	
+
+
+		} else if (pObj2.frozen) {
+
+		   var stackObj1 = {
+							type: "Individual",
+							socketID: pObj2.socketID,
+							destination: "Update Character Status",
+							data: {status: "frozen", newValue: false}
+						   };
+
+		   var stackObj2 = {
+							type: "Individual",
+							socketID: pObj1.socketID,
+							destination: "Update Character Status",
+							data: {status: "frozen", newValue: true}
+						   };
+
+			obj.stack.push(stackObj1);
+			obj.stack.push(stackObj2);	
+
+		};
+
+
+	}; //end handleFrozenExchange(pObj1, pObj2, obj)
+
+
+	/*namesArr = ["Derek", "John"]
+	You want to delay EoS to AFTER 1st powers phase has ended in case somebody is frozen...
+	updating frozen could cause their frontend to re-render and they could re-use their powers.
+	*/
+	setEoSTargets(namesArr) {
+
+		this.exchangeArray = namesArr;
+
+	};
+
+
+	exchangeOfTheSpirits(obj) {
+
+		if (this.exchangeArray.length == 0) { return 0; };
 		if (this.exchangePowerUsed) { return 0; };
 
 		this.exchangePowerUsed = true;
 
-		var index1 = obj.pT[name1];
-		var index2 = obj.pT[name2];
+		var index1 = obj.pT[this.exchangeArray[0]];
+		var index2 = obj.pT[this.exchangeArray[1]];
+		this.exchangeArray = [];
+		
 
 		if (["Saintess", "Umbra Lord"].includes(obj.pA[index1].role) ||
 			["Saintess", "Umbra Lord"].includes(obj.pA[index2].role)) {
@@ -157,6 +225,9 @@ class Hecate extends RolesMasterClass {
 			return 0;
 
 		};
+
+
+		this.handleFrozenExchange(obj.pA[index1], obj.pA[index2], obj);
 
 
 		var tempStatusHolder = {
@@ -262,7 +333,7 @@ class Hecate extends RolesMasterClass {
 		};
 
 
-		return ("Exchanged the statuses of " + name1 + " and " + name2);
+		//return ("Exchanged the statuses of " + name1 + " and " + name2);
 
 	};
 

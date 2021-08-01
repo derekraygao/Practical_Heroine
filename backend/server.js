@@ -1608,10 +1608,10 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    obj.rO.roles["Hecate"].exchangeOfTheSpirits(
-      namesArr[0], namesArr[1], obj);
+    obj.rO.roles["Hecate"].setEoSTargets(namesArr);
 
   });
+
 
 
   socket.on("Multiplication Magic", (name) => {

@@ -614,6 +614,8 @@ class AbilityManager {
   updateStatusesAfterGamePhase1(obj) {
 
     obj.rO.roles["Saintess"].activateHolyPower(obj);
+    obj.rO.roles["Hecate"].exchangeOfTheSpirits(obj);
+
     obj.rO.roles["Sensor"].sendScanResultsToSensor(obj);
 
     obj.rO.roles["Detective Chat"].sendCrossExaminationRequest(obj);
