@@ -189,6 +189,8 @@ class Backstabber extends RolesMasterClass {
 		);
 
 
+		this.messageHandler("Notify Princess of Switch", obj, "");
+
 		/*
 		return (
 			{
@@ -336,7 +338,23 @@ class Backstabber extends RolesMasterClass {
 			obj.stack.push(stackObj);
 
 
-		};
+		} else if (power == "Notify Princess of Switch") {
+
+			var sysMess = {
+							type: "urgent",
+							message: ("Eo: John! " + this.originalBackStabberName + " has betrayed his team and joined the Heroes! The new Backstabber is now " + obj.rO.roles["Backstabber"].name + ".")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: obj.rO.roles["Princess"].socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);		
+
+
+		}; //end else if
 
 
 	}; //end messageHandler
