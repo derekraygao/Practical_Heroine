@@ -59,6 +59,8 @@ class DetectiveChat extends RolesMasterClass {
 
 	setCrossExaminationTarget(name, obj) {
 
+		if (this.crossExaminationPlea == "Used") { return 0; };
+
 		this.crossExaminationTarget = name;
 		this.missionXXNWasUsed = obj.rD.missionNo;
 
@@ -80,9 +82,9 @@ class DetectiveChat extends RolesMasterClass {
 		this.crossExaminationPlea = plea;
 
 		this.messageHandler(
-			"Notify Cross Examination Plea & Update Character Power History",
-			"",
-			obj
+				"Notify Cross Examination Plea",
+				"",
+				obj
 		);
 
 	}; //end setCrossExaminationPlea(plea)
@@ -106,6 +108,15 @@ class DetectiveChat extends RolesMasterClass {
 		if (this.crossExaminationPlea == "Not Guilty") {
 
 			voteSum += 5;
+
+			this.crossExaminationPlea = "Used";
+
+			this.messageHandler(
+				"Update Cross Examination Was Used",
+				"",
+				obj
+			);
+
 
 		} else {
 
@@ -190,7 +201,7 @@ class DetectiveChat extends RolesMasterClass {
 
 
 
-		} else if (power == "Notify Cross Examination Plea & Update Character Power History") {
+		} else if (power == "Notify Cross Examination Plea") {
 
 			var sysMess = {
 							type: "power",
@@ -207,17 +218,17 @@ class DetectiveChat extends RolesMasterClass {
 			obj.stack.push(stackObj);	
 
 
+		} else if (power == "Update Cross Examination Was Used") {
 
-			stackObj = {
-						type: "Individual",
-						socketID: this.socketID, 
-						destination: "Update Character Powers History",
-						data: {"role": "Detective Chat" , "power": "Cross Examination Target", "newValue": this.crossExaminationTarget}
-					   };
+			var stackObj = {
+							type: "Individual",
+							socketID: this.socketID, 
+							destination: "Update Character Powers History",
+							data: {"role": "Detective Chat" , "power": "Cross Examination Target", "newValue": this.crossExaminationTarget}
+						   };
 
 			obj.stack.push(stackObj);	
 	
-
 		};
 
 
