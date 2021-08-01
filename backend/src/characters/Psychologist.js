@@ -45,7 +45,7 @@ class Psychologist extends RolesMasterClass {
                          "Lieutenant Blitz", "Reverser", "Noah",  
                          "Delayer", "Persequor", "Baby Doll",
                          "Spiritualist", "Backstabber", "Toxiturtle", 
-                         "Psychologist", "Psychologist",
+                         "Kaguya", "Psychologist", "Psychologist",
                          "Psychologist"];
 
 

@@ -218,12 +218,7 @@ class Princess extends RolesMasterClass {
 
 			var sysMess = {
 							type: "power",
-							message: ("Loud and strange music "
-								+ "reverberates in the air! Could it "
-								+ "be? Oh, yes! Star Practical has "
-								+ "arrived! Evil doers beware! "
-								+ "In the name of the stars, I will "
-								+ "punish you!")
+							message: ("John: STAR PRISM POWER! Stop right there! I am Star Practical, a champion of Practicality and Rationality! Evil doers beware! In the name of the stars, I will punish you! Or even kill you! Seriously, seems to me like the logical thing to do is to kill villains. Prevent future trouble, ya know? I mean, everyone loves Aeroman, and he's okay, I guess.... But look at what happens with Circus-Circus! Same old story. He commits a crime, Aeroman locks him up, he breaks free, commits more crimes, Aeroman locks him up.... That's the no-kill rule for you....")
 						  };
 
 			var stackObj = {

@@ -43,12 +43,13 @@ class PP1Pear extends React.Component {
 
     var playerChoices = JSON.parse(JSON.stringify(this.props.missionTeam));
 
+    /*
     var q = playerChoices.indexOf(this.props.myName);
 
     if (q > -1) {
       playerChoices.splice(q, 1);
     };
-
+    */
 
     var arrayOfOptions = playerChoices.map( (pName, index) => {
 
