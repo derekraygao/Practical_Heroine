@@ -49,6 +49,7 @@ class Saintess extends RolesMasterClass {
 		if (obj.pA[index].injuredCount > 0) { return false; };
 		if (obj.pA[index].markedMan) { return false; }
 
+		if (obj.pA[index].boost > 0) { return false; };
 		if (obj.pA[index].multiplier > 1) { return false; };
 		if (obj.pA[index].shrinkCount > 0) { return false; };
 		if (obj.pA[index].slow) { return false; }
@@ -142,6 +143,7 @@ class Saintess extends RolesMasterClass {
 
 		obj.pA[index].shrinkCount = 0;
 		obj.pA[index].multiplier = 1;
+		obj.pA[index].boost = 0;
 
 		obj.pA[index].slow = false;
 		obj.pA[index].slowCharge = 0;
@@ -255,7 +257,8 @@ class Saintess extends RolesMasterClass {
 
 	adjustMissionVotesSafeguard(obj) {
 
-		if (!this.inGame) { return 0; };
+		if (!this.inGame && !obj.rO.roles["Persequor"].inGame) 
+			{ return 0; };
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
@@ -272,7 +275,8 @@ class Saintess extends RolesMasterClass {
 
 	adjustTeamVotesBless(obj) {
 
-		if (!this.inGame) { return 0; };
+		if (!this.inGame && !obj.rO.roles["Persequor"].inGame) 
+			{ return 0; };
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
@@ -358,8 +362,8 @@ class Saintess extends RolesMasterClass {
 			case "Dispel":
 
 				return ("Your strength has been scattered to the 4 winds with "
-					+ "the power of 'Dispel'. Delayer Charge, Slow, Slow Charge, "
-					+ "Shrink, and Multiplication Enhancement are reset to normal."
+					+ "the power of 'Dispel'. Temporal Charge, Slow, Slow Charge, "
+					+ "Shrink, Boost, and Multiplication Enhancement are reset to normal."
 				);
 
 			case "Bless":

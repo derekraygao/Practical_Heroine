@@ -216,7 +216,7 @@ function demonLordAbsolutePowerTest() {
 	console.log("Can Absolute Yes Be Used, Kaguya: " + obj.rI.canAbsoluteYesBeUsed(obj));
 };
 
-demonLordAbsolutePowerTest();
+//demonLordAbsolutePowerTest();
 
 
 
@@ -1437,6 +1437,7 @@ function checkStatusConditionForSaintess(playerObject) {
 	console.log("frozen: " + playerObject.frozen);
 	console.log("injured count: " + playerObject.injuredCount);
 	console.log("multiplier: " + playerObject.multiplier);
+	console.log("boost: " + playerObject.boost);
 	console.log("bless: " + playerObject.bless);
 	console.log("safeguard: " + playerObject.safeguard);
 	console.log("");
@@ -1455,6 +1456,7 @@ function isStatusNormalCheckForSaintess() {
 		//obj.pA[0].soulMark = true
 		//obj.pA[0].shrinkCount = 2;
 		//obj.pA[0].multiplier = 3;
+		//obj.pA[0].boost = 2;
 		//obj.pA[0].injuredCount = 2;
 		//obj.pA[0].entranced = true;
 		//obj.pA[0].confused = true;
@@ -1470,12 +1472,13 @@ function isStatusNormalCheckForSaintess() {
 
 };
 
-isStatusNormalCheckForSaintess();
+//isStatusNormalCheckForSaintess();
 
 
 
 function testSaintessPower() {
 
+	obj.rD.missionNo = 1;
 	
 	obj.rO.roles["Umbra Lord"].corrupt("Derek", obj);
 
@@ -1486,39 +1489,48 @@ function testSaintessPower() {
 	obj.pA[0].paralyzed = true;
 	obj.pA[0].frozen = true;
 	obj.pA[0].multiplier = 2;
+	obj.pA[0].boost = 4;
 	obj.pA[0].shrinkCount = 2;
 	obj.pA[0].injuredCount = 1;
 
 	//obj.rO.roles["Delayer"].delayerCount = 1;
 
-	console.log(obj.rO.roles["Saintess"].saintessSense(obj));
+	console.log(saintess.saintessSense(obj));
 	
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 	console.log("");
-	obj.rO.roles["Saintess"].activateHolyPower("Purify", "Derek", obj);
+
+
+	saintess.setSaintessPower({power: "Purify", target: "Derek"}, obj);
+	saintess.activateHolyPower(obj);
 	console.log("After purify");
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 	console.log("");
-	obj.rO.roles["Saintess"].activateHolyPower("Esuna", "Derek", obj);
+
+	saintess.setSaintessPower({power: "Esuna", target: "Derek"}, obj);
+	saintess.activateHolyPower(obj);
 	console.log("After esuna");
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 	console.log("");
-	obj.rO.roles["Saintess"].activateHolyPower("Curaga", "Derek", obj);
+	saintess.setSaintessPower({power: "Curaga", target: "Derek"}, obj);
+	saintess.activateHolyPower(obj);
 	console.log("After curaga");
 	//AbilityManager.updateStatuses(obj);
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 
 	console.log("");
-	obj.rO.roles["Saintess"].activateHolyPower("Dispel", "Derek", obj);
+	saintess.setSaintessPower({power: "Dispel", target: "Derek"}, obj);
+	saintess.activateHolyPower(obj);
 	console.log("After dispel");
 	checkStatusConditionForSaintess(obj.pA[0]);
 
 	console.log("");
-	obj.rO.roles["Saintess"].activateHolyPower("Bless", "Derek", obj);
+	saintess.setSaintessPower({power: "Bless", target: "Derek"}, obj);
+	saintess.activateHolyPower(obj);
 	console.log("After bless");
 	//AbilityManager.updateStatuses(obj);
 	checkStatusConditionForSaintess(obj.pA[0]);
@@ -1526,7 +1538,8 @@ function testSaintessPower() {
 	//obj.pA[0].role = "Umbra Lord"; //should not affect umbra lord
 
 	console.log("");
-	obj.rO.roles["Saintess"].activateHolyPower("Safeguard", "Derek", obj);
+	saintess.setSaintessPower({power: "Safeguard", target: "Derek"}, obj);
+	saintess.activateHolyPower(obj);
 	console.log("After safeguard");
 	//AbilityManager.updateStatuses(obj);
 	checkStatusConditionForSaintess(obj.pA[0]);
