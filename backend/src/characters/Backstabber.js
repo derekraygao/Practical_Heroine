@@ -210,10 +210,9 @@ class Backstabber extends RolesMasterClass {
 		if (!this.inGame) { return 0; };
 		if (this.originalBackStabberName == "nobody chosen") { return 0; };
 
-		var indSwitched = obj.pT[this.name];
 		var indOriginal = obj.pT[this.originalBackStabberName];
 
-		if (obj.pA[indSwitched].selectedForMission && 
+		if (obj.pA[this.index].selectedForMission && 
 			obj.pA[indOriginal].selectedForMission) {
 
 			if (obj.pA[this.index].missionVote >= 0) {
