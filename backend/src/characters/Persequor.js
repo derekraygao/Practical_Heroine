@@ -71,9 +71,8 @@ class Persequor extends RolesMasterClass {
 
 
 	/*don't need to check if persequor is on the team, because 
-	this.personVotetoCopy HAS to be "nobody chosen" unless persequor on team
+	this.personVoteToCopy HAS to be "nobody chosen" unless persequor on team
 	and has used her powers 
-	Also, personVoteToCopy is reset in outside function
 	*/
 	adjustMissionVoteCopyCat(obj) {
 
@@ -81,8 +80,21 @@ class Persequor extends RolesMasterClass {
 		if (this.personVoteToCopy == "nobody chosen") { return 0; };
 
 		//Pear Vanish Power Adjustment
-		if ([this.name, this.personVotetoCopy].
-			includes(obj.rO.roles["Pear"].playerVoteToVanish)) {
+		if (obj.rO.roles["Pear"].playerVoteToVanish 
+			== this.personVoteToCopy) {
+
+			obj.pA[this.index].missionVote = 0;
+
+			this.personVoteToCopy = "nobody chosen";
+
+			return 0;
+
+		}; 
+
+
+		//Perish Song Check
+		if (obj.rO.roles["Baby Doll"].perishSongArray.includes(this.personVoteToCopy)
+			&& obj.rO.roles["Baby Doll"].areAllPerishersOnTheTeam(obj)) {
 
 			obj.pA[this.index].missionVote = 0;
 

@@ -148,6 +148,7 @@ class VoteAdjuster {
 
 		};
 
+
 		obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
 
 		/*reversing powers need to be after berserk but 
@@ -161,14 +162,11 @@ class VoteAdjuster {
 
 		obj.rO.roles["Lottie"].adjustMissionVotesPrincessAndLottie(obj);
 
+		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
+
 		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
 
 		obj.rO.roles["Baby Doll"].adjustMissionVotesPerishSong(obj);
-
-		/*copycat checks inside to see if persequor
-		is target of Pear's vanish */
-		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
-
 
 		//safeguard needs to be near the end
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
@@ -237,7 +235,7 @@ class VoteAdjuster {
 		obj.rO.roles["Lottie"].adjustMissionVotesPrincessAndLottie(obj);
 
 		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
-		
+
 		//safeguard needs to be near the end
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
 

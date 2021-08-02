@@ -81,6 +81,7 @@ var noah = obj.rO.roles["Noah"];
 var delayer = obj.rO.roles["Delayer"];
 var backstabber = obj.rO.roles["Backstabber"];
 var persequor = obj.rO.roles["Persequor"];
+var babyDoll = obj.rO.roles["Baby Doll"];
 
 
 //console.log(obj.rO.rolesInGame);
@@ -1879,21 +1880,23 @@ function testDelayerStall() {
 
 
 
-function testCopycatVoteWithVanishAndSlow() {
+function testCopycatVoteWithVanishAndSlowAndPerishSong() {
 
 	console.log("Testing Copycat Vote Power With Vanish + Slow");
 		
-	Controller.addMissionVote(obj, 0, -2); //Derek //0
+	Controller.addMissionVote(obj, 0, 3); //Derek //0
 	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
-	Controller.addMissionVote(obj, 2, 1); //Serena //2 Persequor
+	Controller.addMissionVote(obj, 2, 2); //Serena //2 Persequor
 	Controller.addMissionVote(obj, 3, 3); //Lucio //3 Pear
-	//Controller.addMissionVote(obj, 4, -2); //Xing //4 Delayer
+	//Controller.addMissionVote(obj, 4, -2); //Xing //4 Baby Doll
 
 	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
 	Controller.setPlayersForMission(obj);
 
-	delayer.stall("Derek", obj);
+	//delayer.stall("Derek", obj);
 	//pear.vanish("Derek");
+	babyDoll.activatePerishSong(["Derek"], obj);
+	babyDoll.setPerishSongArray(obj);
 
 	//persequor.copyCat("Derek");
 
@@ -1902,7 +1905,7 @@ function testCopycatVoteWithVanishAndSlow() {
 };
 
 
-//testCopycatVoteWithVanishAndSlow();
+//testCopycatVoteWithVanishAndSlowAndPerishSong();
 
 
 
@@ -2332,7 +2335,7 @@ function testBackstabberPower() {
 	};
 	console.log("");
 
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
 
@@ -2368,6 +2371,31 @@ function testBackstabberPower() {
 
 
 //testBackstabberPower();
+
+function testBackstabberVengeanceBonus() {
+
+	console.log("Testing Backstabber Vengeance Adjustments");
+	//console.log(obj.rD.missionTeam);
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 3); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, -1); //Serena
+	Controller.addMissionVote(obj, 3, 2); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	obj.rO.roles["Backstabber"].originalBackStabberName = "Lucio";
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+};
+
+//testBackstabberVengeanceBonus();
+
 
 
 //set Serena as Marcus
@@ -2764,10 +2792,12 @@ function testBabyDollPerishSong() {
 	Controller.setPlayersForMission(obj);
 	
 	obj.rO.roles["Baby Doll"].activatePerishSong(["Derek", "Serena", "Lucio"], obj);
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+	console.log("");
+
 
 	Controller.addMissionVote(obj, 0, 1); //Derek
 	Controller.addMissionVote(obj, 1, -1); //Cloud
