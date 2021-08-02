@@ -1,3 +1,18 @@
+
+.power-info-menu-component-container {
+
+	grid-area: info; /*this comes from PowersInfoBox.css*/
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	padding-top: 2%;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+
 .power-info-character-header {
 
 	font-size: 200%;

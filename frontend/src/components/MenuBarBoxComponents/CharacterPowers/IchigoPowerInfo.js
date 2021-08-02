@@ -23,7 +23,7 @@ class IchigoPowerInfo extends React.Component {
 
     return (
 
-      <>
+      <div className="power-info-menu-component-container">
 
         <div className="power-info-character-header">Ichigo Namikaze</div>
 
@@ -164,7 +164,7 @@ class IchigoPowerInfo extends React.Component {
         </div>
 
 
-      </>
+      </div>
 
     ); //end return
 

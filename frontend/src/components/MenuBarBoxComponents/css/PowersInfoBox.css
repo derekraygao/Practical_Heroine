@@ -1,14 +1,18 @@
-.powers-info-box-container {
+
+/*gridArea & display is in-line in PowersInfoBox.js */
+.rules-and-info-box-container {
+
+	grid-template-rows: 7% auto;
+
+	grid-template-areas: "power-menu-bar"
+						 "info"
+						 ;
 
 	flex-direction: column;
-	align-items: center;
 
 	overflow-x: auto;
 	overflow-y: auto;
 
-	padding-top: 2%;
-	padding-left: 1%;
-	padding-right: 1%;
 
 	background-color:rgba(255, 255, 255, 0.5);
 
@@ -16,4 +20,15 @@
 }
 
 
+.rules-and-info-menu {
+
+	grid-area: power-menu-bar;
+
+	position: fixed;
+	
+	height: 6%;
+
+	border-top: 1.5px solid white !important;
+
+}
 

@@ -19,11 +19,12 @@ class PrincessPowerInfo extends React.Component {
 
 
 
+
   render() {
 
     return (
 
-      <>
+      <div className="power-info-menu-component-container">
 
         <div className="power-info-character-header">Princess Serenity (John)</div>
 
@@ -80,7 +81,7 @@ class PrincessPowerInfo extends React.Component {
                 <p style={{marginTop: '0in', marginRight: '0in', marginBottom: '0in', marginLeft: '0in', lineHeight: 'normal', fontSize: '15px', fontFamily: '"Calibri",sans-serif', textAlign: 'center'}}></p>
               </td>
               <td style={{width: '139.25pt', borderTop: 'none', borderLeft: 'none', borderBottom: '1pt solid windowtext', borderRight: '1pt solid windowtext', padding: '0in 5.4pt', verticalAlign: 'top'}}>
-                <p style={{marginTop: '0in', marginRight: '0in', marginBottom: '0in', marginLeft: '0in', lineHeight: 'normal', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>Thanks to Eo, the Starlight Princess of the Spirit Realm, John knows the identities of all the villains and is able to view the status conditions of all players, as seen in the table below.</p>
+                <p style={{marginTop: '0in', marginRight: '0in', marginBottom: '0in', marginLeft: '0in', lineHeight: 'normal', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}>Thanks to Eo, the Starlight Princess of the Spirit Realm, John knows the identities of all the villains and is able to view the status conditions of all players, as seen in the table above.</p>
               </td>
             </tr>
             <tr>
@@ -298,7 +299,7 @@ class PrincessPowerInfo extends React.Component {
       </div>
 
 
-      </>
+      </div>
 
     ); //end return
 
