@@ -85,19 +85,12 @@ class VoteAdjuster {
 
 	adjustVotesSaintessNotOnTeam(obj) {
 
-		//base voting powers adjustment
+		/*base voting powers adjustment
+		 Remember some powers like Final Heaven, Blitz, etc. must be multiply, because they rely on 
+		 normal voting to tell whether vote power should be + or -
+		*/
 		obj.rO.roles["Lan"].adjustMissionVotesLanFinalHeaven(obj);
-		obj.rO.roles["Toxiturtle"].adjustMissionVotesPoisoned(obj);
 		obj.rO.roles["Kaguya"].adjustMissionVotesMoonblast(obj);
-
-		obj.rO.roles["Umbra Lord"].adjustMissionVotesCorrupted(obj);
-
-		obj.rO.roles["Reverser"].adjustVotesMirrorWorld(obj);
-
-		obj.rO.roles["Noah"].adjustMissionVotesNightmareSyndromeZombie(obj);
-
-		this.adjustMissionVotesConfusion(obj);
-
 		obj.rO.roles["Umbra Lord"].adjustMissionVotesBideMeteor(obj);
 		obj.rO.roles["Esper"].adjustMissionVotePsybomb(obj);
 		obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
@@ -105,8 +98,19 @@ class VoteAdjuster {
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
 		obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
 
-		
+
 		this.adjustMissionVotesBoost(obj);
+
+
+		//reverse powers/abilities
+		obj.rO.roles["Umbra Lord"].adjustMissionVotesCorrupted(obj);
+		obj.rO.roles["Reverser"].adjustVotesMirrorWorld(obj);
+		obj.rO.roles["Noah"].adjustMissionVotesNightmareSyndromeZombie(obj);
+		this.adjustMissionVotesConfusion(obj);
+
+		
+		//Toxiturtle needs to be 2nd to last thing
+		obj.rO.roles["Toxiturtle"].adjustMissionVotesPoisoned(obj);
 
 		/*jailed needs to be the last thing since it changes
 		base vote power to 0! */
@@ -184,11 +188,14 @@ class VoteAdjuster {
 	so no need to do Ichigo powers */
 	adjustVotesSaintessOnTeam(obj) {
 
+		console.log("VoteAdjuster.js: Saintess on the Mission Team");
+
+		/*base voting powers adjustment
+		 Remember some powers like Final Heaven, Blitz, etc. must be multiply, because they rely on 
+		 normal voting to tell whether vote power should be + or -
+		*/
 		obj.rO.roles["Lan"].adjustMissionVotesLanFinalHeaven(obj);
-		obj.rO.roles["Toxiturtle"].adjustMissionVotesPoisoned(obj);
-
-		obj.rO.roles["Lan"].adjustMissionVotesConfused(obj);
-
+		obj.rO.roles["Kaguya"].adjustMissionVotesMoonblast(obj);
 		obj.rO.roles["Umbra Lord"].adjustMissionVotesBideMeteor(obj);
 		obj.rO.roles["Esper"].adjustMissionVotePsybomb(obj);
 		obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
@@ -196,17 +203,29 @@ class VoteAdjuster {
 		obj.rO.roles["Backstabber"].adjustVoteVengeance(obj);
 		obj.rO.roles["Spiritualist"].adjustSpiritualistMissionVote(obj);
 
+		this.adjustMissionVotesBoost(obj);
+
 		/*jailed needs to be the last thing since it changes
 		base vote power to 0! */
 		obj.rO.roles["Jailer"].adjustMissionVotesJailed(obj);
+
+		/* First +/- power adjustment, then multiplication * */
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
 			if (!obj.pA[i].selectedForMission) { continue; };
 
-			//curaga is + and comes before bless which is *
-			obj.rO.roles["Saintess"].adjustMissionVotesCuraga(obj.pA[i]);
-			obj.rO.roles["Saintess"].adjustMissionVotesBless(obj.pA[i]); 
+
+			obj.rO.roles["Lottie"].adjustMissionVotesLottie(obj.pA[i]);
+
+			obj.rO.roles["Princess"].adjustMissionVotesHeartacheDefense(obj.pA[i]);
+
+			obj.rO.roles["Saintess"].adjustMissionVotesCuraga(obj.pA[i]); // +
+
+			//below are multiplication powers 
+			obj.rO.roles["Saintess"].adjustMissionVotesBless(obj.pA[i]); // *
+
+			obj.rO.roles["Hecate"].adjustMissionVotesMultiplication(obj.pA[i]);
 
 		}; //end for
 
@@ -218,12 +237,9 @@ class VoteAdjuster {
 		obj.rO.roles["Lottie"].adjustMissionVotesPrincessAndLottie(obj);
 
 		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
-
-		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
-
+		
 		//safeguard needs to be near the end
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
-
 
 	};
 
