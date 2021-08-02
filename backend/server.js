@@ -530,6 +530,9 @@ io.on('connection', function (socket) {
     //those not selected to wait
     Controller.setGamePhase(obj, 5);
 
+    AbilityManager.updateStatusesAfterGamePhase4(obj);
+    MessageNotificationStack(obj);
+
     emitStartPowerPhase2(obj);
 
 
@@ -550,6 +553,9 @@ io.on('connection', function (socket) {
     Controller.resetPlayerReadyStatus(obj);
 
     Controller.setGamePhase(obj, 6);
+
+    AbilityManager.updateStatusesAfterGamePhase5(obj);
+    MessageNotificationStack(obj);
 
     emitStartMission(obj);
 
@@ -709,17 +715,6 @@ io.on('connection', function (socket) {
 
     //send to App.js and redux store, because component
     //has not been mounted yet
-
-
-    if (obj.rO.roles["Saintess"].inGame) {
-
-      io.to(`${obj.rO.roles["Saintess"].socketID}`).
-        emit("Receive Saintess Sense Array", 
-          obj.rO.roles["Saintess"].saintessSense(obj));
-
-    };
-
-
 
     
     if (obj.rO.roles["Backstabber"].activateSwitch) {
@@ -1472,16 +1467,15 @@ io.on('connection', function (socket) {
 
 
 
-
   //Ranger
   socket.on("Anti-Mana Ray", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    obj.rO.roles["Ranger"].antiManaRay(name, obj);
+    obj.rO.roles["Ranger"].setAntiManaRayTarget(name, obj);
 
-    MessageNotificationStack(obj);
+    //MessageNotificationStack(obj);
 
     //console.log("Status for " + name + " after anti-magic ray.");
     //console.log(obj.pA[obj.pT[name]]);

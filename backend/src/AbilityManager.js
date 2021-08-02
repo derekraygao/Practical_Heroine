@@ -627,6 +627,22 @@ class AbilityManager {
   };
 
 
+
+  updateStatusesAfterGamePhase4(obj) {
+
+    obj.rO.roles["Saintess"].
+    notifyMissionTeamThatSaintessIsOnTheTeam(obj);
+
+  };
+
+
+  updateStatusesAfterGamePhase5(obj) {
+
+    obj.rO.roles["Ranger"].antiManaRay(obj);
+
+  };
+
+
   //before mission number changes
   updateStatusesBeforeNightPhase(obj) {
     
@@ -683,7 +699,7 @@ class AbilityManager {
 
     obj.rO.roles["Ranger"].updateRangerSenseArray(obj);
 
-
+    obj.rO.roles["Saintess"].updateSaintessSenseArray(obj);
     
   };
 

@@ -67,7 +67,9 @@ class Saintess extends RolesMasterClass {
 	};
 
 
-	saintessSense(obj) {
+	updateSaintessSenseArray(obj) {
+
+		if (!this.inGame) { return 0; };
 
 		var saintessSenseArr = [];
 
@@ -84,7 +86,15 @@ class Saintess extends RolesMasterClass {
 
 		}; //end for
 
-		return saintessSenseArr;
+
+		var stackObj = {
+						type: "Individual",
+						socketID: this.socketID, 
+						destination: "Update Character Powers History",
+						data: {"role": "Saintess" , "power": "senseArray", "newValue": saintessSenseArr}
+					   };
+
+		obj.stack.push(stackObj);	
 
 	};
 
@@ -331,6 +341,36 @@ class Saintess extends RolesMasterClass {
 
 
 	}; //end adjustSomeDataWhenSaintessOnTheMissionTeam(obj)
+
+
+	/*must be after setPlayersForMission in server.js */
+	notifyMissionTeamThatSaintessIsOnTheTeam(obj) {
+
+		if (!this.inGame) { return 0; };
+		if (!obj.pA[this.index].selectedForMission) { return 0; };
+
+		var sysMess = {
+						type: "urgent",
+						message: ("Saintess: The two primal forces which compose Aether are Light and Darkness, existence and nihility. This Sanctuary repels Umbras, creatures of Darkness, with its Light. Many negative status conditions are nullified when I, the Saintess, am on the Mission Team.")
+					  };
+
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (!obj.pA[i].selectedForMission) { continue; };
+
+			obj.stack.push(
+							{
+							  type: "SMI",
+							  socketID: obj.pA[i].socketID,
+							  data: sysMess
+							}
+						  ); //end push
+
+		};
+
+	}; //end notifyMissionTeamThatSaintessIsOnTheTeam()
+
 
 
 
