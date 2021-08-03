@@ -13,10 +13,27 @@ class PrincessPowerInfo extends React.Component {
 
   };
 
+
   componentDidMount = () => {
+
+    var elem = document.querySelector('.rules-and-info-box-container');
+
+    elem.scrollTop = this.props.prevScrollPosition;
 
   }; //end componentDidMount
 
+
+  componentWillUnmount = () => {
+
+    var elem = document.querySelector('.rules-and-info-box-container');
+
+    this.props.setScrollPosition(
+      "characterScrollPosition",
+      elem.scrollTop
+    );
+
+
+  }; //end componentWillUnmount
 
 
 
