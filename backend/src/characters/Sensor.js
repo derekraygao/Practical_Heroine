@@ -134,6 +134,26 @@ class Sensor extends RolesMasterClass {
 	};
 
 
+	scanBoost(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].boost > 0) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
 
 	scanInjury(obj) {
 		
@@ -353,6 +373,10 @@ class Sensor extends RolesMasterClass {
 				statusArr = this.scanMultiplier(obj);
 				break;
 
+			case "Boost":
+				statusArr = this.scanBoost(obj);
+				break;
+
 			case "Injury":
 				statusArr = this.scanInjury(obj);
 				break;
@@ -421,6 +445,7 @@ class Sensor extends RolesMasterClass {
 		if (obj.pA[ind].soulMark) { individualStatusArr.push("Soul Mark"); };
 		if (obj.pA[ind].shrinkCount > 0) { individualStatusArr.push("Shrink"); };
 		if (obj.pA[ind].multiplier > 1) { individualStatusArr.push("Multiplier"); };
+		if (obj.pA[ind].boost > 0) { individualStatusArr.push("Boost"); };
 		if (obj.pA[ind].injuredCount > 0) { individualStatusArr.push("Injury"); };
 		if (obj.pA[ind].entranced) { individualStatusArr.push("Entrancement"); };
 		if (obj.pA[ind].confused) { individualStatusArr.push("Confusion"); };
