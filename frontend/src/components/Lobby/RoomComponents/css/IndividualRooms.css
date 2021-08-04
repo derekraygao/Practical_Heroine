@@ -1,0 +1,26 @@
+
+.individual-room-container {
+
+	display: flex;
+	justify-content: space-between;
+
+
+	width: 90%;
+	min-height: 45px;
+
+	border: 3px solid #f2711c;
+
+	padding: 3px 3px 3px 3px;
+	margin-bottom: 13px;
+}
+
+
+.individual-room-name {
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 120%;
+
+}

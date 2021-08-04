@@ -1,0 +1,89 @@
+.lobby-create-room-container {
+
+	grid-area: Create-Room;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	overflow-y: auto;
+
+}
+
+
+.create-room-center-box {
+
+	display: flex;
+	flex-direction: column;
+
+	align-items: center;
+
+	width: 80%;
+	max-width: 80%;
+	max-height: 80%;
+
+	overflow: auto;
+
+	border: 2px solid white;
+
+	padding-bottom: 2%;
+
+}
+
+
+.create-room-instructions-bar {
+
+	display: flex;
+	justify-content: center;
+
+	width: 100%;
+
+	color: white;
+	border: 2px solid white;
+	background-color: #f2711e;
+
+	font-size: 140%;
+
+	cursor: pointer;
+
+	padding-top: 1%;
+	padding-bottom: 1%;
+	padding-left: 1%;
+	padding-right: 1%;
+
+}
+
+
+.create-room-instructions-text {
+
+	max-height: 40%;
+	overflow-y: auto;
+
+	font-size: 110%;
+
+
+	padding: 1.5% 1.5% 1.5% 1.5%;
+	background-color:rgba(255,255,255,0.6);
+
+}
+
+
+.create-room-input {
+
+	width: 75%;
+
+	min-height: 30px;
+	max-width: 85%;
+	
+	margin-top: 5%;
+	margin-bottom: 5%;
+
+}
+
+
+.create-room-button {
+
+	min-height: 40px !important;
+	max-width: 80% !important;
+
+}

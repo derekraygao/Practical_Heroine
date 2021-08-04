@@ -1,0 +1,50 @@
+
+.lobby-join-room-container {
+
+	grid-area: Join-Room;
+
+	display: grid;
+	grid-template-rows: 15% 85%;
+
+	grid-template-areas: "Manual-Join"
+						 "Auto-Join"
+						 ;
+
+
+	overflow: auto;
+}
+
+
+.manual-join-room-container {
+
+	grid-area: Manual-Join;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+
+
+.manual-join-room-input {
+
+	height: 45% !important;
+	min-height: 40px !important;
+	max-height: 100% !important;
+
+}
+
+
+
+
+.display-rooms-to-join-container {
+
+	grid-area: Auto-Join;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+
+	overflow: auto;
+
+}
