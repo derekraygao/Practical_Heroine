@@ -5,6 +5,8 @@ import './css/CreateRoom.css';
 
 import socket from 'Socket.js';
 
+
+
 class CreateRoom extends React.Component {
 
   state = {
@@ -73,7 +75,10 @@ class CreateRoom extends React.Component {
 
   createRoomClick = () => {
 
-    if (this.state.roomNameInput !== "") { return 0; }
+    if (this.state.roomNameInput == "") { return 0; }
+ 
+    socket.emit("Create Room", this.state.roomNameInput);
+    this.setState({ roomNameInput: ""});
 
   };
 
@@ -86,7 +91,7 @@ class CreateRoom extends React.Component {
 
       if (this.state.roomNameInput !== "") {
 
-        socket.emit("Submit Player Name", this.state.enteredName);
+        socket.emit("Create Room", this.state.roomNameInput);
         this.setState({ roomNameInput: ""});
 
       };
