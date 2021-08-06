@@ -1,0 +1,23 @@
+
+
+.Player-List-Display-Individual-Containers {
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	font-size: 110%;
+
+	padding: 5px 5px 5px 5px;
+
+	margin-bottom: 2px;
+}
+
+
+.Player-List-Status-Container {
+
+	padding: 6px 6px 6px 6px;
+
+	background-color: red;
+
+}

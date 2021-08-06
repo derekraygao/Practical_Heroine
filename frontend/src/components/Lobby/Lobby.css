@@ -1,0 +1,75 @@
+
+.lobby-grid-container-main {
+
+	display: grid;
+	grid-template-rows: 10% 12% 78%;
+
+	grid-template-areas: "Title"
+						 "Message"
+						 "Create-Join-Room"
+						 ;
+
+
+	height: 100vh;
+	width: 100vw;
+
+	background-image: url(./lobby_background_2.jpg); 
+	background-repeat: no-repeat;
+  	background-size: 100% 100%;
+
+}
+
+
+.lobby-title {
+
+	grid-area: Title;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+
+	font-size: 200%;
+
+	padding-top: 5px;
+	padding-bottom: 5px;
+
+	background-color:rgba(255,255,255,0.4);
+}
+
+
+.lobby-message {
+
+	grid-area: Message;
+
+	display: flex;
+	justify-content: center;
+
+
+	font-size: 130%;
+
+
+	overflow-y: auto;
+
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+
+	background-color:rgba(255,255,255,0.4);
+
+}
+
+
+.create-and-join-room-grid-container {
+
+	grid-area: Create-Join-Room;
+
+
+	display: grid;
+	grid-template-columns: 40% 60%;
+	grid-template-rows: 100%;
+
+	grid-template-areas: "Create-Room   Join-Room";
+
+}

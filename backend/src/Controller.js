@@ -1,6 +1,8 @@
 var RO = require('./RolesObject.js');
 var rI = require('./ResultsInfo.js');
 var {VoteAdjuster} = require('./VoteAdjuster.js');
+var {randomName} = require('../random_name.js');
+var {generateRandomPhrase} = require('../functions/randomPhraseGenerator.js');
 
 
 class Controller {
@@ -16,6 +18,7 @@ class Controller {
 
 		this.roomsData["testing"] = 
 		{	
+			roomStatus: "Open",
 			playersInRoomArray: [],
 			missionNo: 0,
 			gamePhase: 0,
@@ -27,6 +30,7 @@ class Controller {
 			rolesObject: new RO.RolesObject(),
 			results: new rI.ResultsInfo(),
 			messageStack: [],
+			statusEffects: [], //refers to status effects that Ability Manager should implement [{target: "John", effect: "paralysis"}]
 			playerTracker: {} //{name: index in player array} //populated in assignPlayersTheirRoles
 
 		};
@@ -40,11 +44,167 @@ class Controller {
 	}; //end constructor
 
 
+	checkIfDuplicateCapitalizedRoomName(roomName) {
+
+		var capitalizedRN = roomName.toUpperCase();
+
+		var forLength = this.listOfRooms.length;
+		var i = 0;
+
+		for (i; i < forLength; i++) {
+
+			if (capitalizedRN == this.listOfRooms[i].toUpperCase()) {
+				return true;
+			};
+
+		};
+
+		return false;
+
+	}; //end checkIfDuplicateCapitalizedRoomName(roomName)
+
+
+	createRoom(roomName, socket) {
+
+		if (this.checkIfDuplicateCapitalizedRoomName(roomName)) {
+			return "Room Name Exists";
+		};
+
+
+		this.listOfRooms.push(roomName);
+
+		this.socketRoom[socket.id] = roomName;
+
+
+		var tempRanName = randomName();
+
+		this.roomsData[roomName] = 
+		{	
+			roomStatus: "Open",
+			roomMaster: tempRanName,
+			jitsiRoomName: generateRandomPhrase(),
+			playersInRoomArray: [],
+			missionNo: 0,
+			gamePhase: 0,
+			teamLeaderIndex: -1,
+			missionTeam: [],
+			missionVoteInfo: [],
+			teamVoteInfo: [],
+			numOfFailedTeamProposals: 0,
+			rolesObject: new RO.RolesObject(),
+			results: new rI.ResultsInfo(),
+			messageStack: [],
+			statusEffects: [], 
+			playerTracker: {} 
+		};
+
+
+		this.addPlayerToArray(tempRanName, socket.id, roomName);
+
+		return "Successfully Created Room";
+
+	}; //end createRoom
+
+
+	openRoom(obj) {
+
+		if (obj.pA[obj.index].name !== obj.rD.roomMaster) { return 0; };
+
+		obj.rD.roomStatus = "Open";
+
+	};
+
+
+	closeRoom(obj) {
+
+		if (obj.pA[obj.index].name !== obj.rD.roomMaster) { return 0; };
+
+		obj.rD.roomStatus = "Closed";
+
+	};
+
+
+
+	//room is open and < 10 players
+	isRoomJoinable(roomName) {
+
+		if (this.roomsData[roomName].roomStatus !== "Open") {
+			return false;
+		};
+
+
+		if (this.roomsData[roomName].playersInRoomArray.length
+			>= 10) {
+			return false;
+		};
+
+
+		return true;
+
+	}; //end isRoomJoinable
+
+
+	joinRoom(roomName, socket) {
+
+		//make sure roomName exists
+		if (!this.listOfRooms.includes(roomName)) { return "Failed To Join"; };
+		if (!this.isRoomJoinable(roomName)) { return "Failed To Join"; };
+
+		this.addPlayerToArray(randomName(), socket.id, roomName, false);
+
+		return "Successfully Joined Room";
+
+	}; //end joinRoom()
+
+
+
+	setNewJitsiRoomName(obj) {
+
+		var newJitsiRoomName = generateRandomPhrase();
+
+		obj.rD.jitsiRoomName = newJitsiRoomName;
+
+		return newJitsiRoomName;
+
+	};
+
+
+	addPlayerName(name, obj) {
+
+		var capitalizedName = name.toUpperCase();
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if ((obj.pA[i].name).toUpperCase() == capitalizedName) {
+				return "Name Taken";
+			};
+
+		}; //end for
+
+
+		/*if it's room master submitting name,
+		need to update everyone */
+		if (obj.pA[obj.index].name == obj.rD.roomMaster) {
+
+			obj.pA[obj.index].name = name;
+			obj.rD.roomMaster = name;
+
+			return "Successfully Added Room Master Name";
+		};
+
+		
+		obj.pA[obj.index].name = name;
+
+		return "Successfully Added Name";
+
+	};
+
+
 	//also adds socketRoom
-	addPlayerToArray(name, socketID, roomName, roomMaster) {
+	addPlayerToArray(name, socketID, roomName) {
 
 		this.roomsData[roomName].playersInRoomArray.
-		push(new Player(name, socketID, roomName, roomMaster));
+		push(new Player(name, socketID, roomName));
 
 		this.socketRoom[socketID] = roomName;
 
@@ -82,6 +242,13 @@ class Controller {
 	setPlayerReady(obj) {
 
 		obj.pA[obj.index].ready = true;
+
+	};
+
+
+	unreadyPlayer(obj) {
+
+		obj.pA[obj.index].ready = false;
 
 	};
 
@@ -327,13 +494,13 @@ class Controller {
 		var teamVoteAccumulator = this.teamVoteCalculation(obj);
 
 		teamVoteAccumulator = obj.rO.roles["Umbra Lord"].
-		adjustVotesWithUmbraLordAbsolutePower(teamVoteAccumulator);
+		adjustVotesWithUmbraLordAbsolutePower(teamVoteAccumulator, obj);
 
-		//console.log("team vote accumulator is: " + teamVoteAccumulator);
+		console.log("team vote accumulator is: " + teamVoteAccumulator);
 
 
 		if (teamVoteAccumulator >= 0) {
-
+			
 			this.roomsData[obj.room].numOfFailedTeamProposals = 0;
 
 			this.roomsData[obj.room].results.
@@ -476,7 +643,7 @@ class Controller {
 
 			//for Princess
 			case "Star Prism Power": 
-				obj.pA[obj.index].missionVote = -2.5;
+				obj.pA[obj.index].missionVote = -2;
 				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
 									      "Power", 
 									      obj.rD.missionNo
@@ -520,7 +687,7 @@ class Controller {
 			//for Noah
 			case "Nightmare Syndrome":
 
-				obj.pA[obj.index].missionVote = 2;
+				obj.pA[obj.index].missionVote = 1.5;
 				obj.rI.addMissionVoteType(obj.pA[obj.index].name, 
 									      "Power", 
 									      obj.rD.missionNo
@@ -684,6 +851,12 @@ class Controller {
 		missionVoteAccumulator = obj.rO.roles["Jailer"]
 		.adjustVoteSumCapitalPunishment(missionVoteAccumulator, obj);
 
+		missionVoteAccumulator = obj.rO.roles["Oracle"]
+		.adjustVoteSumLucinite(missionVoteAccumulator, obj);
+
+		missionVoteAccumulator = obj.rO.roles["Detective Chat"]
+		.adjustVoteSumCrossExamination(missionVoteAccumulator, obj);
+
 		missionVoteAccumulator = obj.rO.roles["Backstabber"]
 		.adjustVoteSumAssassinate(missionVoteAccumulator, obj);
 
@@ -691,6 +864,8 @@ class Controller {
 		//Hylian shield needs to be the very last thing
 		missionVoteAccumulator = obj.rO.roles["Ichigo"]
 		.hylianShield(missionVoteAccumulator);
+
+		console.log("Mission " + obj.rD.missionNo + " vote total: " + missionVoteAccumulator);
 
 		obj.rI.addMissionInfo(
 			obj.rD.missionNo,
@@ -759,6 +934,7 @@ class Controller {
 		this.roomsData[obj.room].missionTeam = [];
 		this.roomsData[obj.room].missionVoteInfo = [];
 		this.roomsData[obj.room].teamVoteInfo = [];
+		this.roomsData[obj.room].statusEffects = [];
 
 
 		for (let i = 0; i < obj.pA.length; i++) {
@@ -787,6 +963,7 @@ class Controller {
 		playerObj.injuredCount = 0;
 
 		playerObj.soulMark = false;
+		playerObj.markedMan = false;
 
 		playerObj.entranced = false;
 
@@ -803,6 +980,59 @@ class Controller {
 
 
 
+	getRoomPlayerList(pA) {
+
+		var roomPlayerList = [];
+		var forLength = pA.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			roomPlayerList.push(
+				{
+					name: pA[i].name,
+					ready: pA[i].ready,
+					connection: pA[i].connection,
+				}
+			); //end push
+
+		}; //end for
+
+		return roomPlayerList;
+
+	}; //end getRoomPlayerList()
+
+
+	getRoomInfoFirstTime(roomName) {
+
+		return (
+			{
+				roomName: roomName,
+				roomStatus: this.roomsData[roomName].roomStatus,
+				jitsiRoomName: this.roomsData[roomName].jitsiRoomName,
+				roomMaster: this.roomsData[roomName].roomMaster,
+				playerList: this.getRoomPlayerList(this.roomsData[roomName].playersInRoomArray)
+			}
+		); //end return
+
+	}; //end getRoomInfoFirstTime(roomName)
+
+
+	getRoomInfo(obj) {
+
+		return (
+			{
+				roomName: obj.room,
+				roomStatus: obj.rD.roomStatus,
+				jitsiRoomName: obj.rD.jitsiRoomName,
+				roomMaster: obj.rD.roomMaster,
+				playerList: this.getRoomPlayerList(obj.pA)
+			}
+		); //end return
+
+	}; //end getRoomInfoFirstTime(roomName)
+
+
+
 
 	returnpArrayRoomAndIndex(socket) {
 
@@ -815,7 +1045,9 @@ class Controller {
 			return ({room: "404 Room Does Not Exist: Error!", playerArray: undefined});
 		};
 
-		var pA = this.roomsData[this.socketRoom[socket.id]].playersInRoomArray;
+		var roomInfo = this.roomsData[this.socketRoom[socket.id]];
+
+		var pA = roomInfo.playersInRoomArray;
 
 		var index = -1;
 
@@ -831,12 +1063,13 @@ class Controller {
 		return (
 			{
 				room: this.socketRoom[socket.id], 
-				pA: this.roomsData[this.socketRoom[socket.id]].playersInRoomArray,
-				rO: this.roomsData[this.socketRoom[socket.id]].rolesObject,
-				rI: this.roomsData[this.socketRoom[socket.id]].results,
-				rD: this.roomsData[this.socketRoom[socket.id]],
-				pT: this.roomsData[this.socketRoom[socket.id]].playerTracker,
-				stack: this.roomsData[this.socketRoom[socket.id]].messageStack,
+				pA: pA,
+				rO: roomInfo.rolesObject,
+				rI: roomInfo.results,
+				rD: roomInfo,
+				pT: roomInfo.playerTracker,
+				stack: roomInfo.messageStack,
+				sE: roomInfo.statusEffects,
 				index: index
 			}
 		);
@@ -906,6 +1139,7 @@ class Controller {
 		obj.rO = new RO.RolesObject();
 		obj.rI = new rI.ResultsInfo();
 		obj.stack = [];
+		obj.sE = [];
 		obj.pT = {};
 
 	};
@@ -918,16 +1152,16 @@ class Controller {
 
 class Player {
 
-	constructor(_name, _socketID, _roomName, _roomMaster) {
+	constructor(_name, _socketID, _roomName) {
 
 		this.name = _name;
 		this.pseudonym = ""; //for telepathy
 		this.socketID = _socketID;
 		this.room = _roomName;
-		this.roomMaster = _roomMaster;
 		this.ready = false;
 		this.connected = true; //if disconnected, change to false
-		
+		this.connection = "connected";
+
 		this.role = "";
 		this.isTeamLeader = false;
 		this.selectedForMission = false;
@@ -954,7 +1188,8 @@ class Player {
         this.slowCharge = 0;
         this.shrinkCount = 0; //default is 0
         this.multiplier = 1; //default 1: needs to be 1 (and not 0) so you can stack multiplication powers
-        
+        this.boost = 0;
+
         this.safeguard = false; //safeguard and bless gets reset in resetallplayerinfo
         this.bless = false; //default is 1 changed to false.
         this.heartacheDefense = false;

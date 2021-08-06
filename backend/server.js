@@ -110,10 +110,204 @@ io.on('connection', function (socket) {
 
 
 
+  socket.on("Get Rooms From Server", () => {
+    
+    socket.emit("Update Rooms List", Controller.listOfRooms);
+
+  });
+
+
+
+  socket.on("Submit Player Name", (name) => {
+   
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+
+    var addNameResult = Controller.addPlayerName(name, obj);
+
+
+    if (addNameResult == "Name Taken") {
+      
+      //goes to EnterNameBox.js
+      socket.emit("Name Taken", name);
+
+
+    } else if (addNameResult == "Successfully Added Name") {
+
+      //goes to App.js
+      socket.emit("Add Player Name", name);
+
+      /* No need to update ALL information, because 
+      you already got all Info when joining the room
+      as non-room master...just need to update player list
+      since your name changed*/
+      emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
+
+
+    } else if (addNameResult == "Successfully Added Room Master Name") {
+
+      //goes to App.js
+      socket.emit("Add Player Name", name);
+
+      /*need to also update room player list since a player's
+      name (the room master) changed */
+
+      emitToAllSocketsInRoom(obj, 
+      "Update Entire Room Info", Controller.getRoomInfoFirstTime(obj.room));
+
+    };
+
+
+  }); //end Submit Player Name
+
+
+
+
+  socket.on("Create Room", (roomName) => {
+
+    var createRoomResult = Controller.createRoom(roomName, socket);
+
+    if (createRoomResult == "Successfully Created Room") {
+
+      var obj = Controller.returnpArrayRoomAndIndex(socket);
+      if (!obj.pA) { return 0; };
+
+      //goes to Lobby.js
+      socket.emit("Room Was Successfully Created!", roomName);
+
+      socket.emit("Update Entire Room Info", Controller.getRoomInfo(obj));
+
+      socket.emit("Add Player Name", obj.pA[obj.index].name);
+
+      return 0;
+
+    };
+
+
+    //Room Name Already Exists - goes to Lobby.js
+    socket.emit("Room Name Already Exists", roomName);
+
+
+  }); //end "Create Room"
+
+
+
+
+  socket.on("Tell Server To Open Room", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.openRoom(obj);
+
+    //goes to Home.js
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Status", "Open");
+
+  });
+
+
+  socket.on("Tell Server To Close Room", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.closeRoom(obj);
+
+    //goes to Home.js
+    emitToAllSocketsInRoom(obj, 
+     "Update Room Status", "Closed");
+
+  });
+
+
+
+
+  socket.on("Player Wants To Join Room", (roomName) => {
+
+    var joinRoomResult = Controller.joinRoom(roomName, socket);
+    
+
+    if (joinRoomResult == "Successfully Joined Room") {
+
+      var obj = Controller.returnpArrayRoomAndIndex(socket);
+      if (!obj.pA) { return 0; };
+
+      socket.emit("You Successfully Joined The Room");
+
+      /*it's just easier to update everyone, because YOU, newly
+      joined player, needs ALL info, even though everyone else 
+      just needs the updated player list due you being added to it*/
+      emitToAllSocketsInRoom(obj, 
+      "Update Entire Room Info", Controller.getRoomInfoFirstTime(roomName));
+
+      socket.emit("Add Player Name", obj.pA[obj.index].name);
+
+
+      return 0;
+
+    };
+  
+
+    //to Lobby.js
+    socket.emit("Server Message: Failed To Join Room", roomName);
+
+  }); //end socket.on("Player Wants To Join Room")
+
+
+
+  socket.on("Room Master Kicking Player", (kickName) => {
+
+      var obj = Controller.returnpArrayRoomAndIndex(socket);
+      if (!obj.pA) { return 0; };
+
+
+      if (obj.pA[obj.index].name !== obj.rD.roomMaster) { return 0; };
+
+      /*Need to do this because at the start of the game, 
+      obj.pT has not been implemented yet */
+      for (var i = 0; i < obj.pA.length; i++) {
+
+        if (obj.pA[i].name == kickName) {
+
+          io.to(`${obj.pA[i].socketID}`).emit(
+            "You've Been Kicked From The Game Room");
+
+        }; //end if
+
+      }; //end for
+
+
+  }); //end Room Master Kicking Player
+
+
+
+
+
+  socket.on("Get New Jitsi Room Name", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].name !== obj.rD.roomMaster) { return 0; };
+
+    /*goes to App.js instead of Home.js because you need to 
+    increment Jitsi Key to force component to re-render*/
+    emitToAllSocketsInRoom(obj, 
+      "Update Jitsi Room Name", Controller.setNewJitsiRoomName(obj));
+
+  }); //end "Get New Jitsi Room Name"
+
+
+
+
+
   socket.on("TESTING ONLY: Ready For New Game", () => {
 
     var playerRandName = randomName();
-    socket.emit("From Server: Random Name For Testing", playerRandName);
+    socket.emit("Add Player Name", playerRandName);
 
     Controller.addPlayerToArray(playerRandName, socket.id, "testing", "nobody");
 
@@ -195,11 +389,30 @@ io.on('connection', function (socket) {
 
 
 
+  socket.on("Set Player Ready", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    Controller.setPlayerReady(obj);
+
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
+
+  });
 
 
+  socket.on("Unready Player", () => {
 
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
 
+    Controller.unreadyPlayer(obj);
 
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
+
+  });
 
 
 
