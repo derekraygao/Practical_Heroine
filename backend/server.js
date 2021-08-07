@@ -135,8 +135,10 @@ io.on('connection', function (socket) {
 
     } else if (addNameResult == "Successfully Added Name") {
 
-      //goes to App.js
-      socket.emit("Add Player Name", name);
+      
+      socket.emit("Add Player Name", name); //goes to App.js
+
+      socket.emit("Name Was Accepted!"); //goes to EnteredNameBox.js
 
       /* No need to update ALL information, because 
       you already got all Info when joining the room
@@ -148,8 +150,10 @@ io.on('connection', function (socket) {
 
     } else if (addNameResult == "Successfully Added Room Master Name") {
 
-      //goes to App.js
-      socket.emit("Add Player Name", name);
+      
+      socket.emit("Add Player Name", name); //goes to App.js
+
+      socket.emit("Name Was Accepted!"); //goes to EnteredNameBox.js
 
       /*need to also update room player list since a player's
       name (the room master) changed */
@@ -279,6 +283,9 @@ io.on('connection', function (socket) {
 
       }; //end for
 
+
+      /*Don't need to update changes in Player List on Client Side, because it's handled
+      by disconnect function/handling */
 
   }); //end Room Master Kicking Player
 
@@ -426,7 +433,6 @@ io.on('connection', function (socket) {
 
     if (!Controller.isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj)) {
 
-      //update control panel ready info
       return 0;
 
     };
@@ -439,6 +445,10 @@ io.on('connection', function (socket) {
     Controller.updateMissionNumber(obj);
 
     Controller.resetPlayerReadyStatus(obj);
+
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
+
 
     shuffle(obj.pA);
 
@@ -473,13 +483,13 @@ io.on('connection', function (socket) {
     }; //end for
 
  
-    io.to(`${obj.rO.roles["princess"].socketID}`).emit(
+    io.to(`${obj.rO.roles["Princess"].socketID}`).emit(
     "Reveal Villains To Princess", obj.rO.getVillainsIdentitiesForPrincess());
 
 
-    if (obj.rO.roles["marcus"].inGame) {
+    if (obj.rO.roles["Marcus"].inGame) {
 
-        io.to(`${obj.rO.roles["marcus"].socketID}`).emit(
+        io.to(`${obj.rO.roles["Marcus"].socketID}`).emit(
           "Reveal Princess Identity To Marcus", 
           obj.rO.getPrincessIdentityArrayForMarcus()
         );
@@ -1010,6 +1020,9 @@ io.on('connection', function (socket) {
 
     emitToAllSocketsInRoom(obj, 
       "Normal Chat Message From Server To Client", _message);
+
+    /*goes to NormalChatBox.js since the normal chatbox is
+    ALWAYS displayed*/
 
   }); //end socket.on("Normal Chat")
 
@@ -2292,6 +2305,14 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
+
+    Controller.handlePlayerDisconnect(obj, socket);
+
+
+    MessageNotificationStack(obj);
+
+    /*
+    //For Testing
     obj.pA.splice(obj.index, 1);
 
     if (obj.pA.length == 0) {
@@ -2300,6 +2321,7 @@ io.on('connection', function (socket) {
 
     };
 
+    */
 
   });
 

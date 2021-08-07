@@ -40,6 +40,10 @@ class Controller {
 		this.socketRoom["SerenaID"] = "testing";
 		this.socketRoom["LucioID"] = "testing";
 		this.socketRoom["XingID"] = "testing";
+		this.socketRoom["HarleyID"] = "testing";
+		this.socketRoom["KennethID"] = "testing";
+		this.socketRoom["MarsID"] = "testing";
+
 
 	}; //end constructor
 
@@ -255,7 +259,7 @@ class Controller {
 
 	isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj) {
 
-		if (obj.pA.length < 5) { return false; };
+		if (obj.pA.length < 3) { return false; };
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
@@ -1075,6 +1079,246 @@ class Controller {
 		);
 
 	}; //end returnpArrayRoomAndIndex(socket)
+
+
+
+
+	/*needs to be after splicing from playerArray*/
+	numberOfConnectedRejoinedPlayersLeft(obj) {
+
+		var numConnected = 0;
+		var numRejoined = 0;
+		var forLength = obj.pA.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (obj.pA[i].connection == "connected") {
+
+				numConnected += 1;
+				continue;
+
+			}; //end if connected
+
+
+			if (obj.pA[i].connection == "rejoined") {
+
+				numRejoined += 1;
+				continue;
+			}; //end if rejoined
+
+
+		}; //end for
+
+
+		return {connected: numConnected, rejoined: numRejoined};
+
+
+	}; //end numberOfConnectedPlayersLeft(obj)
+
+
+	didTooManyHeroesOrVillainsLeave(obj) {
+
+		var numHeroesDiscon = 0;
+		var numVillainsDiscon = 0;
+		var forLength = obj.rO.rolesInGame.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (obj.pA[i].connection != "disconnected") { continue; };
+
+			if (obj.rO.rolesInGame[i].team == "villains") {
+				numVillainsDiscon += 1;
+			} else {
+				numHeroesDiscon += 1;
+			};
+
+		}; //end for
+
+		var stopGameBool = (numVillainsDiscon >= 2 || numHeroesDiscon >= 2);
+
+		return stopGameBool;
+
+	};
+
+
+	removeAllSocketRoomReferences(obj) {
+
+		var forLength = obj.pA.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			delete this.socketRoom[obj.pA[i].socketID];
+
+		};
+
+	}; //end removeSocketRoom
+
+
+	removeAllDisconnectedAndHandleRejoinedPlayers(obj) {
+
+		var forLength = obj.pA.length;
+		var removeIndicesArray = [];
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (obj.pA[i].connection == "disconnected") {
+				removeIndicesArray.push(i);
+			};
+
+
+			if (obj.pA[i].connection == "rejoined") {
+				obj.pA[i].connection = "connected";
+			};
+
+		}; //end for
+
+
+		/*remove from reverse order since splicing out will change
+		position of everything behind the spliced out element*/
+		forLength = (removeIndicesArray.length - 1);
+
+		for (i = forLength; i > -1; i--) {
+
+			delete this.socketRoom[obj.pA[removeIndicesArray[i]].socketID];
+			obj.pA.splice(removeIndicesArray[i], 1);
+
+		};
+
+
+	}; //end removeAllDisconnectedPlayers
+
+
+	/*roomMaster was already set to "disconnected" within disconnect function
+	roomMaster can be "rejoined" player*/
+	ifRoomMasterAssignSomeoneElse(obj) {
+
+		if (obj.pA[obj.index].name != obj.rD.roomMaster) { return 0; };
+
+		var forLength = obj.pA.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (obj.pA[i].connection == "disconnected") { continue; };
+
+			obj.rD.roomMaster = obj.pA[i].name;
+
+			break;
+
+		};
+
+
+		var stackObj = {
+						type: "Everyone",
+						destination: "Update Room Master",
+						data: obj.rD.roomMaster
+					   };
+
+		obj.stack.push(stackObj);
+
+	}; //end ifRoomMasterAssignSomeoneElse
+
+
+
+	handlePlayerDisconnect(obj, socket) {
+
+
+		obj.pA[obj.index].connection = "disconnected";
+
+		var p = this.numberOfConnectedRejoinedPlayersLeft(obj);
+		var cAndR = p.connected + p.rejoined;
+
+		if (cAndR == 0) {
+
+			this.removeAllSocketRoomReferences(obj);
+
+			delete this.roomsData[obj.room];
+			
+			var q = this.listOfRooms.indexOf(obj.room);
+			this.listOfRooms.splice(q, 1);
+
+			return 0;
+
+		}; //end if numConnected == 0
+
+
+		/*reassign room master needs to be after if cAndR == 0, otherwise maybe push into 
+		obj.stack, which gets deleted later...MessageNotification then tries to access undefined*/
+		this.ifRoomMasterAssignSomeoneElse(obj);
+
+
+		/*can just splice them out completely during join room phases */
+		if ([0, 10, 11].includes(obj.rD.gamePhase)) {
+
+			obj.pA.splice(obj.index, 1);
+
+			delete this.socketRoom[socket.id];
+
+			var stackObj = {
+							type: "Everyone",
+							destination: "Update Entire Room Info",
+							data: this.getRoomInfo(obj)
+						   };
+
+			obj.stack.push(stackObj);
+
+
+			return 0;
+
+		}; //end if gamePhase == 0, 10, 11
+
+
+
+		/*During Game Play, cannot splice out.
+		Player was set to "disconnected" at very top of function */
+
+		var stopGameBool = this.didTooManyHeroesOrVillainsLeave(obj);
+	
+
+		if (stopGameBool || cAndR <= 4) {
+
+			var allInfo = obj.rO.getAllIdentitiesAndTheirRoles();
+
+			this.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+
+			obj.rD.gamePhase = 11;
+
+			var stackObj = {
+							type: "Everyone",
+							destination: "Start Game Phase 11: Too Many Players Left Room",
+							data: allInfo
+						   };
+
+			obj.stack.push(stackObj);
+
+
+			stackObj = {
+						type: "Everyone",
+						destination: "Update Entire Room Info",
+						data: this.getRoomInfo(obj)
+					   };
+
+			obj.stack.push(stackObj);
+
+
+			return 0;
+
+		}; //end if numConnected <= 4
+
+
+
+		/*if none of the above applies, then just update
+		room info, showing player disconnected */
+		var stackObj = {
+						type: "Everyone",
+						destination: "Update Entire Room Info",
+						data: this.getRoomInfo(obj)
+					   };
+
+		obj.stack.push(stackObj);
+
+
+
+	}; //end handlePlayerDisconnect()
 
 
 
