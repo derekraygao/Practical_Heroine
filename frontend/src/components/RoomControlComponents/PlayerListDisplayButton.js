@@ -30,6 +30,9 @@ class PlayerListDisplayButton extends React.Component {
       return 0;
     };
 
+    if (![0, 10, 11].includes(this.props.gamePhase)) { return 0; };
+
+
     socket.emit("Room Master Kicking Player", name);
 
   };
@@ -145,6 +148,7 @@ const mapStateToProps = (state) => {
   return (
     { 
       myName: state.name,
+      gamePhase: state.gamePhase,
       roomInfo: state.roomInfo,
     }
   );

@@ -270,6 +270,9 @@ io.on('connection', function (socket) {
 
       if (obj.pA[obj.index].name !== obj.rD.roomMaster) { return 0; };
 
+      if (![0, 10, 11].includes(obj.rD.gamePhase)) { return 0; };
+
+
       /*Need to do this because at the start of the game, 
       obj.pT has not been implemented yet */
       for (var i = 0; i < obj.pA.length; i++) {

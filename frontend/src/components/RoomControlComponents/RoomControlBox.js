@@ -4,6 +4,7 @@ import './css/RoomControlBox.css';
 
 import { connect } from 'react-redux';
 import {systemMessages} from 'actions/systemMessages.js';
+import {showRoomControlBool} from 'actions/showRoomControlBool.js';
 
 import OpenCloseRoomButton from './OpenCloseRoomButton.js';
 import JitsiRoomButtons from './JitsiRoomButtons.js';
@@ -54,6 +55,12 @@ class RoomControlBox extends React.Component {
   };
 
 
+  closeRoomControlPanel = () => {
+
+    this.props.updateRoomControlBool(false);
+
+  };
+
 
   onClickInstructions = () => {
 
@@ -82,14 +89,21 @@ class RoomControlBox extends React.Component {
 
 		return (
 
-      <div className="Room-Control-Box-Background">
+      <div className="Room-Control-Box-Background" onClick={this.closeRoomControlPanel}>
 
-        <div className="Room-Control-Box-Container">
+        <div className="Room-Control-Box-Container"  onClick={ (e) => e.stopPropagation() }>
 
 
           <div className="Room-Control-Box-Header">
+
             <span>Room Control Panel</span>
-            <div>&#10006;</div>
+            
+            <div
+              onClick={this.closeRoomControlPanel}
+            >
+              &#10006;
+            </div>
+
           </div>
 
 
@@ -175,6 +189,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, 
   {
    addSystemMessage: systemMessages,
+   updateRoomControlBool: showRoomControlBool,
   }
 )
 (RoomControlBox);

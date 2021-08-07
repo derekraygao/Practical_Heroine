@@ -1,7 +1,9 @@
 import React from 'react';
-import './css/TitleBar.css';
 import { connect } from 'react-redux';
 
+import {showRoomControlBool} from 'actions/showRoomControlBool.js';
+
+import './css/TitleBar.css';
 
 
 class TitleBar extends React.Component {
@@ -10,6 +12,9 @@ class TitleBar extends React.Component {
   descriptionContent() {
 
     switch(this.props.gamePhase) {
+
+      case 0: 
+        return ("When the room has a minimum of 6 players and everyone has indicated they're ready, the game will begin!");
 
       case 1:
         return ("Game Phase 1 (Time Left): " + this.props.timer);
@@ -51,24 +56,53 @@ class TitleBar extends React.Component {
   }; //end descriptionContent
 
 
+  clickRoomControl = () => {
+
+    this.props.updateRoomControlBool(true);
+
+  };
+
+  clickExit = () => {
+
+     window.location.replace("http://localhost:3000");
+
+  };
+
+
+
+
+
 	render() {
 
 		return (
-            <>
+            <div className="title-bar-container">
 
                 <div className="title-bar-title">
-                    {this.props.name + " : " + this.props.role}
-
+                    <span>
+                      {this.props.name + " : " + this.props.role}
+                    </span>
                 </div>
+
 
                 <div className="title-bar-description">
-                  {this.descriptionContent()}
+                  <span>{this.descriptionContent()}</span>
                 </div>
+
 
                 <div className="title-bar-buttons">
+
+                  <button className="ui orange button" onClick={this.clickRoomControl}>
+                    Room Control
+                  </button>
+
+                  <button className="ui red button" onClick={this.clickExit}>
+                    Exit
+                  </button>
+
                 </div>
 
-            </>
+
+            </div>
 
 		); //end return
 
@@ -99,6 +133,11 @@ const mapStateToProps = (state) => {
 };
 
 
-export default connect(mapStateToProps, {}) (TitleBar);
+export default connect(mapStateToProps, 
+  {
+    updateRoomControlBool: showRoomControlBool,
+  }
+) 
+(TitleBar);
 
 

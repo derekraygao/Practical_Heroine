@@ -3,24 +3,31 @@
 	grid-area: menu-bar;
 	overflow-x: auto;
 
+	border-bottom: 2px solid white !important;
+
 }
 
-.menu-button1 {
+.menu-button {
 
 	border-right: 2px solid white !important;
 }
 
-.menu-button2 {
 
-	border-right: 2px solid white !important;
+.menu-purple {
+
+	background-color: #a332c8 !important;
+
 }
 
-.menu-button3 {
+.menu-orange {
 
-	border-right: 2px solid white !important;
+	background-color: #f56f1e !important;
+
 }
 
-.menu-button4 {
 
-	border-right: 2px solid white !important;
+.menu-red {
+
+	background-color: #dc2829 !important;
+
 }

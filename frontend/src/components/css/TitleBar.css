@@ -1,29 +1,77 @@
-.title-bar-title {
+.title-bar-container {
 
 	grid-area: title;
+
+	display: grid;
+	grid-template-columns: 10% 70% 20%;
+	grid-template-areas: "title messages buttons";
+
+	max-height: 100%;
+	overflow: auto;
 
 }
 
 
-.title-bar-description {
 
-	grid-area: description;
+.title-bar-title {
+
+	grid-area: title;
 
 	display: flex;
-	justify-content: center;
-	align-items: center;
+
+	overflow: auto;
+
+	font-size: 140%;
+
+	padding-left: 7px;
+	padding-right: 7px;
+
+}
+
+
+.title-bar-title span {
+	margin: auto;
+}
+
+
+
+
+.title-bar-description {
+
+	grid-area: messages;
+
+	display: flex;
+
 	max-height: 100%;
 	overflow-y: auto;
 
 	font-size: 120%;
 
+	margin-left: 10px;
+
 }
+
+
+.title-bar-description span {
+	margin: auto;
+}
+
 
 
 
 .title-bar-buttons {
 
-	grid-area: room-buttons;
+	grid-area: buttons;
 
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+
+}
+
+.title-bar-buttons button {
+
+	max-height: 85% !important;
+	margin-right: 8px !important;
 
 }

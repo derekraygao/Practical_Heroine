@@ -4,7 +4,7 @@
 	grid-template-columns: 20% 40% 20% 20%;
 	grid-template-rows: 8% 8% auto;
 
-	grid-template-areas: "title          description       room-buttons       room-buttons "
+	grid-template-areas: "title            title             title               title"
 						 "menu-bar        menu-bar          menu-bar            menu-bar"
 						 "chat-box        chat-box         gameplay-box       gameplay-box"
 						 ;
@@ -26,7 +26,7 @@
 	grid-template-columns: 20% 40% 20% 20%;
 	grid-template-rows: 8% 8% auto;
 
-	grid-template-areas: "title          description       room-buttons       room-buttons "
+	grid-template-areas: "title            title             title               title"
 						 "menu-bar        menu-bar          menu-bar            menu-bar"
 						 "chat-box        chat-box         gameplay-box       gameplay-box"
 						 ;
@@ -49,7 +49,7 @@
 	grid-template-columns: 20% 40% 20% 20%;
 	grid-template-rows: 8% 8% 84%;
 
-	grid-template-areas: "title          description       room-buttons       room-buttons "
+	grid-template-areas: "title            title             title               title"
 						 "menu-bar        menu-bar          menu-bar            menu-bar"
 						 "chat-box        chat-box         other-menu-box      other-menu-box"
 						 ;
