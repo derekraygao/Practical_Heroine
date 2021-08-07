@@ -13,6 +13,7 @@ import MissionVotingPhase6 from './ActionBoxComponents/GamePhase6/MissionVotingP
 import ViewMissionResultsPhase7 from './ActionBoxComponents/GamePhase7/ViewMissionResultsPhase7.js';
 import VillainsGuessPrincessIdentityPhase9 from './ActionBoxComponents/GamePhase9/VillainsGuessPrincessIdentityPhase9.js';
 import GameOverPhase10 from './ActionBoxComponents/GamePhase10/GameOverPhase10.js';
+import TooFewPlayersPhase11 from './ActionBoxComponents/GamePhase11/TooFewPlayersPhase11.js';
 
 
 
@@ -63,6 +64,9 @@ class ActionBox extends React.Component {
       case 10:
 
         return <GameOverPhase10 />;
+
+      case 11:
+        return <TooFewPlayersPhase11 />;
 
 
       default:
