@@ -257,9 +257,9 @@ class Controller {
 	};
 
 
-	isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj) {
+	isEveryoneReadyFirstGameAndAtLeastSixPlayers(obj) {
 
-		if (obj.pA.length < 3) { return false; };
+		if (obj.pA.length < 6) { return false; };
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
@@ -329,8 +329,27 @@ class Controller {
 	}; //end didAllConnectedVillainsGuessOnThePrincessIdentity(obj)
 
 
+	/*need this to prevent infinite loop in case everyone 
+	connected is paralyzed*/
+	areAllConnectedPlayersParalyzed(obj) {
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].connection != "connected") { continue; };
+
+			if (!obj.pA[i].paralyzed) { return false; };
+
+		};
+
+		return true;
+
+	}; //end ifAllPlayersParalyzed
+
+
 
 	paralyzedPlayerSkip(obj) {
+
+		if (this.areAllConnectedPlayersParalyzed(obj)) { return 0; };
 
 		if (obj.pA[obj.rD.teamLeaderIndex].paralyzed) {
 
@@ -366,8 +385,8 @@ class Controller {
 
 		this.updateTeamLeaderIndex(obj);
 
-		if (!obj.pA[obj.rD.teamLeaderIndex].connected) {
-
+		if (obj.pA[obj.rD.teamLeaderIndex].connection != "connected") {
+			
 			this.chooseOnlyConnectedTeamLeader(obj);
 
 		} else {
@@ -958,6 +977,26 @@ class Controller {
 
 
 
+	resetDataAtEndOfGame(room) {
+
+		this.roomsData[room].missionNo = 1;
+		this.roomsData[room].gamePhase = 1;
+		this.roomsData[room].teamLeaderIndex = 0; /* should be -1 since chooseOnlyConnectedTeamLeader automatically does +1 */
+		this.roomsData[room].missionTeam = [];
+		this.roomsData[room].missionVoteInfo = [];
+		this.roomsData[room].teamVoteInfo = [];
+		this.roomsData[room].numOfFailedTeamProposals = 0;
+		this.roomsData[room].rO = new RO.RolesObject();
+		this.roomsData[room].rI = new rI.ResultsInfo();
+		this.roomsData[room].stack = [];
+		this.roomsData[room].sE = [];
+		this.roomsData[room].pT = {};
+
+
+	}; //end resetDataAtEndOfGame
+
+
+
 	healPlayerForVotingForFailure(playerObj) {
 
 		playerObj.burnCount = 0;
@@ -1371,20 +1410,20 @@ class Controller {
 	}; //end isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj)
 
 
-	resetEverythingWhenTestingRoomEmpty(obj) {
+	resetEverythingWhenTestingRoomEmpty(room) {
 
-		obj.rD.missionNo = 0;
-		obj.rD.gamePhase = 0;
-		obj.rD.teamLeaderIndex = -1;
-		obj.rD.missionTeam = [];
-		obj.rD.missionVoteInfo = [];
-		obj.rD.teamVoteInfo = [];
-		obj.rD.numOfFailedTeamProposals = 0;
-		obj.rO = new RO.RolesObject();
-		obj.rI = new rI.ResultsInfo();
-		obj.stack = [];
-		obj.sE = [];
-		obj.pT = {};
+		this.roomsData[room].missionNo = 0;
+		this.roomsData[room].gamePhase = 0;
+		this.roomsData[room].teamLeaderIndex = -1;
+		this.roomsData[room].missionTeam = [];
+		this.roomsData[room].missionVoteInfo = [];
+		this.roomsData[room].teamVoteInfo = [];
+		this.roomsData[room].numOfFailedTeamProposals = 0;
+		this.roomsData[room].rO = new RO.RolesObject();
+		this.roomsData[room].rI = new rI.ResultsInfo();
+		this.roomsData[room].stack = [];
+		this.roomsData[room].sE = [];
+		this.roomsData[room].pT = {};
 
 	};
 
