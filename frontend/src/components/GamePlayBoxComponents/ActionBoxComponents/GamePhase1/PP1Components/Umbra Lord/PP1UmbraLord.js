@@ -31,7 +31,10 @@ class PP1UmbraLord extends React.Component {
       this.props.addSystemMessage(
         {
           type: "power",
-          message: ("You corrupted " + this.state.corruptionTarget + ".")
+          message: ("You corrupted " + this.state.corruptionTarget + ". "
+            + "Unless healed by another ability, from now until the "
+            + "end of the game, " + this.state.corruptionTarget 
+            + "'s mission B.V.P. (base voting power) will be reversed!")
         }
       ); //end this.props.addSystemMessage
 
