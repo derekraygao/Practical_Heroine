@@ -109,10 +109,10 @@ io.on('connection', function (socket) {
   });
 
 
-
+  /*Goes to DisplayRooms.js*/
   socket.on("Get Rooms From Server", () => {
     
-    socket.emit("Update Rooms List", Controller.listOfRooms);
+    socket.emit("Update Rooms List", Controller.getListOfRooms());
 
   });
 
@@ -375,19 +375,6 @@ io.on('connection', function (socket) {
 
     }; //end for
 
- 
-    io.to(`${obj.rO.roles["Princess"].socketID}`).emit(
-    "Reveal Villains To Princess", obj.rO.getVillainsIdentitiesForPrincess());
-
-
-    if (obj.rO.roles["Marcus"].inGame) {
-
-        io.to(`${obj.rO.roles["Marcus"].socketID}`).emit(
-          "Reveal Princess Identity To Marcus", 
-          obj.rO.getPrincessIdentityArrayForMarcus()
-        );
-
-    };
 
 
     AbilityManager.updateInfoStartOfGame(obj);
@@ -430,11 +417,20 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (![0, 10, 11].includes(obj.rD.gamePhase)) { return 0; };
+    /*I had some error where if person left midway, then 
+    the game did stop and go to gamephase 11, but then a few seconds 
+    later it went into game phase 6 (mission voting), and submitting a 
+    vote and stuff would cause the game to proceed, but try to access
+    undefined and thus crash...so need to check to make sure it's 
+    correct gamePhase*/
 
 
+
+    //sets Room Master Ready
     Controller.setPlayerReady(obj);
 
-    if (!Controller.isEveryoneReadyFirstGameAndAtLeastFivePlayers(obj)) {
+    if (!Controller.isEveryoneReadyFirstGameAndAtLeastSixPlayers(obj)) {
 
       return 0;
 
@@ -485,28 +481,88 @@ io.on('connection', function (socket) {
 
     }; //end for
 
- 
-    io.to(`${obj.rO.roles["Princess"].socketID}`).emit(
-    "Reveal Villains To Princess", obj.rO.getVillainsIdentitiesForPrincess());
 
 
-    if (obj.rO.roles["Marcus"].inGame) {
-
-        io.to(`${obj.rO.roles["Marcus"].socketID}`).emit(
-          "Reveal Princess Identity To Marcus", 
-          obj.rO.getPrincessIdentityArrayForMarcus()
-        );
-
-    };
-
-
-    
     AbilityManager.updateInfoStartOfGame(obj);
     MessageNotificationStack(obj);
 
-
-
   }); //end Ready For New Game
+
+
+
+  socket.on("Start New Game After First Game", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+    if (![0, 10, 11].includes(obj.rD.gamePhase)) { return 0; };
+
+    //sets Room Master Ready
+    Controller.setPlayerReady(obj);
+
+    if (!Controller.isEveryoneReadyFirstGameAndAtLeastSixPlayers(obj)) {
+
+      return 0;
+
+    };
+
+    /*Need to delete/reset all data 
+    player ready also reset in here*/
+    Controller.resetDataForNewGame(obj.room);
+
+    //need to get new obj since you resetted the data
+    obj = Controller.returnpArrayRoomAndIndex(socket);
+
+    emitToAllSocketsInRoom(obj, "Reset Data For New Game", "");
+
+
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
+
+
+    shuffle(obj.pA);
+
+    //index mapping is done here, so cannot shuffle afterwards, or if shuffle
+    //playerArray, then need to re-map the indices
+    Controller.assignPlayersTheirRoles(obj);
+
+
+    var listOfPlayers = Controller.getListOfPlayers(obj);
+
+
+    //sets roles on client side
+    for (let i = 0; i < obj.rO.rolesInGame.length; i++) {
+
+      //sets roles for everyone and starts the game
+      io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
+        "Start Game", {
+                        role: obj.rO.rolesInGame[i].role,
+                        team: obj.rO.rolesInGame[i].team,
+                        listOfPlayers: listOfPlayers
+                      }
+      );
+
+
+      if (obj.rO.rolesInGame[i].team == "villains") {
+
+        io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
+        "Set Villains List", obj.rO.getVillainsIdentities());
+
+      };
+
+
+    }; //end for
+
+
+
+    AbilityManager.updateInfoStartOfGame(obj);
+    MessageNotificationStack(obj);
+
+  }); //end Start New Game After First Game
+
+
+
+
+
 
 
 
@@ -514,6 +570,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 1) { return 0; };
 
     Controller.setPlayerReady(obj);
 
@@ -545,6 +602,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 2) { return 0; };
 
     //makes sure person is team leader
     if (!obj.pA[obj.index].isTeamLeader) { return 0; };
@@ -570,6 +628,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 3) { return 0; };
 
     //vote is either "Accept" or "Reject"
     Controller.setPlayerTeamVote(obj, vote);
@@ -683,6 +742,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 4) { return 0; };
 
     Controller.setPlayerReady(obj);
 
@@ -740,6 +800,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 4) { return 0; };
 
     Controller.setPlayerReady(obj);
 
@@ -770,6 +831,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 5) { return 0; };
 
     Controller.setPlayerReady(obj);
 
@@ -794,6 +856,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 6) { return 0; };
 
     console.log(obj.pA[obj.index].name + " voted for " + vote);
 
@@ -879,6 +942,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 7) { return 0; };
 
     Controller.setPlayerReady(obj);
 
@@ -910,6 +974,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 8) { return 0; };
 
     //console.log(obj.pA[obj.index].name + "end night phase 8");
 
@@ -973,6 +1038,7 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+    if (obj.rD.gamePhase !== 9) { return 0; };
 
     obj.rO.addPrincessGuessForVillain(obj, guess);
 
@@ -2320,7 +2386,7 @@ io.on('connection', function (socket) {
 
     if (obj.pA.length == 0) {
 
-      Controller.resetEverythingWhenTestingRoomEmpty(obj);
+      Controller.resetEverythingWhenTestingRoomEmpty(obj.room);
 
     };
 
