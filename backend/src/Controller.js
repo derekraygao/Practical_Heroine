@@ -142,6 +142,11 @@ class Controller {
 			return false;
 		};
 
+		
+		if (![0, 10, 11].includes(this.roomsData[roomName].gamePhase)) {
+			return false;
+		};
+	
 
 		return true;
 
@@ -154,11 +159,75 @@ class Controller {
 		if (!this.listOfRooms.includes(roomName)) { return "Failed To Join"; };
 		if (!this.isRoomJoinable(roomName)) { return "Failed To Join"; };
 
-		this.addPlayerToArray(randomName(), socket.id, roomName, false);
+		this.addPlayerToArray(randomName(), socket.id, roomName);
 
 		return "Successfully Joined Room";
 
 	}; //end joinRoom()
+
+
+	/*must be disconnected, if connected or rejoined, then 
+	you are not a rejoining player
+	During game phase 0, 10, 11, all d/ced has already been
+	spliced out*/
+	isPlayerRejoining(roomName, info) {
+		
+		if (info.roomName !== roomName) { return -1; };
+
+		var pA = this.roomsData[roomName].playersInRoomArray;
+		var forLength = pA.length;
+		var i = 0;
+
+		for (i; i < forLength; i++) {
+
+			if (pA[i].name !== info.name) { continue; };
+			if (pA[i].connection !== "disconnected") { break; };
+
+			return i;
+
+		};
+
+
+		return -1; 
+
+	}; //end isPlayerRejoining
+
+
+	/*
+		Need to check listOfRooms.includes(roomName), in case room
+		doesn't exist for isPlayerRejoining function. It's also why
+		we cannot just re-use this.joinRoom since it checks it again,
+		so not very efficient
+	*/
+	joinRoomManually(roomName, socket, rejoinInfo) {
+
+		if (!this.listOfRooms.includes(roomName)) { return "Failed To Join"; };
+
+		var ind = this.isPlayerRejoining(roomName, rejoinInfo);
+
+		if (ind == -1) {
+
+			if (!this.isRoomJoinable(roomName)) { return "Failed To Join"; };
+
+			this.addPlayerToArray(randomName(), socket.id, roomName);
+
+			return "Successfully Joined Room";
+
+		}; //end areYouRejoining
+
+		/*you are rejoining player*/
+
+		var pObj = this.roomsData[roomName].playersInRoomArray[ind];
+		var rolesInGameObj = this.roomsData[roomName].rolesObject.rolesInGame[ind];
+
+		pObj.socketID = socket.id;
+		pObj.connection = "rejoined";
+
+		rolesInGameObj.socketID = socket.id;
+
+		return "Rejoined The Room";
+
+	}; //end joinRoomManually
 
 
 
@@ -171,6 +240,35 @@ class Controller {
 		return newJitsiRoomName;
 
 	};
+
+
+
+	/*For now, it's just open/closed status, but in future,
+	maybe can set like level limits and stuff */
+	getListOfRooms() {
+
+		var roomsList = [];
+		var forLength = this.listOfRooms.length;
+		var i = 0;
+
+		for (i; i < forLength; i++) {
+
+			if (this.roomsData[this.listOfRooms[i]].roomStatus 
+				== "Closed") { continue; };
+
+			if (![0, 10, 11].includes(this.roomsData[this.listOfRooms[i]].gamePhase)) 
+				{ continue; };		
+
+			roomsList.push(this.listOfRooms[i]);
+
+		}; //end for 
+		
+
+		return roomsList;
+
+	}; //end getListOfRooms
+
+
 
 
 	addPlayerName(name, obj) {
@@ -259,7 +357,7 @@ class Controller {
 
 	isEveryoneReadyFirstGameAndAtLeastSixPlayers(obj) {
 
-		if (obj.pA.length < 6) { return false; };
+		if (obj.pA.length < 3) { return false; };
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
@@ -977,20 +1075,34 @@ class Controller {
 
 
 
-	resetDataAtEndOfGame(room) {
+	resetDataForNewGame(room) {
 
 		this.roomsData[room].missionNo = 1;
 		this.roomsData[room].gamePhase = 1;
-		this.roomsData[room].teamLeaderIndex = 0; /* should be -1 since chooseOnlyConnectedTeamLeader automatically does +1 */
+		this.roomsData[room].teamLeaderIndex = -1; //needs to be -1 because chooseOnlyConnectedTeamLeader automatically does +1 to it 
 		this.roomsData[room].missionTeam = [];
 		this.roomsData[room].missionVoteInfo = [];
 		this.roomsData[room].teamVoteInfo = [];
 		this.roomsData[room].numOfFailedTeamProposals = 0;
-		this.roomsData[room].rO = new RO.RolesObject();
-		this.roomsData[room].rI = new rI.ResultsInfo();
-		this.roomsData[room].stack = [];
-		this.roomsData[room].sE = [];
-		this.roomsData[room].pT = {};
+		this.roomsData[room].rolesObject = new RO.RolesObject();
+		this.roomsData[room].results = new rI.ResultsInfo();
+		this.roomsData[room].messageStack = [];
+		this.roomsData[room].statusEffects = [];
+		this.roomsData[room].playerTracker = {};
+
+
+		var pA = this.roomsData[room].playersInRoomArray;
+		var forLength = pA.length;
+
+		for (let i = 0; i < forLength; i++) {
+
+			pA[i].ready = false;
+			pA[i].isTeamLeader = false;
+			pA[i].selectedForMission = false;
+			pA[i].missionVote = null;
+			pA[i].teamVote = null;
+
+		};
 
 
 	}; //end resetDataAtEndOfGame
@@ -1257,6 +1369,27 @@ class Controller {
 	}; //end ifRoomMasterAssignSomeoneElse
 
 
+	ifCurrentTeamLeader(obj) {
+
+		/*only applies if it's during team leader
+		choosing team phase */
+		if (obj.rD !== 2) { return 0; };
+		if (obj.index !== obj.rD.teamLeaderIndex) { return 0; };
+
+		var newTLName = this.chooseOnlyConnectedTeamLeader(obj);
+
+		var stackObj = {
+						type: "Everyone",
+						destination: "Start Game Phase 2: Team Leader Choosing A Team",
+						data: newTLName
+					   };
+
+		obj.stack.push(stackObj);
+
+
+	}; //end ifCurrentTeamLeader
+
+
 
 	handlePlayerDisconnect(obj, socket) {
 
@@ -1345,8 +1478,13 @@ class Controller {
 
 
 
-		/*if none of the above applies, then just update
-		room info, showing player disconnected */
+		/*if none of the above applies, means the game 
+		continues as normally*/
+
+		/*in case the person disconnecting was the team leader,
+		then you need to choose a new one */
+		this.ifCurrentTeamLeader(obj);
+
 		var stackObj = {
 						type: "Everyone",
 						destination: "Update Entire Room Info",
@@ -1419,11 +1557,11 @@ class Controller {
 		this.roomsData[room].missionVoteInfo = [];
 		this.roomsData[room].teamVoteInfo = [];
 		this.roomsData[room].numOfFailedTeamProposals = 0;
-		this.roomsData[room].rO = new RO.RolesObject();
-		this.roomsData[room].rI = new rI.ResultsInfo();
-		this.roomsData[room].stack = [];
-		this.roomsData[room].sE = [];
-		this.roomsData[room].pT = {};
+		this.roomsData[room].rolesObject = new RO.RolesObject();
+		this.roomsData[room].results = new rI.ResultsInfo();
+		this.roomsData[room].messageStack = [];
+		this.roomsData[room].statusEffects = [];
+		this.roomsData[room].playerTracker = {};
 
 	};
 

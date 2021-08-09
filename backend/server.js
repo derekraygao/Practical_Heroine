@@ -239,6 +239,7 @@ io.on('connection', function (socket) {
       var obj = Controller.returnpArrayRoomAndIndex(socket);
       if (!obj.pA) { return 0; };
 
+      /*goes to IndividualRooms.js*/
       socket.emit("You Successfully Joined The Room");
 
       /*it's just easier to update everyone, because YOU, newly
@@ -259,6 +260,65 @@ io.on('connection', function (socket) {
     socket.emit("Server Message: Failed To Join Room", roomName);
 
   }); //end socket.on("Player Wants To Join Room")
+
+
+  /*from JoinRoom.js
+    rejoinInfo={name: "John", roomName: "My Room"}*/
+  socket.on("Joining Room Through Manual Input", ({roomName, rejoinInfo}) => {
+
+      var joinRoomResult = Controller.joinRoomManually(roomName, socket, rejoinInfo);
+
+
+      if (joinRoomResult == "Successfully Joined Room") {
+
+      var obj = Controller.returnpArrayRoomAndIndex(socket);
+      if (!obj.pA) { return 0; };
+
+      /*goes to IndividualRooms.js*/
+      socket.emit("You Successfully Joined The Room");
+
+      /*it's just easier to update everyone, because YOU, newly
+      joined player, needs ALL info, even though everyone else 
+      just needs the updated player list due you being added to it*/
+      emitToAllSocketsInRoom(obj, 
+      "Update Entire Room Info", Controller.getRoomInfoFirstTime(roomName));
+
+      socket.emit("Add Player Name", obj.pA[obj.index].name);
+
+
+      return 0;
+
+    }; //end Successfully Joined Room
+
+
+
+    if (joinRoomResult == "Rejoined The Room") {
+
+      var obj = Controller.returnpArrayRoomAndIndex(socket);
+      if (!obj.pA) { return 0; };
+
+      emitToAllSocketsInRoom(obj, 
+      "Update Entire Room Info", Controller.getRoomInfoFirstTime(roomName));
+
+
+      /*Need some socket.emit rejoined info,
+      for things like name, role, player list, villain list,
+      powersHistory, status history, etc. */
+
+      return 0;
+
+    }; //end Rejoined The Room
+
+
+    //to Lobby.js
+    socket.emit("Server Message: Failed To Join Room", roomName);
+
+
+  }); //end socket.on("Joining Room Through Manual Input");
+
+
+
+
 
 
 
