@@ -24,6 +24,42 @@ class GameOverPhase10 extends React.Component {
   };
 
 
+  startNewGame = () => {
+    socket.emit("Start New Game After First Game");
+  };
+
+
+  clickReady = () => {
+    socket.emit("Set Player Ready");
+  };
+
+
+  clickUnready = () => {
+    socket.emit("Unready Player");
+  };
+
+
+  /*Roundabout method of checking if ready, but 
+  just to make sure server received and set player 
+  as ready/unready*/
+  amIReady = () => {
+
+    var {playerList} = this.props.roomInfo;
+
+    for (var i = 0; i < playerList.length; i++) {
+
+      if (playerList[i].name == this.props.myName) {
+        return (playerList[i].ready);
+      };
+
+    }; //end for
+
+    return false;
+
+  }; //end amIReady()
+
+
+
   congratulatoryText = () => {
 
     var gameScenario = this.props.gameEndScenario;
@@ -87,40 +123,58 @@ class GameOverPhase10 extends React.Component {
   }; //end congratulatoryText()
 
 
-  readyUnreadyNewGameClick = () => {
-
-    if (!this.state.ready) {
-
-      this.setState({ready: true});
-      //socket.emit
-
-    } else {
-
-      this.setState({ready: false});
-      //socket.emit
-
-    }; //end else
-
-  }; //end readyUnreadyNewGameClick
 
 
   readyForNewGameOrNot = () => {
 
-    if (this.state.ready) {
+
+    if (this.props.myName == this.props.roomInfo["roomMaster"]) {
 
       return (
 
         <div className="game-over-ready-for-new-game-container">
 
           <div className="game-over-ready-text-container">
-            When all people in the game room have clicked ready, 
-            a new game will start! Remember, new people are able 
-            to join from the lobby.
+            Though this battle has ended, the war continues 
+            indefinitely, like the boundless space of the Cosmic 
+            Void. New players can join from the lobby. 
+            You, {this.props.myName}, the Room Master, can start 
+            a new game when there are at least 6 players in the 
+            room and everyone has clicked the 'Ready' button.
+          </div>
+
+          <button 
+            className="ui green button"
+            onClick={this.startNewGame}
+          >
+            Start New Game
+          </button>
+
+        </div>
+
+      ); //end return
+
+    }; //end if roomMaster
+
+
+
+    if (this.amIReady()) {
+
+      return (
+
+        <div className="game-over-ready-for-new-game-container">
+
+          <div className="game-over-ready-text-container">
+            You are ready! 
+            The Room Master, {this.props.roomInfo["roomMaster"]}, 
+            can start a new game once there are at least 6 players 
+            in the room and everyone has clicked the 'Ready' button. 
+            Remember, new players can join from the lobby.
           </div>
 
           <button 
             className="ui red button"
-            onClick={this.readyUnreadyNewGameClick}
+            onClick={this.clickUnready}
           >
             Unready
           </button>
@@ -132,6 +186,7 @@ class GameOverPhase10 extends React.Component {
     }; //end if
 
 
+    /*currently unready*/
     return (
 
       <div className="game-over-not-ready-container">
@@ -142,7 +197,7 @@ class GameOverPhase10 extends React.Component {
 
         <button 
           className="ui green button"
-          onClick={this.readyUnreadyNewGameClick}
+          onClick={this.clickReady}
         >
           Ready
         </button>
@@ -177,7 +232,8 @@ const mapStateToProps = (state) => {
   return (
          {  
             myName: state.name,
-            gameEndScenario: state.gameEndScenario
+            gameEndScenario: state.gameEndScenario,
+            roomInfo: state.roomInfo,
          }
   );
 

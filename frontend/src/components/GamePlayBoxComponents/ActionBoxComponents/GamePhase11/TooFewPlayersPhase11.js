@@ -130,6 +130,7 @@ class TooFewPlayersPhase11 extends React.Component {
 
         <button
           className="ui button green"
+          onClick={this.clickStartNewGame}
         >
           Start New Game
         </button>

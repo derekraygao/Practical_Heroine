@@ -23,16 +23,21 @@ import {updateCharacterStatus} from 'actions/updateCharacterStatus.js';
 import {newCharacterStatus} from 'actions/newCharacterStatus.js';
 
 
-import {villainChatMessage} from '../actions/villainChatMessage.js';
-import {esperChatMessage} from '../actions/esperChatMessage.js';
-import {jailerChatMessage} from '../actions/jailerChatMessage.js';
+import {villainChatMessage} from 'actions/villainChatMessage.js';
+import {esperChatMessage} from 'actions/esperChatMessage.js';
+import {jailerChatMessage} from 'actions/jailerChatMessage.js';
 
 
 import {crossExamBool} from '../actions/crossExamBool.js';
 
 
+import {roomInfo} from 'actions/roomInfo.js';
+
 /*for character specific redux store */
 import {rangerSenseArray} from '../actions/rangerSenseArray.js';
+
+
+import {resetForNewGame} from 'actions/resetForNewGame.js';
 
 
 import './css/App.css';
@@ -42,9 +47,12 @@ import ChatBox from './MenuBarBoxComponents/ChatBox.js';
 import NotesBox from './MenuBarBoxComponents/NotesBox.js';
 import PlayerAndResultsBox from './MenuBarBoxComponents/PlayerAndResultsBox.js';
 import PowersInfoBox from './MenuBarBoxComponents/PowersInfoBox.js';
+import JitsiVideoBox from './MenuBarBoxComponents/JitsiVideoBox.js';
 
 import GamePlayBox from './GamePlayBox.js';
+import EnterNameBox from './EnterNameBox.js';
 
+import RoomControlBox from './RoomControlComponents/RoomControlBox.js';
 import CrossExaminationBox from './CrossExaminationBox.js';
 
 import socket from '../Socket.js';
@@ -100,7 +108,7 @@ var hVictory = new Audio(process.env.PUBLIC_URL + "/sounds/Heroes_Victory.mp4");
 hVictory.volume = 0.15;
 
 var vVictoryGeneral = new Audio(process.env.PUBLIC_URL + "/sounds/Villains_Victory_General.mp3");
-vVictoryGeneral.volume = 0.05;
+vVictoryGeneral.volume = 0.02;
 
 var vVictoryDarkDestiny = new Audio(process.env.PUBLIC_URL + "/sounds/Villains_Victory_Dark_Destiny.mp3");
 vVictoryDarkDestiny.volume = 0.15;
@@ -169,7 +177,7 @@ var P8Interval;
 class App extends React.Component {
 
   state = {
-
+    jitsiKey: 1, /*need this to force jitsi video component to re-render when you get a new room name */
   };
 
   componentWillUnmount = () => {
@@ -189,12 +197,15 @@ class App extends React.Component {
     });
 
 
-    socket.emit("TESTING ONLY: Ready For New Game");
+    /*this is the function that automatically gets you past 
+    gamePhase 0 and starts game without entering names*/
 
-    socket.on("From Server: Random Name For Testing", (randomName) => {
+    //socket.emit("TESTING ONLY: Ready For New Game");
 
-      this.props.addPlayerName(randomName);
-      console.log(this.props.name);
+
+    socket.on("Add Player Name", (name) => {
+
+      this.props.addPlayerName(name);
 
     }); //end From Server: Random Name....
 
@@ -207,6 +218,14 @@ class App extends React.Component {
       this.props.updatePlayerList(obj.listOfPlayers);
 
 
+      this.props.addSystemMessage(
+        {
+          type: "intro message",
+          message: introMessage
+        }
+      );
+
+
       var sysMessage = ("Hi " + this.props.name + ", your role is '" + 
             obj.role + "' and you are on the " + obj.team + " team.");
 
@@ -217,12 +236,14 @@ class App extends React.Component {
         }
       );
 
-      this.props.addSystemMessage(
-        {
-          type: "intro message",
-          message: introMessage
+
+      var storedObj = JSON.stringify(
+        {roomName: this.props.roomInfo["roomName"], 
+          name: this.props.name
         }
       );
+
+      localStorage.setItem("Rejoin Info", storedObj);
 
 
     }); //end socket.on("Start Game")
@@ -230,7 +251,7 @@ class App extends React.Component {
 
     socket.on("Reveal Villains To Princess", (villainsArr) => {
 
-      var villainString = "Princess, the villains are: " + formatArrayIntoString(villainsArr);
+      var villainString = "Princess, the villains are: " + formatArrayIntoString(villainsArr) + ".";
 
       this.props.addSystemMessage({type: "urgent", message: villainString});
 
@@ -239,8 +260,8 @@ class App extends React.Component {
 
     socket.on("Reveal Princess Identity To Marcus", (princessArr) => {
 
-      var princessIdentityString = "Marcus, the princess's identity is: " + 
-                      formatArrayIntoString(princessArr);
+      var princessIdentityString = "Marcus, the Princess's identity is: " + 
+                      formatArrayIntoString(princessArr) + ".";
 
       this.props.addSystemMessage({type: "urgent", message: princessIdentityString});
       
@@ -252,7 +273,7 @@ class App extends React.Component {
       this.props.updateVillainList(villainsArr);
 
       var villainString = "Villains! Your team is composed of: " + 
-                           formatArrayIntoString(this.props.villainList);
+                           formatArrayIntoString(this.props.villainList) + ".";
 
       this.props.addSystemMessage({type: "urgent", message: villainString});
       
@@ -265,7 +286,7 @@ class App extends React.Component {
       setTimeout(() => this.props.updateGamePhase(1), 1000);
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
-      this.props.updateTimerSeconds(4);
+      this.props.updateTimerSeconds(40);
 
       this.props.updateCharacterStatus(
         {"status": "jailed", "newValue": false}
@@ -325,7 +346,7 @@ class App extends React.Component {
 
       if (_teamArr.includes(_name)) {
 
-        this.props.updateTimerSeconds(15);
+        this.props.updateTimerSeconds(2);
 
       } else {
 
@@ -545,7 +566,7 @@ class App extends React.Component {
         {
           type: "big and purple", 
           message: ("The Villains Win!!! "
-            + data.darkDestinyTarget + "'s dark destiny "
+            + data.darkDestinyTarget + "'s Dark Destiny "
             + "was fulfilled!")
         }
       );      
@@ -558,6 +579,31 @@ class App extends React.Component {
 
     });
 
+
+
+    socket.on("Start Game Phase 11: Too Many Players Left Room", (allInfo) => {
+
+      setTimeout(() => this.props.updateGamePhase(11), 1000);
+
+      this.revealAllIdentitiesAndRoles(allInfo);
+
+      this.props.addSystemMessage(
+        {
+          type: "big and purple", 
+          message: ("Sorry! Too many players left. The Villains/Heroes team is too imbalanced. The game has automatically ended!")
+        }
+      );      
+
+
+    }); //end socket.on("Start Game Phase 11")
+
+
+
+    socket.on("Reset Data For New Game", () => {
+
+      this.props.resetDataForNewGame();
+
+    }); //end Reset Data For New Game
 
 
 
@@ -775,6 +821,18 @@ class App extends React.Component {
     });
 
 
+    socket.on("Update Jitsi Room Name", (jName) => {
+
+      this.props.updateRoomInfo(jName, "Jitsi");
+
+      var tempJitsiKey = this.state.jitsiKey + 1;
+
+      this.setState({jitsiKey: tempJitsiKey});
+
+    });
+
+
+
   }; //end componentDidMount()
 
 
@@ -859,6 +917,32 @@ class App extends React.Component {
   };
 
 
+  forceJitsiReRender = () => {
+
+    var tempJitsiKey = this.state.jitsiKey + 1;
+
+    this.setState({jitsiKey: tempJitsiKey});
+
+  };
+
+
+  jitsiVideoBoxStyle = () => {
+
+    if (this.props.mainMenuSelection === "video") {
+
+      if (this.props.gamePhase === 8) {
+        return {display: "none", gridArea: "other-menu-box"};
+      };
+
+      return {display: "flex", gridArea: "chat-box"};
+
+    }; //end if mainMenuSelection === notes
+
+    return {display: "none"};
+
+  }; //end displayOrNot
+
+
   //night phase 8 has different layout - no video chat
   //everything else takes up entire width below the menu bars
   whichGridContainer = () => {
@@ -881,7 +965,7 @@ class App extends React.Component {
     switch (this.props.gamePhase) {
 
       case 0:
-        return <div></div>;
+        return <EnterNameBox />;
 
       default:
         return <GamePlayBox />;
@@ -905,7 +989,19 @@ class App extends React.Component {
         <PlayerAndResultsBox />
         <PowersInfoBox />
         
+        {/*
+        <JitsiVideoBox
+          key={this.state.jitsiKey} 
+          display={this.jitsiVideoBoxStyle()}
+          roomName={this.props.roomInfo["jitsiRoomName"]} 
+        />
+        */}
+        
         {this.gamePlayBoxArea()}
+
+        {this.props.showRoomControlBool &&
+          <RoomControlBox forceJitsiReRender={this.forceJitsiReRender} />
+        }
 
         {this.props.XXNBool &&
           <CrossExaminationBox />
@@ -943,7 +1039,9 @@ const mapStateToProps = (state) => {
       mainMenuSelection: state.mainMenuSelection,
       gameEndScenario: state.gameEndScenario,
       timer: state.timer,
+      roomInfo: state.roomInfo,
       XXNBool: state.crossExamBool,
+      showRoomControlBool: state.showRoomControlBool,
     }
   );
 
@@ -975,6 +1073,8 @@ export default connect(mapStateToProps,
     addJailerMessage: jailerChatMessage,
     addVillainMessage: villainChatMessage,
     updateXXNBool: crossExamBool,
+    updateRoomInfo: roomInfo,
+    resetDataForNewGame: resetForNewGame,
   })
 (App);
 
@@ -982,8 +1082,8 @@ export default connect(mapStateToProps,
 
 var introMessage = "Remember, you can read the instructions (what to do) " 
                     + "for each game phase by clicking on the 'Instructions' " 
-                    + "button directly above this box. You can also view the "
-                    + "entire rules by clicking the 'Rules' button at the " 
-                    + "very top right. To just see your character's own " 
-                    + "abilities, click the 'Character' button on the " 
-                    + "yellow orange menu bar.";
+                    + "button directly above this box. To view your "
+                    + "character's powers & abilities, to get helpful info " 
+                    + "on status conditions, win conditions, etc., or to "
+                    + "see the entire rules, click on the 'Rules' tab on "
+                    + "the yellow menu bar above."
