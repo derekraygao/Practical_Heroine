@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import './css/IndividualRooms.css';
 
@@ -10,11 +11,22 @@ import socket from 'Socket.js';
 class IndividualRooms extends React.Component {
 
 
+  state = {
+            redirect: false
+          };
+
+
 
   componentDidMount = () => {
 
+    socket.on("You Successfully Joined The Room", () => {
 
-  };
+      this.setState({redirect: true});
+
+    });
+
+
+  }; //end componentDidMount
 
 
   componentWillUnmount = () => {
@@ -24,8 +36,23 @@ class IndividualRooms extends React.Component {
 
 
 
+  clickJoinRoom = () => {
+
+    socket.emit("Player Wants To Join Room", this.props.roomName);
+
+  };
+
+
 
   render() {
+
+    if (this.state.redirect) {
+
+      return (<Redirect to="/PracticalHeroine" />);
+
+    };
+
+
 
     return (
 
@@ -41,6 +68,7 @@ class IndividualRooms extends React.Component {
 
         <button 
           className="ui yellow button"
+          onClick={this.clickJoinRoom}
         >
           Join
         </button>

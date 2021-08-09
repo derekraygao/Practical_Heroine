@@ -19,8 +19,17 @@ class JoinRoom extends React.Component {
 
   componentDidMount = () => {
 
+    var localStorageInfo = JSON.parse(localStorage.getItem("Rejoin Info"));
 
-  };
+    console.log("Local storage info is:");
+    console.log(localStorageInfo.roomName);
+
+    if (localStorageInfo) {
+      this.setState({roomNameInput: localStorageInfo.roomName});
+    };
+
+
+  }; //end componentDidMount
 
 
   componentWillUnmount = () => {
@@ -28,6 +37,29 @@ class JoinRoom extends React.Component {
 
   };
 
+
+  /*"Rejoin Info" = {name:, roomName: }, set in App.js 
+  in socket.on("Start Game") */
+  joinRoomClick = () => {
+
+    if (this.state.roomNameInput == "") { return 0; }
+
+    var localStorageInfo = JSON.parse(localStorage.getItem("Rejoin Info"));
+
+    if (!localStorageInfo) {
+      localStorageInfo = {name: "!*!$", roomName: "!*!$"};
+    };
+  
+    var info = {
+                  roomName: this.state.roomNameInput,
+                  rejoinInfo: localStorageInfo
+               };
+
+
+    socket.emit("Joining Room Through Manual Input", info);
+    this.setState({ roomNameInput: ""});
+
+  };
 
 
   inputOnChange = (e) => {
@@ -51,12 +83,7 @@ class JoinRoom extends React.Component {
       e.preventDefault();
       //console.log(this.state.term);
 
-      if (this.state.roomNameInput !== "") {
-
-        socket.emit("Submit Player Name", this.state.enteredName);
-        this.setState({ roomNameInput: ""});
-
-      };
+      this.joinRoomClick();
 
     }; //end if e.key === "Enter"
 
@@ -82,7 +109,7 @@ class JoinRoom extends React.Component {
 
           <button 
             className="ui button orange"
-            onClick={this.createRoomClick}
+            onClick={this.joinRoomClick}
           >
             Join Room
           </button>
