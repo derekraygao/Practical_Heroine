@@ -382,7 +382,7 @@ class Controller {
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
-			if (!obj.pA[i].connected) { continue; };
+			if (obj.pA[i].connection !== "connected") { continue; };
 
 			if (!obj.pA[i].ready) { return false; };
 
@@ -397,7 +397,7 @@ class Controller {
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
-			if (!obj.pA[i].connected) { continue; };
+			if (obj.pA[i].connection !== "connected") { continue; };
 			if (!obj.pA[i].selectedForMission) { continue; };
 
 			if (!obj.pA[i].ready) { return false; };
@@ -415,7 +415,7 @@ class Controller {
 
 		for (var i = 0; i < obj.rO.rolesInGame.length; i++) {
 
-			if (!obj.pA[i].connected) { continue; };
+			if (obj.pA[i].connection !== "connected") { continue; };
 			if (obj.rO.rolesInGame[i].team != "villains") { continue; };
 
 			//if princessGuess is null
@@ -437,7 +437,7 @@ class Controller {
 
 		for (var i = 0; i < obj.pA.length; i++) {
 
-			if (obj.pA[i].connection != "connected") { continue; };
+			if (obj.pA[i].connection !== "connected") { continue; };
 
 			if (!obj.pA[i].paralyzed) { return false; };
 
@@ -516,11 +516,11 @@ class Controller {
 	};
 
 
-	didAllPlayersVoteOnTheTeam(obj) {
+	didAllConnectedPlayersVoteOnTheTeam(obj) {
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
-			if (!obj.pA[i].connected) { continue; };
+			if (obj.pA[i].connection !== "connected") { continue; };
 
 			//default teamVote is null
 			if (obj.pA[i].teamVote == null) {
@@ -864,13 +864,13 @@ class Controller {
 	voted before d/c, because in mission vote accumulator it 
 	will add if vote is not null
 	*/ 
-	didAllPlayersVoteOnTheMission(obj) {
+	didAllConnectedPlayersVoteOnTheMission(obj) {
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
 			if (!obj.pA[i].selectedForMission) { continue; };
 
-			if (!obj.pA[i].connected) { continue; };
+			if (obj.pA[i].connection !== "connected") { continue; };
 
 			//default missionVote is null
 			if (obj.pA[i].missionVote == null) {
@@ -1320,6 +1320,22 @@ class Controller {
 		return rejoinInfo;
 
 	}; //end getRejoinInfo
+
+
+	convertRejoinedToConnected(obj) {
+
+		var forLength = obj.pA.length;
+
+		for (let i = 0; i < forLength; i++) {
+
+			if (obj.pA[i].connection == "rejoined") {
+				obj.pA[i].connection = "connected";
+			};
+
+		}; //end for
+
+	}; //end convertRejoinedToConnnected
+
 
 
 	/*needs to be after splicing from playerArray*/

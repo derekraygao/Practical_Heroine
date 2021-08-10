@@ -72,7 +72,7 @@ gamePhase
 during this phase)
 11 = less than 5 people in the room - game automatically ends and people can 
 join the room during this phase
-
+12 = rejoined the game after disconnecting
 
 */
 
@@ -267,7 +267,7 @@ io.on('connection', function (socket) {
   socket.on("Joining Room Through Manual Input", ({roomName, rejoinInfo}) => {
 
       var joinRoomResult = Controller.joinRoomManually(roomName, socket, rejoinInfo);
-
+      
 
       if (joinRoomResult == "Successfully Joined Room") {
 
@@ -300,10 +300,11 @@ io.on('connection', function (socket) {
       emitToAllSocketsInRoom(obj, 
       "Update Entire Room Info", Controller.getRoomInfoFirstTime(roomName));
 
+      /*goes to IndividualRooms.js to  
+      redirect / into /PracticalHeroine*/
+      socket.emit("You Successfully Joined The Room");
 
-      /*Need some socket.emit rejoined info,
-      for things like name, role, player list, villain list,
-      powersHistory, status history, etc. */
+      socket.emit("Rejoin The Room", Controller.getRejoinInfo(obj));
 
       return 0;
 
@@ -403,7 +404,7 @@ io.on('connection', function (socket) {
 
     Controller.resetPlayerReadyStatus(obj);
 
-    shuffle(obj.pA);
+    //shuffle(obj.pA);
 
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
     //playerArray, then need to re-map the indices
@@ -509,7 +510,7 @@ io.on('connection', function (socket) {
       "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
-    shuffle(obj.pA);
+    //shuffle(obj.pA);
 
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
     //playerArray, then need to re-map the indices
@@ -639,6 +640,9 @@ io.on('connection', function (socket) {
     /* ready for next phase */
     Controller.resetPlayerReadyStatus(obj);
 
+    Controller.convertRejoinedToConnected(obj);
+
+
     Controller.setGamePhase(obj, 2);
 
     //starting teamLeader Index is -1, and chooseOnly +1 to index
@@ -665,7 +669,7 @@ io.on('connection', function (socket) {
     if (obj.rD.gamePhase !== 2) { return 0; };
 
     //makes sure person is team leader
-    if (!obj.pA[obj.index].isTeamLeader) { return 0; };
+    if (obj.index !== obj.rD.teamLeaderIndex) { return 0; };
 
     Controller.setMissionTeam(obj, proposedTeamArray);
 
@@ -673,6 +677,9 @@ io.on('connection', function (socket) {
     //and might want to use absolute voting power
 
     Controller.setGamePhase(obj, 3);
+
+
+    Controller.convertRejoinedToConnected(obj);
 
     //Don't need to send team leader name because it was sent previously
     emitToAllSocketsInRoom(obj, 
@@ -693,7 +700,9 @@ io.on('connection', function (socket) {
     //vote is either "Accept" or "Reject"
     Controller.setPlayerTeamVote(obj, vote);
 
-    if (!Controller.didAllPlayersVoteOnTheTeam(obj)) { return 0; };
+    if (!Controller.didAllConnectedPlayersVoteOnTheTeam(obj)) { return 0; };
+
+    Controller.convertRejoinedToConnected(obj);
 
 
     var teamCase = Controller.wasTeamAccepted(obj);
@@ -732,6 +741,7 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 4);
 
+        //this is not being used (???)
         updateTeamHistoryResults(obj);
 
         emitToAllSocketsInRoom(obj, "Start Game Phase 4: Team Was Accepted!", 
@@ -810,6 +820,8 @@ io.on('connection', function (socket) {
 
     Controller.resetPlayerReadyStatus(obj);
 
+    Controller.convertRejoinedToConnected(obj);
+
     //uses original teamLeaderIndex to set player.isTeamLeader = false
     //before selecting for/choosing new team leader
     Controller.resetDataForFailedTeamProposal(obj);
@@ -868,6 +880,9 @@ io.on('connection', function (socket) {
 
     Controller.resetPlayerReadyStatus(obj);
 
+    Controller.convertRejoinedToConnected(obj);
+
+
     //this must go BEFORE Controller.setPlayersForMission
     dropPlayerAffectedBySing(obj);
 
@@ -900,6 +915,9 @@ io.on('connection', function (socket) {
 
     Controller.resetPlayerReadyStatus(obj);
 
+    Controller.convertRejoinedToConnected(obj);
+
+
     Controller.setGamePhase(obj, 6);
 
     AbilityManager.updateStatusesAfterGamePhase5(obj);
@@ -922,13 +940,18 @@ io.on('connection', function (socket) {
 
     Controller.setPlayerMissionVote(vote, obj);
 
-    if ( !Controller.didAllPlayersVoteOnTheMission(obj) ) { return 0; };
+
+    if ( !Controller.didAllConnectedPlayersVoteOnTheMission(obj) ) { return 0; };
 
     /*All players have voted on mission */
 
     var missionPointsTotal = Controller.missionVoteCalculation(obj);
 
     var gameStatus = obj.rI.didAnyoneWin(obj.rD.missionNo);
+
+    /*convertRejoinedToConnected needs to come AFTER mission vote
+    calculation since it skips disconneted player */
+    Controller.convertRejoinedToConnected(obj);
 
     //needs to come after above mission calculations
     updateMissionResults(obj);
@@ -1008,6 +1031,8 @@ io.on('connection', function (socket) {
 
     if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; }; 
 
+    Controller.convertRejoinedToConnected(obj);
+
     /*abilitymanager needs to come BEFORE
     you update mission number and A*/
     AbilityManager.updateStatusesBeforeNightPhase(obj);
@@ -1045,6 +1070,9 @@ io.on('connection', function (socket) {
     //console.log("End night phase, all players ready");
 
     Controller.resetPlayerReadyStatus(obj);
+
+    Controller.convertRejoinedToConnected(obj);
+
 
     Controller.setGamePhase(obj, 1);
 
@@ -1107,6 +1135,9 @@ io.on('connection', function (socket) {
     if (!Controller.didAllConnectedVillainsGuessOnThePrincessIdentity(obj)) {
       return 0;
     };
+
+
+    Controller.convertRejoinedToConnected(obj);
 
 
     Controller.setGamePhase(obj, 10);
