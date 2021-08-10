@@ -220,8 +220,12 @@ class Controller {
 		var pObj = this.roomsData[roomName].playersInRoomArray[ind];
 		var rolesInGameObj = this.roomsData[roomName].rolesObject.rolesInGame[ind];
 
+		delete this.socketRoom[pObj.socketID];
+		this.socketRoom[socket.id] = roomName;
+
 		pObj.socketID = socket.id;
 		pObj.connection = "rejoined";
+
 
 		rolesInGameObj.socketID = socket.id;
 
@@ -357,7 +361,7 @@ class Controller {
 
 	isEveryoneReadyFirstGameAndAtLeastSixPlayers(obj) {
 
-		if (obj.pA.length < 3) { return false; };
+		if (obj.pA.length < 6) { return false; };
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
@@ -1232,6 +1236,86 @@ class Controller {
 	}; //end returnpArrayRoomAndIndex(socket)
 
 
+
+
+	/*Disconnect and Rejoin Functions */
+
+
+	frozenRejoinInfo(obj) {
+
+	    if (obj.rD.gamePhase == 8) { return false; };
+
+	    return (obj.pA[obj.index].frozen);
+
+	};
+
+
+	/*In the future, make character info update come from server,
+	not from local storage. Then, you won't need to do stuff like,
+	if backstabber, see if he/she was switched */
+	getRejoinInfo(obj) {
+
+		var pObj = obj.pA[obj.index];
+		var rolesIG = obj.rO.rolesInGame;
+		var rObj = rolesIG[obj.index];
+
+		var villainList = [];
+
+		var ogBackstabber = "nobody";
+
+
+		/*get villain list. Cannot re-use obj.rO function cause
+		worried about persequor switched with somebody. Move this
+		function to rolesObject when have time */
+		if (rObj.team == "villains"
+			&& rObj.role !== "???") {
+
+			var forLength = rolesIG.length;
+
+			for (let i = 0; i < forLength; i++) {
+
+		      if (rolesIG[i].team == "villains"
+		      	&& rolesIG[i].role !== "???") {
+		        villainList.push(obj.pA[i].name);
+		      };
+
+	    	}; //end for
+			
+		}; //end if team == villains
+
+
+		if (rObj.role == "Backstabber") {
+
+			if (rObj.originalBackStabberName
+				!== "nobody chosen") {
+				ogBackstabber = rObj.originalBackStabberName;
+			};
+
+		}; //end if role == Backstabber
+
+
+		var charStatus = {
+							selectedForTelepathy: obj.rO.roles["Esper"].rejoinInfo(pObj.name),
+							jailed: obj.rO.roles["Jailer"].rejoinInfo(obj),
+							frozen: this.frozenRejoinInfo(obj), 
+						 };
+
+
+
+		var rejoinInfo = {
+							name: pObj.name,
+							role: pObj.role,
+							gamePhase: obj.rD.gamePhase,
+							playerList: this.getListOfPlayers(obj),
+							villainList: villainList,
+							ogBackstabber: ogBackstabber,
+							characterStatus: charStatus,
+						 };
+
+
+		return rejoinInfo;
+
+	}; //end getRejoinInfo
 
 
 	/*needs to be after splicing from playerArray*/
