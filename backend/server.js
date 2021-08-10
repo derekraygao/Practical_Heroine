@@ -499,6 +499,10 @@ io.on('connection', function (socket) {
 
     /* if everyone is ready */
 
+    /*need this in case original players left room and new player 
+    becomes room master. His start game will go to this socket.on */
+    Controller.resetDataForNewGame(obj.room);
+
     Controller.setGamePhase(obj, 1);
 
     //default missionNo is 0, add to become Mission 1
@@ -2499,7 +2503,7 @@ function emitToAllSocketsInRoom(obj, _destination, _data = "") {
 
   for (var i = 0; i < obj.pA.length; i++) {
     
-    if (obj.pA[i].connected) {
+    if (obj.pA[i].connection == "connected") {
       io.to(`${obj.pA[i].socketID}`).emit(_destination, _data);
     }; //end if
     
