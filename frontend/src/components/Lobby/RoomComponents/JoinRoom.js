@@ -21,9 +21,6 @@ class JoinRoom extends React.Component {
 
     var localStorageInfo = JSON.parse(localStorage.getItem("Rejoin Info"));
 
-    console.log("Local storage info is:");
-    console.log(localStorageInfo.roomName);
-
     if (localStorageInfo) {
       this.setState({roomNameInput: localStorageInfo.roomName});
     };

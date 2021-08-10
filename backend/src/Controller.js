@@ -361,7 +361,7 @@ class Controller {
 
 	isEveryoneReadyFirstGameAndAtLeastSixPlayers(obj) {
 
-		if (obj.pA.length < 6) { return false; };
+		if (obj.pA.length < 3) { return false; };
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
@@ -1308,6 +1308,10 @@ class Controller {
 							gamePhase: obj.rD.gamePhase,
 							playerList: this.getListOfPlayers(obj),
 							villainList: villainList,
+							teamLeader: obj.pA[obj.rD.teamLeaderIndex].name,
+							missionTeam: obj.rD.missionTeam,
+							teamVoteInfo: obj.rI.teamInfo,
+							missionResultsHistory: obj.rI.missionInfo,
 							ogBackstabber: ogBackstabber,
 							characterStatus: charStatus,
 						 };
@@ -1457,7 +1461,7 @@ class Controller {
 
 		/*only applies if it's during team leader
 		choosing team phase */
-		if (obj.rD !== 2) { return 0; };
+		if (obj.rD.gamePhase !== 2) { return 0; };
 		if (obj.index !== obj.rD.teamLeaderIndex) { return 0; };
 
 		var newTLName = this.chooseOnlyConnectedTeamLeader(obj);
@@ -1523,14 +1527,19 @@ class Controller {
 		}; //end if gamePhase == 0, 10, 11
 
 
-
+		
 		/*During Game Play, cannot splice out.
 		Player was set to "disconnected" at very top of function */
 
 		var stopGameBool = this.didTooManyHeroesOrVillainsLeave(obj);
 	
-
-		if (stopGameBool || cAndR <= 4) {
+		/*do if rejoined >= 3 in case there's weird situation where
+		most players are rejoined players. Maybe chooseTeam leader 
+		will get stuck in infinite loop cause there's nobody to 
+		choose */
+		
+		/*
+		if (stopGameBool || cAndR <= 4 || p.rejoined >= 3) {
 
 			var allInfo = obj.rO.getAllIdentitiesAndTheirRoles();
 
@@ -1560,7 +1569,7 @@ class Controller {
 
 		}; //end if numConnected <= 4
 
-
+		*/
 
 		/*if none of the above applies, means the game 
 		continues as normally*/

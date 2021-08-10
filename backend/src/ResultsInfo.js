@@ -84,6 +84,7 @@ class ResultsInfo {
 		return this.teamInfo[missionNumber][teamInfoIndex];
 
 	};
+	
 
 	/*vote type is either: success, fail, or power
 	this is before mission vote power adjustments
