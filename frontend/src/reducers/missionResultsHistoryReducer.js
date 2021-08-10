@@ -9,7 +9,16 @@ const missionResultsHistoryReducer = (missionRH = [], action) => {
 
 			clonedArr[action.payload.missionNumber] = action.payload.missionRH;
 
+			
 			return clonedArr;
+
+
+		case "COMPLETELY_REPLACE_MISSION_RESULTS_HISTORY":
+			return action.payload;
+
+
+		case "RESET_FOR_NEW_GAME":
+			return [];
 
 		default:
 			return missionRH;
