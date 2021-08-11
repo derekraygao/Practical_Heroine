@@ -591,9 +591,11 @@ class AbilityManager {
   updateSaintessStatuses(obj) {
    
     obj.rO.roles["Saintess"].removeSaintessBuffsAtEndOfRound(obj);
-    obj.rO.roles["Saintess"].adjustSomeDataWhenSaintessOnTheMissionTeam(obj);
 
   }; //end updateSaintessStatuses(obj)
+
+
+
 
 
 
@@ -601,6 +603,9 @@ class AbilityManager {
   /*Actual Functions to Put In Server.js */
 
   updateInfoStartOfGame(obj) {
+
+    obj.rO.getVillainsIdentitiesForPrincess(obj);
+    obj.rO.getPrincessIdentityArrayForMarcus(obj);
 
     obj.rO.roles["Esper"].assignPlayersTheirPseudonyms(obj);
     obj.rO.roles["Delayer"].notifyPrincessDelayerIsInTheGame(obj);
