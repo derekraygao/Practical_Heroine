@@ -49,6 +49,7 @@ import PlayerAndResultsBox from './MenuBarBoxComponents/PlayerAndResultsBox.js';
 import PowersInfoBox from './MenuBarBoxComponents/PowersInfoBox.js';
 import JitsiVideoBox from './MenuBarBoxComponents/JitsiVideoBox.js';
 
+
 import GamePlayBox from './GamePlayBox.js';
 import EnterNameBox from './EnterNameBox.js';
 
@@ -200,7 +201,7 @@ class App extends React.Component {
     /*this is the function that automatically gets you past 
     gamePhase 0 and starts game without entering names*/
 
-    //socket.emit("TESTING ONLY: Ready For New Game");
+    socket.emit("TESTING ONLY: Ready For New Game");
 
 
     socket.on("Add Player Name", (name) => {
@@ -236,6 +237,12 @@ class App extends React.Component {
         }
       );
 
+
+      /*need timeout so the message appears after telling 
+      princess, marcus, villains, etc. other info
+      */
+      setTimeout(() => this.addSysMess("new mission", "Mission 1"), 1000);
+      
 
       var storedObj = JSON.stringify(
         {roomName: this.props.roomInfo["roomName"], 
@@ -286,22 +293,17 @@ class App extends React.Component {
       setTimeout(() => this.props.updateGamePhase(1), 1000);
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
-      this.props.updateTimerSeconds(40);
+      this.props.updateTimerSeconds(6);
 
-      this.props.updateCharacterStatus(
-        {"status": "jailed", "newValue": false}
-      );
-
-      this.props.updateCharacterStatus(
-        {"status": "selectedForTelepathy", "newValue": false}
-      );
+      this.props.updateCharacterStatus("jailed", false);
+      this.props.updateCharacterStatus("selectedForTelepathy", false);
 
 
     }); //end socket.on(Start Game Phase 1)
 
 
     socket.on("Start Game Phase 2: Team Leader Choosing A Team", (teamLeaderName) => {
-
+      
       setTimeout(() => this.props.updateGamePhase(2), 1000);
       this.props.updateTeamLeader(teamLeaderName);
       this.props.updateMissionTeam([]);
@@ -391,7 +393,7 @@ class App extends React.Component {
       setTimeout(() => this.props.updateGamePhase(8), 1000);
 
       this.props.updateMissionNumber(_missionNo);
-      this.props.updateTimerSeconds(2);
+      this.props.updateTimerSeconds(15);
       this.props.updateMainMenuSelection("player & results");
 
       //setTimeout(() => console.log("phase 8 timer is: " + this.props.timer), 1000);

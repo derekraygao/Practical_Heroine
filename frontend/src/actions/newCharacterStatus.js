@@ -1,5 +1,14 @@
 
-//{role: "Umbra Lord", power: "corruption", newValue: ""}
+/*
+var charStatusObj = {
+
+	selectedForTelepathy: false,
+	jailed: false,
+	frozen: false,
+
+}; //end defaultCharStatus
+*/
+
 export const newCharacterStatus = (newStatusObj) => {
 
 	return (
