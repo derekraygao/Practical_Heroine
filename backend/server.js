@@ -514,7 +514,7 @@ io.on('connection', function (socket) {
       "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
-    shuffle(obj.pA);
+    //shuffle(obj.pA);
 
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
     //playerArray, then need to re-map the indices
@@ -539,7 +539,7 @@ io.on('connection', function (socket) {
       if (obj.rO.rolesInGame[i].team == "villains") {
 
         io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
-        "Set Villains List", obj.rO.getVillainsIdentities());
+        "Set Villains List For Villains", obj.rO.getVillainsIdentities());
 
       };
 
@@ -610,7 +610,7 @@ io.on('connection', function (socket) {
       if (obj.rO.rolesInGame[i].team == "villains") {
 
         io.to(`${obj.rO.rolesInGame[i].socketID}`).emit(
-        "Set Villains List", obj.rO.getVillainsIdentities());
+        "Set Villains List For Villains", obj.rO.getVillainsIdentities());
 
       };
 
@@ -645,6 +645,8 @@ io.on('connection', function (socket) {
     Controller.resetPlayerReadyStatus(obj);
 
     Controller.convertRejoinedToConnected(obj);
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
     Controller.setGamePhase(obj, 2);
@@ -654,7 +656,6 @@ io.on('connection', function (socket) {
 
     //on client side, also set gamePhase to 2
     emitToTeamLeaderChoosingTeam(obj, teamLeaderName);
-
 
     AbilityManager.updateStatusesAfterGamePhase1(obj);
     MessageNotificationStack(obj);
@@ -684,6 +685,8 @@ io.on('connection', function (socket) {
 
 
     Controller.convertRejoinedToConnected(obj);
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
     //Don't need to send team leader name because it was sent previously
     emitToAllSocketsInRoom(obj, 
@@ -711,6 +714,8 @@ io.on('connection', function (socket) {
     if (!Controller.didAllConnectedPlayersVoteOnTheTeam(obj)) { return 0; };
 
     Controller.convertRejoinedToConnected(obj);
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
     var teamCase = Controller.wasTeamAccepted(obj);
@@ -829,6 +834,8 @@ io.on('connection', function (socket) {
     Controller.resetPlayerReadyStatus(obj);
 
     Controller.convertRejoinedToConnected(obj);
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
     //uses original teamLeaderIndex to set player.isTeamLeader = false
     //before selecting for/choosing new team leader
@@ -889,6 +896,8 @@ io.on('connection', function (socket) {
     Controller.resetPlayerReadyStatus(obj);
 
     Controller.convertRejoinedToConnected(obj);
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
     //this must go BEFORE Controller.setPlayersForMission
@@ -924,6 +933,8 @@ io.on('connection', function (socket) {
     Controller.resetPlayerReadyStatus(obj);
 
     Controller.convertRejoinedToConnected(obj);
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
     Controller.setGamePhase(obj, 6);
@@ -959,9 +970,6 @@ io.on('connection', function (socket) {
 
     var gameStatus = obj.rI.didAnyoneWin(obj.rD.missionNo);
 
-    /*convertRejoinedToConnected needs to come AFTER mission vote
-    calculation since it skips disconneted player */
-    Controller.convertRejoinedToConnected(obj);
 
     //needs to come after above mission calculations
     updateMissionResults(obj);
@@ -975,6 +983,8 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 9);
 
+        Controller.convertRejoinedToConnected(obj);
+
         emitToStartGamePhase9(obj);
 
         break;
@@ -985,6 +995,9 @@ io.on('connection', function (socket) {
         console.log("Villains Win!");
 
         Controller.setGamePhase(obj, 10);
+
+        Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+
 
         emitToAllSocketsInRoom(
           obj, 
@@ -1001,6 +1014,9 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 10);
 
+        Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+        
+
         emitToAllSocketsInRoom(
           obj, 
           "Game Over. Villians Win! Roles & Identities Revealed!", 
@@ -1016,6 +1032,8 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 7);
 
+        Controller.convertRejoinedToConnected(obj);
+
         emitToAllSocketsInRoom(obj, "Start Game Phase 7: Mission Ended", missionPointsTotal);
 
         break;
@@ -1025,6 +1043,11 @@ io.on('connection', function (socket) {
         break;
 
     }; //end switch
+
+
+
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
   }); //end "Vote on Mission"
@@ -1042,6 +1065,8 @@ io.on('connection', function (socket) {
     if (!Controller.areAllConnectedPlayersReady(obj)) { return 0; }; 
 
     Controller.convertRejoinedToConnected(obj);
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
     /*abilitymanager needs to come BEFORE
     you update mission number and A*/
@@ -1082,6 +1107,8 @@ io.on('connection', function (socket) {
     Controller.resetPlayerReadyStatus(obj);
 
     Controller.convertRejoinedToConnected(obj);
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
     Controller.setGamePhase(obj, 1);
@@ -1151,13 +1178,16 @@ io.on('connection', function (socket) {
     };
 
 
-    Controller.convertRejoinedToConnected(obj);
-
-
     Controller.setGamePhase(obj, 10);
 
+    Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+    
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
+
+
     //if everyone did guess, then next phase
-    if (obj.rO.didVillainsCorrectlyGuessThePrincessIdentity()) {
+    if (obj.rO.didVillainsCorrectlyGuessThePrincessIdentity(obj)) {
 
       console.log("Correct guess");
 
