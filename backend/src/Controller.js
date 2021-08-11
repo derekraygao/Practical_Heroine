@@ -487,9 +487,10 @@ class Controller {
 
 		this.updateTeamLeaderIndex(obj);
 
-		if (obj.pA[obj.rD.teamLeaderIndex].connection != "connected") {
+
+		if (obj.pA[obj.rD.teamLeaderIndex].connection !== "connected") {
 			
-			this.chooseOnlyConnectedTeamLeader(obj);
+			return this.chooseOnlyConnectedTeamLeader(obj);
 
 		} else {
 
