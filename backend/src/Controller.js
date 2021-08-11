@@ -675,7 +675,7 @@ class Controller {
 	//teamVoteInfo and need to send this data to clients
 	resetDataForFailedTeamProposal(obj) {
 
-		this.roomsData[obj.room].missionTeam = [];
+		//this.roomsData[obj.room].missionTeam = [];
 		this.roomsData[obj.room].teamVoteInfo = [];
 
 		obj.pA[obj.rD.teamLeaderIndex].isTeamLeader = false;
@@ -1056,7 +1056,12 @@ class Controller {
 
 	resetDataAtEndOfMission(obj) {
 
+		/*
+		don't reset since it just gets overwritten,
+		plus rejoining player during night phase 
+		needs to know mission Team for power phase 1
 		this.roomsData[obj.room].missionTeam = [];
+		*/
 		this.roomsData[obj.room].missionVoteInfo = [];
 		this.roomsData[obj.room].teamVoteInfo = [];
 		this.roomsData[obj.room].statusEffects = [];
