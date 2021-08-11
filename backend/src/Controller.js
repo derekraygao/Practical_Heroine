@@ -1301,14 +1301,23 @@ class Controller {
 						 };
 
 
+		/*this is in case player rejoins during game phase 1
+		for very first game*/
+		if (obj.rD.teamLeaderIndex == -1) {
+			var teamLeaderName = "No Team Leader Yet";
+		} else {
+			var teamLeaderName = obj.pA[obj.rD.teamLeaderIndex].name;
+		};
+
 
 		var rejoinInfo = {
 							name: pObj.name,
 							role: pObj.role,
 							gamePhase: obj.rD.gamePhase,
 							playerList: this.getListOfPlayers(obj),
+							roomInfo: this.getRoomInfo(obj),
 							villainList: villainList,
-							teamLeader: obj.pA[obj.rD.teamLeaderIndex].name,
+							teamLeader: teamLeaderName,
 							missionTeam: obj.rD.missionTeam,
 							teamVoteInfo: obj.rI.teamInfo,
 							missionResultsHistory: obj.rI.missionInfo,
