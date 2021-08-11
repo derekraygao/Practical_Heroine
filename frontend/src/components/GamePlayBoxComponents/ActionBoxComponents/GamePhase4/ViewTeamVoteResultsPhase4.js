@@ -96,8 +96,11 @@ class ViewTeamVoteResultsPhase4 extends React.Component {
 
 
         <div className="team-vote-results-text-container">
-          {this.props.teamLeader}'s team of: {formatArrayIntoString(this.props.missionTeam)}
-          &nbsp; was {this.teamVoteResultsText()} 
+          <span>
+            {this.props.teamLeader}'s team 
+            of: {formatArrayIntoString(this.props.missionTeam)} 
+            &nbsp;was {this.teamVoteResultsText()}
+          </span> 
         </div>
 
 
