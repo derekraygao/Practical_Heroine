@@ -514,7 +514,7 @@ io.on('connection', function (socket) {
       "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
-    //shuffle(obj.pA);
+    shuffle(obj.pA);
 
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
     //playerArray, then need to re-map the indices
@@ -2513,9 +2513,7 @@ function emitToAllSocketsInRoom(obj, _destination, _data = "") {
 
   for (var i = 0; i < obj.pA.length; i++) {
     
-    if (obj.pA[i].connection == "connected") {
-      io.to(`${obj.pA[i].socketID}`).emit(_destination, _data);
-    }; //end if
+    io.to(`${obj.pA[i].socketID}`).emit(_destination, _data);
     
   }; //end for
 
