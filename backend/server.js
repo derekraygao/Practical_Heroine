@@ -503,12 +503,12 @@ io.on('connection', function (socket) {
     becomes room master. His start game will go to this socket.on */
     Controller.resetDataForNewGame(obj.room);
 
-    Controller.setGamePhase(obj, 1);
+    //need to get new obj since you resetted the data
+    obj = Controller.returnpArrayRoomAndIndex(socket);
 
-    //default missionNo is 0, add to become Mission 1
-    Controller.updateMissionNumber(obj);
+    emitToAllSocketsInRoom(obj, "Reset Data For New Game", "");
 
-    Controller.resetPlayerReadyStatus(obj);
+
 
     emitToAllSocketsInRoom(obj, 
       "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
@@ -701,8 +701,12 @@ io.on('connection', function (socket) {
     if (!obj.pA) { return 0; };
     if (obj.rD.gamePhase !== 3) { return 0; };
 
-    //vote is either "Accept" or "Reject"
-    Controller.setPlayerTeamVote(obj, vote);
+
+    if (vote !== "Server Check") {
+      //vote is either "Accept" or "Reject"
+      Controller.setPlayerTeamVote(obj, vote);
+    };
+
 
     if (!Controller.didAllConnectedPlayersVoteOnTheTeam(obj)) { return 0; };
 
@@ -942,8 +946,10 @@ io.on('connection', function (socket) {
 
     console.log(obj.pA[obj.index].name + " voted for " + vote);
 
-    Controller.setPlayerMissionVote(vote, obj);
-
+    if (vote !== "Server Check") {
+      Controller.setPlayerMissionVote(vote, obj);
+    };
+    
 
     if ( !Controller.didAllConnectedPlayersVoteOnTheMission(obj) ) { return 0; };
 
@@ -1132,7 +1138,11 @@ io.on('connection', function (socket) {
     if (!obj.pA) { return 0; };
     if (obj.rD.gamePhase !== 9) { return 0; };
 
-    obj.rO.addPrincessGuessForVillain(obj, guess);
+
+    if (guess !== "Server Check") {
+      obj.rO.addPrincessGuessForVillain(obj, guess);
+    };
+    
 
     console.log(obj.pA[obj.index].name + " guessed the princess to be: " + guess);
 

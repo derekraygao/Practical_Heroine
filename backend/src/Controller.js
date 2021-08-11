@@ -1318,6 +1318,7 @@ class Controller {
 							roomInfo: this.getRoomInfo(obj),
 							villainList: villainList,
 							teamLeader: teamLeaderName,
+							missionNumber: obj.rD.missionNo,
 							missionTeam: obj.rD.missionTeam,
 							teamVoteInfo: obj.rI.teamInfo,
 							missionResultsHistory: obj.rI.missionInfo,
@@ -1612,8 +1613,38 @@ class Controller {
 		obj.stack.push(stackObj);
 
 
+		/*Because the game only checks whether to proceed or not 
+		after people send information (e.g. areAllPlayersReady), 
+		if last person to send info disconnects, then the check of 
+		"should game proceed" does not happen, so you need to do it 
+		here 
+
+		I do a roundabout method of emitting to team leader who emits 
+		back to server because otherwise would need to wrap 
+		socket.on (in server.js) in functions, and I feel that would 
+		get complicated/less readable
+		*/
+
+		//0, 10, 11 check happens at top
+		if ([2].includes(obj.rD.gamePhase)) { return 0; };
+
+		//if 1, 3, 4, 5, 6, 7, 8, 9, then need to do check
+
+
+		var stackObj = {
+						type: "Individual",
+						socketID: obj.pA[obj.pT[obj.rD.roomMaster]].socketID,
+						destination: "Room Master Check Server If Game Should Proceed Upon Player Disconnect",
+						data: obj.rD.gamePhase
+					   };
+
+		obj.stack.push(stackObj);
+
 
 	}; //end handlePlayerDisconnect()
+
+
+
 
 
 
