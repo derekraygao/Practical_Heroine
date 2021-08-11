@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 
 import './css/IndividualRooms.css';
 
@@ -12,18 +11,12 @@ class IndividualRooms extends React.Component {
 
 
   state = {
-            redirect: false
+    
           };
 
 
 
   componentDidMount = () => {
-
-    socket.on("You Successfully Joined The Room", () => {
-
-      this.setState({redirect: true});
-
-    });
 
 
   }; //end componentDidMount
@@ -45,13 +38,6 @@ class IndividualRooms extends React.Component {
 
 
   render() {
-
-    if (this.state.redirect) {
-
-      return (<Redirect to="/PracticalHeroine" />);
-
-    };
-
 
 
     return (

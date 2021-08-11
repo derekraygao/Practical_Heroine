@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import './css/DisplayRooms.css';
 
@@ -17,6 +18,7 @@ class DisplayRooms extends React.Component {
   state = {
             roomList: ["Wait for rooms to load"],
             roomNameInput: "",
+            redirect: false,
 
           };
 
@@ -33,6 +35,13 @@ class DisplayRooms extends React.Component {
 
     });
 
+
+
+    socket.on("You Successfully Joined The Room", () => {
+      
+      this.setState({redirect: true});
+
+    });
 
 
   }; //end componentDidMount
@@ -71,6 +80,15 @@ class DisplayRooms extends React.Component {
 
 
   render() {
+
+
+    if (this.state.redirect) {
+
+      return (<Redirect to="/PracticalHeroine" />);
+
+    };
+
+
 
     return (
 

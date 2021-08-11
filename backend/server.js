@@ -274,7 +274,7 @@ io.on('connection', function (socket) {
       var obj = Controller.returnpArrayRoomAndIndex(socket);
       if (!obj.pA) { return 0; };
 
-      /*goes to IndividualRooms.js*/
+      /*goes to DisplayRooms.js*/
       socket.emit("You Successfully Joined The Room");
 
       /*it's just easier to update everyone, because YOU, newly
@@ -300,8 +300,10 @@ io.on('connection', function (socket) {
       emitToAllSocketsInRoom(obj, 
       "Update Entire Room Info", Controller.getRoomInfoFirstTime(roomName));
 
-      /*goes to IndividualRooms.js to  
-      redirect / into /PracticalHeroine*/
+      /*goes to DisplayRooms.js to  
+      redirect / into /PracticalHeroine
+      Needs to be Display and not IndividualRooms.js because if there's no individual rooms (you are joining in progress game), then the component is not mounted, so cannot receive socket message
+      */
       socket.emit("You Successfully Joined The Room");
 
       socket.emit("Rejoin The Room", Controller.getRejoinInfo(obj));
