@@ -288,16 +288,25 @@ class App extends React.Component {
 
 
     //for very first game phase 1, it's trigged by start game
-    socket.on("Start Game Phase 1: Power Phase 1", () => {
+    socket.on("Start Game Phase 1: Power Phase 1", (newMissionNumber) => {
 
       setTimeout(() => this.props.updateGamePhase(1), 1000);
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
-      this.props.updateTimerSeconds(6);
+      this.props.updateTimerSeconds(7);
 
       this.props.updateCharacterStatus("jailed", false);
       this.props.updateCharacterStatus("selectedForTelepathy", false);
 
+
+      this.props.updateMissionNumber(newMissionNumber);
+      
+      /*need timeout to wait for system message box to mount,
+      otherwise it won't scroll to the bottom..probably cause 
+      it's in a weird area and the calculations off scrolltop,
+      scrollheight, and stuff will be off*/
+      setTimeout(() => this.addSysMess("new mission", ("Mission " + this.props.missionNumber)), 1000);
+      
 
     }); //end socket.on(Start Game Phase 1)
 
@@ -348,7 +357,7 @@ class App extends React.Component {
 
       if (_teamArr.includes(_name)) {
 
-        this.props.updateTimerSeconds(2);
+        this.props.updateTimerSeconds(7);
 
       } else {
 
@@ -388,26 +397,17 @@ class App extends React.Component {
 
 
 
-    socket.on("Start Game Phase 8: Night Phase", (_missionNo) => {
+    socket.on("Start Game Phase 8: Night Phase", () => {
 
       setTimeout(() => this.props.updateGamePhase(8), 1000);
 
-      this.props.updateMissionNumber(_missionNo);
-      this.props.updateTimerSeconds(15);
+      this.props.updateTimerSeconds(13);
       this.props.updateMainMenuSelection("player & results");
 
       //setTimeout(() => console.log("phase 8 timer is: " + this.props.timer), 1000);
 
       setTimeout(() => P8Interval = setInterval(this.powerPhase8TimerCountdown, 1000), 1000);
     
-
-      this.props.addSystemMessage(
-        {
-          type: "new mission",
-          message: ("Mission " + this.props.missionNumber)
-        }
-      );
-
 
     }); //end socket.on("Start Game Phase 8")
 
@@ -1082,10 +1082,11 @@ export default connect(mapStateToProps,
 
 
 
-var introMessage = "Remember, you can read the instructions (what to do) " 
-                    + "for each game phase by clicking on the 'Instructions' " 
-                    + "button directly above this box. To view your "
-                    + "character's powers & abilities, to get helpful info " 
-                    + "on status conditions, win conditions, etc., or to "
-                    + "see the entire rules, click on the 'Rules' tab on "
-                    + "the yellow menu bar above."
+var introMessage = "If you are confused, you can read the game's "
+                  + "instructions on what to do by clicking on "
+                  + "the yellow 'Instructions' tab located "
+                  + "directly above the System Messages box. " 
+                  + "You can view your role's powers, "
+                  + "access the 'Quick Guide' to view what to do "
+                  + "for each game phase, or read the entire "
+                  + "instructions through 'Rules'.";
