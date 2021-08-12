@@ -82,14 +82,16 @@ class MissionAndTeamResultsTable extends React.Component {
 
     const displayResults = [];
     var i = 1; //start at mission number 1
-    var mN = this.props.missionNo;
+    var mN = (this.props.missionNo + 1);
     var TI = this.props.teamInfo;
     var MH = this.props.missionHistory;
 
 
     //should never display mission 7 information
     for (i; i < mN; i++) {
-     
+      
+      if (TI[i] == undefined || MH[i] == undefined) { continue; };
+
       displayResults.push(
 
         <>
