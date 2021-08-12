@@ -7,6 +7,10 @@ import { newChatNotification } from 'actions/newChatNotification.js';
 import './css/MenuBar.css';
 
 
+/*Note, Instructions tab used to be called "powers", but I'm too 
+lazy to double check everything and change the redux prop
+mainMeunuSelection from "powers" to "instructions"*/
+
 class MenuBar extends React.Component {
 
     showVideoAndChatMenuButtonOrNot() {
@@ -142,7 +146,7 @@ class MenuBar extends React.Component {
 
         <button 
           class={`ui button menu-button ${this.menuButtonColor("powers")}`}
-          onClick={this.powersClick}>Powers
+          onClick={this.powersClick}>Instructions
         </button>
 
       </div> //end div menu-bar-container

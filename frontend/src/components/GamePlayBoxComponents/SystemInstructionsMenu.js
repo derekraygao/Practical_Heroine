@@ -11,8 +11,7 @@ class SystemInstructionsMenu extends React.Component {
 
 			<div className="system-instructions-menu-bar orange ui buttons">
 
-        <button class="ui button sibutton1">System</button>
-        <button class="ui button">Instructions</button>
+        <button class="ui button sibutton1">System Messages</button>
 
       </div> //end div menu-bar-container
 
