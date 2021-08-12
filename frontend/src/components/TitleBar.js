@@ -9,6 +9,19 @@ import './css/TitleBar.css';
 class TitleBar extends React.Component {
 
 
+  titleContent() {
+
+    if ([0, 10, 11].includes(this.props.gamePhase)) {
+      return "Practical Hero(ine)";
+    };
+
+
+    return (this.props.name + " : " + this.props.role);
+
+  };
+
+
+
   descriptionContent() {
 
     switch(this.props.gamePhase) {
@@ -45,6 +58,18 @@ class TitleBar extends React.Component {
       case 8:
         return ("Night Phase 8 (Time Left): " + this.props.timer);
 
+      case 9:
+        return ("Game Phase 9: If the Villains correctly deduce the identity of the Princess (John), then the Villains win!");
+
+      case 10:
+        return ("Game Over! When the room has a minimum of 6 players and everyone has signaled their 'Ready' status, a new game will begin!");
+
+      case 11:
+        return ("Whoops! The game ended because too many players left. When you have 6 'Ready' players once again, a new game will start!");
+
+      case 12:
+        return ("You rejoined the room! You'll be added back into the game starting next game phase.");
+
       default:
         return ""; 
 
@@ -79,7 +104,7 @@ class TitleBar extends React.Component {
 
                 <div className="title-bar-title">
                     <span>
-                      {this.props.name + " : " + this.props.role}
+                      {this.titleContent()}
                     </span>
                 </div>
 
