@@ -53,7 +53,7 @@ class Persequor extends RolesMasterClass {
         	4: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
         	5: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
         	6: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
-
+        	7: {"switchedName": "nobody chosen", "originalRole": "", "socketID": "", "originalRolesObject": {}},
         };
 
 
@@ -198,6 +198,15 @@ class Persequor extends RolesMasterClass {
 		obj.pA[switchedInd].name;
 
 
+		/*for Esper*/
+		if (obj.pA[switchedInd].role == "Esper") {
+
+			obj.pA[switchedInd].pseudonym = obj.pA[this.index].pseudonym;
+			obj.pA[this.index].pseudonym = "Esper";
+
+		};
+
+
 		/*console.log("Persequor switch is " + obj.pA[switchedInd].name 
 			+ ", whose role is: " + obj.pA[switchedInd].role); */
 
@@ -269,6 +278,15 @@ class Persequor extends RolesMasterClass {
 		var switchedIndex = obj.pT[this.name];
 		var originalRole = obj.pA[switchedIndex].role; //this.powersHistory[(obj.rD.missionNo -1)].originalRole;
 		
+		/*for Esper*/
+		if (obj.pA[switchedIndex].role == "Esper") {
+
+			obj.pA[switchedIndex].pseudonym = obj.pA[this.index].pseudonym;
+			obj.pA[this.index].pseudonym = "Esper";
+
+		};
+
+
 		//switched, non-persequor player
 		obj.pA[this.index].role = originalRole;
 		obj.pA[switchedIndex].role = "Persequor";
