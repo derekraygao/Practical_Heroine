@@ -34,6 +34,10 @@ import PP5Psychologist from './PowerPhase5Components/Psychologist/PP5Psychologis
 import PP5NotSelectedForMissionLottie from './NotSelectedForMissionPowers/PP5NotSelectedForMissionLottie.js';
 import PP5NotSelectedForMissionPersequor from './NotSelectedForMissionPowers/PP5NotSelectedForMissionPersequor.js';
 
+import PP5NotSelectedForMissionFrozen from './NotSelectedForMissionPowers/PP5NotSelectedForMissionFrozen.js';
+
+
+
 var PP5TimerInterval;
 
 
@@ -147,7 +151,7 @@ class PowerPhase5 extends React.Component {
 
 
     if (this.props.characterStatus["frozen"]) {
-      return <PP5Frozen />;
+      return <PP5NotSelectedForMissionFrozen />;
     };
 
 
