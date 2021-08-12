@@ -1080,9 +1080,6 @@ io.on('connection', function (socket) {
 
     Controller.setGamePhase(obj, 8);
 
-    //+1 to current Mission No. Need to update on client side too
-    Controller.updateMissionNumber(obj);
-
 
     //mission number updated in client's side
     emitToAllSocketsInRoom(obj, "Start Game Phase 8: Night Phase", obj.rD.missionNo);
@@ -1115,15 +1112,14 @@ io.on('connection', function (socket) {
 
     Controller.setGamePhase(obj, 1);
 
-
+    //updateStatuses needs to be BEFORE update mission Number
     AbilityManager.updateStatusesAfterNightPhase(obj);
     MessageNotificationStack(obj);
 
-    //put info in Redux store because you cannot send messages
-    //to an unmounted component
-    //updateInfoForPowersOnClientSide(obj);
+    //+1 to current Mission No. Need to update on client side too
+    Controller.updateMissionNumber(obj);
 
-    emitToAllSocketsInRoom(obj, "Start Game Phase 1: Power Phase 1", "");
+    emitToAllSocketsInRoom(obj, "Start Game Phase 1: Power Phase 1", obj.rD.missionNo);
 
 
   });

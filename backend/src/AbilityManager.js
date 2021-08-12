@@ -521,7 +521,7 @@ class AbilityManager {
 
 
   	if (persequorSwapActivated) {
-
+      
 		//inside backstabber function, it checks if backstab has been activated
 		this.updateBackstabberPowers(obj);
 		obj.rO.roles["Persequor"].identityTheft(obj);
@@ -681,11 +681,6 @@ class AbilityManager {
     obj.rO.roles["Princess"].updateHeartacheDefense(obj);
 
 
-    /*put switch BEFORE update status arrays because 
-    Persequor/Backstabber might steal Ranger/Princess role
-    */
-    this.handleBackstabberPersequorAndHurricane(obj);
-
     obj.rO.roles["Princess"].updateEoSenseArray(obj);
     obj.rO.roles["Ichigo"].updateNaviSenseInfo(obj);
     
@@ -693,12 +688,19 @@ class AbilityManager {
   };
 
 
-
+  //this is right before mission number is updated +1
   updateStatusesAfterNightPhase(obj) {
 
     this.updateJailerAbilities(obj);
 
     obj.rO.roles["Esper"].resetTelepathyArrayAtEndOfRound();
+
+
+    /*put switch BEFORE update status arrays because 
+    Persequor/Backstabber might steal Ranger/Princess role
+    */
+    this.handleBackstabberPersequorAndHurricane(obj);
+
 
     obj.rO.roles["Princess"].updateTransformationCount(obj);
 
