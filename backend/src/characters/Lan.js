@@ -34,7 +34,7 @@ class Lan extends RolesMasterClass {
 				return -2;
 
 			case 1:
-				return 0.25;
+				return 0.5;
 
 			case 2:
 				return 3;
@@ -176,7 +176,7 @@ class Lan extends RolesMasterClass {
 
 		} else {
 
-			voteSum -= 1.5;
+			voteSum -= 2;
 
 			this.messageHandler("Intimidate", 
 								{"target": obj.pA[intimidateInd].name, result: "Failure!"}, 
