@@ -4,11 +4,14 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 import { roomInfo } from 'actions/roomInfo.js';
 
+import { disconnectMessage } from 'actions/disconnectMessage.js';
+
 import socket from 'Socket.js';
 
 import Lobby from './Lobby/Lobby.js';
 import App from './App.js';
-
+import DisconnectRejoinRoomHandler from './DisconnectRejoinRoomHandler.js';
+import DisconnectMessage from './DisconnectMessage.js';
 
 
 class Home extends React.Component {
@@ -61,6 +64,13 @@ class Home extends React.Component {
 
 
 
+    socket.on("disconnect", () => {
+
+      this.props.showDisconnectMessage(true);
+
+    });
+
+
 
   }; //end componentDidMount
 
@@ -78,8 +88,18 @@ class Home extends React.Component {
     return (
 
       <BrowserRouter>
+
         <Route path="/" exact component={Lobby} />
         <Route path="/PracticalHeroine" exact component={App} />
+
+        <Route path="/" component={DisconnectRejoinRoomHandler} />
+
+        {
+          this.props.disconnectMessageBool &&
+
+          <Route path="/" component={DisconnectMessage} />
+        }
+
       </BrowserRouter>
 
     );
@@ -97,7 +117,8 @@ const mapStateToProps = (state) => {
   return (
          { 
             role: state.role,
-            gamePhase: state.gamePhase
+            gamePhase: state.gamePhase,
+            disconnectMessageBool: state.disconnectMessageBool,
          }
   );
 
@@ -107,5 +128,6 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, 
   {
     updateRoomInfo: roomInfo,
+    showDisconnectMessage: disconnectMessage,
   })
 (Home);
