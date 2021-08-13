@@ -6,7 +6,7 @@ AND frontend/src/
 /* eslint-disable */
 function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
-  //3 and 4 are for testing purposes only...minimum of 5 players for game
+  //3, 4, 5 are for testing purposes only...minimum of 6 players for game
 
   if (_numOfPlayers == 3) {
 
@@ -16,11 +16,11 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 2) {
 
-      return 3;
+      return 2;
 
     } else if (_MNumber == 3) {
 
-      return 1;
+      return 3;
 
     } else if (_MNumber == 4) {
 
@@ -51,11 +51,11 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 2) {
 
-      return 3;
+      return 4;
 
     } else if (_MNumber == 3) {
 
-      return 3;
+      return 4;
 
     } else if (_MNumber == 4) {
 
@@ -121,11 +121,11 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 2) {
 
-      return 2;
+      return 4;
 
     } else if (_MNumber == 3) {
 
-      return 4;
+      return 2;
 
     } else if (_MNumber == 4) {
 
@@ -155,11 +155,11 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 2) {
 
-      return 3;
+      return 4;
 
     } else if (_MNumber == 3) {
 
-      return 4;
+      return 3;
 
     } else if (_MNumber == 4) {
 
@@ -171,7 +171,7 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 6) {
 
-      return 4;
+      return 3;
 
     } else if (_MNumber == 7) {
 
@@ -194,7 +194,7 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 3) {
 
-      return 5;
+      return 4;
 
     } else if (_MNumber == 4) {
 
@@ -224,19 +224,19 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 2) {
 
-      return 3;
+      return 2;
 
     } else if (_MNumber == 3) {
 
-      return 2;
+      return 5;
 
     } else if (_MNumber == 4) {
 
-      return 6;
+      return 3;
 
     } else if (_MNumber == 5) {
 
-      return 5;
+      return 6;
 
     } else if (_MNumber == 6) {
 
@@ -258,11 +258,11 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 2) {
 
-      return 5;
+      return 6;
 
     } else if (_MNumber == 3) {
 
-      return 4;
+      return 2;
 
     } else if (_MNumber == 4) {
 
@@ -270,11 +270,11 @@ function calculateNumberofTeamMembers(_MNumber, _numOfPlayers) {
 
     } else if (_MNumber == 5) {
 
-      return 2;
+      return 4;
 
     } else if (_MNumber == 6) {
 
-      return 5;
+      return 6;
 
     } else if (_MNumber == 7) {
 
