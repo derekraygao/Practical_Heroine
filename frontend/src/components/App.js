@@ -301,12 +301,14 @@ class App extends React.Component {
 
       this.props.updateMissionNumber(newMissionNumber);
       
-      /*need timeout to wait for system message box to mount,
-      otherwise it won't scroll to the bottom..probably cause 
-      it's in a weird area and the calculations off scrolltop,
-      scrollheight, and stuff will be off*/
-      setTimeout(() => this.addSysMess("new mission", ("Mission " + this.props.missionNumber)), 1000);
+      this.addSysMess("new mission", ("Mission " + newMissionNumber));
       
+      /*At beginning of new mission, automatically scroll down
+      to the very bottom */
+      var scrollElem = document.querySelector('.system-message-box');
+
+      scrollElem.scrollTop = scrollElem.scrollHeight;
+
 
     }); //end socket.on(Start Game Phase 1)
 
@@ -357,7 +359,7 @@ class App extends React.Component {
 
       if (_teamArr.includes(_name)) {
 
-        this.props.updateTimerSeconds(7);
+        this.props.updateTimerSeconds(2);
 
       } else {
 
@@ -401,10 +403,19 @@ class App extends React.Component {
 
       setTimeout(() => this.props.updateGamePhase(8), 1000);
 
-      this.props.updateTimerSeconds(13);
-      this.props.updateMainMenuSelection("player & results");
+      this.props.updateTimerSeconds(16);
+     
+      /*Auto scroll down to latest mission results */
+      setTimeout(() => {
 
-      //setTimeout(() => console.log("phase 8 timer is: " + this.props.timer), 1000);
+        this.props.updateMainMenuSelection("player & results");
+
+        var scrollElem = document.querySelector('.player-and-results-box-container');
+
+        scrollElem.scrollTop = scrollElem.scrollHeight;
+      }, 
+      1000);
+
 
       setTimeout(() => P8Interval = setInterval(this.powerPhase8TimerCountdown, 1000), 1000);
     
@@ -423,7 +434,19 @@ class App extends React.Component {
       var missionPlusOne = (this.props.missionNumber + 1);
       this.props.updateMissionNumber(missionPlusOne);
 
-    });
+
+      /*Auto scroll down to latest mission results */
+      setTimeout(() => {
+
+        this.props.updateMainMenuSelection("player & results");
+
+        var scrollElem = document.querySelector('.player-and-results-box-container');
+
+        scrollElem.scrollTop = scrollElem.scrollHeight;
+      }, 
+      1000);
+
+    }); //end Start Game Phase 9
 
 
 

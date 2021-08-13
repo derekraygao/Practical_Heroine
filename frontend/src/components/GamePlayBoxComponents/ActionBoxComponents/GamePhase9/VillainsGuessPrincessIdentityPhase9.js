@@ -89,7 +89,7 @@ class VillainsGuessPrincessIdentityPhase9 extends React.Component {
 
         <div className="villain-guess-princess-text-container">
           Villains! This is your last chance to win! If you 
-          successfully guess the identity of the princess, 
+          successfully guess the identity of the Princess, 
           victory is yours! If discord exists, then majority 
           rules!
         </div>
