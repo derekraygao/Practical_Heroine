@@ -56,7 +56,7 @@ class PowersInfoBox extends React.Component {
     menuSelection: "Character",
     characterScrollPosition: 0,
     quickGuideScrollPosition: 0,
-    RulesScrollPosition: 0,
+    rulesScrollPosition: 0,
 
   };
 
@@ -326,11 +326,18 @@ class PowersInfoBox extends React.Component {
       case "Character":
         return this.whichPowerInfoToShow();
 
+
       case "Quick Guide":
-        return <QuickGuide />;
+        return <QuickGuide 
+                  setScrollPosition={this.setScrollPosition}
+                  prevScrollPosition={this.state.quickGuideScrollPosition}
+               />;
 
       case "Rules":
-        return <Rules />;
+        return <Rules 
+                  setScrollPosition={this.setScrollPosition}
+                  prevScrollPosition={this.state.rulesScrollPosition}
+               />;
 
       default:
         return <div>Error in PowersInfoBox.js</div>;

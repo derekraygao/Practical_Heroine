@@ -14,9 +14,10 @@ class PrincessPowerInfo extends React.Component {
   };
 
 
+
   componentDidMount = () => {
 
-    var elem = document.querySelector('.rules-and-info-box-container');
+    var elem = document.querySelector('.power-info-menu-component-container');
 
     elem.scrollTop = this.props.prevScrollPosition;
 
@@ -25,15 +26,16 @@ class PrincessPowerInfo extends React.Component {
 
   componentWillUnmount = () => {
 
-    var elem = document.querySelector('.rules-and-info-box-container');
+    var elem = document.querySelector('.power-info-menu-component-container');
 
     this.props.setScrollPosition(
       "characterScrollPosition",
       elem.scrollTop
     );
 
-
   }; //end componentWillUnmount
+
+
 
 
 
