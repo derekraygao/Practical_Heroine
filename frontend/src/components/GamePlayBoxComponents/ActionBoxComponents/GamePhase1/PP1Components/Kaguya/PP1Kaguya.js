@@ -60,7 +60,16 @@ class PP1Kaguya extends React.Component {
 
       this.props.updatePower("Kaguya", "darkDestiny", this.state.power1Target);
 
-    };
+
+      this.props.addSystemMessage(
+        {
+          type: "power",
+          message: ("You foretold a Dark Destiny upon " + this.state.power1Target + ".")
+        }
+      );
+
+    }; //end if this.state.power!Target !== "Power1 ?"
+
 
   }; //end submitPower1
 

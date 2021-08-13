@@ -393,7 +393,7 @@ class Persequor extends RolesMasterClass {
 				              socketID: persequor.socketID,
 				              data: {
 					                  type: "urgent",
-					                  message: ("You stole the role of " + persequor.newRole + " from a Hero! For this mission round only, you will have access to all of his/her powers, leaving your victim powerless!")
+					                  message: ("You stole the role of " + persequor.newRole + " from a Hero! For mission round " + (obj.rD.missionNo + 1) + " only, you will have access to all of his/her powers, leaving your victim powerless!")
 				                    }
 	               		  };
 
@@ -412,7 +412,7 @@ class Persequor extends RolesMasterClass {
 				              socketID: victim.socketID,
 				              data: {
 					                  type: "urgent",
-					                  message: ("Oops. You shouldn't have lost your passport, clicked on that suspicious weblink, or responded to that phishing email! Your identity was stolen! Persequor has stolen your identity and powers for this mission round only, leaving you as a powerless nobody '???'!")
+					                  message: ("Oops. You shouldn't have lost your passport, clicked on that suspicious weblink, or responded to that phishing email! Your identity was stolen! Persequor has stolen your identity and powers for mission round " + (obj.rD.missionNo + 1) + " only, leaving you as a powerless nobody '???'!")
 					                }
 	               		  };
 

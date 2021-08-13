@@ -723,36 +723,14 @@ io.on('connection', function (socket) {
     var teamCase = Controller.wasTeamAccepted(obj);
 
 
-    /*Dark Destiny */
-    if (obj.rO.roles["Kaguya"].wasDarkDestinyFulfilled(obj)) {
-
-      Controller.setGamePhase(obj, 10);
-
-      updateTeamHistoryResults(obj);
-
-      var DDInfo = {
-                      allInfo: obj.rO.getAllIdentitiesAndTheirRoles(),
-                      darkDestinyTarget: obj.rO.roles["Kaguya"].darkDestinyTarget
-                   };
-
-      emitToAllSocketsInRoom(
-          obj, 
-          "Start Game Phase 10: Game Over. Dark Destiny Fulfilled!",
-          DDInfo
-      );
-      
-
-      return 0;
-
-      /*No need to notify of umbra lord's absolute acceptance
-      because he cannot use the power if darkDestinyCount >= 2*/
-    }; //end wasDarkDestinyFulfilled
-
-
-
     switch (teamCase) {
 
       case "Successful Team Proposal":
+
+        if (wasDarkDestinyFulfilled(obj)) {
+          return 0;
+        };
+
 
         Controller.setGamePhase(obj, 4);
 
@@ -987,6 +965,10 @@ io.on('connection', function (socket) {
 
         Controller.convertRejoinedToConnected(obj);
 
+        /*need this, because when game ends, everybody needs to 
+          be on the right team and the right roles */
+        obj.rO.roles["Persequor"].switchBackIdentities(obj);
+
         emitToStartGamePhase9(obj);
 
         break;
@@ -999,6 +981,10 @@ io.on('connection', function (socket) {
         Controller.setGamePhase(obj, 10);
 
         Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+
+        /*need this, because when game ends, everybody needs to 
+          be on the right team and the right roles */
+        obj.rO.roles["Persequor"].switchBackIdentities(obj);
 
 
         emitToAllSocketsInRoom(
@@ -1018,6 +1004,11 @@ io.on('connection', function (socket) {
 
         Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
         
+
+        /*need this, because when game ends, everybody needs to 
+          be on the right team and the right roles */
+        obj.rO.roles["Persequor"].switchBackIdentities(obj);
+
 
         emitToAllSocketsInRoom(
           obj, 
@@ -1051,6 +1042,8 @@ io.on('connection', function (socket) {
     emitToAllSocketsInRoom(obj, 
       "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
+
+    MessageNotificationStack(obj);
 
   }); //end "Vote on Mission"
 
@@ -2695,6 +2688,51 @@ function updateMissionResults(obj) {
 
 }; //end updateMissionResults
 
+
+
+function wasDarkDestinyFulfilled(obj) {
+    
+    if (obj.rO.roles["Kaguya"].wasDarkDestinyFulfilled(obj)) {
+
+      Controller.setGamePhase(obj, 10);
+
+      updateTeamHistoryResults(obj);
+
+      /*need this, because when game ends, everybody needs to 
+        be on the right team and the right roles */
+      obj.rO.roles["Persequor"].switchBackIdentities(obj);
+      MessageNotificationStack(obj);
+
+      var DDInfo = {
+                      allInfo: obj.rO.getAllIdentitiesAndTheirRoles(),
+                      darkDestinyTarget: obj.rO.roles["Kaguya"].darkDestinyTarget
+                   };
+
+      emitToAllSocketsInRoom(
+          obj, 
+          "Start Game Phase 10: Game Over. Dark Destiny Fulfilled!",
+          DDInfo
+      );
+      
+
+      return true;
+
+      /*No need to notify of umbra lord's absolute acceptance
+      because he cannot use the power if darkDestinyCount >= 2*/
+    }; //end wasDarkDestinyFulfilled
+
+
+    return false;
+
+}; //end wasDarkDestinyFulfilled
+
+
+
+
+
+
+
+/*old functions from previous RG game */
 
 
 /*name here is original name NOT, the name from Marcus'
