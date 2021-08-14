@@ -119,7 +119,47 @@ class RoomControlBox extends React.Component {
             {this.state.showInstructions &&
 
               <div className="Room-Control-Box-Instructions-Text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                In the room control panel, you can view information 
+                about the room. Remember, every room name needs to 
+                be unique and your friends can easily join your room 
+                through using the room name. 
+
+                <br></br><br></br>
+
+                Each room has a 'Room Master' who can kick players 
+                from the room, and who is able to start the game 
+                once all players have clicked 'Ready'. The 
+                'Room Master' is also capable of opening/closing 
+                the room, by clicking on the button next to 
+                'Room Status'. Players can only join games that 
+                have not started, but if the room is closed, then 
+                nobody can join, even if the game has not yet 
+                started. However, if a player disconnected and is 
+                attempting to rejoin a room (must be done through 
+                manual room name input), then he/she can rejoin, 
+                regardless if the room is closed or open.
+
+                <br></br><br></br>
+
+                If the player accidentally hangs up on the video 
+                chat, he/she can restart it by clicking on the 
+                'Restart Video' button. The 'Room Master' can restart 
+                the video chat for everyone by clicking the 
+                'New Video Room' button. Additionally, this creates 
+                a new Jitsi video room. This could be useful in case 
+                a previous player was kicked from the room, but uses 
+                the old Jitsi room name to join your video call.
+
+                <br></br><br></br>
+
+                At the very bottom of the panel, you can see a list 
+                of the players in the room, as well as their statuses. 
+                This allows you to see who is 'Ready' to play the 
+                game, and also whether they have 'Disconnected' from 
+                the room or 'Rejoined' the room. 'Rejoined' players 
+                must wait one game phase before they officially 
+                rejoin the game play.
+
               </div>
 
             }
