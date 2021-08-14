@@ -735,7 +735,7 @@ io.on('connection', function (socket) {
         Controller.setGamePhase(obj, 4);
 
         //this is not being used (???)
-        updateTeamHistoryResults(obj);
+        //updateTeamHistoryResults(obj);
 
         emitToAllSocketsInRoom(obj, "Start Game Phase 4: Team Was Accepted!", 
           obj.rI.teamInfo);
@@ -755,7 +755,7 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 4);
 
-        updateTeamHistoryResults(obj);
+        //updateTeamHistoryResults(obj);
 
         emitToAllSocketsInRoom(
           obj, 
@@ -2696,7 +2696,7 @@ function wasDarkDestinyFulfilled(obj) {
 
       Controller.setGamePhase(obj, 10);
 
-      updateTeamHistoryResults(obj);
+      //updateTeamHistoryResults(obj);
 
       /*need this, because when game ends, everybody needs to 
         be on the right team and the right roles */

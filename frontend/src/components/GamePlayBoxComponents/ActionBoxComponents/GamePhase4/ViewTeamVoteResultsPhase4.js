@@ -19,7 +19,7 @@ class ViewTeamVoteResultsPhase4 extends React.Component {
 
   componentDidMount = () => {
 
-    //socket.emit("Ready To Start Power Phase 2 and Game Phase 5");
+    socket.emit("Ready To Start Power Phase 2 and Game Phase 5");
 
   }; //end componentDidMount
 

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { connect } from 'react-redux';
+import {newChatNotification} from 'actions/newChatNotification.js';
 
 import InputSubmit from './InputSubmit.js';
 import socket from 'Socket.js';
@@ -22,6 +24,14 @@ class NormalChatBox extends React.Component {
     socket.on("Normal Chat Message From Server To Client", 
       (messageObj) => {
 
+        //this is to turn the chatbox menu button red in MenuBar.js
+        if (this.props.mainMenuSelection !== "chat"
+          && this.props.gamePhase !== 8) {
+
+          this.props.updateNewChatNotification(true);
+        
+        };
+        
         var messageArr = this.state.chatMessageList;
 
         messageArr.push(messageObj);
@@ -144,7 +154,7 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, 
   {
-
+    updateNewChatNotification: newChatNotification,
   })
 (NormalChatBox);
 

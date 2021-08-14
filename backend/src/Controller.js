@@ -224,10 +224,10 @@ class Controller {
 		this.socketRoom[socket.id] = roomName;
 
 		pObj.socketID = socket.id;
+		rolesInGameObj.socketID = socket.id;
+
 		pObj.connection = "rejoined";
 
-
-		rolesInGameObj.socketID = socket.id;
 
 		return "Rejoined The Room";
 
@@ -361,7 +361,7 @@ class Controller {
 
 	isEveryoneReadyFirstGameAndAtLeastSixPlayers(obj) {
 
-		if (obj.pA.length < 3) { return false; };
+		if (obj.pA.length < 6) { return false; };
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
@@ -1350,6 +1350,7 @@ class Controller {
 
 		}; //end for
 
+
 	}; //end convertRejoinedToConnnected
 
 
@@ -1570,7 +1571,7 @@ class Controller {
 		will get stuck in infinite loop cause there's nobody to 
 		choose */
 		
-		/*
+		
 		if (stopGameBool || cAndR <= 4 || p.rejoined >= 3) {
 
 			var allInfo = obj.rO.getAllIdentitiesAndTheirRoles();
@@ -1601,7 +1602,7 @@ class Controller {
 
 		}; //end if numConnected <= 4
 
-		*/
+		
 
 		/*if none of the above applies, means the game 
 		continues as normally*/

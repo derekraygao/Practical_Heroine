@@ -1,0 +1,57 @@
+
+
+For sensing powers (ranger, seer, aura knight, saintess), need to move
+delayerCount from playerObject to rolesObject
+
+maybe within socket.on("Power"), need to do some checks...ie: make sure person
+has correct role for the power, the target is correct (must be on mission team, cannot be him/herself, etc.)
+
+
+for Ranger shrink power, you want it to activate AFTER the mission has been completed.
+
+for delayer, what happens if somebody disconnects (?)...how should power be affected/adjusted?
+
+for using copycat power, null is perceived as 0
+
+for hecate, need to change it so multiplier only takes effect AFTER this mission round has passed
+
+need to think of order of vote adjustment, since multiplication (multiplier, bless, shrink) and subtraction/addition (Burn) matter....
+
+need to reset some stuff like Noah paralyzed and Noah ice punch
+
+need separate function to notify hylian shield has been used
+
+
+*Hurricane should be absolute last thing to do....identity switch/swap should be second last.THat's because things like frozen/paralyze and get rid of it relies on person name and index
+
+be careful WHEN updating missionNo, since you use it for Noah's powers
+
+for stuff like expose/spy on, need to do this BEFORE resetting mission/teamvotes for the round
+
+when resetting stats (bless, multiplier, vanish, etc.), make sure for some skills only reset if they were on the mission team. ALso, in case of saintess, you want to keep multiplier/bomb, so reset ONLY if they were on mission team AND saintess was on mission team.
+
+what if exchange of spirits chooses both Marcus + Princess (??); how does notification work then?
+
+
+for each power, need to make sure correct role, mission #, not alreayd used, etc. Otherwise could crash server. For example, if saintess is not in the game, but someone hacks and puts safeguard on a player, the safeguard will check if saintess is on the team, and crash, cause the saintess index is -1....
+
+
+
+On disconnect and reconnect:
+
+Depending on gamePhase, need to send to client the teamLeader and team array info 
+
+if demonlord disconnect and reconnect, need to make sure on client side, it knows 
+whether he used absolute choice already
+
+
+
+
+
+
+
+how powers work:
+
+Demon Lord: Absolute Yes/No....changes RolesObject roles["demonLord"].absoluteTeamVoteYes/NoUsed to "Yes"
+and then Controller.wasTeamAccepted will handle things AND set the absoluteTeamVoteYes/NoUsed to "Used"
+

@@ -201,7 +201,7 @@ class App extends React.Component {
     /*this is the function that automatically gets you past 
     gamePhase 0 and starts game without entering names*/
 
-    socket.emit("TESTING ONLY: Ready For New Game");
+    //socket.emit("TESTING ONLY: Ready For New Game");
 
 
     socket.on("Add Player Name", (name) => {

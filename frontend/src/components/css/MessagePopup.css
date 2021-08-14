@@ -1,0 +1,84 @@
+
+.Message-Popup-Background {
+
+	height: 100vh;
+	width: 100vw;
+
+	position: fixed;
+	left: 0;
+	top: 0;
+
+	z-index: 105;
+
+	background: rgba(0, 0, 0, 0.4);
+
+}
+
+
+.Message-Popup-Box-Container {
+
+	display: flex;
+	flex-direction: column;
+
+	min-height: 15%;
+	max-height: 50%;
+	max-width: 30%;
+
+	overflow-y: auto;
+
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	background-color: white;
+}
+
+
+.Message-Popup-Box-Header {
+
+	display: flex;
+
+	font-size: 140%;
+
+	padding: 2% 2% 2% 2%;
+
+	color: white;
+	background-color: #fbbd08;
+
+}
+
+
+.Message-Popup-Box-Header span {
+	margin: auto;
+}
+
+
+.Message-Popup-Box-Body {
+
+	display: flex;
+
+	overflow-y: auto;
+
+	font-size: 120%;
+
+	padding: 1.5% 1.5% 1.5% 1.5%;
+
+}
+
+.Message-Popup-Box-Body span {
+	margin: auto;
+}
+
+
+
+
+.Message-Popup-Box-Button-Container {
+
+	display: flex;
+	justify-content: center;
+
+	margin-top: 2%;
+	margin-bottom: 2%;
+
+}

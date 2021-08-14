@@ -4,12 +4,12 @@ var defaultPH = {
 
 	"Umbra Lord": {
 					corruption: "Nobody Selected",
-					absoluteYes: "No",
-					absoluteNo: "No"
+					absoluteTeamVoteYesUsed: "No",
+					absoluteTeamVoteNoUsed: "No"
 				  },
 
 	"Princess": {
-				  eoSenseArray: [],
+				  eoSenseArray: [{name: "Myself", statusArray: ["This table will be updated after Power Phase 1 ends."]}],
 				  transformed: 0,
 				},
 
@@ -19,12 +19,13 @@ var defaultPH = {
 
 
 	"Saintess": {
-				  senseArray: [],
+				  senseArray: [{name: "nothing yet", isStatusNormal: "none"}],
 				},
 
 	"Ichigo": {
 				shield: false,
 				strike: false,
+				naviSenseInfo: {name: "Myself", statusArray: ["This table will be updated after Power Phase 1 ends."]}
 			  },
 
 
@@ -41,6 +42,11 @@ var defaultPH = {
 	"Detective Chat": {
 						"Cross Examination Target": "nobody chosen"
 					  },
+
+	"Ranger": {
+				senseArray: [{name: "nothing yet", status: "none"}],
+			  },
+
 
 	"Noah": {
 				hurricane: 0 //missionNo it was used during
@@ -120,7 +126,13 @@ const characterPowersHistoryReducer = (powersHistory = defaultPH, action) => {
 
 			updatedPH[obj.role][obj.power] = obj.newValue;
 
-			return updatedPH; 
+			localStorage.setItem("Character Power History", JSON.stringify(updatedPH));
+
+			return updatedPH;
+
+
+		case "RESET_FOR_NEW_GAME":
+			return defaultPH; 
 
 		default:
 			return powersHistory;

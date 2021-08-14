@@ -6,6 +6,9 @@ const listOfPlayersReducer = (playersArr = [], action) => {
 		case "AVAILABLE_LIST_OF_PLAYERS":
 			return action.payload;
 
+		case "RESET_FOR_NEW_GAME":
+			return [];
+
 		default:
 			return playersArr;
 

@@ -1,5 +1,5 @@
 
-const gamePhaseReducer = (gamePhase = 1, action) => {
+const gamePhaseReducer = (gamePhase = 0, action) => {
 
 	switch (action.type) {
 

@@ -29,7 +29,7 @@ class TeamLeaderChoosingTeamPhase2 extends React.Component {
 
   componentDidMount = () => {
 
-    //this.automateTeamSelection();
+    this.automateTeamSelection();
 
   };
 

@@ -1,5 +1,5 @@
 
-const playerNameReducer = (playerName = "Anonymous", action) => {
+const playerNameReducer = (playerName = "Anonymous***!", action) => {
 
 	switch (action.type) {
 

@@ -20,7 +20,7 @@ class VoteOnProposedTeamPhase3 extends React.Component {
   
   componentDidMount = () => {
 
-   //socket.emit("Vote on Team Leader's Proposed Team", "Accept");
+   socket.emit("Vote on Team Leader's Proposed Team", "Accept");
 
   };
 

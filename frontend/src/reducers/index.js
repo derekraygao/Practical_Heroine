@@ -16,8 +16,12 @@ import missionResultsHistoryReducer from './missionResultsHistoryReducer.js';
 import gameEndScenarioReducer from './gameEndScenarioReducer.js';
 import mainMenuSelectionReducer from './mainMenuSelectionReducer.js';
 import powersMenuSelectionReducer from './powersMenuSelectionReducer.js';
-import crossExamBoolReducer from './crossExamBoolReducer.js';
 
+import crossExamBoolReducer from './crossExamBoolReducer.js';
+import showRoomControlBoolReducer from './showRoomControlBoolReducer.js';
+import disconnectMessageReducer from './disconnectMessageReducer.js';
+
+import newChatNotificationReducer from './newChatNotificationReducer.js';
 import esperChatMessageReducer from './esperChatMessageReducer.js';
 import jailerChatMessageReducer from './jailerChatMessageReducer.js';
 import villainChatMessageReducer from './villainChatMessageReducer.js';
@@ -28,6 +32,9 @@ import characterStatusReducer from './characterStatusReducer.js';
 
 
 import timerReducer from './timerReducer.js';
+
+import roomInfoReducer from './roomInfoReducer.js';
+
 
 //this is your state object
 export default combineReducers({
@@ -52,9 +59,13 @@ export default combineReducers({
 	characterStatus: characterStatusReducer,
 	rangerSenseArray: rangerSenseArrayReducer,
 	timer: timerReducer,
+	newChatNotification: newChatNotificationReducer,
 	esperChat: esperChatMessageReducer,
 	jailerChatArray: jailerChatMessageReducer,
 	villainChatArray: villainChatMessageReducer,
 	crossExamBool: crossExamBoolReducer,
+	showRoomControlBool: showRoomControlBoolReducer,
+	disconnectMessageBool: disconnectMessageReducer,
+	roomInfo: roomInfoReducer,
 
 });

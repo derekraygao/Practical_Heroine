@@ -28,7 +28,10 @@ class PP5DetectiveChat extends React.Component {
         {
           type: "power",
           message: ("You interrogated " 
-          + this.state.interrogateTarget + ".")
+          + this.state.interrogateTarget + ". " + "You will find "
+          + "out if he/she clicked the 'Success' button, the 'Fail' "
+          + "button, or used a 'Power'. You will get the results "
+          + "after the mission has ended.")
         }
       ); //end addSystemMessage
 

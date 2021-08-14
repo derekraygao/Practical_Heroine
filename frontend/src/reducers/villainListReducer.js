@@ -6,6 +6,9 @@ const villainListReducer = (villainsArray = [], action) => {
 		case "VILLAINS_ARRAY":
 			return action.payload;
 
+		case "RESET_FOR_NEW_GAME":
+			return [];
+
 		default:
 			return villainsArray;
 

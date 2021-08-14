@@ -129,7 +129,7 @@ class PP1Lan extends React.Component {
             className="ui yellow button"
             onClick={this.submitBR}
           >
-            Scry!
+            Beat Up!
           </button>
 
         </div>

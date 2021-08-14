@@ -6,6 +6,9 @@ const jailerChatMessageReducer = (jailerChatMessagesArray = [], action) => {
 		case "JAILER_MESSAGE":
 			return [...jailerChatMessagesArray, action.payload];
 
+		case "RESET_FOR_NEW_GAME":
+			return [];
+
 		default:
 			return jailerChatMessagesArray;
 

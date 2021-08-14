@@ -317,9 +317,9 @@ class Saintess extends RolesMasterClass {
 	}; //end removeSaintessBuffsAtEndofRound(obj)
 
 
-	//like reverseTarget, lullaby, etc. - inside AbilityManager
+	//this is inside VoteAdjuster.js
 	adjustSomeDataWhenSaintessOnTheMissionTeam(obj) {
-
+		
 		var reverser = obj.rO.roles["Reverser"];
 
 		reverser.personToReverseVote = "nobody chosen";
@@ -333,12 +333,9 @@ class Saintess extends RolesMasterClass {
 		};
 
 
-		var babydoll = obj.rO.roles["Baby Doll"];
+		obj.rO.roles["Baby Doll"].lullabyPowerUsed = false;
 
-		if (babydoll.lullabyPowerUsed) {
-			babydoll.lullabyPowerUsed = false;
-		};
-
+		obj.rO.roles["Persequor"].personVoteToCopy = "nobody chosen";
 
 	}; //end adjustSomeDataWhenSaintessOnTheMissionTeam(obj)
 

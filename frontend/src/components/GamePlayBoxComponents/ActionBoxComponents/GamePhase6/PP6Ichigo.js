@@ -22,11 +22,11 @@ class PP6Ichigo extends React.Component {
     //for now, shield is unlimited use
     //this.props.updatePower("Ichigo", "shield", true);
 
-    this.props.voted("Power");
-
     socket.emit("Activate Hylian Shield");
 
     socket.emit("Vote on Mission", "Power");
+
+    this.props.voted("Power");
 
   }; //end clickShield()
 
@@ -34,8 +34,6 @@ class PP6Ichigo extends React.Component {
   clickStrike = () => {
 
     this.props.updatePower("Ichigo", "strike", true);
-
-    this.props.voted("Power");
 
     socket.emit("Activate Holy Strike");
 
@@ -53,7 +51,7 @@ class PP6Ichigo extends React.Component {
 
     ); //end addSystemMessage
 
-
+    this.props.voted("Power");
 
   }; //end clickStrike
 

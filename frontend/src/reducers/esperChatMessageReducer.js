@@ -6,6 +6,9 @@ const esperChatMessageReducer = (esperChatMessagesArray = [], action) => {
 		case "ESPER_MESSAGE":
 			return [...esperChatMessagesArray, action.payload];
 
+		case "RESET_FOR_NEW_GAME":
+			return [];
+
 		default:
 			return esperChatMessagesArray;
 

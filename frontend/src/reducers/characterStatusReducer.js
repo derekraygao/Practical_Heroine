@@ -1,10 +1,14 @@
 
-//false means not used, true means used
+/*false means not used, true means used
+The charStatus is automatically reset to default/all false
+whenever client gets gamePhase 1 start message, AFTER the very
+first time 
+*/
 var defaultCharStatus = {
 
 	selectedForTelepathy: false,
 	jailed: false,
-	frozen: false
+	frozen: false,
 
 }; //end defaultCharStatus
 
@@ -28,6 +32,9 @@ const characterStatusReducer = (charStatus = defaultCharStatus, action) => {
 			updatedCS[obj.status] = obj.newValue;
 
 			return updatedCS;
+
+		case "RESET_FOR_NEW_GAME":
+			return defaultCharStatus;
 
 		default:
 			return charStatus;

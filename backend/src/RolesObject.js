@@ -1,8 +1,9 @@
 var {Princess} = require('./characters/Princess.js');
 var {Marcus} = require('./characters/Marcus.js');
+var {Lottie} = require('./characters/Lottie.js');
 var {Saintess} = require('./characters/Saintess.js');
 var {Ichigo} = require('./characters/Ichigo.js');
-var {Noah} = require('./characters/Noah.js');
+var {Lan} = require('./characters/Lan.js');
 var {Seer} = require('./characters/Seer.js');
 var {Oracle} = require('./characters/Oracle.js');
 var {Balancer} = require('./characters/Balancer.js');
@@ -17,13 +18,18 @@ var {Jailer} = require('./characters/Jailer.js');
 
 var {UmbraLord} = require('./characters/UmbraLord.js');
 var {Hecate} = require('./characters/Hecate.js');
+var {Noah} = require('./characters/Noah.js');
 var {Bomberman} = require('./characters/Bomberman.js');
 var {LieutenantBlitz} = require('./characters/LieutenantBlitz.js');
 var {Delayer} = require('./characters/Delayer.js');
 var {Persequor} = require('./characters/Persequor.js');
 var {Reverser} = require('./characters/Reverser.js');
 var {Spiritualist} = require('./characters/Spiritualist.js');
+var {BabyDoll} = require('./characters/BabyDoll.js');
+var {Toxiturtle} = require('./characters/Toxiturtle.js');
 var {Backstabber} = require('./characters/Backstabber.js');
+var {Psychologist} = require('./characters/Psychologist.js');
+var {Kaguya} = require('./characters/Kaguya.js');
 
 var {Unknown} = require('./characters/Unknown.js');
 
@@ -53,7 +59,15 @@ class RolesObject {
 
       "Marcus": new Marcus(),
 
+
+      "Lottie": new Lottie(),
+
+
+      "Lan": new Lan(),
+
+
       "Noah": new Noah(),
+
 
       "Seer": new Seer(),
 
@@ -111,13 +125,27 @@ class RolesObject {
       "Spiritualist": new Spiritualist(),
 
 
+      "Baby Doll": new BabyDoll(),
+
+
+      "Toxiturtle": new Toxiturtle(),
+
+
       "Reverser": new Reverser(),
+
 
       "Backstabber": new Backstabber(),
 
+
+      "Psychologist": new Psychologist(),
+
+
+      "Kaguya": new Kaguya(),
+
+
       "Unknown": new Unknown(),
 
-
+      /*
       sooah:
       {
             role: "sooah",
@@ -128,7 +156,7 @@ class RolesObject {
             alignment: "unknown",
             team: "neutral"
       }
-
+      */
 
     }; //end this.roles
 
@@ -137,13 +165,21 @@ class RolesObject {
     //has same index order as player array
     this.rolesInGame = [];
 
-      //don't include princess or demonLord, because they're ALWAYS in the game
-    this.goodRoles = ["Seer", "Balancer", "Esper", "Pear", 
-                      "Marcus", "Noah", "Detective Chat", "Aura Knight", "Ranger", 
-                      "Scientist", "Oracle", "Jailer", "Sensor"];
+    /*don't include princess or umbraLord, because they're ALWAYS in the game
+      Similarly, don't include Ichigo/Saintess...manually set that
+    */
+    this.goodRoles = ["Seer", "Balancer", "Esper", 
+                      "Pear", "Lan", "Marcus", "Lottie", 
+                      "Detective Chat", "Aura Knight", 
+                      "Ranger", "Scientist", "Oracle", 
+                      "Jailer", "Sensor"];
 
-    this.badRoles = ["Hecate", "Bomberman", "Lieutenant Blitz", "reverser", 
-                     "Delayer", "Persequor", "spiritualist", "Back Stabber"];
+    this.goodRolesOdd = ["Saintess", "Ichigo"];
+
+    this.badRoles = ["Hecate", "Bomberman", "Lieutenant Blitz", 
+                     "Reverser", "Noah", "Delayer", "Persequor", 
+                     "Baby Doll", "Spiritualist", "Backstabber", 
+                     "Toxiturtle", "Kaguya", "Psychologist"];
 
 
   }; //end constructor
@@ -162,36 +198,40 @@ class RolesObject {
 
     switch(obj.pA.length) {
 
-         //3 and 4 should be test case only...need minimum 5 players
+      //3 and 4 should be test case only...need minimum 5 players
       case 3:
 
         //rolesArrayForThisGame[2] = goodRoles[0];
-        rolesArrayForThisGame[2] = "Marcus";
+        rolesArrayForThisGame[2] = "Toxiturtle";
 
         break;
 
 
       case 4:
 
-        rolesArrayForThisGame[2] = "ranger";
-        rolesArrayForThisGame[3] = "ditto";
+        rolesArrayForThisGame[2] = "Kaguya";
+        rolesArrayForThisGame[3] = "Persequor";
 
         break;
 
       case 5:
-
-        rolesArrayForThisGame[2] = "Marcus"; //this.badRoles[0]; //Serena
-        rolesArrayForThisGame[3] = "Persequor"; //this.goodRoles[0]; //Lucio
-        rolesArrayForThisGame[4] = "Pear"; //this.goodRoles[1]; //Xing
+        /*
+                                  "Princess"  //Derek
+                                  "Umbra Lord" //Cloud
+        */
+        rolesArrayForThisGame[2] = "Noah"; //this.badRoles[0]; //Serena
+        rolesArrayForThisGame[3] = "Backstabber"; //this.goodRoles[0]; //Lucio
+        rolesArrayForThisGame[4] = "Persequor"; //this.goodRoles[1]; //Xing
 
         break;
 
       case 6: 
 
-        rolesArrayForThisGame[2] = "spiritualist"; //badRoles[0];
-        rolesArrayForThisGame[3] = "oracle";//goodRoles[0];
-        rolesArrayForThisGame[4] = "Marcus";//goodRoles[1];
-        rolesArrayForThisGame[5] = "Seer";//goodRoles[2];
+        rolesArrayForThisGame[2] = this.badRoles[0];
+  
+        rolesArrayForThisGame[3] = this.goodRoles[0];
+        rolesArrayForThisGame[4] = this.goodRoles[1];
+        rolesArrayForThisGame[5] = this.goodRoles[2];
 
         break;
 
@@ -199,24 +239,22 @@ class RolesObject {
         
         rolesArrayForThisGame[2] = this.badRoles[0];
         rolesArrayForThisGame[3] = this.badRoles[1];
-        rolesArrayForThisGame[4] = this.goodRoles[0];
-        rolesArrayForThisGame[5] = this.goodRoles[1];
-        rolesArrayForThisGame[6] = this.goodRoles[2];
+
+        rolesArrayForThisGame[4] = this.goodRolesOdd[this.get0Or1()];
+        rolesArrayForThisGame[5] = this.goodRoles[0];
+        rolesArrayForThisGame[6] = this.goodRoles[1];
 
         break;
 
       case 8:
 
-        //add good roles
-        for (var i = 2; i < 7; i++) {
-          rolesArrayForThisGame[i] = this.goodRoles[(i - 2)];
-        };
-        
-
-        //add bad roles
-        for (var i = 7; i < 8; i++) {
-          rolesArrayForThisGame[i] = this.badRoles[(i - 7)];
-        };
+        rolesArrayForThisGame[2] = this.badRoles[0];
+        rolesArrayForThisGame[3] = this.badRoles[1];
+       
+        rolesArrayForThisGame[4] = this.goodRoles[0];
+        rolesArrayForThisGame[5] = this.goodRoles[1];
+        rolesArrayForThisGame[6] = this.goodRoles[2];
+        rolesArrayForThisGame[7] = this.goodRoles[3];
 
         break;
 
@@ -225,25 +263,37 @@ class RolesObject {
         rolesArrayForThisGame[2] = this.badRoles[0];
         rolesArrayForThisGame[3] = this.badRoles[1];
         rolesArrayForThisGame[4] = this.badRoles[2];
-        rolesArrayForThisGame[5] = this.goodRoles[0];
-        rolesArrayForThisGame[6] = this.goodRoles[1];
-        rolesArrayForThisGame[7] = this.goodRoles[2];
-        rolesArrayForThisGame[8] = this.goodRoles[3];
+
+        rolesArrayForThisGame[5] = this.goodRolesOdd[this.get0Or1()];
+        rolesArrayForThisGame[6] = this.goodRoles[0];
+        rolesArrayForThisGame[7] = this.goodRoles[1];
+        rolesArrayForThisGame[8] = this.goodRoles[2];
 
         break;
 
       case 10:
 
+        rolesArrayForThisGame[2] = this.badRoles[0];
+        rolesArrayForThisGame[3] = this.badRoles[1];
+        rolesArrayForThisGame[4] = this.badRoles[2];
+
+        rolesArrayForThisGame[5] = this.goodRoles[0];
+        rolesArrayForThisGame[6] = this.goodRoles[1];
+        rolesArrayForThisGame[7] = this.goodRoles[2];
+        rolesArrayForThisGame[8] = this.goodRoles[3];
+        rolesArrayForThisGame[9] = this.goodRoles[4];
+
+        /*
         //add good roles
-        for (var i = 2; i < 8; i++) {
+        for (var i = 2; i < 7; i++) {
           rolesArrayForThisGame[i] = this.goodRoles[(i - 2)];
         };
         
 
         //add bad roles
-        for (var i = 8; i < 12; i++) {
+        for (var i = 8; i < 11; i++) {
           rolesArrayForThisGame[i] = this.badRoles[(i - 8)];
-        };
+        }; */
 
         break;
 
@@ -258,6 +308,13 @@ class RolesObject {
     return rolesArrayForThisGame;
 
   }; //end getListOfRolesForGame
+
+
+  get0Or1() {
+
+    return (Math.floor(Math.random() * 2));
+
+  };
 
 
 
@@ -275,17 +332,39 @@ class RolesObject {
   };
 
 
-  //marcus does not know between ditto & persequor
-  getPrincessIdentityArrayForMarcus() {
+  //marcus does not know between Princess & Persequor
+  getPrincessIdentityArrayForMarcus(obj) {
 
-    if (!this.roles["Persequor"].inGame) { return ([this.roles["Princess"].name]); };
+    if (!this.roles["Marcus"].inGame) { return 0; };
 
-    /*ditto is in game*/
-    var princessAndDitto = [this.roles["Princess"].name, this.roles["Persequor"].name];
+    if (this.roles["Persequor"].inGame) { 
 
-    shuffle(princessAndDitto);
+      var princessArr = [this.roles["Princess"].name, this.roles["Persequor"].name];
+      shuffle(princessArr);
 
-    return princessAndDitto;
+      var stackObj = {
+                      type: "Individual",
+                      socketID: this.roles["Marcus"].socketID,
+                      destination: "Reveal Princess Identity To Marcus",
+                      data: princessArr
+                     };
+
+      obj.stack.push(stackObj);
+
+
+    } else {
+
+      var stackObj = {
+                      type: "Individual",
+                      socketID: this.roles["Marcus"].socketID,
+                      destination: "Reveal Princess Identity To Marcus",
+                      data: [this.roles["Princess"].name]
+                     };
+
+      obj.stack.push(stackObj);
+
+    }; //end else (if Persequor NOT in game)
+
 
   }; //end getPrincessIdentityForMarcus
 
@@ -299,13 +378,14 @@ class RolesObject {
   };
 
 
-  didVillainsCorrectlyGuessThePrincessIdentity() {
+  didVillainsCorrectlyGuessThePrincessIdentity(obj) {
 
     var princessIdentityMap = {};
 
     for (var i = 0; i < this.rolesInGame.length; i++) {
 
       if (this.rolesInGame[i].team != "villains") { continue; };
+      if (obj.pA[i].connection != "connected") { continue; };
 
       //if someone already guessed and it exists as a property
       if (princessIdentityMap[this.rolesInGame[i].princessGuess]) {
@@ -340,6 +420,11 @@ class RolesObject {
 
     });
 
+    /*might not be necessary...cause if there's not enough villains,
+    the game will end due to too many villains disconnecting, but 
+    put this here just in case */
+    if (princessGuessArray.length == 0) { return false; };
+
 
     if (princessGuessArray[0].guessName == this.getPrincessIdentity()) {
 
@@ -373,8 +458,8 @@ class RolesObject {
   }; //end getVillainIdentities
 
 
-  //princess does not know ditto's identity
-  getVillainsIdentitiesForPrincess() {
+  //princess does not know persequor's identity
+  getVillainsIdentitiesForPrincess(obj) {
 
     var listOfVillains = [];
 
@@ -388,14 +473,22 @@ class RolesObject {
 
     };
 
-    return listOfVillains;
+    
+    var stackObj = {
+                    type: "Individual",
+                    socketID: this.roles["Princess"].socketID,
+                    destination: "Reveal Villains To Princess",
+                    data: listOfVillains
+                   };
+
+    obj.stack.push(stackObj);
 
   }; //end getVillainsIdentitiesForPrincess
 
 
 
   getAllIdentitiesAndTheirRoles() {
-
+    
     var identityAndRoleArray = [];
 
     for (let i = 0; i < this.rolesInGame.length; i++) {
@@ -416,6 +509,14 @@ class RolesObject {
     return identityAndRoleArray;
 
   }; //end getAllIdentitiesAndTheirRoles
+
+
+
+
+
+
+
+
 
 
 

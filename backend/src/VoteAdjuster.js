@@ -188,6 +188,8 @@ class VoteAdjuster {
 
 		console.log("VoteAdjuster.js: Saintess on the Mission Team");
 
+		obj.rO.roles["Saintess"].adjustSomeDataWhenSaintessOnTheMissionTeam(obj);
+
 		/*base voting powers adjustment
 		 Remember some powers like Final Heaven, Blitz, etc. must be multiply, because they rely on 
 		 normal voting to tell whether vote power should be + or -

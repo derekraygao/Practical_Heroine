@@ -12,13 +12,13 @@ class Ranger extends RolesMasterClass {
 
         this.powersHistory = 
         {
-        	1: {"shrinkName": "nobody chosen"},
-        	2: {"shrinkName": "nobody chosen"},
-        	3: {"shrinkName": "nobody chosen"},
-        	4: {"shrinkName": "nobody chosen"},
-        	5: {"shrinkName": "nobody chosen"},
-        	6: {"shrinkName": "nobody chosen"},
-        	7: {"shrinkName": "nobody chosen"},
+        	1: {"shrinkName": "nobody chosen", "AMR": "nobody chosen" },
+        	2: {"shrinkName": "nobody chosen", "AMR": "nobody chosen" },
+        	3: {"shrinkName": "nobody chosen", "AMR": "nobody chosen" },
+        	4: {"shrinkName": "nobody chosen", "AMR": "nobody chosen" },
+        	5: {"shrinkName": "nobody chosen", "AMR": "nobody chosen" },
+        	6: {"shrinkName": "nobody chosen", "AMR": "nobody chosen" },
+        	7: {"shrinkName": "nobody chosen", "AMR": "nobody chosen" },
         };
 
 	}; //end constructor
@@ -94,9 +94,25 @@ class Ranger extends RolesMasterClass {
 	}; //end updateRangerSenseArray()
 
 
-	antiManaRay(name, obj) {
 
-		var pObj = obj.pA[obj.pT[name]];
+	/*You want to do anti-mana ray AFTER power phase 2, in case someone is frozen. Immediately 
+	unfreezing them could cause their frontend to re-render and show their powers again */
+	setAntiManaRayTarget(name, obj) {
+
+		this.powersHistory[obj.rD.missionNo]["AMR"] = name;
+
+	};
+
+
+	antiManaRay(obj) {
+
+		if (this.powersHistory[obj.rD.missionNo]["AMR"]
+			== "nobody chosen") {
+			return 0;
+		};
+
+
+		var pObj = obj.pA[obj.pT[this.powersHistory[obj.rD.missionNo]["AMR"]]];
 
 		if (pObj.role == "Saintess") { return 0; };
 

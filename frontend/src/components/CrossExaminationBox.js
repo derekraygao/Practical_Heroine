@@ -17,7 +17,7 @@ var ceTimerInterval;
 class CrossExaminationBox extends React.Component {
 
   state = {
-            timer: 60,
+            timer: 50,
           };
 
 

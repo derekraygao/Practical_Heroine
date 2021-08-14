@@ -6,6 +6,9 @@ const teamLeaderReducer = (teamLeaderName = "No Team Leader Yet", action) => {
 		case "CURRENT_TEAM_LEADER":
 			return action.payload;
 
+		case "RESET_FOR_NEW_GAME":
+			return "No Team Leader Yet";
+
 		default:
 			return teamLeaderName;
 

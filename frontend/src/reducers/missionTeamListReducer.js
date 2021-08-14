@@ -35,6 +35,10 @@ const missionTeamListReducer = (missionTeamList = [], action) => {
 			return [...missionTeamList, action.payload.name];
 
 
+		case "RESET_FOR_NEW_GAME":
+			return [];	
+
+
 		default:
 			return missionTeamList;
 

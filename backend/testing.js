@@ -46,11 +46,18 @@ var AbilityManager = new AbilityManager();
 
 //console.log(Controller);
 
-Controller.addPlayerToArray("Derek", "DerekID", "testing", false);
-Controller.addPlayerToArray("Cloud", "CloudID", "testing", false);
-Controller.addPlayerToArray("Serena", "SerenaID", "testing", false);
-Controller.addPlayerToArray("Lucio", "LucioID", "testing", false);
-Controller.addPlayerToArray("Xing", "XingID", "testing", false);
+Controller.addPlayerToArray("Derek", "DerekID", "testing");
+Controller.addPlayerToArray("Cloud", "CloudID", "testing");
+Controller.addPlayerToArray("Serena", "SerenaID", "testing");
+Controller.addPlayerToArray("Lucio", "LucioID", "testing");
+Controller.addPlayerToArray("Xing", "XingID", "testing");
+
+
+/*//for testing disconnect
+Controller.addPlayerToArray("Harley", "HarleyID", "testing");
+Controller.addPlayerToArray("Kenneth", "KennethID", "testing");
+Controller.addPlayerToArray("Mars", "MarsID", "testing");
+*/
 
 var obj = Controller.returnpArrayRoomAndIndex({id: "DerekID"});
 
@@ -1890,7 +1897,7 @@ function testCopycatVoteWithVanishAndSlowAndPerishSong() {
 	Controller.addMissionVote(obj, 3, 3); //Lucio //3 Pear
 	//Controller.addMissionVote(obj, 4, -2); //Xing //4 Baby Doll
 
-	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena", "Xing"]);
 	Controller.setPlayersForMission(obj);
 
 	//delayer.stall("Derek", obj);
@@ -1898,7 +1905,7 @@ function testCopycatVoteWithVanishAndSlowAndPerishSong() {
 	babyDoll.activatePerishSong(["Derek"], obj);
 	babyDoll.setPerishSongArray(obj);
 
-	//persequor.copyCat("Derek");
+	persequor.copyCat("Derek");
 
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
@@ -2895,13 +2902,13 @@ function testNoahAndToxiTurtlePowersParalyzeSkip() {
 
 	console.log(obj.rO.roles["Toxiturtle"].glare("Xing", obj));
 
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
-	for (var i = 0; i < 9; i++) {
+	for (var i = 0; i < 11; i++) {
 
-		Controller.updateTeamLeaderIndex(obj);
+		Controller.chooseOnlyConnectedTeamLeader(obj);
 
-		console.log("team leader index is now: " + obj.rD.teamLeaderIndex);
+		console.log("team leader index is now: " + obj.rD.teamLeaderIndex + ", paralysis status: " + obj.pA[obj.rD.teamLeaderIndex].paralyzed);
 
 	};
 
@@ -2910,21 +2917,43 @@ function testNoahAndToxiTurtlePowersParalyzeSkip() {
 	console.log("Paralysis should be removed");
 
 	obj.rD.missionNo = 2;
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	for (var i = 0; i < 9; i++) {
 
-		Controller.updateTeamLeaderIndex(obj);
+		Controller.chooseOnlyConnectedTeamLeader(obj);
 
 		console.log("team leader index is now: " + obj.rD.teamLeaderIndex);
 
 	};
 
 
+	console.log("");
+	console.log("Testing that Paralyzed is skipped if EVERYONE connected is paralyzed");
 
-};
+	obj.pA[0].paralyzed = true;
+	obj.pA[1].paralyzed = true;
+	//obj.pA[2].paralyzed = true;
+	obj.pA[2].connection = "disconnected";
+	//obj.pA[3].connection = "rejoined";
+	//obj.pA[3].paralyzed = true;
+	obj.pA[4].paralyzed = true;
 
-//testNoahAndToxiTurtlePowersParalyzeSkip();
+
+	for (var i = 0; i < 9; i++) {
+
+		Controller.chooseOnlyConnectedTeamLeader(obj);
+
+		console.log("team leader index is now: " + obj.rD.teamLeaderIndex);
+
+	};
+
+
+}; //end testNoahAndToxiTurtlePowersParalyzeSkip()
+
+testNoahAndToxiTurtlePowersParalyzeSkip();
+
+
 
 
 function testToxiturtlePoisonPowers() {
@@ -3294,3 +3323,103 @@ function testConfusionPowers() {
 
 
 //testConfusionPowers();
+
+
+
+
+function logConnectionStatus() {
+
+	var connectedArr = [];
+	var disconnectedArr = [];
+	var rejoinedArr = [];
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+		if (obj.pA[i].connection == "connected") {
+			connectedArr.push({name: obj.pA[i].name, role: obj.pA[i].role, index: i});
+		} else if (obj.pA[i].connection == "rejoined") {
+			rejoinedArr.push({name: obj.pA[i].name, role: obj.pA[i].role, index: i});
+		} else if (obj.pA[i].connection == "disconnected") {
+			disconnectedArr.push({name: obj.pA[i].name, role: obj.pA[i].role, index: i});
+		};
+
+	}; //end for
+
+
+	console.log("Connected Players");
+
+	for (var i = 0; i < connectedArr.length; i++) {
+		console.log(connectedArr[i].name + " (" + connectedArr[i].role + ") index of: " + connectedArr[i].index);
+	};
+
+
+	console.log("");
+	console.log("Disconnected Players");
+
+
+	for (var i = 0; i < disconnectedArr.length; i++) {
+		console.log(disconnectedArr[i].name + " (" + disconnectedArr[i].role + ") index of: " + disconnectedArr[i].index);
+	};
+
+
+	console.log("");
+	console.log("Rejoined Players");
+
+
+	for (var i = 0; i < rejoinedArr.length; i++) {
+		console.log(rejoinedArr[i].name + " (" + rejoinedArr[i].role + ") index of: " + rejoinedArr[i].index);
+	};
+
+	console.log("");
+	console.log("Room Master is: " + obj.rD.roomMaster);
+
+}; //end logConnectionStatus
+
+
+
+
+/*at the top, you need to add in the 3 extra players
+of Harley, Kenneth, and Mars */
+function testingDisconnectFunction() {
+
+	console.log("Testing Disconnect Function");
+	console.log("");
+	console.log("");
+
+	/*
+		0: Derek
+		1: Cloud
+		2: Serena
+		3: Lucio
+		4: Xing
+		5: Harley
+		6: Kenneth
+		7: Mars
+	*/
+
+
+	obj.pA[0].connection = "rejoined";
+	obj.pA[1].connection = "disconnected";
+	obj.pA[2].connection = "disconnected";
+	obj.pA[3].connection = "disconnected";
+	obj.pA[4].connection = "disconnected";
+	obj.pA[5].connection = "disconnected";
+	obj.pA[6].connection = "disconnected";
+	obj.pA[7].connection = "disconnected";
+
+	//logConnectionStatus();
+
+	var tempSocket = {id: "CloudID"};
+	obj.index = 1;
+	obj.room = "testing";
+	obj.rD.gamePhase = 1;
+	obj.rD.roomMaster = "Cloud";
+
+	Controller.handlePlayerDisconnect(obj, tempSocket);
+
+	logConnectionStatus();
+
+};
+
+
+//testingDisconnectFunction();

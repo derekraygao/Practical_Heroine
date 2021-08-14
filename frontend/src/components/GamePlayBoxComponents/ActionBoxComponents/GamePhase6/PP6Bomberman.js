@@ -80,7 +80,7 @@ class PP6Bomberman extends React.Component {
 
   getSelectionChoices = () => {
 
-    var playerChoices = JSON.parse(JSON.stringify(this.props.playerList));
+    var playerChoices = JSON.parse(JSON.stringify(this.props.missionTeam));
 
     var q = playerChoices.indexOf(this.props.myName);
 

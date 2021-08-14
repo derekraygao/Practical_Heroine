@@ -35,7 +35,9 @@ class PP6Noah extends React.Component {
           message: ("During Mission " + this.props.missionNumber 
             + ", your Nightmare Syndrome infected " 
             + this.state.nightmareTarget 
-            + ", turning him/her into a zombie!")
+            + ", turning him/her into a zombie! His/her "
+            + "base mission voting power will be reversed "
+            + "until he/she is healed from the 'Zombie' status.")
         }
       );
 

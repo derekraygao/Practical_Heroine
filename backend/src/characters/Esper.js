@@ -62,6 +62,15 @@ class Esper extends RolesMasterClass {
 	}; //end setTelepathyArray
 
 
+	resetTelepathyArrayAtEndOfRound() {
+
+		if (!this.inGame) { return 0; };
+
+		this.telepathyArray = [];
+
+	};
+
+
 	chargeUpHeadache() {
 
 		this.headacheCharge += 1;
@@ -267,6 +276,24 @@ class Esper extends RolesMasterClass {
 	}; //end messageHandler
 
 
+	//returns true/false for if you are target of telepathy
+	rejoinInfo(name) {
+
+		if (!this.inGame) { return false; };
+
+		var forLength = this.telepathyArray.length;
+
+		for (var i = 0; i < forLength; i++) {
+
+			if (this.telepathyArray[i].name == name) {
+				return true;
+			};
+
+		};
+
+		return false;
+
+	}; //end rejoinInfo
 
 
 

@@ -10,12 +10,18 @@ import socket from 'Socket.js';
 
 import NormalMissionVoteButtons from './PowerPhase6Components/NormalMissionVoteButtons.js';
 import PP6NoPower from './PP6NoPower.js';
+import PP6Frozen from './PP6Frozen.js';
+
+import PP6Princess from './PP6Princess.js';
 import PP6Ichigo from './PP6Ichigo.js';
 import PP6Lan from './PP6Lan.js';
 import PP6Esper from './PP6Esper.js';
 import PP6Sensor from './PP6Sensor.js';
 import PP6Scientist from './PP6Scientist.js';
-
+import PP6Jailer from './PP6Jailer.js';
+import PP6Seer from './PP6Seer.js';
+import PP6AuraKnight from './PP6AuraKnight.js';
+import PP6Oracle from './PP6Oracle.js';
 
 import PP6UmbraLord from './PP6UmbraLord.js';
 import PP6Hecate from './PP6Hecate.js';
@@ -44,7 +50,7 @@ class MissionVotingPhase6 extends React.Component {
 
       phase6TimerInterval = setInterval(this.timerCountdown, 1000);
 
-      //automateVoteOnMission();
+      automateVoteOnMission();
     
   }; //end componentDidMount
 
@@ -146,7 +152,19 @@ class MissionVotingPhase6 extends React.Component {
 
     if (this.state.tabSelection == "vote") {
 
+
+      if (this.props.characterStatus["frozen"]) {
+        return <PP6Frozen voted={this.clearTimerAndSetVote} />;
+      };
+
+
       switch (this.props.role) {
+
+        case "Princess":
+          return <PP6Princess voted={this.clearTimerAndSetVote} />;
+
+        case "Seer":
+          return <PP6Seer voted={this.clearTimerAndSetVote} />;          
 
         case "Ichigo":
           return <PP6Ichigo voted={this.clearTimerAndSetVote} />;
@@ -162,6 +180,15 @@ class MissionVotingPhase6 extends React.Component {
 
         case "Scientist":
           return <PP6Scientist voted={this.clearTimerAndSetVote} />;
+
+        case "Jailer":
+          return <PP6Jailer voted={this.clearTimerAndSetVote} />;
+
+        case "Aura Knight":
+          return <PP6AuraKnight voted={this.clearTimerAndSetVote} />; 
+
+        case "Oracle":
+          return <PP6Oracle voted={this.clearTimerAndSetVote} />;          
 
         case "Umbra Lord":
           return <PP6UmbraLord voted={this.clearTimerAndSetVote} />; 
@@ -231,6 +258,7 @@ const mapStateToProps = (state) => {
          {  
             myName: state.name,
             role: state.role,
+            characterStatus: state.characterStatus,
             missionNumber: state.missionNumber,
             teamLeader: state.teamLeader,
             missionTeam: state.missionTeam,

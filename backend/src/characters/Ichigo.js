@@ -32,11 +32,11 @@ class Ichigo extends RolesMasterClass {
 		
 		if (voteTotal < 0) {
 
-			voteTotal += 3.5;
+			voteTotal += 4;
 
 		} else {
 
-			voteTotal -= 3.5;
+			voteTotal -= 4;
 
 		};
 		

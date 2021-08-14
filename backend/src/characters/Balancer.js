@@ -35,15 +35,21 @@ class Balancer extends RolesMasterClass {
 
 		if (vote1 == 0 && vote2 == 0) { 
 
-			return (voteSum + 3.5); 
+			this.notifyEquilibriumResults(obj, "both 0");
+
+			return (voteSum + 3); 
 
 		};
 
 		if ((vote1 * vote2) > 0) {
 
+			this.notifyEquilibriumResults(obj, "the same");
+
 			return (voteSum + 1.5);
 
 		} else {
+
+			this.notifyEquilibriumResults(obj, "opposites");
 
 			return (voteSum - 2);
 
@@ -70,6 +76,30 @@ class Balancer extends RolesMasterClass {
 		};
 
 	}; //end mysticScales
+
+
+
+	notifyEquilibriumResults(obj, result) {
+
+		var eMess = ("Equilibrium Results: The final voting powers were "
+					+ result + "!");
+
+		var sysMess = {
+						type: "power",
+						message: eMess
+					  };
+
+		var stackObj = {
+						type: "SMI",
+						socketID: obj.pA[this.index].socketID,
+						data: sysMess
+					   };
+
+		obj.stack.push(stackObj);
+
+
+	}; //end notifyDelayerOfEquilibriumResults()
+
 
 
 

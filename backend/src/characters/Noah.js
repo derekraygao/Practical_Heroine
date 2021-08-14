@@ -131,7 +131,7 @@ class Noah extends RolesMasterClass {
 
 	      var tIndex = obj.pT[thunderWaveTarget];
 	      if (tIndex !== 0 && !tIndex) { return 0; };
-
+	      
 	      obj.pA[tIndex].paralyzed = true;
 
 	    };	

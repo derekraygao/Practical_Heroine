@@ -6,6 +6,9 @@ const systemMessageReducer = (systemMessage = [], action) => {
 		case 'SYSTEM_MESSAGE':
 			return [...systemMessage, action.payload];
 
+		case "RESET_FOR_NEW_GAME":
+			return [];
+
 		default:
 			return systemMessage;
 

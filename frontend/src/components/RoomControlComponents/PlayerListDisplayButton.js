@@ -66,7 +66,7 @@ class PlayerListDisplayButton extends React.Component {
     var {ready, connection} = this.props.info;
 
     if (connection !== "connected") {
-      return connection;
+      return ((connection === "disconnected") ? "Disconnected" : "Rejoined");
     };
 
     //if connected

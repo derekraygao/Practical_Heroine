@@ -140,6 +140,15 @@ class Backstabber extends RolesMasterClass {
 
 		if (switchInd === -1) { return 0; };
 
+		/*for Esper*/
+		if (obj.pA[switchInd].role == "Esper") {
+
+			obj.pA[switchInd].pseudonym = obj.pA[this.index].pseudonym;
+			obj.pA[this.index].pseudonym = "Esper";
+
+		};
+
+
 		//backstabber player
 		obj.pA[this.index].role = obj.pA[switchInd].role;
 

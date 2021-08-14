@@ -1,0 +1,13 @@
+Mirror World = Paper Mario 1 Angry Bowser
+Sing = Inuyasha's Lullaby
+Lullaby = Zelda's Lullaby
+Psychologist = Sailor Moon Tense Moments
+Perish_Song = Tsubasa Chronicles Prove Yourself
+Dark_Destiny = Rozen Maiden Rozen Spell
+Scientist_Expose = Maplestory 2 Attack on Tria
+Invisible_Spy = Paper Maio 1 Ghost Gulping
+Star_Prism_Power = Sailor Moon Transformation
+
+Heroes_Victory = FF6 Victory Fanfare
+Villains_Victory_Dark_Destiny = Rozen Maiden Kurayami Yori Kitaru Mono
+Villains_Victory_General = Death Note Law of Solipsism

@@ -14,6 +14,8 @@ import ViewMissionResultsPhase7 from './ActionBoxComponents/GamePhase7/ViewMissi
 import VillainsGuessPrincessIdentityPhase9 from './ActionBoxComponents/GamePhase9/VillainsGuessPrincessIdentityPhase9.js';
 import GameOverPhase10 from './ActionBoxComponents/GamePhase10/GameOverPhase10.js';
 import TooFewPlayersPhase11 from './ActionBoxComponents/GamePhase11/TooFewPlayersPhase11.js';
+import RejoinedTheGamePhase12 from './ActionBoxComponents/GamePhase12/RejoinedTheGamePhase12.js';
+
 
 
 
@@ -67,6 +69,9 @@ class ActionBox extends React.Component {
 
       case 11:
         return <TooFewPlayersPhase11 />;
+
+      case 12:
+        return <RejoinedTheGamePhase12 />;
 
 
       default:

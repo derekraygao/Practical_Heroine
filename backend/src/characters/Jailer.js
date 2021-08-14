@@ -165,7 +165,29 @@ class Jailer extends RolesMasterClass {
 	};
 
 
+	/*for rejoin info in Controller.js*/
+	rejoinInfo(obj) {
 
+		if (!this.inGame) { return false; };
+
+		if (obj.rD.gamePhase == 8) { return false; };
+
+		//if you are jailer
+		if (this.name == obj.pA[obj.index].name && 
+			this.jailedPlayer !== "nobody chosen") {
+
+			return true;
+		};
+
+		//if you are prisoner
+		if (obj.pA[obj.index].name == this.jailedPlayer) {
+			return true;
+		};
+
+
+		return false;
+
+	}; //end rejoinInfo(obj)
 
 
 
