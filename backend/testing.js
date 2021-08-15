@@ -1311,7 +1311,7 @@ function testSensorPower() {
 
 };
 
-testSensorPower();
+//testSensorPower();
 
 
 function testSensorDiagnosisPower() {
@@ -1329,10 +1329,10 @@ function testSensorDiagnosisPower() {
 
 
 	obj.pA[0].multiplier = 3;
-	obj.pA[2].corrupted = true;
+	//obj.pA[2].corrupted = true;
 	obj.pA[3].multiplier = 3;
 
-	sensor.activateDiagnosis(2, obj);
+	sensor.activateDiagnosis(1, obj);
 
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
@@ -1718,37 +1718,22 @@ function testLieutenantBlitzPower() {
 	obj.rD.missionNo = 1;
 	//first need some mission results
 	Controller.addMissionVote(obj, 0, 1); //Derek
-	Controller.addMissionVote(obj, 1, 1); //Cloud
+	Controller.addMissionVote(obj, 1, 0); //Cloud
 	Controller.addMissionVote(obj, 2, 1); //Serena Lieutenant Blitz
-	Controller.addMissionVote(obj, 3, -4); //Lucio
-	Controller.addMissionVote(obj, 4, 2); //Xing
+	Controller.addMissionVote(obj, 3, 0); //Lucio
+	Controller.addMissionVote(obj, 4, 0); //Xing
 
 	Controller.setMissionTeam(obj, ["Derek", "Serena"]);
 	Controller.setPlayersForMission(obj);
 
-
-	obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
-	console.log("For mission #1, votes should be 1");
-	console.log(obj.pA[0].missionVote);
-
-
-	obj.rD.missionNo = 2;
-	obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
-	console.log("For mission #2, Lt. Blitz votes should be 2");
-	console.log(obj.pA[0].missionVote);
-
-	console.log("For mission #2, for NOT Lt. Blitz role, vote should be 1");
-	obj.rO.roles["Lieutenant Blitz"].adjustVotesBlitz(obj);
-	console.log(obj.pA[1].missionVote);
-
-
-	obj.rD.missionNo = 3;
-	console.log("For mission #2, votes should be 2");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
 
 };
 
 //testLieutenantBlitzPower();
+
+
 
 
 function testInjuredStatus() {

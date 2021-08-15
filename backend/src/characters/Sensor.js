@@ -554,7 +554,6 @@ class Sensor extends RolesMasterClass {
 
 
 
-	//shared with Saintess
 	isStatusNormal(playerObj) {
 
 		if (playerObj.corrupted) { return false; };
@@ -564,9 +563,6 @@ class Sensor extends RolesMasterClass {
 
 		if (playerObj.bomb) { return false; };
 		if (playerObj.burnCount > 0) { return false; };
-		if (playerObj.paralyzed) { return false; };
-		if (playerObj.frozen) { return false; };
-		if (playerObj.confused) { return false; };
 		if (playerObj.entranced) { return false; };
 
 		if (playerObj.injuredCount > 0) { return false; };
@@ -579,6 +575,7 @@ class Sensor extends RolesMasterClass {
 		if (playerObj.slowCharge != 0) { return false; }
 
 		return true;
+		
 	}; //end isStatusNormal
 
 
