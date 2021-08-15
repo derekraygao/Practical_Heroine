@@ -12,6 +12,8 @@ class Sensor extends RolesMasterClass {
         this.alignment = "good";
         this.team = "heroes";
 
+        this.diagnosisStatus = "Not Activated";
+
         //scanType is "Scan All" or "Scan Individual"
         this.powersHistory = {
         						1: {"scanType": "none", "target": "nobody chosen", "condition": "none"},
@@ -90,6 +92,30 @@ class Sensor extends RolesMasterClass {
 		return statusArr;
 
 	};
+
+
+	scanPoison(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].poisonCount > 0) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
+
+
 
 
 
@@ -365,6 +391,10 @@ class Sensor extends RolesMasterClass {
 				statusArr = this.scanSoulSea(obj);
 				break;
 
+			case "Poison":
+				statusArr = this.scanPoison(obj);
+				break;
+
 			case "Shrink":
 				statusArr = this.scanShrink(obj);
 				break;
@@ -421,7 +451,7 @@ class Sensor extends RolesMasterClass {
 
 		var stackObj = {
 						type: "Individual",
-						socketID: obj.pA[this.index].socketID,
+						socketID: this.socketID,
 						destination: "Add System Message",
 						data: sysMess
 					   };
@@ -440,22 +470,26 @@ class Sensor extends RolesMasterClass {
 		var individualStatusArr = [];
 
 		if (obj.pA[ind].corrupted) { individualStatusArr.push("Corruption"); };
+		if (obj.pA[ind].soulMark) { individualStatusArr.push("Soul Mark"); };
+		if (obj.pA[ind].zombie == "zombie") { individualStatusArr.push("Zombie"); };
+		if (obj.pA[ind].poisonCount > 0) { individualStatusArr.push("Poison"); };
+
 		if (obj.pA[ind].bomb) { individualStatusArr.push("Flame Seal Bomb"); };
 		if (obj.pA[ind].burnCount > 0) { individualStatusArr.push("Burn"); };
-		if (obj.pA[ind].soulMark) { individualStatusArr.push("Soul Mark"); };
-		if (obj.pA[ind].shrinkCount > 0) { individualStatusArr.push("Shrink"); };
-		if (obj.pA[ind].multiplier > 1) { individualStatusArr.push("Multiplier"); };
-		if (obj.pA[ind].boost > 0) { individualStatusArr.push("Boost"); };
-		if (obj.pA[ind].injuredCount > 0) { individualStatusArr.push("Injury"); };
-		if (obj.pA[ind].entranced) { individualStatusArr.push("Entrancement"); };
-		if (obj.pA[ind].confused) { individualStatusArr.push("Confusion"); };
-		if (obj.pA[ind].markedMan) { individualStatusArr.push("Marked Man"); };
-		if (obj.pA[ind].slow) { individualStatusArr.push("Slow"); };
-		if (obj.pA[ind].slowCharge != 0) { individualStatusArr.push("Slow Charge"); };
-		if (obj.pA[ind].zombie == "zombie") { individualStatusArr.push("Zombie"); };
 		if (obj.pA[ind].paralyzed) { individualStatusArr.push("Paralysis"); };
 		if (obj.pA[ind].frozen) { individualStatusArr.push("Freeze"); };
+		if (obj.pA[ind].confused) { individualStatusArr.push("Confusion"); };
+		if (obj.pA[ind].entranced) { individualStatusArr.push("Entrancement"); };
 
+		if (obj.pA[ind].injuredCount > 0) { individualStatusArr.push("Injury"); };
+		if (obj.pA[ind].markedMan) { individualStatusArr.push("Marked Man"); };
+
+		if (obj.pA[ind].boost > 0) { individualStatusArr.push("Boost"); };
+		if (obj.pA[ind].multiplier > 1) { individualStatusArr.push("Multiplier"); };
+		if (obj.pA[ind].shrinkCount > 0) { individualStatusArr.push("Shrink"); };
+		if (obj.pA[ind].slow) { individualStatusArr.push("Slow"); };
+		if (obj.pA[ind].slowCharge != 0) { individualStatusArr.push("Slow Charge"); };
+		
 
 		if (individualStatusArr.length == 0) { individualStatusArr.push("Nothing"); };
 
@@ -479,7 +513,7 @@ class Sensor extends RolesMasterClass {
 
 		var stackObj = {
 						type: "Individual",
-						socketID: obj.pA[this.index].socketID,
+						socketID: this.socketID,
 						destination: "Add System Message",
 						data: sysMess
 					   };
@@ -517,6 +551,136 @@ class Sensor extends RolesMasterClass {
 		obj.stack.push(stackObj);
 
 	};
+
+
+
+	//shared with Saintess
+	isStatusNormal(playerObj) {
+
+		if (playerObj.corrupted) { return false; };
+		if (playerObj.soulMark) { return false; };
+		if (playerObj.zombie == "zombie") { return false; };
+		if (playerObj.poisonCount > 0) { return false; };
+
+		if (playerObj.bomb) { return false; };
+		if (playerObj.burnCount > 0) { return false; };
+		if (playerObj.paralyzed) { return false; };
+		if (playerObj.frozen) { return false; };
+		if (playerObj.confused) { return false; };
+		if (playerObj.entranced) { return false; };
+
+		if (playerObj.injuredCount > 0) { return false; };
+		if (playerObj.markedMan) { return false; }
+
+		if (playerObj.boost > 0) { return false; };
+		if (playerObj.multiplier > 1) { return false; };
+		if (playerObj.shrinkCount > 0) { return false; };
+		if (playerObj.slow) { return false; }
+		if (playerObj.slowCharge != 0) { return false; }
+
+		return true;
+	}; //end isStatusNormal
+
+
+	numberOfMissionTeamSufferingAStatusCondition(obj) {
+
+		var numSuffering = 0;
+		var forLength = obj.pA.length;
+		var i = 0;
+
+		for (i; i < forLength; i++) {
+
+			if (!obj.pA[i].selectedForMission) { continue; };
+
+			if (!this.isStatusNormal(obj.pA[i])) {
+				numSuffering += 1;
+			};
+
+		}; //end for
+
+
+		return numSuffering;
+
+	}; //end numberOfMissionTeamSufferingAStatusCondition()
+
+
+
+	activateDiagnosis(guess, obj) {
+
+		var trueNumber = this.numberOfMissionTeamSufferingAStatusCondition(obj);
+
+		if (guess == trueNumber) {
+
+			var mess = ("Diagnosis: You guessed correctly! " + guess + " people on the Mission Team are suffering from a status condition. +2 to the Mission Team's vote sum!");
+
+			this.messageHandler("Diagnosis", mess, obj);			
+
+			this.diagnosisStatus = "Correct";
+
+
+		} else {
+
+			var mess = ("Diagnosis: Wrong! " + trueNumber + " people, not " + guess + " people, on the Mission Team are suffering from a status condition. -2 to the Mission Team's vote sum!");
+
+			this.messageHandler("Diagnosis", mess, obj);
+
+			this.diagnosisStatus = "Wrong";	
+
+		}; //end else
+
+
+	}; //end activateDiagnosis
+
+
+	adjustVoteSumDiagnosis(voteSum) {
+
+		if (this.diagnosisStatus == "Not Activated") { return voteSum; };
+
+
+		if (this.diagnosisStatus == "Correct") {
+
+			voteSum += 2;
+
+		} else {
+
+			voteSum -= 2;
+
+		};
+
+
+		this.diagnosisStatus = "Not Activated";
+
+
+		return voteSum;
+
+
+	}; //end diagnosis
+
+
+	messageHandler(power, data, obj) {
+
+
+		if (power == "Diagnosis") {
+
+			var sysMess = {
+							type: "power",
+							message: data
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: this.socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);	
+
+		}; //end if power == Diagnosis
+
+
+	}; //end messageHandler
+
+
 
 
 

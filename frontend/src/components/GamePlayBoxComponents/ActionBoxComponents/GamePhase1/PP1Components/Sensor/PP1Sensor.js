@@ -57,6 +57,7 @@ class PP1Sensor extends React.Component {
         <option value="FS Bomb">FS Bomb</option>
         <option value="Burn">Burn</option>
         <option value="Soul Mark">Soul Mark</option>
+        <option value="Poison">Poison</option>
         <option value="Shrink">Shrink</option>
         <option value="Multiplier">Multiplier</option>
         <option value="Boost">Boost</option>

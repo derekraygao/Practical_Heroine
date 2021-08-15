@@ -34,11 +34,19 @@ app.use('/quickstart', express.static(quickstartPath));
 
 
 
+app.use(express.static(path.join(__dirname, 'build')));
 
+/*
+app.get('/', function(req, res){
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+*/
+
+/*
 app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, 'index.html'));
 });
-
+*/
 
 app.get('/game_rules', function(req, res){
     res.sendFile(path.join(__dirname, 'Game_Rules.html'));
@@ -1880,6 +1888,19 @@ io.on('connection', function (socket) {
     if (!obj.pA) { return 0; };
 
     obj.rO.roles["Sensor"].testResults(name, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
+  socket.on("Activate Diagnosis", (guess) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    obj.rO.roles["Sensor"].activateDiagnosis(guess, obj);
 
     MessageNotificationStack(obj);
 

@@ -81,6 +81,7 @@ var aura = obj.rO.roles["Aura Knight"];
 var oracle = obj.rO.roles["Oracle"];
 var detective = obj.rO.roles["Detective"];
 var ranger = obj.rO.roles["Ranger"];
+var sensor = obj.rO.roles["Sensor"];
 	
 var umbraLord = obj.rO.roles["Umbra Lord"];
 var kaguya = obj.rO.roles["Kaguya"];
@@ -1289,6 +1290,8 @@ function testSensorPower() {
 	obj.pA[0].slowCharge = 3;
 	obj.pA[0].markedMan = true;
 
+	obj.pA[0].poisonCount = 1;
+
 	obj.pA[1].bomb = true;
 	obj.pA[2].slowCharge = -3;
 	obj.pA[3].markedMan = true;
@@ -1308,7 +1311,42 @@ function testSensorPower() {
 
 };
 
-//testSensorPower();
+testSensorPower();
+
+
+function testSensorDiagnosisPower() {
+
+	console.log("Testing Sensor Diagnosis Power");
+
+	Controller.addMissionVote(obj, 0, 0); //Derek
+	Controller.addMissionVote(obj, 1, -1); //Cloud
+	Controller.addMissionVote(obj, 2, 0); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
+	Controller.addMissionVote(obj, 4, 2); //Xing
+
+	Controller.setMissionTeam(obj, ["Serena", "Derek"]);
+	Controller.setPlayersForMission(obj);
+
+
+	obj.pA[0].multiplier = 3;
+	obj.pA[2].corrupted = true;
+	obj.pA[3].multiplier = 3;
+
+	sensor.activateDiagnosis(2, obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	console.log("");
+	console.log("Diagnosis should be reset");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+
+};
+
+
+//testSensorDiagnosisPower();
 
 
 
@@ -2951,7 +2989,7 @@ function testNoahAndToxiTurtlePowersParalyzeSkip() {
 
 }; //end testNoahAndToxiTurtlePowersParalyzeSkip()
 
-testNoahAndToxiTurtlePowersParalyzeSkip();
+//testNoahAndToxiTurtlePowersParalyzeSkip();
 
 
 

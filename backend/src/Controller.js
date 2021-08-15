@@ -980,6 +980,9 @@ class Controller {
 		missionVoteAccumulator = obj.rO.roles["Oracle"]
 		.adjustVoteSumLucinite(missionVoteAccumulator, obj);
 
+		missionVoteAccumulator = obj.rO.roles["Sensor"]
+		.adjustVoteSumDiagnosis(missionVoteAccumulator, obj);
+
 		missionVoteAccumulator = obj.rO.roles["Detective Chat"]
 		.adjustVoteSumCrossExamination(missionVoteAccumulator, obj);
 
@@ -1748,7 +1751,7 @@ class Player {
 
         this.corrupted = false;
         this.soulMark = false; //spiritualist
-        this.poisonCount = 0;
+        this.poisonCount = 0; //default 0
         this.zombie = "human";
 
         this.bomb = false;

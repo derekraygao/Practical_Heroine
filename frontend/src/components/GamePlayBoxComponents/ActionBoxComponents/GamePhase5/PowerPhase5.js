@@ -11,6 +11,7 @@ import formatArrayIntoString from 'formatArrayIntoString.js';
 import PP5NoPower from './PowerPhase5Components/PP5NoPower.js';
 import PP5Frozen from './PowerPhase5Components/PP5Frozen.js';
 
+
 import PP5Marcus from './PowerPhase5Components/Marcus/PP5Marcus.js';
 import PP5Lottie from './PowerPhase5Components/Lottie/PP5Lottie.js';
 import PP5Lan from './PowerPhase5Components/Lan/PP5Lan.js';
@@ -19,6 +20,7 @@ import PP5Pear from './PowerPhase5Components/Pear/PP5Pear.js';
 import PP5DetectiveChat from './PowerPhase5Components/DetectiveChat/PP5DetectiveChat.js';
 import PP5Ranger from './PowerPhase5Components/Ranger/PP5Ranger.js';
 import PP5Scientist from './PowerPhase5Components/Scientist/PP5Scientist.js';
+import PP5Sensor from './PowerPhase5Components/Sensor/PP5Sensor.js';
 
 
 import PP5Noah from './PowerPhase5Components/Noah/PP5Noah.js';
@@ -120,6 +122,10 @@ class PowerPhase5 extends React.Component {
 
       case "Scientist":
         return <PP5Scientist />;
+
+      case "Sensor":
+        return <PP5Sensor />;
+
 
       case "Noah":
         return <PP5Noah />;
