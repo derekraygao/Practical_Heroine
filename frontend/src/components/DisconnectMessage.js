@@ -2,6 +2,7 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import { disconnectMessage } from 'actions/disconnectMessage.js';
+import { homePageRedirect } from 'variablesAndFunctions/homePageRedirect.js';
 
 import './css/MessagePopup.css';
 
@@ -29,7 +30,7 @@ class DisconnectMessage extends React.Component {
 
   exitRoom = () => {
 
-    window.location.replace("http://localhost:3000");
+    homePageRedirect();
 
   };
 

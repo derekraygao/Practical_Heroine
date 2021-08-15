@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {showRoomControlBool} from 'actions/showRoomControlBool.js';
+import { homePageRedirect } from 'variablesAndFunctions/homePageRedirect.js';
+
 
 import './css/TitleBar.css';
 
@@ -87,9 +89,10 @@ class TitleBar extends React.Component {
 
   };
 
+
   clickExit = () => {
 
-     window.location.replace("http://localhost:3000");
+     homePageRedirect();
 
   };
 

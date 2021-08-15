@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 import { roomInfo } from 'actions/roomInfo.js';
-
 import { disconnectMessage } from 'actions/disconnectMessage.js';
+import { homePageRedirect } from 'variablesAndFunctions/homePageRedirect.js';
+
 
 import socket from 'Socket.js';
 
@@ -58,7 +59,7 @@ class Home extends React.Component {
 
     socket.on("You've Been Kicked From The Game Room", () => {
 
-      window.location.replace("http://localhost:3000");
+      homePageRedirect();
 
     });
 
