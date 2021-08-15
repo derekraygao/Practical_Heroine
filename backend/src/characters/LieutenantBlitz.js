@@ -1,5 +1,6 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
-var {calculateNumberofTeamMembers} = require('./calculateNumberofTeamMembers.js');
+
+
 
 class LieutenantBlitz extends RolesMasterClass {
 
@@ -25,15 +26,49 @@ class LieutenantBlitz extends RolesMasterClass {
 
 
 
+	BlitzBVP(obj) {
+
+		var missionTeamSize = obj.rD.missionTeam.length;
+
+		switch (missionTeamSize) {
+
+			case 2:
+				return 1.5;
+
+			case 3:
+				return 2;
+
+			case 4:
+				return 2.5;
+
+			case 5:
+				return 3;
+
+			case 6:
+				return 3.5;
+
+			case 7:
+				return 4;
+
+			case 1: /*team size cannot be 1, but just in case */
+				return 1;
+
+			default: 
+				return 4;
+
+		}; //end switch
+
+	}; //end BlitzBVP
+
+
 	//need to do *= to handle negative/positive vote
 	adjustVotesBlitz(obj) {
-
+		
 	  if (!this.inGame) { return 0; };
 
 	  if (!obj.pA[this.index].selectedForMission) { return 0;};
 	 
-	  obj.pA[this.index].missionVote 
-	  *= Math.ceil((calculateNumberofTeamMembers(obj.rD.missionNo, obj.pA.length))/2);
+	  obj.pA[this.index].missionVote *= this.BlitzBVP(obj);
 	
 	};
 
