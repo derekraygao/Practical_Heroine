@@ -1,12 +1,14 @@
 
 .individual-room-container {
 
-	display: flex;
-	justify-content: space-between;
+	display: grid;
+	grid-template-columns: 15% 70% 15%;
+	grid-template-areas: "player-num     room-name      join-button";
 
 
 	width: 90%;
 	min-height: 45px;
+	max-height: 50px;
 
 	border: 3px solid #f2711c;
 
@@ -15,12 +17,50 @@
 }
 
 
+
+.individual-room-number-of-players {
+
+	grid-area: player-num;
+
+	display: flex;
+
+	font-size: 120%;
+
+}
+
+.individual-room-number-of-players span {
+	margin: auto;
+}
+
+
 .individual-room-name {
+
+	grid-area: room-name;
+
+	display: flex;
+
+	max-width: 90%;
+	max-height: 100%;
+
+	overflow: auto;
+
+	font-size: 120%;
+
+}
+
+.individual-room-name span {
+	margin: auto;
+}
+
+
+
+.individual-room-join-button {
+
+	grid-area: join-button;
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
-	font-size: 120%;
 
 }

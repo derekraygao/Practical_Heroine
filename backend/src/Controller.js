@@ -11,11 +11,11 @@ class Controller {
 	constructor() {
 
 		this.roomsData = {};
-		this.listOfRooms = ["testing"];
+		this.listOfRooms = [];//["testing"];
 		this.socketRoom = {}; //which room is a socket in (based on socket.id)
 		this.voteAdjuster = new VoteAdjuster(); //all rooms can share this single instance
 
-
+		/*
 		this.roomsData["testing"] = 
 		{	
 			roomStatus: "Open",
@@ -43,7 +43,7 @@ class Controller {
 		this.socketRoom["HarleyID"] = "testing";
 		this.socketRoom["KennethID"] = "testing";
 		this.socketRoom["MarsID"] = "testing";
-
+		*/
 
 	}; //end constructor
 
@@ -263,7 +263,12 @@ class Controller {
 			if (![0, 10, 11].includes(this.roomsData[this.listOfRooms[i]].gamePhase)) 
 				{ continue; };		
 
-			roomsList.push(this.listOfRooms[i]);
+			roomsList.push(
+							{
+								roomName: this.listOfRooms[i],
+								numOfPlayers: this.roomsData[this.listOfRooms[i]].playersInRoomArray.length
+						  	}
+						  );
 
 		}; //end for 
 		
@@ -591,8 +596,8 @@ class Controller {
 
 			teamVoteAccumulator += obj.pA[i].teamVote;
 
-			console.log(obj.pA[i].name + " role is " + 
-				obj.pA[i].role + ", team vote is: " + obj.pA[i].teamVote);
+			/*console.log(obj.pA[i].name + " role is " + 
+				obj.pA[i].role + ", team vote is: " + obj.pA[i].teamVote);*/
 
 			//no need for exact number because it's team vote. Just need to know if
 			//it's accept or reject. Only need to store Mission exact number
@@ -622,7 +627,7 @@ class Controller {
 		teamVoteAccumulator = obj.rO.roles["Umbra Lord"].
 		adjustVotesWithUmbraLordAbsolutePower(teamVoteAccumulator, obj);
 
-		console.log("team vote accumulator is: " + teamVoteAccumulator);
+		//console.log("team vote accumulator is: " + teamVoteAccumulator);
 
 
 		if (teamVoteAccumulator >= 0) {
@@ -931,8 +936,8 @@ class Controller {
 
 			);
 			
-			console.log(obj.pA[i].name + " final vote after adjustments is: " 
-				+ obj.pA[i].missionVote); 
+			/*console.log(obj.pA[i].name + " final vote after adjustments is: " 
+				+ obj.pA[i].missionVote); */
 			
 		}; //end for
 
@@ -994,7 +999,7 @@ class Controller {
 		missionVoteAccumulator = obj.rO.roles["Ichigo"]
 		.hylianShield(missionVoteAccumulator);
 
-		console.log("Mission " + obj.rD.missionNo + " vote total: " + missionVoteAccumulator);
+		//console.log("Mission " + obj.rD.missionNo + " vote total: " + missionVoteAccumulator);
 
 		obj.rI.addMissionInfo(
 			obj.rD.missionNo,

@@ -32,7 +32,7 @@ class DisplayRooms extends React.Component {
 
 
     socket.on("Update Rooms List", (roomList) => {
-
+   
       this.setState({roomList: roomList});
 
     });
@@ -63,13 +63,18 @@ class DisplayRooms extends React.Component {
   };
 
 
+  /* roomList = [{roomName:, numOfPlayers: } */
   renderRooms = () => {
 
-    const roomList = this.state.roomList.map( (roomName, index) => {
+    const roomList = this.state.roomList.map( (roomObj, index) => {
 
       return (
 
-        <IndividualRooms key={index} roomName={roomName} game="Practical Hero(ine)" />
+        <IndividualRooms 
+          key={index} 
+          roomName={roomObj.roomName}
+          numOfPlayers={roomObj.numOfPlayers}
+        />
 
       ); //end return
 

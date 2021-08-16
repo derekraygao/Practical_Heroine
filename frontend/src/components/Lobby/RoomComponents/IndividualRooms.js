@@ -44,20 +44,27 @@ class IndividualRooms extends React.Component {
 
       <div className="individual-room-container">
       
-        <div className="individual-room-name">
-          {this.props.game}
+
+        <div className="individual-room-number-of-players">
+          <span>{this.props.numOfPlayers}/10</span>
         </div>
 
+
         <div className="individual-room-name">
-          {this.props.roomName}
+          <span>{this.props.roomName}</span>
         </div>
 
-        <button 
-          className="ui yellow button"
-          onClick={this.clickJoinRoom}
-        >
-          Join
-        </button>
+
+        <div className="individual-room-join-button">
+
+          <button 
+            className="ui yellow button"
+            onClick={this.clickJoinRoom}
+          >
+            Join
+          </button>
+
+        </div>
 
 
       </div>
