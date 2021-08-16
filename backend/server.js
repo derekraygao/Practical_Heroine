@@ -193,6 +193,8 @@ io.on('connection', function (socket) {
 
       socket.emit("Add Player Name", obj.pA[obj.index].name);
 
+      socket.emit("Update Jitsi Room Name", obj.rD.jitsiRoomName);
+
       return 0;
 
     };
@@ -258,6 +260,7 @@ io.on('connection', function (socket) {
 
       socket.emit("Add Player Name", obj.pA[obj.index].name);
 
+      socket.emit("Update Jitsi Room Name", obj.rD.jitsiRoomName);
 
       return 0;
 
@@ -293,6 +296,7 @@ io.on('connection', function (socket) {
 
       socket.emit("Add Player Name", obj.pA[obj.index].name);
 
+      socket.emit("Update Jitsi Room Name", obj.rD.jitsiRoomName);
 
       return 0;
 
@@ -316,6 +320,8 @@ io.on('connection', function (socket) {
 
       socket.emit("Rejoin The Room", Controller.getRejoinInfo(obj));
 
+      socket.emit("Update Jitsi Room Name", obj.rD.jitsiRoomName);
+      
       return 0;
 
     }; //end Rejoined The Room
@@ -384,8 +390,8 @@ io.on('connection', function (socket) {
 
 
 
-
-  socket.on("TESTING ONLY: Ready For New Game", () => {
+  //remove 343 when using
+  socket.on("343TESTING ONLY: Ready For New Game", () => {
 
     var playerRandName = randomName();
     socket.emit("Add Player Name", playerRandName);
@@ -414,7 +420,7 @@ io.on('connection', function (socket) {
 
     Controller.resetPlayerReadyStatus(obj);
 
-    //shuffle(obj.pA);
+    shuffle(obj.pA);
 
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
     //playerArray, then need to re-map the indices
@@ -524,7 +530,7 @@ io.on('connection', function (socket) {
       "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
 
 
-    //shuffle(obj.pA);
+    shuffle(obj.pA);
 
     //index mapping is done here, so cannot shuffle afterwards, or if shuffle
     //playerArray, then need to re-map the indices
