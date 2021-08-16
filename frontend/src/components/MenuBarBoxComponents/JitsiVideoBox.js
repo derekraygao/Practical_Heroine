@@ -30,9 +30,6 @@ const JitsiVideoBox = (props) => {
   const jitsiConfig = {
 
     roomName: props.roomName,
-    displayName: 'Naruto Uzumaki',
-    password: 'dattebayo',
-    subject: 'fan',
     parentNode: 'jitsi-container',
 
   };

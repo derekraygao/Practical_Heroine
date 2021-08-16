@@ -25,8 +25,10 @@ class DisplayRooms extends React.Component {
 
   componentDidMount = () => {
 
+    socket.emit("Get Rooms From Server");
+
     getRoomsInterval = 
-    setInterval(this.getRoomsListFromServer, 1000);
+    setInterval(this.getRoomsListFromServer, 3000);
 
 
     socket.on("Update Rooms List", (roomList) => {
