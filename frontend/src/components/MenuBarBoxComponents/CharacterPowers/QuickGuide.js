@@ -43,6 +43,9 @@ class QuickGuide extends React.Component {
 
         <div className="power-info-character-header">Quick Guide</div>
 
+        <a href="https://drive.google.com/file/d/1VUKwkA28B4qW4MW9sVCzDMfMZYEOsk8I/view?usp=sharing" target="_blank">PDF Quick Guide</a>
+        <br></br> 
+
           <div>
             <p style={{marginTop: '0in', marginRight: '0in', marginBottom: '8.0pt', marginLeft: '0in', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}><strong><u><span style={{fontSize: '19px', lineHeight: '107%', fontFamily: '"Times New Roman",serif'}}>Mission Team Size</span></u></strong></p>
             <table style={{marginLeft: '.25pt', borderCollapse: 'collapse', border: 'none'}}>
@@ -140,7 +143,7 @@ class QuickGuide extends React.Component {
                     <p style={{marginTop: '0in', marginRight: '0in', marginBottom: '0in', marginLeft: '0in', lineHeight: 'normal', fontSize: '15px', fontFamily: '"Calibri",sans-serif', textAlign: 'center'}}><span style={{fontSize: '16px', fontFamily: '"Times New Roman",serif', color: 'black'}}>4</span></p>
                   </td>
                   <td style={{width: '46.55pt', borderTop: 'none', borderLeft: 'none', borderBottom: '1pt solid windowtext', borderRight: '1pt solid windowtext', padding: '0in 5.4pt', verticalAlign: 'top'}}>
-                    <p style={{marginTop: '0in', marginRight: '0in', marginBottom: '0in', marginLeft: '0in', lineHeight: 'normal', fontSize: '15px', fontFamily: '"Calibri",sans-serif', textAlign: 'center'}}><span style={{fontSize: '16px', fontFamily: '"Times New Roman",serif'}}>4</span></p>
+                    <p style={{marginTop: '0in', marginRight: '0in', marginBottom: '0in', marginLeft: '0in', lineHeight: 'normal', fontSize: '15px', fontFamily: '"Calibri",sans-serif', textAlign: 'center'}}><span style={{fontSize: '16px', fontFamily: '"Times New Roman",serif'}}>5</span></p>
                   </td>
                   <td style={{width: '46.55pt', borderTop: 'none', borderLeft: 'none', borderBottom: '1pt solid windowtext', borderRight: '1pt solid windowtext', padding: '0in 5.4pt', verticalAlign: 'top'}}>
                     <p style={{marginTop: '0in', marginRight: '0in', marginBottom: '0in', marginLeft: '0in', lineHeight: 'normal', fontSize: '15px', fontFamily: '"Calibri",sans-serif', textAlign: 'center'}}><span style={{fontSize: '16px', fontFamily: '"Times New Roman",serif'}}>2</span></p>
