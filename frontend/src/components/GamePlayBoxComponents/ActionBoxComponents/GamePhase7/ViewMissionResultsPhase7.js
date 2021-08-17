@@ -41,7 +41,7 @@ class ViewMissionResultsPhase7 extends React.Component {
 
     this.setState({MH: _currentMissionHistory});
 
-    socket.emit("Ready For Next Round/Mission");
+    //socket.emit("Ready For Next Round/Mission");
 
   };
 
@@ -55,20 +55,6 @@ class ViewMissionResultsPhase7 extends React.Component {
   }; //end nextMissionClick
 
 
-  nextMissionButtonContainerStyle() {
-
-    if (!this.state.clickedNextMission) {
-      return {alignItems: "center"};
-    };
-
-    return {
-              paddingLeft: "5%",
-              paddingRight: "3%",
-              paddingTop: "20%",
-              fontSize: "140%"
-           };
-
-  };
 
   buttonOrText = () => {
 
@@ -88,7 +74,7 @@ class ViewMissionResultsPhase7 extends React.Component {
     };
 
     return (
-      "Please wait until everyone has finished viewing the mission results."
+      <span>Please wait until everyone has finished viewing the mission results.</span>
     ); //end return
 
 
@@ -133,7 +119,7 @@ class ViewMissionResultsPhase7 extends React.Component {
 
         </div>
 
-        <div className="next-mission-button-container" style={this.nextMissionButtonContainerStyle()}>
+        <div className="next-mission-button-container">
           {this.buttonOrText()}
         </div>
 

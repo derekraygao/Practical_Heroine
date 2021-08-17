@@ -13,19 +13,25 @@
 	grid-area: table;
 
 	display: flex;
-	justify-content: center;
-	padding-top: 3%;
-	padding-bottom: 2%;
+
+
 	overflow-y: auto;
 
+	padding-top: 3%;
+	padding-bottom: 3%;
+	
+
 }
+
 
 .view-mission-results-table-container table {
 
-	max-width: 90%;
+	max-width: 90% !important;
 
+	margin: auto !important;
 
 }
+
 
 .table-style {
 
@@ -39,15 +45,28 @@
 .next-mission-button-container {
 
 	display: flex;
-	justify-content: center;
-	/*align-items: center; this handled within component*/
+
 	overflow-y: auto;
+
+	padding-left: 14px;
+	padding-right: 14px;
 
 }
 
+.next-mission-button-container span {
+
+	margin: auto;
+
+	font-size: 135%;
+
+}
+
+
+
 .next-mission-button-container button {
-	max-width: 80% !important;
-	min-width: 90px !important;
+
+	margin: auto !important;
+
 }
 
 
