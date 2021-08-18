@@ -1,8 +1,12 @@
 var RO = require('./RolesObject.js');
 var rI = require('./ResultsInfo.js');
 var {VoteAdjuster} = require('./VoteAdjuster.js');
+var {Validator} = require('./Validator.js');
+
+
 var {randomName} = require('../random_name.js');
 var {generateRandomPhrase} = require('../functions/randomPhraseGenerator.js');
+
 
 
 class Controller {
@@ -97,6 +101,7 @@ class Controller {
 			numOfFailedTeamProposals: 0,
 			rolesObject: new RO.RolesObject(),
 			results: new rI.ResultsInfo(),
+			validator: new Validator(),
 			messageStack: [],
 			statusEffects: [], 
 			playerTracker: {} 
@@ -1104,6 +1109,7 @@ class Controller {
 		this.roomsData[room].numOfFailedTeamProposals = 0;
 		this.roomsData[room].rolesObject = new RO.RolesObject();
 		this.roomsData[room].results = new rI.ResultsInfo();
+		this.roomsData[room].validator = new Validator();
 		this.roomsData[room].messageStack = [];
 		this.roomsData[room].statusEffects = [];
 		this.roomsData[room].playerTracker = {};
@@ -1239,6 +1245,7 @@ class Controller {
 				pA: pA,
 				rO: roomInfo.rolesObject,
 				rI: roomInfo.results,
+				validator: roomInfo.validator,
 				rD: roomInfo,
 				pT: roomInfo.playerTracker,
 				stack: roomInfo.messageStack,
@@ -1723,6 +1730,7 @@ class Controller {
 		this.roomsData[room].numOfFailedTeamProposals = 0;
 		this.roomsData[room].rolesObject = new RO.RolesObject();
 		this.roomsData[room].results = new rI.ResultsInfo();
+		this.roomsData[room].validator = new Validator();
 		this.roomsData[room].messageStack = [];
 		this.roomsData[room].statusEffects = [];
 		this.roomsData[room].playerTracker = {};

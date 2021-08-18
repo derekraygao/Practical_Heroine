@@ -85,14 +85,16 @@ join the room during this phase
 */
 
 
-
-
 var myClass = require('./src/Controller.js');
+var Controller = new myClass.Controller();
+//console.log(Controller);
+
 var {AbilityManager} = require('./src/AbilityManager.js');
 var AbilityManager = new AbilityManager();
 
-var Controller = new myClass.Controller();
-//console.log(Controller);
+var {Validator} = require('./src/Validator.js');
+var ServerValidator = new Validator();
+
 
 var {randomName} = require('./random_name.js');
 var {shuffle} = require("./src/characters/shuffle.js");
@@ -106,7 +108,7 @@ var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
 //EVERY SERVER MESSAGE (socket.on) GOES INSIDE THE io.on
 io.on('connection', function (socket) {
 
-  console.log(socket.id + " connected!");
+  //console.log(socket.id + " connected!");
 
 
   /*for testing only */
@@ -321,7 +323,7 @@ io.on('connection', function (socket) {
       socket.emit("Rejoin The Room", Controller.getRejoinInfo(obj));
 
       socket.emit("Update Jitsi Room Name", obj.rD.jitsiRoomName);
-      
+
       return 0;
 
     }; //end Rejoined The Room
@@ -396,11 +398,14 @@ io.on('connection', function (socket) {
     var playerRandName = randomName();
     socket.emit("Add Player Name", playerRandName);
 
+
     Controller.addPlayerToArray(playerRandName, socket.id, "testing", "nobody");
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
 
     Controller.setPlayerReady(obj);
+
+
 
     if (!Controller.isEveryoneReadyFirstGameAndAtLeastThreePlayers(obj)) {
 
@@ -428,6 +433,9 @@ io.on('connection', function (socket) {
 
 
     var listOfPlayers = Controller.getListOfPlayers(obj);
+
+    obj.validator.setPlayerList(listOfPlayers);
+
 
     //sets roles on client side
     for (let i = 0; i < obj.rO.rolesInGame.length; i++) {
@@ -539,6 +547,9 @@ io.on('connection', function (socket) {
 
     var listOfPlayers = Controller.getListOfPlayers(obj);
 
+    obj.validator.setPlayerList(listOfPlayers);
+
+
     //sets roles on client side
     for (let i = 0; i < obj.rO.rolesInGame.length; i++) {
 
@@ -608,6 +619,8 @@ io.on('connection', function (socket) {
 
 
     var listOfPlayers = Controller.getListOfPlayers(obj);
+
+    obj.validator.setPlayerList(listOfPlayers);
 
 
     //sets roles on client side
@@ -683,7 +696,7 @@ io.on('connection', function (socket) {
 
   socket.on("Team Leader's Proposed Team Submission", (proposedTeamArray) => {
     //missionTeamArray = ["Derek", "Cloud", "Serena"]
-    console.log("Submitted team is: " + proposedTeamArray);
+    //console.log("Submitted team is: " + proposedTeamArray);
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
@@ -949,7 +962,7 @@ io.on('connection', function (socket) {
     if (!obj.pA) { return 0; };
     if (obj.rD.gamePhase !== 6) { return 0; };
 
-    console.log(obj.pA[obj.index].name + " voted for " + vote);
+    //console.log(obj.pA[obj.index].name + " voted for " + vote);
 
     if (vote !== "Server Check") {
       Controller.setPlayerMissionVote(vote, obj);
@@ -973,7 +986,7 @@ io.on('connection', function (socket) {
 
       case "Heroes Win! Villains' Last Chance.":
 
-        console.log("Start Game Phase 9: Heroes Win! Villains' Last Chance.");
+        //console.log("Start Game Phase 9: Heroes Win! Villains' Last Chance.");
 
         Controller.setGamePhase(obj, 9);
 
@@ -990,7 +1003,7 @@ io.on('connection', function (socket) {
 
       case "Villains Win 3 Consecutively!":
 
-        console.log("Villains Win!");
+        //console.log("Villains Win!");
 
         Controller.setGamePhase(obj, 10);
 
@@ -1012,7 +1025,7 @@ io.on('connection', function (socket) {
 
       case "Villains Win 4xs!":
 
-        console.log("Villains Win!");
+        //console.log("Villains Win!");
 
         Controller.setGamePhase(obj, 10);
 
@@ -1035,7 +1048,7 @@ io.on('connection', function (socket) {
 
       case "Nobody Has Won Yet.":
 
-        console.log("Nobody Has Won Yet.");
+        //console.log("Nobody Has Won Yet.");
 
         Controller.setGamePhase(obj, 7);
 
@@ -2522,7 +2535,7 @@ io.on('connection', function (socket) {
 
   socket.on("disconnect", () => {
 
-    console.log(socket.id + " disconnected!");
+    //console.log(socket.id + " disconnected!");
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
