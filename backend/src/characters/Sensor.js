@@ -181,6 +181,28 @@ class Sensor extends RolesMasterClass {
 
 
 
+	scanEnergyPool(obj) {
+		
+		var statusArr = [];
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+			if (obj.pA[i].energyPool != 0) {
+				statusArr.push(obj.pA[i].name);
+			};
+
+		};
+
+
+		if (statusArr.length == 0) { statusArr = "Nobody"};
+
+		return statusArr;
+
+	};
+
+
+
+
 	scanInjury(obj) {
 		
 		var statusArr = [];
@@ -407,6 +429,10 @@ class Sensor extends RolesMasterClass {
 				statusArr = this.scanBoost(obj);
 				break;
 
+			case "Energy Pool":
+				statusArr = this.scanEnergyPool(obj);
+				break;
+
 			case "Injury":
 				statusArr = this.scanInjury(obj);
 				break;
@@ -490,6 +516,8 @@ class Sensor extends RolesMasterClass {
 		if (obj.pA[ind].slow) { individualStatusArr.push("Slow"); };
 		if (obj.pA[ind].slowCharge != 0) { individualStatusArr.push("Slow Charge"); };
 		
+		if (obj.pA[ind].energyPool != 0) { individualStatusArr.push("Energy Pool"); };
+
 
 		if (individualStatusArr.length == 0) { individualStatusArr.push("Nothing"); };
 
@@ -573,6 +601,8 @@ class Sensor extends RolesMasterClass {
 		if (playerObj.shrinkCount > 0) { return false; };
 		if (playerObj.slow) { return false; }
 		if (playerObj.slowCharge != 0) { return false; }
+
+		if (playerObj.energyPool != 0) { return false; }
 
 		return true;
 		

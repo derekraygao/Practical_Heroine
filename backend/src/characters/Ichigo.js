@@ -99,6 +99,8 @@ class Ichigo extends RolesMasterClass {
 		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
 		if (playerObj.boost > 0) { individualStatusArr.push("Boost: ±" + playerObj.boost); };
 
+		if (playerObj.energyPool != 0) { individualStatusArr.push("Energy Pool: " + playerObj.energyPool); };
+
 		if (playerObj.safeguard) { individualStatusArr.push("Safeguard"); };
 		if (playerObj.bless) { individualStatusArr.push("Bless"); };
 		if (playerObj.heartacheDefense) { individualStatusArr.push("Heartache Defense"); };
@@ -145,16 +147,16 @@ class Ichigo extends RolesMasterClass {
 
 
 
-
+	/*
 	//no need to do Saintess statuses because both she & Ichigo cannot be 
 	//in the same game
 	naviNotification(status) {
 
-		/* this is in server.js function instead (IchigoNotificationPower())
+		this is in server.js function instead (IchigoNotificationPower())
 		if (this.name != name) { 
 			return {message: "Ichigo is not the target."};
 		};
-		*/
+		
 
 		if (status == "bomb") {
 
@@ -197,7 +199,8 @@ class Ichigo extends RolesMasterClass {
 		};
 
 	}; //end naviNotification
-
+	
+	*/
 
 
 

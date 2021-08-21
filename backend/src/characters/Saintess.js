@@ -55,6 +55,8 @@ class Saintess extends RolesMasterClass {
 		if (obj.pA[index].slow) { return false; }
 		if (obj.pA[index].slowCharge != 0) { return false; }
 
+		if (obj.pA[index].energyPool != 0) { return false; };
+
 		if (obj.pA[index].role == "Delayer") {
 
 			if (obj.rO.roles["Delayer"].delayerCount > 0) {
@@ -157,6 +159,8 @@ class Saintess extends RolesMasterClass {
 
 		obj.pA[index].slow = false;
 		obj.pA[index].slowCharge = 0;
+
+		obj.pA[index].energyPool = 0;
 
 		if (obj.pA[index].role == "Delayer") {
 			obj.rO.roles["Delayer"].delayerCount = 0;
@@ -400,7 +404,8 @@ class Saintess extends RolesMasterClass {
 
 				return ("Your strength has been scattered to the 4 winds with "
 					+ "the power of 'Dispel'. Temporal Charge, Slow, Slow Charge, "
-					+ "Shrink, Boost, and Multiplication Enhancement are reset to normal."
+					+ "Shrink, Boost, Multiplication Enhancement, and Energy Pool " 
+					+ "are reset to normal."
 				);
 
 			case "Bless":

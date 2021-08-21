@@ -55,6 +55,8 @@ class Ranger extends RolesMasterClass {
 		if (playerObj.multiplier > 1) { return "status"; };
 		if (playerObj.boost > 0) { return "status"; };
 
+		if (playerObj.energyPool != 0) { return "status"; };
+
 		return "no status";
 
 	};
@@ -135,6 +137,7 @@ class Ranger extends RolesMasterClass {
 		pObj.multiplier = 1;
 		pObj.boost = 0;
 
+		pObj.energyPool = 0;
 
 		pObj.safeguard = false;
 		pObj.bless = false;

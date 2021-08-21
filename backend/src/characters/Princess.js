@@ -40,6 +40,8 @@ class Princess extends RolesMasterClass {
 		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
 		if (playerObj.boost > 0) { individualStatusArr.push("Boost: ±" + playerObj.boost); };
 
+		if (playerObj.energyPool != 0) { individualStatusArr.push("Energy Pool: " + playerObj.energyPool); };
+
 		if (playerObj.safeguard) { individualStatusArr.push("Safeguard"); };
 		if (playerObj.bless) { individualStatusArr.push("Bless"); };
 		if (playerObj.heartacheDefense) { individualStatusArr.push("Heartache Defense"); };
@@ -132,6 +134,10 @@ class Princess extends RolesMasterClass {
 		obj.pA[shInd].confused = false;
 		obj.pA[shInd].slow = false;
 		obj.pA[shInd].slowCharge = 0;
+
+		if (obj.pA[shInd].energyPool < 0) {
+			obj.pA[shInd].energyPool = 0;
+		};
 
 
 		if (obj.pA[shInd].zombie == "zombie") {

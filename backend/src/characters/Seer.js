@@ -68,6 +68,8 @@ class Seer extends RolesMasterClass {
 		if (playerObj.multiplier > 1) { individualStatusArr.push("Multiplier: " + playerObj.multiplier + "xs"); };
 		if (playerObj.boost > 0) { individualStatusArr.push("Boost: ±" + playerObj.boost); };
 
+		if (playerObj.energyPool != 0) { individualStatusArr.push("Energy Pool: " + playerObj.energyPool); };
+
 		return individualStatusArr;
 
 	};
