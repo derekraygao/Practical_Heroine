@@ -71,6 +71,7 @@ Controller.roomsData["testing"].teamLeaderIndex = 1;
 var princess = obj.rO.roles["Princess"];
 var saintess = obj.rO.roles["Saintess"];
 var marcus = obj.rO.roles["Marcus"];
+var pharaoh = obj.rO.roles["Pharaoh"];
 var scientist = obj.rO.roles["Scientist"];
 var jailer = obj.rO.roles["Jailer"];
 var pear = obj.rO.roles["Pear"];
@@ -1637,7 +1638,134 @@ function testSaintessMissionVotingEffect() {
 
 
 
+function whoIsOnTheMissionTeam() {
 
+	var missionTeamArray = [];
+
+	for (var i = 0; i < obj.pA.length; i++) {
+
+
+		if (obj.pA[i].selectedForMission) {
+			missionTeamArray.push(obj.pA[i].name);
+		};
+
+	};
+
+	console.log(missionTeamArray);
+
+};
+
+
+function testPharaohPower() {
+
+	console.log("Testing Pharaoh Power");
+
+	//logArrays();
+
+	obj.rD.missionNo = 1;
+		
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	Controller.addMissionVote(obj, 3, -1); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Cloud", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	whoIsOnTheMissionTeam();
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	Controller.resetDataAtEndOfMission(obj);
+
+
+	console.log("");
+	console.log("");
+
+
+	obj.rD.missionNo = 2;
+
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
+	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, -1); //Serena //2
+	Controller.addMissionVote(obj, 3, -2); //Lucio //3
+	Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Xing", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	whoIsOnTheMissionTeam();
+
+
+	pharaoh.addFriendTargetAndEffect("Lucio", obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	console.log("");
+	console.log("Destiny Draw");
+
+
+	pharaoh.destinyDraw("Lucio", obj);
+	pharaoh.destinyDraw("Lucio", obj);
+	pharaoh.destinyDraw("Lucio", obj);
+	pharaoh.destinyDraw("Lucio", obj);
+	pharaoh.destinyDraw("Lucio", obj);
+	pharaoh.destinyDraw("Lucio", obj);
+	pharaoh.destinyDraw("Lucio", obj);
+	pharaoh.destinyDraw("Lucio", obj);
+
+	
+	console.log("");
+	console.log("");
+	console.log("Testing Dark Magic Attack");
+
+
+	console.log("Testing Eo Sense Power");
+
+	obj.pA[3].corrupted = true;
+	obj.pA[3].bomb = true
+	obj.pA[3].burnCount = 2
+	obj.pA[3].soulMark = true
+	obj.pA[3].shrinkCount = 3;
+	obj.pA[3].multiplier = 3;
+	obj.pA[3].injuredCount = 2;
+	obj.pA[3].entranced = true;
+	obj.pA[3].confused = true;
+	obj.pA[3].markedMan = true;
+	obj.pA[3].slow = true;
+	obj.pA[3].slowCharge = -5;
+	//obj.pA[0].zombie = "zombie";
+	obj.pA[3].zombie = "recovered";
+	obj.pA[3].paralyzed = true;
+	obj.pA[3].frozen = true;
+
+	obj.pA[3].boost = 3;
+
+	obj.pA[3].safeguard = true;
+	obj.pA[3].bless = true;
+	obj.pA[3].heartacheDefense = true;
+	obj.pA[3].therapy = true;
+	obj.pA[3].groupHug = true;
+
+	obj.rO.roles["Saintess"].curagaBoostTarget = "Lucio";
+
+	console.log(princess.updateEoSenseArray(obj));
+
+
+	pharaoh.setDarkMagicAttackTarget("Lucio", obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
+
+	console.log("Lucio's energy pool is: " + obj.pA[3].energyPool);
+
+	console.log(princess.updateEoSenseArray(obj));
+
+
+};
+
+
+testPharaohPower();
 
 
 
@@ -3446,3 +3574,13 @@ function testingDisconnectFunction() {
 
 
 //testingDisconnectFunction();
+
+
+
+
+/*test bad words */
+
+var Filter = require('bad-words');
+var customFilter = new Filter({ placeHolder: 'x'});
+
+customFilter.clean("Don't be an ash0le");

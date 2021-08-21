@@ -148,6 +148,11 @@ class AbilityManager {
 
 
 
+        case "Dark Magic Attack":
+          this.applyDarkMagicAttack(obj.sE[i].target, obj);
+          break;
+
+
         default:
           break;
 
@@ -333,6 +338,10 @@ class AbilityManager {
     obj.pA[obj.pT[target]].groupHug = true;
 
   };
+
+
+
+
 
 
 
@@ -588,6 +597,18 @@ class AbilityManager {
   };
 
 
+  updatePharaohAbilities(obj) {
+
+    var pharaoh = obj.rO.roles["Pharaoh"];
+
+    if (!pharaoh.inGame) { return 0; };
+
+    pharaoh.resetData();
+    pharaoh.useDarkMagicAttack(obj);
+
+  };
+
+
   updateSaintessStatuses(obj) {
    
     obj.rO.roles["Saintess"].removeSaintessBuffsAtEndOfRound(obj);
@@ -679,6 +700,10 @@ class AbilityManager {
     this.updateParalysisAbilitiesEffect(obj);
     
     obj.rO.roles["Princess"].updateHeartacheDefense(obj);
+
+    /* needs to be right before sense array since it uses 
+    dark magic attack to destroy status conditions */
+    this.updatePharaohAbilities(obj);
 
 
     obj.rO.roles["Princess"].updateEoSenseArray(obj);

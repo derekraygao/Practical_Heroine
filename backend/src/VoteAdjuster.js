@@ -168,8 +168,9 @@ class VoteAdjuster {
 
 		obj.rO.roles["Baby Doll"].adjustMissionVotesPerishSong(obj);
 
-		//safeguard needs to be near the end
+		/*convert to positive (need to be near the end)*/
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
+		obj.rO.roles["Pharaoh"].adjustMissionVotesFriendship(obj);
 
 		//should be 2nd to last
 		obj.rO.roles["Baby Doll"].adjustMissionVotesLullaby(obj);
@@ -238,8 +239,9 @@ class VoteAdjuster {
 
 		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
 
-		//safeguard needs to be near the end
+		/*Convert to positive needs to be near the end*/
 		obj.rO.roles["Saintess"].adjustMissionVotesSafeguard(obj);
+		obj.rO.roles["Pharaoh"].adjustMissionVotesFriendship(obj);
 
 	};
 

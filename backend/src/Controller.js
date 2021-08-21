@@ -15,11 +15,11 @@ class Controller {
 	constructor() {
 
 		this.roomsData = {};
-		this.listOfRooms = [];//["testing"];
+		this.listOfRooms = ["testing"];
 		this.socketRoom = {}; //which room is a socket in (based on socket.id)
 		this.voteAdjuster = new VoteAdjuster(); //all rooms can share this single instance
 
-		/*
+		
 		this.roomsData["testing"] = 
 		{	
 			roomStatus: "Open",
@@ -47,7 +47,7 @@ class Controller {
 		this.socketRoom["HarleyID"] = "testing";
 		this.socketRoom["KennethID"] = "testing";
 		this.socketRoom["MarsID"] = "testing";
-		*/
+		
 
 	}; //end constructor
 
@@ -371,7 +371,7 @@ class Controller {
 
 	isEveryoneReadyFirstGameAndAtLeastSixPlayers(obj) {
 
-		if (obj.pA.length < 6) { return false; };
+		if (obj.pA.length < 3) { return false; };
 
 		for (let i = 0; i < obj.pA.length; i++) {
 
@@ -941,8 +941,8 @@ class Controller {
 
 			);
 			
-			/*console.log(obj.pA[i].name + " final vote after adjustments is: " 
-				+ obj.pA[i].missionVote); */
+			console.log(obj.pA[i].name + " final vote after adjustments is: " 
+				+ obj.pA[i].missionVote); 
 			
 		}; //end for
 
@@ -977,6 +977,9 @@ class Controller {
 
 		missionVoteAccumulator = obj.rO.roles["Lan"]
 		.adjustVoteSumIntimidate(missionVoteAccumulator, obj);
+
+		missionVoteAccumulator = obj.rO.roles["Pharaoh"]
+		.adjustVoteSumFriendship(missionVoteAccumulator, obj);
 
 		missionVoteAccumulator = obj.rO.roles["Balancer"]
 		.adjustVoteSumEquilibrium(missionVoteAccumulator, obj);
@@ -1788,6 +1791,8 @@ class Player {
         this.heartacheDefense = false;
         this.therapy = false;
         this.groupHug = false;
+
+        this.energyPool = 0; //default 0
         
         this.invisible = false;
         this.jailed = false;

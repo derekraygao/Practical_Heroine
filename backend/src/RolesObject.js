@@ -4,6 +4,7 @@ var {Lottie} = require('./characters/Lottie.js');
 var {Saintess} = require('./characters/Saintess.js');
 var {Ichigo} = require('./characters/Ichigo.js');
 var {Lan} = require('./characters/Lan.js');
+var {Pharaoh} = require('./characters/Pharaoh.js');
 var {Seer} = require('./characters/Seer.js');
 var {Oracle} = require('./characters/Oracle.js');
 var {Balancer} = require('./characters/Balancer.js');
@@ -64,6 +65,9 @@ class RolesObject {
 
 
       "Lan": new Lan(),
+
+
+      "Pharaoh": new Pharaoh(),
 
 
       "Noah": new Noah(),
@@ -172,7 +176,7 @@ class RolesObject {
                       "Pear", "Lan", "Marcus", "Lottie", 
                       "Detective Chat", "Aura Knight", 
                       "Ranger", "Scientist", "Oracle", 
-                      "Jailer", "Sensor"];
+                      "Jailer", "Sensor", "Pharaoh"];
 
     this.goodRolesOdd = ["Saintess", "Ichigo"];
 
@@ -202,7 +206,7 @@ class RolesObject {
       case 3:
 
         //rolesArrayForThisGame[2] = goodRoles[0];
-        rolesArrayForThisGame[2] = "Toxiturtle";
+        rolesArrayForThisGame[2] = "Kaguya";
 
         break;
 
@@ -219,7 +223,7 @@ class RolesObject {
                                   "Princess"  //Derek
                                   "Umbra Lord" //Cloud
         */
-        rolesArrayForThisGame[2] = "Noah"; //this.badRoles[0]; //Serena
+        rolesArrayForThisGame[2] = "Pharaoh"; //this.badRoles[0]; //Serena
         rolesArrayForThisGame[3] = "Backstabber"; //this.goodRoles[0]; //Lucio
         rolesArrayForThisGame[4] = "Persequor"; //this.goodRoles[1]; //Xing
 
