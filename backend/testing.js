@@ -507,11 +507,16 @@ function testSeerPower() {
 	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
 	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
 
+	
 	obj.pA[0].devilized = true;
 	obj.pA[0].soulMark = true;
 
+	obj.pA[0].energyPool = -2;
+	obj.pA[0].boost = 3;
+
 	obj.pA[1].shrinkCount = 2;
 	obj.pA[1].multiplier = 4;
+	obj.pA[1].energyPool = 2;
 
 	console.log("");
 	console.log("With Status Conditions");
@@ -523,7 +528,7 @@ function testSeerPower() {
 	console.log(obj.rO.roles["Seer"].scry(obj, "Cloud"));
 
 	obj.rD.missionNo = 1;
-
+	
 };
 
 
@@ -616,6 +621,7 @@ function testEoSensePower() {
 		obj.pA[0].frozen = true;
 
 		obj.pA[0].boost = 3;
+		obj.pA[0].energyPool = -2;
 
 		obj.pA[0].safeguard = true;
 		obj.pA[0].bless = true;
@@ -685,10 +691,12 @@ function testStarPracticalPowers() {
 	obj.pA[1].zombie = "recovered";
 	obj.pA[0].paralyzed = true;
 	obj.pA[0].frozen = true;
+
+	obj.pA[0].energyPool = -2;
 	
 	princess.starHealingActivation("Derek", obj);
 
-	//console.log(obj.pA[0]);
+	console.log(princess.updateEoSenseArray(obj));
 
 	obj.rO.roles["Delayer"].delayerCount = 4;
 	console.log("delayer count BEFORE healing is: " + obj.rO.roles["Delayer"].delayerCount);
@@ -750,7 +758,12 @@ function testOraclePower() {
 	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
 	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
 	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
+	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
+	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
+	obj.rO.roles["Oracle"].lightAndDark("Serena", obj);
 
+	obj.rO.roles["Oracle"].lightAndDark("Cloud", obj);
+	obj.rO.roles["Oracle"].lightAndDark("Cloud", obj);
 	obj.rO.roles["Oracle"].lightAndDark("Cloud", obj);
 
 };
@@ -917,7 +930,7 @@ function testAuraKnightPower(name) {
 		obj.pA[3].burnCount = 2
 		obj.pA[3].soulMark = true
 		obj.pA[3].shrinkCount = 2;
-		obj.pA[3].multiplier = 3;
+		obj.pA[3].multiplier = 4;
 		obj.pA[3].injuredCount = 2;
 		obj.pA[3].entranced = true;
 		obj.pA[3].confused = true;
@@ -930,6 +943,8 @@ function testAuraKnightPower(name) {
 		obj.pA[3].frozen = true;
 		obj.pA[3].boost = 3;
 		obj.pA[3].delayerCount = 2;
+
+		obj.pA[3].energyPool = 4;
 
 	console.log(obj.rO.roles["Aura Knight"].readAura(name, obj));
 };
@@ -1017,15 +1032,16 @@ function testRangerSensing() {
 		//obj.pA[0].frozen = true;
 
 		//obj.pA[0].boost = 2;
+		//obj.pA[0].energyPool = -2;
 
-		console.log(ranger.sense(obj));
-
-
+		console.log("");
+		console.log(ranger.rangerSensing(obj.pA[0], obj));
 
 };
 
 
 //testRangerSensing();
+
 
 
 function testRangerAntiManaRay() {
@@ -1293,9 +1309,12 @@ function testSensorPower() {
 
 	obj.pA[0].poisonCount = 1;
 
+	obj.pA[0].energyPool = -1;
+	obj.pA[1].energyPool = 3;
+
 	obj.pA[1].bomb = true;
-	obj.pA[2].slowCharge = -3;
-	obj.pA[3].markedMan = true;
+	//obj.pA[2].slowCharge = -3;
+	//obj.pA[3].markedMan = true;
 
 	console.log("Scan Individual should have: bomb, burn, soulmark, shrink, multiplier, confused, frozen, paralyzed, entranced, injured, and zombie");
 	obj.rO.roles["Sensor"].scanOne(obj.pA[0].name, obj)
@@ -1306,7 +1325,7 @@ function testSensorPower() {
 	console.log("Scan Individual should have nothing");
 	obj.rO.roles["Sensor"].scanOne(obj.pA[2].name, obj);
 
-	obj.rO.roles["Sensor"].scanAll("Marked Man", obj);
+	obj.rO.roles["Sensor"].scanAll("Energy Pool", obj);
 
 	obj.rO.roles["Sensor"].testResults(obj.pA[1].name, obj);
 
@@ -1329,7 +1348,7 @@ function testSensorDiagnosisPower() {
 	Controller.setPlayersForMission(obj);
 
 
-	obj.pA[0].multiplier = 3;
+	obj.pA[0].energyPool = -1;
 	//obj.pA[2].corrupted = true;
 	obj.pA[3].multiplier = 3;
 
@@ -1462,7 +1481,10 @@ function testIchigoNaviSense() {
 		obj.pA[2].groupHug = true;
 		
 
-		console.log(obj.rO.roles["Ichigo"].updateNaviSenseInfo(obj));
+		obj.pA[2].boost = 3;
+		obj.pA[2].energyPool = 1;
+
+		console.log(obj.rO.roles["Ichigo"].getStatusesForOnePerson(obj.pA[2], obj));
 
 };
 
@@ -1485,6 +1507,7 @@ function checkStatusConditionForSaintess(playerObject) {
 	console.log("injured count: " + playerObject.injuredCount);
 	console.log("multiplier: " + playerObject.multiplier);
 	console.log("boost: " + playerObject.boost);
+	console.log("energy pool: " + playerObject.energyPool);
 	console.log("bless: " + playerObject.bless);
 	console.log("safeguard: " + playerObject.safeguard);
 	console.log("");
@@ -1504,6 +1527,7 @@ function isStatusNormalCheckForSaintess() {
 		//obj.pA[0].shrinkCount = 2;
 		//obj.pA[0].multiplier = 3;
 		//obj.pA[0].boost = 2;
+		//obj.pA[0].energyPool = 2;
 		//obj.pA[0].injuredCount = 2;
 		//obj.pA[0].entranced = true;
 		//obj.pA[0].confused = true;
@@ -1539,10 +1563,11 @@ function testSaintessPower() {
 	obj.pA[0].boost = 4;
 	obj.pA[0].shrinkCount = 2;
 	obj.pA[0].injuredCount = 1;
+	obj.pA[0].energyPool = 3;
 
 	//obj.rO.roles["Delayer"].delayerCount = 1;
 
-	console.log(saintess.saintessSense(obj));
+	console.log(princess.updateEoSenseArray(obj));
 	
 	checkStatusConditionForSaintess(obj.pA[0]);
 
@@ -1765,7 +1790,7 @@ function testPharaohPower() {
 };
 
 
-testPharaohPower();
+//testPharaohPower();
 
 
 

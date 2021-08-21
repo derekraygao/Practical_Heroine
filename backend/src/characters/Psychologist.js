@@ -29,14 +29,14 @@ class Psychologist extends RolesMasterClass {
                               "Lottie", "Lan", "Seer", "Balancer", "Esper", 
                               "Pear", "Detective Chat", "Aura Knight", 
                               "Ranger", "Scientist", "Oracle", "Jailer", 
-                              "Sensor"];
+                              "Sensor", "Pharaoh"];
 
         //no Ichigo or Saintess
         this.goodRoles = ["Princess", "Seer", "Balancer", "Esper", 
                           "Pear", "Lan", "Marcus", "Lottie", 
                           "Detective Chat", "Aura Knight", 
                           "Ranger", "Scientist", "Oracle", 
-                          "Jailer", "Sensor"];
+                          "Jailer", "Sensor", "Pharaoh"];
 
         //20% chance of choosing psychologist, so psychologist
         //can choose to reveal him/herself without people

@@ -18,13 +18,13 @@ class Spiritualist extends RolesMasterClass {
         this.goodRolesOdd = ["Ichigo", "Marcus", "Lottie", "Lan", 
         					 "Balancer", "Esper", "Pear", 
         					 "Detective Chat", "Ranger", 
-        					 "Scientist", "Jailer"];
+        					 "Scientist", "Jailer", "Pharaoh"];
 
         //no Ichigo
         this.goodRolesEven = ["Marcus", "Lottie", "Lan", 
         					 "Balancer", "Esper", "Pear", 
         					 "Detective Chat", "Ranger", 
-        					 "Scientist", "Jailer"];
+        					 "Scientist", "Jailer", "Pharaoh"];
 
 
         /*numbers refer to mission round the power was used, but the powers
