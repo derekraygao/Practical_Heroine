@@ -66,7 +66,6 @@ class PP1Sensor extends React.Component {
         <option value="Entrancement">Entrancement</option>
         <option value="Marked Man">Marked Man</option>
         <option value="Slow">Slow</option>
-        <option value="Slow Charge">Slow Charge</option>
         <option value="Zombie">Zombie</option>
       </>
     );

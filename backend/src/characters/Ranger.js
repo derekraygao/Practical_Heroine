@@ -51,7 +51,6 @@ class Ranger extends RolesMasterClass {
 		if (playerObj.markedMan) { return "status"; };
 
 		if (playerObj.slow) { return "status"; };
-		if (playerObj.slowCharge != 0) { return "status"; };
 		if (playerObj.multiplier > 1) { return "status"; };
 		if (playerObj.boost > 0) { return "status"; };
 
@@ -133,7 +132,7 @@ class Ranger extends RolesMasterClass {
 		pObj.markedMan = false;
 
 		pObj.slow = false;
-		pObj.slowCharge = 0;
+
 		pObj.multiplier = 1;
 		pObj.boost = 0;
 

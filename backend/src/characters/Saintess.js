@@ -52,8 +52,7 @@ class Saintess extends RolesMasterClass {
 		if (obj.pA[index].boost > 0) { return false; };
 		if (obj.pA[index].multiplier > 1) { return false; };
 		if (obj.pA[index].shrinkCount > 0) { return false; };
-		if (obj.pA[index].slow) { return false; }
-		if (obj.pA[index].slowCharge != 0) { return false; }
+		if (obj.pA[index].slow) { return false; };
 
 		if (obj.pA[index].energyPool != 0) { return false; };
 
@@ -158,8 +157,7 @@ class Saintess extends RolesMasterClass {
 		obj.pA[index].boost = 0;
 
 		obj.pA[index].slow = false;
-		obj.pA[index].slowCharge = 0;
-
+		
 		obj.pA[index].energyPool = 0;
 
 		if (obj.pA[index].role == "Delayer") {

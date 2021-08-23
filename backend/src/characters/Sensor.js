@@ -330,25 +330,6 @@ class Sensor extends RolesMasterClass {
 	};
 
 
-	scanSlowCharge(obj) {
-		
-		var statusArr = [];
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].slowCharge != 0) {
-				statusArr.push(obj.pA[i].name);
-			};
-
-		};
-
-
-		if (statusArr.length == 0) { statusArr = "Nobody"};
-
-		return statusArr;
-
-	};
-
 
 
 	scanZombie(obj) {
@@ -449,10 +430,6 @@ class Sensor extends RolesMasterClass {
 				statusArr = this.scanSlow(obj);
 				break;
 
-			case "Slow Charge":
-				statusArr = this.scanSlowCharge(obj);
-				break;
-
 			case "Zombie":
 				statusArr = this.scanZombie(obj);
 				break;
@@ -514,7 +491,6 @@ class Sensor extends RolesMasterClass {
 		if (obj.pA[ind].multiplier > 1) { individualStatusArr.push("Multiplier"); };
 		if (obj.pA[ind].shrinkCount > 0) { individualStatusArr.push("Shrink"); };
 		if (obj.pA[ind].slow) { individualStatusArr.push("Slow"); };
-		if (obj.pA[ind].slowCharge != 0) { individualStatusArr.push("Slow Charge"); };
 		
 		if (obj.pA[ind].energyPool != 0) { individualStatusArr.push("Energy Pool"); };
 
@@ -599,10 +575,9 @@ class Sensor extends RolesMasterClass {
 		if (playerObj.boost > 0) { return false; };
 		if (playerObj.multiplier > 1) { return false; };
 		if (playerObj.shrinkCount > 0) { return false; };
-		if (playerObj.slow) { return false; }
-		if (playerObj.slowCharge != 0) { return false; }
+		if (playerObj.slow) { return false; };
 
-		if (playerObj.energyPool != 0) { return false; }
+		if (playerObj.energyPool != 0) { return false; };
 
 		return true;
 		

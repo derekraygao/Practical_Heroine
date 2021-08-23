@@ -45,7 +45,6 @@ class AuraKnight extends RolesMasterClass {
 		if (playerObj.confused) { individualStatusArr.push("Confusion"); };
 		if (playerObj.markedMan) { individualStatusArr.push("Marked Man"); };
 		if (playerObj.slow) { individualStatusArr.push("Slow"); };
-		if (playerObj.slowCharge != 0) { individualStatusArr.push("Slow Charge Boost: " + playerObj.slowCharge); };
 		if (playerObj.zombie == "zombie") { individualStatusArr.push("Zombie"); };
 		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
 		if (playerObj.paralyzed) { individualStatusArr.push("Paralysis"); };

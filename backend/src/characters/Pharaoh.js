@@ -79,9 +79,7 @@ class Pharaoh extends RolesMasterClass {
 	    pObj.multiplier = 1;
 	    pObj.shrinkCount = 0;
 	    pObj.slow = false;
-	    pObj.slowCharge = 0;
-	    
-	    
+	
 
 	    pObj.safeguard = false;
 	    pObj.bless = false;

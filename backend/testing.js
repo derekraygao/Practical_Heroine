@@ -517,6 +517,7 @@ function testSeerPower() {
 	obj.pA[1].shrinkCount = 2;
 	obj.pA[1].multiplier = 4;
 	obj.pA[1].energyPool = 2;
+	obj.pA[1].slowCharge = 3;
 
 	console.log("");
 	console.log("With Status Conditions");
@@ -533,6 +534,7 @@ function testSeerPower() {
 
 
 //testSeerPower();
+
 
 
 function rolesInGame() {
@@ -1348,7 +1350,8 @@ function testSensorDiagnosisPower() {
 	Controller.setPlayersForMission(obj);
 
 
-	obj.pA[0].energyPool = -1;
+	obj.pA[0].energyPool = 1;
+	//obj.pA[0].slowCharge = -3;
 	//obj.pA[2].corrupted = true;
 	obj.pA[3].multiplier = 3;
 
@@ -2017,10 +2020,10 @@ function testDelayerStall() {
 		
 
 	Controller.addMissionVote(obj, 0, 1); //Derek //0
-	Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
 	Controller.addMissionVote(obj, 2, 1); //Serena //2
 	Controller.addMissionVote(obj, 3, 3); //Lucio //3
-	Controller.addMissionVote(obj, 4, -2); //Xing //4
+	//Controller.addMissionVote(obj, 4, -2); //Xing //4
 
 	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
 	Controller.setPlayersForMission(obj);
@@ -2030,7 +2033,7 @@ function testDelayerStall() {
 	console.log("With slow, should be +2 mission vote total");
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	Controller.addMissionVote(obj, 0, 1); //Derek //0
 	Controller.addMissionVote(obj, 2, 1); //Serena //2
@@ -2042,7 +2045,7 @@ function testDelayerStall() {
 	console.log("With slow boost, should be 9.5 mission vote total");
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	Controller.addMissionVote(obj, 0, 1); //Derek //0
 	Controller.addMissionVote(obj, 2, 1); //Serena //2
@@ -3348,6 +3351,7 @@ function testAdjustMissionVotes() {
 	//obj.pA[0].shrinkCount = 2;
 	//obj.pA[0].burnCount = 3;
 	//obj.pA[0].multiplier= 2;
+	//obj.pA[0].energyPool = 2;
 
 	//obj.rO.roles["Umbra Lord"].corrupt("Serena", obj);
 
@@ -3383,6 +3387,7 @@ function testAdjustMissionVotes() {
 };
 
 //testAdjustMissionVotes();
+
 
 
 function testAdjustTeamVotes() {
