@@ -29,6 +29,11 @@ var defaultPH = {
 			  },
 
 
+	"Pharaoh": {
+				 ritualCount: 0,
+			   },
+
+
 	"Oracle": {
 				"1 and 1": false,
 				"At Least 1 Good": false,

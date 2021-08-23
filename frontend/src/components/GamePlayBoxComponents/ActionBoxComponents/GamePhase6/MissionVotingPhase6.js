@@ -15,6 +15,7 @@ import PP6Frozen from './PP6Frozen.js';
 import PP6Princess from './PP6Princess.js';
 import PP6Ichigo from './PP6Ichigo.js';
 import PP6Lan from './PP6Lan.js';
+import PP6Pharaoh from './PP6Pharaoh.js';
 import PP6Esper from './PP6Esper.js';
 import PP6Sensor from './PP6Sensor.js';
 import PP6Scientist from './PP6Scientist.js';
@@ -50,7 +51,7 @@ class MissionVotingPhase6 extends React.Component {
 
       phase6TimerInterval = setInterval(this.timerCountdown, 1000);
 
-      automateVoteOnMission();
+      //automateVoteOnMission();
     
   }; //end componentDidMount
 
@@ -174,6 +175,9 @@ class MissionVotingPhase6 extends React.Component {
 
         case "Lan":
           return <PP6Lan voted={this.clearTimerAndSetVote} />;
+
+        case "Pharaoh":
+          return <PP6Pharaoh voted={this.clearTimerAndSetVote} />;
 
         case "Sensor":
           return <PP6Sensor voted={this.clearTimerAndSetVote} />;

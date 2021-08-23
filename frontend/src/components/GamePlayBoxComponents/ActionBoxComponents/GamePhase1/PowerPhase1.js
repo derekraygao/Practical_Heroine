@@ -24,6 +24,8 @@ import PP1Sensor from './PP1Components/Sensor/PP1Sensor.js';
 import PP1Saintess from './PP1Components/Saintess/PP1Saintess.js';
 import PP1Marcus from './PP1Components/Marcus/PP1Marcus.js';
 import PP1Pear from './PP1Components/Pear/PP1Pear.js';
+import PP1Pharaoh from './PP1Components/PP1Pharaoh.js';
+
 
 import PP1UmbraLord from './PP1Components/Umbra Lord/PP1UmbraLord.js';
 import PP1Noah from './PP1Components/Noah/PP1Noah.js';
@@ -141,8 +143,13 @@ class PowerPhase1 extends React.Component {
       case "Sensor":
         return <PP1Sensor />;
 
+      case "Pharaoh":
+        return <PP1Pharaoh />;
+
       case "Saintess":
         return <PP1Saintess />;
+
+
 
       case "Umbra Lord":
         return <PP1UmbraLord />;

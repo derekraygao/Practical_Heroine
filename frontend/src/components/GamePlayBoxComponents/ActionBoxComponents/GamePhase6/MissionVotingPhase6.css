@@ -63,6 +63,58 @@
 
 
 
+/*Has ability Acronym in power bar and full ability
+name within action area */
+
+.PP6-general-action-area-with-title-container {
+
+	grid-area: action-area;
+
+	display: grid;
+
+	grid-template-rows: 40% 60%;
+	grid-template-areas: "powers-title"
+						 "powers-buttons"
+						 ;
+
+
+}
+
+
+.PP6-Power-Title-Div {
+
+	grid-area: powers-title;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+
+	font-size: 150%;
+
+	padding-top: 5%;
+
+}
+
+.PP6-Power-Buttons-Div {
+
+	grid-area: powers-buttons;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	
+}
+
+
+.PP6-Power-Buttons-Div select {
+
+	margin-right: 5px;
+	
+}
+
+
+
+
 /*For Princess Only */
 .PP6-Princess-general-action-area-container {
 

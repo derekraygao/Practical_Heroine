@@ -92,15 +92,13 @@ var Controller = new myClass.Controller();
 var {AbilityManager} = require('./src/AbilityManager.js');
 var AbilityManager = new AbilityManager();
 
-var {Validator} = require('./src/Validator.js');
-var ServerValidator = new Validator();
-
 
 var {randomName} = require('./random_name.js');
 var {shuffle} = require("./src/characters/shuffle.js");
 var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
 
-
+var Filter = require('bad-words');
+var customFilter = new Filter({ placeHolder: 'z'});
 
 
 
@@ -130,6 +128,9 @@ io.on('connection', function (socket) {
 
   socket.on("Submit Player Name", (name) => {
    
+    if (typeof name !== "string") { return 0; };
+    if (name.length > 12) { return 0; };
+
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
@@ -180,6 +181,10 @@ io.on('connection', function (socket) {
 
 
   socket.on("Create Room", (roomName) => {
+
+    if (typeof roomName !== "string") { return 0; };
+    if (roomName.length > 30) { return 0; };
+    roomName = customFilter.clean(roomName);
 
     var createRoomResult = Controller.createRoom(roomName, socket);
 
@@ -243,6 +248,9 @@ io.on('connection', function (socket) {
 
   socket.on("Player Wants To Join Room", (roomName) => {
 
+    if (typeof roomName !== "string") { return 0; };
+    if (roomName.length > 30) { return 0; };
+
     var joinRoomResult = Controller.joinRoom(roomName, socket);
     
 
@@ -278,6 +286,10 @@ io.on('connection', function (socket) {
   /*from JoinRoom.js
     rejoinInfo={name: "John", roomName: "My Room"}*/
   socket.on("Joining Room Through Manual Input", ({roomName, rejoinInfo}) => {
+
+      if (typeof roomName !== "string") { return 0; };
+      if (roomName.length > 30) { return 0; };
+
 
       var joinRoomResult = Controller.joinRoomManually(roomName, socket, rejoinInfo);
       
@@ -622,7 +634,6 @@ io.on('connection', function (socket) {
 
     obj.validator.setPlayerList(listOfPlayers);
 
-
     //sets roles on client side
     for (let i = 0; i < obj.rO.rolesInGame.length; i++) {
 
@@ -705,9 +716,13 @@ io.on('connection', function (socket) {
     //makes sure person is team leader
     if (obj.index !== obj.rD.teamLeaderIndex) { return 0; };
 
+    if (!obj.validator.areNamesInArrayValid(proposedTeamArray)) { return 0; };
+    if (!obj.validator.isTeamSizeCorrect(proposedTeamArray, obj)) { return 0; };
+
+
     Controller.setMissionTeam(obj, proposedTeamArray);
 
-    //team leader needs to vote too because he/she might be demonLord 
+    //team leader needs to vote too because he/she might be umbraLord 
     //and might want to use absolute voting power
 
     Controller.setGamePhase(obj, 3);
@@ -803,6 +818,13 @@ io.on('connection', function (socket) {
       case "Game Over. Too Many Failed Team Proposals":
 
         Controller.setGamePhase(obj, 10);
+
+        /*need this, because when game ends, everybody needs to 
+          be on the right team and the right roles */
+        obj.rO.roles["Persequor"].switchBackIdentities(obj);
+
+        Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+        
 
         emitToAllSocketsInRoom(
           obj, 
@@ -965,7 +987,13 @@ io.on('connection', function (socket) {
     //console.log(obj.pA[obj.index].name + " voted for " + vote);
 
     if (vote !== "Server Check") {
+
+      if ( !obj.validator.isActionValid(obj, "MV") ) { return 0; };
+
       Controller.setPlayerMissionVote(vote, obj);
+
+      obj.validator.addAction(obj, "MV");
+
     };
     
 
@@ -1007,11 +1035,11 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 10);
 
-        Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
-
         /*need this, because when game ends, everybody needs to 
           be on the right team and the right roles */
         obj.rO.roles["Persequor"].switchBackIdentities(obj);
+
+        Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
 
 
         emitToAllSocketsInRoom(
@@ -1029,13 +1057,12 @@ io.on('connection', function (socket) {
 
         Controller.setGamePhase(obj, 10);
 
-        Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
-        
-
         /*need this, because when game ends, everybody needs to 
           be on the right team and the right roles */
         obj.rO.roles["Persequor"].switchBackIdentities(obj);
 
+        Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+        
 
         emitToAllSocketsInRoom(
           obj, 
@@ -1142,7 +1169,9 @@ io.on('connection', function (socket) {
     emitToAllSocketsInRoom(obj, "Start Game Phase 1: Power Phase 1", obj.rD.missionNo);
 
 
-  });
+  }); //end socket.on("End Night Phase")
+
+
 
   //starting Mission 2
   function updateInfoForPowersOnClientSide(obj) {
@@ -1179,6 +1208,10 @@ io.on('connection', function (socket) {
 
   socket.on("Submit Villain Guess On The Princess's Identity", (guess) => {
 
+    /*maybe it's not necessary to check if it's a string
+    since it won't throw an error*/
+    if (typeof guess !== "string") { return 0; };
+
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
     if (obj.rD.gamePhase !== 9) { return 0; };
@@ -1198,6 +1231,9 @@ io.on('connection', function (socket) {
 
     Controller.setGamePhase(obj, 10);
 
+    /*don't do persequor switch back check here because it was done
+    before during game phase 9 */
+
     Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
     
     emitToAllSocketsInRoom(obj, 
@@ -1207,7 +1243,7 @@ io.on('connection', function (socket) {
     //if everyone did guess, then next phase
     if (obj.rO.didVillainsCorrectlyGuessThePrincessIdentity(obj)) {
 
-      console.log("Correct guess");
+      //console.log("Correct guess");
 
       emitToAllSocketsInRoom(
         obj, 
@@ -1218,7 +1254,7 @@ io.on('connection', function (socket) {
 
     } else {
 
-      console.log("Wrong guess");
+      //console.log("Wrong guess");
 
       emitToAllSocketsInRoom(
         obj, 
@@ -1289,6 +1325,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Princess") { return 0; };
+
+
     obj.rO.roles["Princess"].starPrismPower(obj);
 
     MessageNotificationStack(obj);
@@ -1300,6 +1339,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Princess") { return 0; };
+
 
     obj.rO.roles["Princess"].starHealingActivation(name, obj);
 
@@ -1313,6 +1355,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Princess") { return 0; };
+
+
     obj.rO.roles["Princess"].setHeartacheDefenseTarget(name);
 
   });
@@ -1324,6 +1369,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Marcus") { return 0; };
+
 
     obj.rO.roles["Marcus"].activateBerserk(obj);
     
@@ -1337,6 +1385,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Marcus") { return 0; };
+
+
     obj.rO.roles["Marcus"].setCounterEspionageTarget(target);
 
   });
@@ -1346,11 +1397,13 @@ io.on('connection', function (socket) {
 
 
   //Lottie
-
   socket.on("Add Therapy Target", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Lottie") { return 0; };
+
 
     obj.rO.roles["Lottie"].addTherapyTarget(name);
 
@@ -1365,6 +1418,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Lottie") { return 0; };
+
+
     obj.rO.roles["Lottie"].activateGroupHug();
     
     //console.log("Group Hug status: " + obj.rO.roles["Lottie"].groupHugActivated);
@@ -1376,6 +1432,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Lottie") { return 0; };
+
 
     obj.rO.roles["Lottie"].getGossipInfo(target, obj);
 
@@ -1393,6 +1452,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Pear") { return 0; };
+
+
     obj.rO.roles["Pear"].spyOn(spyTarget, obj);
 
     MessageNotificationStack(obj);
@@ -1405,6 +1467,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Pear") { return 0; };
+
+
     obj.rO.roles["Pear"].vanish(vanishTarget);
 
     //console.log("Turn vote invisible: " + obj.rO.roles["Pear"].playerVoteToVanish);
@@ -1416,6 +1481,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Pear") { return 0; };
+
 
     obj.rO.roles["Pear"].natureTelepathy(name, obj);
 
@@ -1432,6 +1500,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };    
 
+    if (obj.pA[obj.index].role !== "Lan") { return 0; };
+
+
     obj.rO.roles["Lan"].beatRush(name, obj);
 
     MessageNotificationStack(obj);
@@ -1445,6 +1516,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };   
 
+    if (obj.pA[obj.index].role !== "Lan") { return 0; };
+
+
     obj.rO.roles["Lan"].addIntimidateTarget(name);
 
     //console.log(obj.rO.roles["Lan"].intimidateTarget);
@@ -1456,6 +1530,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };  
+
+    if (obj.pA[obj.index].role !== "Lan") { return 0; };
+
 
     obj.rO.roles["Lan"].activateFinalHeaven(obj);
 
@@ -1472,6 +1549,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };  
 
+    if (obj.pA[obj.index].role !== "Saintess") { return 0; };
+
+
     obj.rO.roles["Saintess"].setSaintessPower(sInfo, obj);
 
 
@@ -1484,6 +1564,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };   
+
+    if (obj.pA[obj.index].role !== "Ichigo") { return 0; };
+
 
     obj.rO.roles["Ichigo"].activateHylianShield();
 
@@ -1508,6 +1591,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };   
 
+    if (obj.pA[obj.index].role !== "Ichigo") { return 0; };
+
+
     obj.rO.roles["Ichigo"].activateHolyStrike();
 
     console.log("Holy Strike Status: ", obj.rO.roles["Ichigo"].holyStrike);
@@ -1516,6 +1602,116 @@ io.on('connection', function (socket) {
 
 
 
+  //Pharaoh
+  socket.on("Symbol of Friendship", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Pharaoh") { return 0; };
+
+
+    obj.rO.roles["Pharaoh"].addFriendTargetAndEffect(target, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+  socket.on("Forbidden Ritual", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Pharaoh") { return 0; };
+
+    obj.rO.roles["Pharaoh"].increaseRitualCount(obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+  socket.on("Obliterate!", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Pharaoh") { return 0; };
+
+    if (obj.rO.roles["Pharaoh"].ritualCount < 3) { return 0; };
+
+
+    Controller.setGamePhase(obj, 10);
+
+    Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+    
+    /*need this, because when game ends, everybody needs to 
+      be on the right team and the right roles */
+    obj.rO.roles["Persequor"].switchBackIdentities(obj);
+
+
+    emitToAllSocketsInRoom(obj, 
+      "Update Room Player List", Controller.getRoomPlayerList(obj.pA));
+
+
+    var gameOverData = {
+                          gameEndScenario: 
+                          {
+                            winners: "heroes",
+                            scenario: "obliterate"
+                          },
+
+                          winMessage: 
+                          {
+                            type: "big and purple",
+                            message: "Pharaoh: Come forth, Forbidden One! Obliterate! This game is over! The Heroes win!!!"
+                          },
+
+                          allInfo: obj.rO.getAllIdentitiesAndTheirRoles(),
+
+                          song: "Obliterate"
+
+                       }; //end gameOverData
+
+
+    emitToAllSocketsInRoom(
+        obj, 
+        "Start Game Phase 10: Game Over", 
+        gameOverData
+    );
+
+
+  }); //end socket.on("Obliterate")
+
+
+
+  socket.on("Destiny Draw", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Pharaoh") { return 0; };
+
+    obj.rO.roles["Pharaoh"].destinyDraw(target, obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+  socket.on("Dark Magic Attack", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Pharaoh") { return 0; };
+
+    obj.rO.roles["Pharaoh"].setDarkMagicAttackTarget(target, obj);
+
+    MessageNotificationStack(obj);
+
+  });
 
 
 
@@ -1526,6 +1722,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Seer") { return 0; };
+
 
     var scryInfo = obj.rO.roles["Seer"].scry(obj, _name);
 
@@ -1538,6 +1737,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Seer") { return 0; };
+
 
     obj.rO.roles["Seer"].flash(target, obj);
 
@@ -1554,6 +1756,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Aura Knight") { return 0; };
+
+
     var auraInfo = obj.rO.roles["Aura Knight"].readAura(_name, obj);
 
     socket.emit("Aura Sense Result", auraInfo);
@@ -1561,10 +1766,14 @@ io.on('connection', function (socket) {
   });
 
 
+
   socket.on("Aura Boost", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Aura Knight") { return 0; };
+
 
     obj.rO.roles["Aura Knight"].setAuraBoostTarget(name, obj);
 
@@ -1580,6 +1789,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Oracle") { return 0; };
+
 
     var oracleInfoArray = obj.rO.roles["Oracle"].prophesize(
       oraclePowerChoice, obj);
@@ -1603,6 +1815,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Oracle") { return 0; };
+
+
     obj.rO.roles["Oracle"].lightAndDark(name, obj);
 
     MessageNotificationStack(obj);
@@ -1616,6 +1831,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Oracle") { return 0; };
+
+
     obj.rO.roles["Oracle"].setLuciniteGuess(number);
 
   });
@@ -1626,6 +1844,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Oracle") { return 0; };
+
 
     obj.rO.roles["Oracle"].deliverPrivateMessage(messageObj, obj);
 
@@ -1640,6 +1861,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Balancer") { return 0; };
+
 
     var balanceResult = obj.rO.roles["Balancer"].
     mysticScales(_bArr[0], _bArr[1], obj);
@@ -1660,6 +1884,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Balancer") { return 0; };
+
+
     obj.rO.roles["Balancer"].setEquilibriumArray(eArr);
 
     /*console.log("Equilibrium Array is: " + 
@@ -1678,6 +1905,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Detective Chat") { return 0; };
+
 
     var InvestigationResults = obj.rO.roles["Detective Chat"].
     investigate(_name, obj);
@@ -1698,8 +1928,10 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    obj.rO.roles["Detective Chat"].setInterrogationTarget(target);
+    if (obj.pA[obj.index].role !== "Detective Chat") { return 0; };
 
+
+    obj.rO.roles["Detective Chat"].setInterrogationTarget(target);
 
   });
 
@@ -1708,6 +1940,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Detective Chat") { return 0; };
+
 
     obj.rO.roles["Detective Chat"].setCrossExaminationTarget(target, obj);
 
@@ -1718,6 +1953,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Detective Chat") { return 0; };
+
 
     obj.rO.roles["Detective Chat"].setCrossExaminationPlea(plea, obj);
 
@@ -1733,6 +1971,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Esper") { return 0; };
+
 
     obj.rO.roles["Esper"].setTelepathyArray(tArray, obj);
 
@@ -1757,6 +1998,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Esper") { return 0; };
+
+
     var currentHCharge = obj.rO.roles["Esper"].chargeUpHeadache();
 
     socket.emit("Add System Message",
@@ -1774,6 +2018,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Esper") { return 0; };
+
 
     obj.rO.roles["Esper"].activatePsybomb(obj);
 
@@ -1830,6 +2077,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Jailer") { return 0; };
+
+
     obj.rO.roles["Jailer"].jailPlayer(_jailedName);
 
     /*On Client side, need to set both jailer + client status as
@@ -1855,6 +2105,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Jailer") { return 0; };
+
 
     obj.rO.roles["Jailer"].executeAPlayer(name);
 
@@ -1895,6 +2148,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Sensor") { return 0; };
+
+
     obj.rO.roles["Sensor"].setScan(scanObj, obj);
 
   });
@@ -1905,6 +2161,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Sensor") { return 0; };
+
 
     obj.rO.roles["Sensor"].testResults(name, obj);
 
@@ -1918,6 +2177,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Sensor") { return 0; };
+
 
     obj.rO.roles["Sensor"].activateDiagnosis(guess, obj);
 
@@ -1934,6 +2196,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Ranger") { return 0; };
+
+
     obj.rO.roles["Ranger"].setAntiManaRayTarget(name, obj);
 
     //MessageNotificationStack(obj);
@@ -1948,6 +2213,8 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Ranger") { return 0; };
 
 
     obj.rO.roles["Ranger"].setShrinkTarget(name, obj);
@@ -1967,6 +2234,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Scientist") { return 0; };
+
   
     obj.rO.roles["Scientist"].activateAndNotifyVotesWillBeExposed(obj);
 
@@ -1978,7 +2248,10 @@ io.on('connection', function (socket) {
   socket.on("Set Hypothesis", (hypothesis) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
-    if (!obj.pA) { return 0; };   
+    if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Scientist") { return 0; };
+
 
     obj.rO.roles["Scientist"].setHypothesis(hypothesis);
 
@@ -1998,10 +2271,12 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Umbra Lord") { return 0; };
+
+
     obj.rO.roles["Umbra Lord"].corrupt(_name, obj);
 
-    //console.log(obj.pA[obj.pT[_name]]);
-    //console.log("Corrupt status: " + obj.pA[obj.pT[_name]].corrupted);
+    MessageNotificationStack(obj);
 
   });
 
@@ -2010,6 +2285,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Umbra Lord") { return 0; };
+
 
     obj.rO.roles["Umbra Lord"].bidePower(obj);
 
@@ -2023,6 +2301,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Umbra Lord") { return 0; };
+
+
     obj.rO.roles["Umbra Lord"].activateMeteor();   
 
 
@@ -2034,6 +2315,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Umbra Lord") { return 0; };
+
 
     obj.rO.roles["Umbra Lord"].useAbsoluteTeamYesPower(obj);
 
@@ -2047,6 +2331,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Umbra Lord") { return 0; };
+
     
     obj.rO.roles["Umbra Lord"].useAbsoluteTeamNoPower();
 
@@ -2063,6 +2350,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Hecate") { return 0; };
+
+
     obj.rO.roles["Hecate"].setEoSTargets(namesArr);
 
   });
@@ -2074,15 +2364,22 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Hecate") { return 0; };
+
+
     obj.rO.roles["Hecate"].setMultiplierTarget(name, obj);
 
   });
+
 
 
   socket.on("Spell Boost", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Hecate") { return 0; };
+
 
     obj.rO.roles["Hecate"].setSpellBoostTarget(name, obj);
 
@@ -2096,6 +2393,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Delayer") { return 0; };
+
 
     obj.rO.roles["Delayer"].stall(name, obj);
 
@@ -2111,6 +2411,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Noah") { return 0; };
+
+
     obj.rO.roles["Noah"].activateHurricane();
 
     console.log("Hurricane is: " + obj.rO.roles["Noah"].hurricane);
@@ -2122,6 +2425,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Noah") { return 0; };
+    
 
     obj.rO.roles["Noah"].setThunderWave(name, obj);
 
@@ -2139,6 +2445,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Noah") { return 0; };
+
+
     obj.rO.roles["Noah"].setIcePunch(name, obj);
 
     /*
@@ -2153,6 +2462,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Noah") { return 0; };
+
 
     obj.rO.roles["Noah"].setNightmareSyndrome(name, obj);
 
@@ -2171,6 +2483,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Bomberman") { return 0; };
+
+
     obj.rO.roles["Bomberman"].setBombTarget(name, obj);
 
   });
@@ -2180,6 +2495,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Bomberman") { return 0; };
+
 
     obj.rO.roles["Bomberman"].setfirePunchTarget(name, obj);
 
@@ -2191,6 +2509,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Lieutenant Blitz") { return 0; };
+
 
     obj.rO.roles["Lieutenant Blitz"].setUnitedStatesOfSmashTarget(name, obj);
 
@@ -2208,6 +2529,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Persequor") { return 0; };
+
+
     obj.rO.roles["Persequor"].copyCat(name);
 
     console.log(obj.rO.roles["Persequor"].personVoteToCopy);
@@ -2221,6 +2545,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Persequor") { return 0; };
+
+
     obj.rO.roles["Persequor"].activateIdentityTheft(obj);
 
     console.log(obj.rO.roles["Persequor"].powersHistory[obj.rD.missionNo].switchedName);
@@ -2232,6 +2559,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Persequor") { return 0; };
+
 
     obj.rO.roles["Persequor"].metronome(target, obj);
 
@@ -2249,6 +2579,9 @@ io.on('connection', function (socket) {
     if (!obj.pA) { return 0; }; 
     if (obj.rO.roles["Reverser"].wasMirrorWorldAlreadyUsed(mwType)) { return 0; };
 
+    if (obj.pA[obj.index].role !== "Reverser") { return 0; };
+
+
     obj.rO.roles["Reverser"].activateMirrorWorld(mwType);
  
     emitToAllSocketsInRoom(obj, "Mirror World Activated");
@@ -2262,9 +2595,12 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
+    if (obj.pA[obj.index].role !== "Reverser") { return 0; };
+
+
     obj.rO.roles["Reverser"].reverseVote(name);
 
-    console.log("Reverse Vote of: " + obj.rO.roles["Reverser"].personToReverseVote);
+    //console.log("Reverse Vote of: " + obj.rO.roles["Reverser"].personToReverseVote);
 
   });
 
@@ -2280,8 +2616,10 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
-    obj.rO.roles["Backstabber"].backstab();
+    if (obj.pA[obj.index].role !== "Backstabber") { return 0; };
 
+
+    obj.rO.roles["Backstabber"].backstab();
 
   });
 
@@ -2290,6 +2628,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Backstabber") { return 0; };
+
 
     obj.rO.roles["Backstabber"].markAMan(name, obj);
 
@@ -2300,6 +2641,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Backstabber") { return 0; };
+
 
     obj.rO.roles["Backstabber"].assassinate(name, obj);
     
@@ -2314,6 +2658,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
+    if (obj.pA[obj.index].role !== "Spiritualist") { return 0; };
+
+
     obj.rO.roles["Spiritualist"].markAPlayer(name, obj);
 
     console.log("Soul Mark target: " + obj.rO.roles["Spiritualist"].powersHistory[obj.rD.missionNo].soulMark);
@@ -2325,6 +2672,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Spiritualist") { return 0; };
+
 
     //2 element array of 2 roles: 1 actual, 1 fake
     var roleArr = obj.rO.roles["Spiritualist"].soulScan(name, obj);
@@ -2349,6 +2699,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
+    if (obj.pA[obj.index].role !== "Baby Doll") { return 0; };
+
+
     obj.rO.roles["Baby Doll"].setSingTarget(name, obj);
 
     //console.log("Sing target: " + obj.rO.roles["Baby Doll"].powersHistory[obj.rD.missionNo]["sing"]);
@@ -2360,6 +2713,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Baby Doll") { return 0; };
+
 
     obj.rO.roles["Baby Doll"].activateLullaby(obj);
 
@@ -2374,6 +2730,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Baby Doll") { return 0; };
+
 
     obj.rO.roles["Baby Doll"].
     activatePerishSong(obj.rD.missionTeam, obj);
@@ -2390,6 +2749,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
+    if (obj.pA[obj.index].role !== "Toxiturtle") { return 0; };
+
+
     obj.rO.roles["Toxiturtle"].poisonBeak(name, obj);
 
     //console.log(obj.pA[obj.pT[name]].poisonCount);
@@ -2401,7 +2763,10 @@ io.on('connection', function (socket) {
   socket.on("Toxiturtle Glare", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
-    if (!obj.pA) { return 0; };     
+    if (!obj.pA) { return 0; };
+
+    if (obj.pA[obj.index].role !== "Toxiturtle") { return 0; };
+
 
     obj.rO.roles["Toxiturtle"].glare(name, obj);
 
@@ -2419,6 +2784,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
+    if (obj.pA[obj.index].role !== "Psychologist") { return 0; };
+
+
     obj.rO.roles["Psychologist"].setPredictionArray(pTeamArr, obj);
 
   });
@@ -2429,6 +2797,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Psychologist") { return 0; };
+
 
     var mixedNames = obj.rO.roles["Psychologist"].revealOneBadOneGoodPlayer(arr);
 
@@ -2453,6 +2824,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Psychologist") { return 0; };
+
 
     var mixedRoles = obj.rO.roles["Psychologist"].revealOnePlayersRole(name, obj);
     
@@ -2482,6 +2856,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
+    if (obj.pA[obj.index].role !== "Kaguya") { return 0; };
+
+
     obj.rO.roles["Kaguya"].addDarkDestinyTarget(name, obj);
 
     MessageNotificationStack(obj);
@@ -2496,6 +2873,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
 
+    if (obj.pA[obj.index].role !== "Kaguya") { return 0; };
+
+
     obj.rO.roles["Kaguya"].setSweetCharmTarget(name, obj);
 
     //console.log("Sweet Charm Target is: " + obj.rO.roles["Kaguya"].powersHistory[obj.rD.missionNo]["sweetCharm"]);
@@ -2508,6 +2888,9 @@ io.on('connection', function (socket) {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Kaguya") { return 0; };
+    
 
     obj.rO.roles["Kaguya"].activateMoonblast(obj);
 
@@ -2736,12 +3119,15 @@ function wasDarkDestinyFulfilled(obj) {
 
       Controller.setGamePhase(obj, 10);
 
-      //updateTeamHistoryResults(obj);
-
       /*need this, because when game ends, everybody needs to 
         be on the right team and the right roles */
       obj.rO.roles["Persequor"].switchBackIdentities(obj);
+
+      Controller.removeAllDisconnectedAndHandleRejoinedPlayers(obj);
+
+
       MessageNotificationStack(obj);
+
 
       var DDInfo = {
                       allInfo: obj.rO.getAllIdentitiesAndTheirRoles(),

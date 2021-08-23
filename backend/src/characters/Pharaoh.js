@@ -29,20 +29,16 @@ class Pharaoh extends RolesMasterClass {
 
 
 
-	increaseRitualCount() {
+	increaseRitualCount(obj) {
 
 		this.ritualCount += 1;
 
+		obj.pA[this.index].energyPool -= 1;
+
+		this.messageHandler("Forbidden Ritual", "", obj);
+
 	};
 
-
-	activateObliterate() {
-
-		if (this.ritualCount >= 3) {
-			this.obliterateActivated = true;
-		};
-
-	}; //end activateObliterate
 
 
 
@@ -62,8 +58,7 @@ class Pharaoh extends RolesMasterClass {
 		if (this.darkMagicAttackTarget == "nobody chosen") { return 0; };
 
 	    var pObj = obj.pA[obj.pT[this.darkMagicAttackTarget]];
-	    this.darkMagicAttackTarget = "nobody chosen";
-
+	    
 	    pObj.energyPool -= 3;
 
 	    pObj.corrupted = false;
@@ -104,7 +99,12 @@ class Pharaoh extends RolesMasterClass {
 		};
 
 
-		this.messageHandler("Dark Magic Attack", pObj.socketID, obj);
+		if (this.darkMagicAttackTarget !== this.name) {
+			this.messageHandler("Dark Magic Attack", pObj.socketID, obj);
+		};
+
+
+		this.darkMagicAttackTarget = "nobody chosen";
 
 
   	}; //end useDarkMagicAttack()
@@ -125,13 +125,15 @@ class Pharaoh extends RolesMasterClass {
 						 "factor": rndFactor
 						};
 
+
 		if (!["Saintess", "Umbra Lord"].includes(obj.pA[obj.pT[target]].role)) {
 			obj.sE.push(statusObj);
+			this.messageHandler("Destiny Draw Message For Target", statusObj, obj);
 		};
-		console.log(statusObj);
+		
 
-		this.messageHandler("Destiny Draw", statusObj, obj);
-
+		this.messageHandler("Destiny Draw Message For Pharaoh", statusObj, obj);
+		
 	}; //end destinyDraw()
 
 
@@ -315,7 +317,7 @@ class Pharaoh extends RolesMasterClass {
 
 
 
-		} else if (power == "Destiny Draw") {
+		} else if (power == "Destiny Draw Message For Target") {
 
 
 			var powerString = "";
@@ -327,7 +329,7 @@ class Pharaoh extends RolesMasterClass {
 
 			var sysMess = {
 							type: "power",
-							message: ("Destiny lies at the end of all paths. Destiny Draw imbues you with the Effect of: " + data.effect + powerString + ".")
+							message: ("Destiny lies at the end of all paths. 'Destiny Draw' imbues you with the effect of '" + data.effect + powerString + "', which will take effect beginning next mission round.")
 						  };
 
 			var stackObj1 = {
@@ -339,23 +341,31 @@ class Pharaoh extends RolesMasterClass {
 			obj.stack.push(stackObj1);
 
 
-			if (data.target !== this.name) {
 
-				sysMess = {
+		} else if (power == "Destiny Draw Message For Pharaoh") {
+
+
+			if (data.target == this.name) { return 0; };
+
+			var powerString = "";
+
+			if (["Multiplier", "Boost"].includes(data.effect)) {
+				powerString = " (" + data.factor + ")";
+			};
+
+
+			var sysMess = {
 							type: "power",
-							message: ("The power of 'Destiny Draw' imbues " + data.target + " with the Effect of: " + data.effect + powerString + ".")
-						  };
+							message: ("The power of 'Destiny Draw' imbues " + data.target + " with the effect of '" + data.effect + powerString + "', which will take effect beginning next mission round.")
+					  	  };
 
-				var stackObj2 = {
-								 type: "SMI",
-								 socketID: this.socketID, 
-								 data: sysMess
-							    };
+			var stackObj2 = {
+							 type: "SMI",
+							 socketID: this.socketID, 
+							 data: sysMess
+						    };
 
-				obj.stack.push(stackObj2);
-
-			}; //end if data.target !== this.name
-
+			obj.stack.push(stackObj2);
 
 
 		} else if (power == "Unfreeze") {
@@ -375,10 +385,9 @@ class Pharaoh extends RolesMasterClass {
 
 		} else if (power == "Dark Magic Attack") {
 
-
 			var sysMess = {
 							type: "urgent",
-							message: ("The Pharaoh's faithful protector blasts you with a wave of shadow energy. ALL status conditions (good, bad, neutral) affecting you have been neutralized. However, the leftover shadow energy adds a charge of -3 to your current Energy Pool.")
+							message: ("The Pharaoh's faithful protector, Mahad, blasts you with a wave of shadow energy. ALL status conditions (good, bad, neutral) affecting you have been neutralized. However, the leftover shadow energy adds a charge of -3 to your current Energy Pool.")
 						  };
 
 			var stackObj = {
@@ -390,7 +399,39 @@ class Pharaoh extends RolesMasterClass {
 			obj.stack.push(stackObj);
 
 
-		}; //end if power == "Dark Magic Attack"
+
+		} else if (power == "Forbidden Ritual") {
+
+
+			var stackObj = {
+							type: "Individual",
+							socketID: this.socketID,
+							destination: "Update Character Powers History",
+							data: {
+									role: "Pharaoh",
+									power: "ritualCount",
+									newValue: this.ritualCount
+								  }
+						   }; //end stackObj
+
+			obj.stack.push(stackObj);
+
+
+			var sysMess = {
+							type: "urgent",
+							message: ("You've managed to release another chain that is locking 'The Forbidden One'. Current Ritual Count is " + this.ritualCount + ", and your 'Energy Pool' gets another -1 charge.")
+						  };
+
+			stackObj = {
+						 type: "SMI",
+						 socketID: this.socketID,  
+						 data: sysMess
+					   };
+
+
+			obj.stack.push(stackObj);
+
+		}; //end Forbidden Ritual
 
 
 

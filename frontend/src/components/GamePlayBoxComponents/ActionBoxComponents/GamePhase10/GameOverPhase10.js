@@ -66,12 +66,29 @@ class GameOverPhase10 extends React.Component {
 
     if (gameScenario.winners === "heroes") {
 
-      return ("The Heroes win! They successfully defied Sarah's"
-      + " prediction! The Cosmic Void is now forever safe. When"
-      + " ready for a new game, click the ready button below."
-      + " New people can join from the lobby.");
+      if (gameScenario.scenario === "obliterate") {
 
-    }; //end if
+        return ("The Pharaoh successfully summoned a Paragon of "
+          + "Fate: The Forbidden One! Eons ago, this Paragon "
+          + "was a powerful force in stopping evil's advance. "
+          + "However, it was deemed too dangerous and so the "
+          + "Luces had no choice but to "
+          + "seal it away. With the Forbidden One's power, the "
+          + "Heroes automatically win! When ready for a new "
+          + "game, click the ready button below. New people "
+          + "can join from the lobby.");
+
+      } else {
+
+        return ("The Heroes win! They successfully defied Sarah's"
+        + " prediction! The Cosmic Void is now forever safe. When"
+        + " ready for a new game, click the ready button below."
+        + " New people can join from the lobby.");
+
+      };
+
+    }; //end if gameScenario.winners === "heroes"
+
 
     switch (gameScenario.scenario) {
 
