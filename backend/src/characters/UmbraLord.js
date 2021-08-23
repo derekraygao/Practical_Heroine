@@ -47,7 +47,7 @@ class UmbraLord extends RolesMasterClass {
 
 			this.absoluteTeamVoteYesUsed = "Used";
 
-			this.messageHandler("Absolute Yes", obj);
+			this.messageHandler("Absolute Yes", "", obj);
 
 			return 100;
 
@@ -56,7 +56,7 @@ class UmbraLord extends RolesMasterClass {
 
 			this.absoluteTeamVoteNoUsed = "Used";
 
-			this.messageHandler("Absolute No", obj);
+			this.messageHandler("Absolute No", "", obj);
 
 			return -100;
 
@@ -73,19 +73,17 @@ class UmbraLord extends RolesMasterClass {
 	corrupt(name, obj) {
 
 		var index = obj.pT[name];
-		if (obj.pA[index].role == "Saintess") { return 0; };
 
-		//this.devilConversionChoice = name;
-		obj.pA[index].corrupted = true;
+		if (obj.pA[index].role !== "Saintess") { 
 
-	};
+			obj.pA[index].corrupted = true;
 
+		};
 
-	isPlayerDevilized(name) {
+		this.messageHandler("Update Power History: Corruption", name, obj);
 
-		return ((name == this.devilConversionChoice) ? true : false); 
+	}; //end corrupt
 
-	};
 
 
 	bidePower(obj) {
@@ -173,7 +171,11 @@ class UmbraLord extends RolesMasterClass {
 	};
 
 
-	messageHandler(power, obj) {
+	/*reason absolute yes needs server to tell client to update 
+	power history is because absolute yes fails if villains are
+	1 mission away from victory, but absolute no always works, 
+	which is why it updates on client side automatically */
+	messageHandler(power, data, obj) {
 
 		if (power == "Absolute Yes") {
 
@@ -223,7 +225,35 @@ class UmbraLord extends RolesMasterClass {
 			obj.stack.push(stackObj);
 
 
-		}; //end else if
+		} else if (power == "Update Power History: Corruption") {
+
+
+			var stackObj = {
+							type: "Individual",
+							socketID: this.socketID, 
+							destination: "Update Character Powers History",
+							data: {"role": "Umbra Lord" , "power": "corruption", "newValue": data}
+						   };
+
+			obj.stack.push(stackObj);
+
+
+			var sysMess = {
+							type: "urgent",
+							message: ("You corrupted " + data + "! Unless healed by a special ability/power, from now until the end of the game, " + data + "'s base voting power (B.V.P.) will be permanently reversed!")
+						  };
+
+			stackObj = {
+						 type: "SMI",
+						 socketID: this.socketID,  
+						 data: sysMess
+					   };
+
+			obj.stack.push(stackObj);	
+
+
+		};
+
 
 
 	}; //end messageHandler()

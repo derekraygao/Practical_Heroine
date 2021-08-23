@@ -8,11 +8,14 @@ import {systemMessages} from 'actions/systemMessages.js';
 import getArrayOfOnlyHeroes from 'getArrayOfOnlyHeroes.js';
 import socket from 'Socket.js';
 
+
+
 class PP1UmbraLord extends React.Component {
 
   state = {
 
     corruptionTarget: "Corrupt ?",
+    usedPower: false,
 
   };
 
@@ -26,27 +29,12 @@ class PP1UmbraLord extends React.Component {
 
   submitCorruptionTarget = () => {
 
-    if (this.state.corruptionTarget !== "Corrupt ?") {
+    if (this.state.corruptionTarget == "Corrupt ?") { return 0; };
 
-      this.props.addSystemMessage(
-        {
-          type: "power",
-          message: ("You corrupted " + this.state.corruptionTarget + ". "
-            + "Unless healed by another ability, from now until the "
-            + "end of the game, " + this.state.corruptionTarget 
-            + "'s mission B.V.P. (base voting power) will be reversed!")
-        }
-      ); //end this.props.addSystemMessage
+    socket.emit("Corruption", this.state.corruptionTarget);
 
-      this.props.updatePower(
-        "Umbra Lord", "corruption", this.state.corruptionTarget);
-
-      socket.emit("Corruption", this.state.corruptionTarget);
+    this.setState({usedPower: true});
  
-    }; //end if
-
-    // do nothing
-
   }; //end submitCorruptionTarget()
 
 
@@ -111,23 +99,48 @@ class PP1UmbraLord extends React.Component {
 
       return (
 
-      <div className="PP1-Umbra-Lord-Container">
+        <div className="PP1-Umbra-Lord-Container">
 
-        <div className="powers-menu-bar-container orange ui buttons">
-          <button className="ui button"></button>
-        </div> 
+          <div className="powers-menu-bar-container orange ui buttons">
+            <button className="ui button"></button>
+          </div> 
 
-        <div className="PP1-corruption-container">
-          Corruption can only be used once. You corrupted {corruption}. 
-          Please wait {this.props.timer} seconds for Game 
-          Phase 1 to end.
+          <div className="PP1-corruption-container">
+            Corruption can only be used once. You corrupted {corruption}. 
+            Please wait {this.props.timer} seconds for Game 
+            Phase 1 to end.
+          </div>
+
         </div>
-
-      </div>
 
       ); //end return
 
     }; //end if corruption !==
+
+
+
+
+    if (this.state.usedPower) {
+
+      return (
+
+        <div className="PP1-Umbra-Lord-Container">
+
+          <div className="powers-menu-bar-container orange ui buttons">
+            <button className="ui button"></button>
+          </div> 
+
+          <div className="PP1-corruption-container">
+            You used your dark mana to corrupt another player! 
+            Please wait {this.props.timer} seconds for Game 
+            Phase 1 to end.
+          </div>
+
+        </div>
+
+      ); //end return
+
+    }; //end if this.state.usedPower
 
 
 
