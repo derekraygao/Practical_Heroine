@@ -1135,6 +1135,45 @@ class Controller {
 	}; //end resetDataAtEndOfGame
 
 
+	resetAllStatusesForAllPlayers(obj) {
+
+		for (var i = 0; i < obj.pA.length; i++) {
+
+	        obj.pA[i].corrupted = false;
+	        obj.pA[i].soulMark = false; //spiritualist
+	        obj.pA[i].poisonCount = 0; //default 0
+	        obj.pA[i].zombie = "human";
+
+	        obj.pA[i].bomb = false;
+	       	obj.pA[i].burnCount = 0; //default is 0
+	       	obj.pA[i].frozen = false;
+	       	obj.pA[i].paralyzed = false;
+	       	obj.pA[i].confused = false;
+	       	obj.pA[i].entranced = false;
+
+	       	obj.pA[i].injuredCount = 0;
+	       	obj.pA[i].markedMan = false; //backstabber
+
+	        obj.pA[i].slow = false;
+	        obj.pA[i].slowCharge = 0;
+	        obj.pA[i].shrinkCount = 0; //default is 0
+	        obj.pA[i].multiplier = 1; //default 1: needs to be 1 (and not 0) so you can stack multiplication powers
+	        obj.pA[i].boost = 0;
+
+	        obj.pA[i].safeguard = false; //safeguard and bless gets reset in resetallplayerinfo
+	        obj.pA[i].bless = false; //default is 1 changed to false.
+	        obj.pA[i].heartacheDefense = false;
+	        obj.pA[i].therapy = false;
+	        obj.pA[i].groupHug = false;
+
+	        obj.pA[i].energyPool = 0; //default 0
+
+		}; //end for 
+
+	}; //end resetAllStatusesForAllPlayers(obj)
+
+
+
 
 	healPlayerForVotingForFailure(playerObj) {
 
@@ -1475,6 +1514,9 @@ class Controller {
 		};
 
 
+		this.resetAllStatusesForAllPlayers(obj);
+		
+
 	}; //end removeAllDisconnectedPlayers
 
 
@@ -1763,7 +1805,7 @@ class Player {
 		this.selectedForMission = false;
 		this.teamVote = null; 
 		this.missionVote = null;
-        this.princessChoice = "";
+        this.princessChoice = ""; //is this necessary ?
 
         this.corrupted = false;
         this.soulMark = false; //spiritualist
