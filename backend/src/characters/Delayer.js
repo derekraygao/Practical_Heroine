@@ -69,27 +69,14 @@ class Delayer extends RolesMasterClass {
 
 			if (obj.pA[i].slow) {
 
-				obj.pA[i].slowCharge = (obj.pA[i].missionVote * 1.5);
+				obj.pA[i].energyPool += (obj.pA[i].missionVote * 1.5);
 				obj.pA[i].missionVote = 0;
-
+				
 			};
 
 		};
 
 	}; //end adjustMissionVotesSlow(obj)
-
-
-	adjustMissionVotesSlowCharge(playerObj) {
-
-		if (playerObj.slowCharge !== 0) {
-
-			playerObj.missionVote += playerObj.slowCharge;
-
-			playerObj.slowCharge = 0;
-
-		};
-
-	}; //end adjustMissionVotesSlowCharge(playerObj)
 
 
 

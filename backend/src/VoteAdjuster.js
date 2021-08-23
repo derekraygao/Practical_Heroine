@@ -67,6 +67,17 @@ class VoteAdjuster {
 
 
 
+	adjustMissionVotesEnergyPool(playerObj) {
+
+		if (playerObj.energyPool == 0) { return 0; };
+
+		playerObj.missionVote += playerObj.energyPool;
+		playerObj.energyPool = 0;
+
+	}; //end adjustMissionVotesEnergyPool(playerObj)
+
+
+
 	adjustMissionVotes(obj) {
 
 		if (obj.rO.roles["Saintess"].inGame 
@@ -127,8 +138,8 @@ class VoteAdjuster {
 			obj.rO.roles["Bomberman"].adjustMissionVotesBurn(obj.pA[i]);
 			obj.rO.roles["Bomberman"].adjustMissionVotesBomb(obj.pA[i], obj);
 
-			obj.rO.roles["Delayer"].adjustMissionVotesSlowCharge(obj.pA[i]);
-
+			this.adjustMissionVotesEnergyPool(obj.pA[i]);
+			
 			obj.rO.roles["Noah"].adjustMissionVotesZombieRecovered(obj.pA[i]);
 
 
@@ -146,7 +157,7 @@ class VoteAdjuster {
 			obj.rO.roles["Hecate"].adjustMissionVotesMultiplication(obj.pA[i]);
 
 
-		};
+		}; //end for
 
 
 		obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
