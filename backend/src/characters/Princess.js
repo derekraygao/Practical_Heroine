@@ -169,13 +169,6 @@ class Princess extends RolesMasterClass {
 
 	updateHeartacheDefense(obj) {
 
-		for (var i = 0; i < obj.pA.length; i++) {
-			if (obj.pA[i].heartacheDefense) {
-				obj.pA[i].heartacheDefense = false;
-			};
-		};
-
-
 		if (this.heartacheDefenseTarget !== "nobody chosen") {
 		
 			var hdInd = obj.pT[this.heartacheDefenseTarget];
@@ -195,6 +188,7 @@ class Princess extends RolesMasterClass {
 		}; //end if heartacheDefense !== "nobody chosen"
 
 	}; //end updateHeartacheDefense
+
 
 
 	adjustMissionVotesHeartacheDefense(playerObj) {

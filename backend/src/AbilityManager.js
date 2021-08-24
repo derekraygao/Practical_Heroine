@@ -23,6 +23,11 @@ class AbilityManager {
       obj.pA[i].slow = false;
 
 
+      obj.pA[i].therapy = false;
+      obj.pA[i].groupHug = false;
+
+      obj.pA[i].heartacheDefense = false;
+
       obj.pA[i].bless = false;
       obj.pA[i].safeguard = false;
 
@@ -48,6 +53,8 @@ class AbilityManager {
 
 
 
+  /*status effects array is cleared inside 
+    Controller.resetDataAtEndOfMission*/
   //obj.sE = [{target: "Derek", effect: "Freeze", factor: 2}]
   handleStatusEffectsArray(obj) {
 
@@ -589,7 +596,6 @@ class AbilityManager {
 
     var lottie = obj.rO.roles["Lottie"];
 
-    lottie.removeGroupHugAndTherapyAtEndOfRound(obj);
     //setTherapy & GroupHug MUST come AFTER removeGroupHug&Therapy
     lottie.setTherapyStatus(obj);
     lottie.setGroupHugStatus(obj);

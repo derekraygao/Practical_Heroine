@@ -199,7 +199,7 @@ class Noah extends RolesMasterClass {
 
 	adjustMissionVotesNightmareSyndromeZombie(obj) {
 
-		if (!this.inGame) { return 0; };
+		//if (!this.inGame) { return 0; };
 
 		for (var i = 0; i < obj.pA.length; i++) {
 

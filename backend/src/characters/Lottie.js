@@ -66,7 +66,7 @@ class Lottie extends RolesMasterClass {
 
 	adjustMissionVotesLottie(playerObj) {
 
-		if (!this.inGame) { return 0; };
+		//if (!this.inGame) { return 0; };
 
 		if (playerObj.therapy) {
 
@@ -104,19 +104,6 @@ class Lottie extends RolesMasterClass {
 	}; //end adjustMissionVotesPrincessAndLottie
 
 
-
-	removeGroupHugAndTherapyAtEndOfRound(obj) {
-
-		if (!this.inGame) { return 0; };
-			
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			obj.pA[i].therapy = false;
-			obj.pA[i].groupHug = false;
-
-		};
-
-	};
 
 
 	//votingArray is [{name: "Derek", vote: 5}]
