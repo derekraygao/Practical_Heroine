@@ -98,6 +98,9 @@ class Esper extends RolesMasterClass {
 
 		switch (this.headacheCharge) {
 
+			case 0:
+				return 1;
+
 			case 1:
 				return 2;
 
@@ -110,17 +113,8 @@ class Esper extends RolesMasterClass {
 			case 4:
 				return 7;
 
-			case 5:
-				return 8;
-
-			case 6:
-				return 10;
-
-			case 7:
-				return 12;
-
 			default:
-				return 1;
+				return 8.5;
 
 		}; //end switch
 
