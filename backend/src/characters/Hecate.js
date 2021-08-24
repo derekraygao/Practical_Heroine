@@ -247,7 +247,7 @@ class Hecate extends RolesMasterClass {
 									markedMan: obj.pA[index1].markedMan,
 
 									slow: obj.pA[index1].slow,
-									slowCharge: obj.pA[index1].slowCharge,
+									energyPool: obj.pA[index1].energyPool,
 									shrinkCount: obj.pA[index1].shrinkCount,
 									multiplier: obj.pA[index1].multiplier,
 									boost: obj.pA[index1].boost,
@@ -277,7 +277,7 @@ class Hecate extends RolesMasterClass {
 		obj.pA[index1].markedMan = obj.pA[index2].markedMan;
 
 		obj.pA[index1].slow = obj.pA[index2].slow;
-		obj.pA[index1].slowCharge = obj.pA[index2].slowCharge;
+		obj.pA[index1].energyPool = obj.pA[index2].energyPool;
 		obj.pA[index1].shrinkCount = obj.pA[index2].shrinkCount;
 		obj.pA[index1].multiplier = obj.pA[index2].multiplier;
 		obj.pA[index1].boost = obj.pA[index2].boost;
@@ -307,7 +307,7 @@ class Hecate extends RolesMasterClass {
 		obj.pA[index2].markedMan = tempStatusHolder.markedMan;
 
 		obj.pA[index2].slow = tempStatusHolder.slow;
-		obj.pA[index2].slowCharge = tempStatusHolder.slowCharge;
+		obj.pA[index2].energyPool = tempStatusHolder.energyPool;
 		obj.pA[index2].shrinkCount = tempStatusHolder.shrinkCount;
 		obj.pA[index2].multiplier = tempStatusHolder.multiplier;
 		obj.pA[index2].boost = tempStatusHolder.boost;
