@@ -160,6 +160,8 @@ class VoteAdjuster {
 		}; //end for
 
 
+		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
+
 		obj.rO.roles["Marcus"].adjustVoteBerserk(obj);
 
 		/*reversing powers need to be after berserk but 
@@ -172,8 +174,6 @@ class VoteAdjuster {
 		obj.rO.roles["Ichigo"].adjustVotesHolyStrike(obj);
 
 		obj.rO.roles["Lottie"].adjustMissionVotesPrincessAndLottie(obj);
-
-		obj.rO.roles["Persequor"].adjustMissionVoteCopyCat(obj);
 
 		obj.rO.roles["Pear"].adjustMissionVoteVanish(obj);
 

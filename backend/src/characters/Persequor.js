@@ -79,31 +79,6 @@ class Persequor extends RolesMasterClass {
 		//if (!this.inGame) { return 0; };
 		if (this.personVoteToCopy == "nobody chosen") { return 0; };
 
-		//Pear Vanish Power Adjustment
-		if (obj.rO.roles["Pear"].playerVoteToVanish 
-			== this.personVoteToCopy) {
-
-			obj.pA[this.index].missionVote = 0;
-
-			this.personVoteToCopy = "nobody chosen";
-
-			return 0;
-
-		}; 
-
-
-		//Perish Song Check
-		if (obj.rO.roles["Baby Doll"].perishSongArray.includes(this.personVoteToCopy)
-			&& obj.rO.roles["Baby Doll"].areAllPerishersOnTheTeam(obj)) {
-
-			obj.pA[this.index].missionVote = 0;
-
-			this.personVoteToCopy = "nobody chosen";
-
-			return 0;
-
-		}; 
-
 
 		var copyIndex = obj.pT[this.personVoteToCopy];
 		if (copyIndex == undefined) { return 0; };
@@ -119,22 +94,9 @@ class Persequor extends RolesMasterClass {
 		};
 
 
-		//Slow Power Adjustment
-		if (obj.pA[copyIndex].slow) {
-
-			obj.pA[this.index].missionVote = 0;
-
-			this.personVoteToCopy = "nobody chosen";
-
-			return 0;
-
-		};
-
-
-
 		var copyVote = obj.pA[copyIndex].missionVote;
 
-		if (copyVote >= 0) {
+		if (copyVote > 0) {
 			copyVote *= -1;
 		};
 
