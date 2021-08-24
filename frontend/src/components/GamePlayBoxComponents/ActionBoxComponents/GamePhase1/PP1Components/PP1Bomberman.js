@@ -28,29 +28,28 @@ class PP1Bomberman extends React.Component {
 
 
 
-
   getSelectionChoices = () => {
 
-    const {missionTeam} = this.props;
+    var playerChoices = JSON.parse(JSON.stringify(this.props.playerList));
 
-    var missionTeamOptionsArray = [];
+    var q = playerChoices.indexOf(this.props.myName);
 
-    for (var i = 0; i < missionTeam.length; i++) {
+    if (q > -1) {
+      playerChoices.splice(q, 1);
+    };
 
-      //don't want to have yourself as an option
-      if (missionTeam[i] === this.props.myName) { continue; };
+    var arrayOfOptions = playerChoices.map( (pName, index) => {
 
-      missionTeamOptionsArray.push(
+      return (
+        <option value={pName} key={index}>{pName}</option>
+      );
 
-         <option value={missionTeam[i]}>{missionTeam[i]}</option>
+    });
 
-      ); //end if
+    return arrayOfOptions;
 
-    }; //end for
+  }; //end getSelectionChoices()
 
-    return missionTeamOptionsArray;
-
-  };
 
 
 
