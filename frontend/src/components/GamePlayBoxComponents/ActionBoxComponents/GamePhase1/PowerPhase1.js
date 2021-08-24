@@ -37,10 +37,12 @@ import PP1BabyDoll from './PP1Components/Baby Doll/PP1BabyDoll.js';
 import PP1Toxiturtle from './PP1Components/Toxiturtle/PP1Toxiturtle.js';
 import PP1Psychologist from './PP1Components/Psychologist/PP1Psychologist.js';
 import PP1Kaguya from './PP1Components/Kaguya/PP1Kaguya.js';
-
+import PP1Bomberman from './PP1Components/PP1Bomberman.js';
 
 
 var timerInterval;
+
+
 
 class PowerPhase1 extends React.Component {
 
@@ -180,6 +182,9 @@ class PowerPhase1 extends React.Component {
 
       case "Kaguya":
         return <PP1Kaguya />;
+
+      case "Bomberman":
+        return <PP1Bomberman />;
 
       default:
         return <PP1NoPower />;

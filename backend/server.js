@@ -2491,6 +2491,7 @@ io.on('connection', function (socket) {
   });
 
 
+
   socket.on("Fire Punch A Player", (name) => {
 
     var obj = Controller.returnpArrayRoomAndIndex(socket);
@@ -2504,6 +2505,24 @@ io.on('connection', function (socket) {
   });
 
 
+
+
+  socket.on("Devour A Player's Flames", (target) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; };
+
+
+    obj.rO.roles["Bomberman"].flameDevourer(target, obj);
+
+    MessageNotificationStack(obj);
+
+  }); //end socket.on("Devour A Player's Flames")
+
+
+
+
+
   //Lieutenant Blitz
   socket.on("United States of Smash", (name) => {
 
@@ -2515,7 +2534,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Lieutenant Blitz"].setUnitedStatesOfSmashTarget(name, obj);
 
-    console.log(obj.rO.roles["Lieutenant Blitz"].powersHistory[obj.rD.missionNo]["USOS"]);
+    //console.log(obj.rO.roles["Lieutenant Blitz"].powersHistory[obj.rD.missionNo]["USOS"]);
 
 
   });
@@ -2534,7 +2553,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Persequor"].copyCat(name);
 
-    console.log(obj.rO.roles["Persequor"].personVoteToCopy);
+    //console.log(obj.rO.roles["Persequor"].personVoteToCopy);
 
 
   });
@@ -2550,7 +2569,7 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Persequor"].activateIdentityTheft(obj);
 
-    console.log(obj.rO.roles["Persequor"].powersHistory[obj.rD.missionNo].switchedName);
+    //console.log(obj.rO.roles["Persequor"].powersHistory[obj.rD.missionNo].switchedName);
 
   });
 
