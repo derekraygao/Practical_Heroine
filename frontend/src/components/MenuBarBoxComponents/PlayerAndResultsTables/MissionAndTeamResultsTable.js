@@ -63,11 +63,11 @@ class MissionAndTeamResultsTable extends React.Component {
 
       thArray.push(
         <tr>
-          <td>{arr[q].teamLeader}</td>
-          <td>{formatArrayIntoString(arr[q].teamArray)}</td>
-          <td>{this.getStringOfTeamApprovers(arr[q].votingInfo)}</td>
-          <td>{this.getStringOfTeamRejecters(arr[q].votingInfo)}</td>
-          <td>{arr[q].result}</td>
+          <td className="center aligned">{arr[q].teamLeader}</td>
+          <td className="center aligned">{formatArrayIntoString(arr[q].teamArray)}</td>
+          <td className="center aligned">{this.getStringOfTeamApprovers(arr[q].votingInfo)}</td>
+          <td className="center aligned">{this.getStringOfTeamRejecters(arr[q].votingInfo)}</td>
+          <td className="center aligned">{arr[q].result}</td>
         </tr>
       ); //end push
 
@@ -109,11 +109,11 @@ class MissionAndTeamResultsTable extends React.Component {
             <tbody>
 
               <tr>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>Leader</td>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>Team</td>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>Approvers</td>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>Rejecters</td>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>Result</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>Leader</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>Team</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>Approvers</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>Rejecters</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>Result</td>
               </tr>
 
               {this.teamHistoryTRGenerator(TI[i])}
@@ -134,17 +134,19 @@ class MissionAndTeamResultsTable extends React.Component {
             <tbody>
 
               <tr>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>Result</td>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>Point Total</td>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>+ Points</td>
-                <td style={{backgroundColor: "#fbbd05", color: "white"}}>&#8212; Points</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>Result</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>Final Vote Sum</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>+ Points</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>&#8212; Points</td>
+                <td className="center aligned" style={{backgroundColor: "#fbbd05", color: "white"}}>Neutral Points</td>
              </tr>
 
              <tr>
-                <td>{MH[i].result}</td>
-                <td>{MH[i].pointTotal}</td>
-                <td>{MH[i].positiveTotal}</td>
-                <td>{MH[i].negativeTotal}</td>
+                <td className="center aligned">{MH[i].result}</td>
+                <td className="center aligned">{MH[i].pointTotal}</td>
+                <td className="center aligned">{MH[i].positiveTotal}</td>
+                <td className="center aligned">{MH[i].negativeTotal}</td>
+                <td className="center aligned">{MH[i].neutralTotal}</td>
              </tr>
   
 

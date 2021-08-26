@@ -102,11 +102,13 @@ class ResultsInfo {
 	//votingArray is [{name: "Derek", vote: 5}]
 	//result is either "Success" or "Fail"
 	addMissionInfo(missionNumber, votingArray, positivePointTotal, 
-		negativePointTotal, pointTotal, result) {
+		negativePointTotal, neutralPointTotal, pointTotal, result) {
 
 		this.missionInfo[missionNumber].positiveTotal = positivePointTotal;
 
 		this.missionInfo[missionNumber].negativeTotal = negativePointTotal;
+
+		this.missionInfo[missionNumber].neutralTotal = neutralPointTotal;
 
 		this.missionInfo[missionNumber].pointTotal = pointTotal;
 
@@ -126,6 +128,7 @@ class ResultsInfo {
 			missionTeam: obj.rD.missionTeam,
 			positiveTotal: this.missionInfo[obj.rD.missionNo].positiveTotal,
 			negativeTotal: this.missionInfo[obj.rD.missionNo].negativeTotal,
+			neutralTotal: this.missionInfo[obj.rD.missionNo].neutralTotal,
 			pointTotal: this.missionInfo[obj.rD.missionNo].pointTotal,
 			result: this.missionInfo[obj.rD.missionNo].result
 		};

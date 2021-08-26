@@ -1011,6 +1011,10 @@ class Controller {
 		missionVoteAccumulator = obj.rO.roles["Ichigo"]
 		.hylianShield(missionVoteAccumulator);
 
+
+		var neutralPointsTotal = missionVoteAccumulator - positiveVoteAccumulator - negativeVoteAccumulator;
+
+
 		//console.log("Mission " + obj.rD.missionNo + " vote total: " + missionVoteAccumulator);
 
 		obj.rI.addMissionInfo(
@@ -1018,6 +1022,7 @@ class Controller {
 			obj.rD.missionVoteInfo,
 			positiveVoteAccumulator,
 			negativeVoteAccumulator,
+			neutralPointsTotal,
 			missionVoteAccumulator,
 			this.missionSuccessOrFail(missionVoteAccumulator)
 		);

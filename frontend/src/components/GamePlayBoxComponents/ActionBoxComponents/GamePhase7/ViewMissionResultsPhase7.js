@@ -35,7 +35,7 @@ class ViewMissionResultsPhase7 extends React.Component {
     var _missionHistory = this.props.missionHistory;
     var _currentMissionNo = this.props.missionNumber;
 
-    console.log(_missionHistory);
+    //console.log(_missionHistory);
 
     var _currentMissionHistory = _missionHistory[_currentMissionNo];
 
@@ -95,7 +95,7 @@ class ViewMissionResultsPhase7 extends React.Component {
                 <td data-label="result">{this.state.MH.result}</td>
               </tr>
               <tr>
-                <td data-label="total-votes-heading" className="table-style">Total Points</td>
+                <td data-label="total-votes-heading" className="table-style">Final Vote Sum</td>
                 <td data-label="total-vote">{this.state.MH.pointTotal}</td>
               </tr>
               <tr>
@@ -105,6 +105,10 @@ class ViewMissionResultsPhase7 extends React.Component {
               <tr>
                 <td data-label="negative-votes-heading" className="table-style">&#8212; Points</td>
                 <td data-label="negative-vote">{this.state.MH.negativeTotal}</td>
+              </tr>
+              <tr>
+                <td data-label="negative-votes-heading" className="table-style">Neutral Points</td>
+                <td data-label="negative-vote">{this.state.MH.neutralTotal}</td>
               </tr>
               <tr>
                 <td data-label="team-heading" className="table-style">Mission Team</td>
