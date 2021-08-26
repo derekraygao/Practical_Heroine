@@ -6,6 +6,9 @@ import './css/PlayerAndResultsBox.css';
 import PlayerListTable from './PlayerAndResultsTables/PlayerListTable.js';
 import MissionAndTeamResultsTable from './PlayerAndResultsTables/MissionAndTeamResultsTable.js';
 
+
+
+
 class PlayerAndResultsBox extends React.Component {
 
   state = {
@@ -18,15 +21,30 @@ class PlayerAndResultsBox extends React.Component {
   }; //end componentDidMount
 
 
+
+  /*need this since position:fixed inherits width/height of viewport
+  and no longer the parent div*/
+  rulesAndInfoMenuWidth = () => {
+
+    if (this.props.gamePhase === 8) {
+      return {width: "40%"};
+    };
+
+    return {width: "60%"};
+
+  };
+
+
+
   prBoxStyle = () => {
 
     if (this.props.mainMenuSelection === "player & results") {
 
       if (this.props.gamePhase === 8) {
-        return {display: "flex", gridArea: "other-menu-box"};
+        return {display: "grid", gridArea: "other-menu-box"};
       };
 
-      return {display: "flex", gridArea: "chat-box"};
+      return {display: "grid", gridArea: "chat-box"};
 
     }; //end if mainMenuSelection === notes
 
@@ -41,8 +59,13 @@ class PlayerAndResultsBox extends React.Component {
 
       <div class="player-and-results-box-container" style={this.prBoxStyle()}>
 
-        <PlayerListTable />
-        <MissionAndTeamResultsTable />
+        <div className="player-order-fixed-position-div" style={this.rulesAndInfoMenuWidth()}> 
+          <span> <PlayerListTable /> </span>
+        </div>
+
+        <div className="results-box-container">
+          <MissionAndTeamResultsTable />
+        </div>
 
       </div>
 
