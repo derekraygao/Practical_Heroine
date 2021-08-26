@@ -1,59 +1,12 @@
 .player-and-results-box-container {
 
-	/*display is located within PlayerREsultsBox.js -inline css*/
-
-	grid-template-rows: 25% auto;
-
-	grid-template-areas: "player-order"
-						 "results"
-						 ;
-
-	overflow: auto;
-	/*
 	flex-direction: column;
 	align-items: flex-start;
 
 	overflow-x: auto;
 	overflow-y: auto;
-	*/
 
 	padding-top: 2%;
-
-}
-
-
-
-.player-order-fixed-position-div {
-
-	/*width is determined by function inside component
-	since position fixed means width is determined by viewport 
-	and not by parent */
-
-	grid-area: player-order;
-
-	position: fixed;
-
-	max-height: 20vh;
-
-	display: flex;
-
-	overflow-y: auto;
-
-}
-
-.player-order-fixed-position-div span {
-	margin: auto;
-}
-
-
-
-.results-box-container {
-
-	grid-area: results;
-
-	overflow: auto;
-
 	padding-left: 1%;
 	padding-right: 1%;
-
 }
