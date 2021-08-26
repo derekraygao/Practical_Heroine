@@ -68,10 +68,10 @@ class PP1Psychologist extends React.Component {
   predictionButtonColor = (_name) => {
 
     if (this.state.predictionArr.includes(_name)) {
-        return "green";
+        return "yellow";
     };
 
-    return "yellow";
+    return "";
 
   };
 
@@ -150,8 +150,8 @@ class PP1Psychologist extends React.Component {
         </div> 
 
         <div className="PP1-prediction-container">
-          You predicted that {formatArrayIntoString(this.state.predictionArr)} 
-          will be on the mission team! Please wait {this.props.timer} 
+          You predicted that {formatArrayIntoString(this.state.predictionArr)} will 
+          be on the mission team! Please wait {this.props.timer} 
           &nbsp;seconds for Game Phase 1 to end.
         </div>
 

@@ -2886,6 +2886,24 @@ io.on('connection', function (socket) {
 
 
 
+
+  socket.on("Use Truth Bomb", () => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Psychologist") { return 0; };
+
+    obj.rO.roles["Psychologist"].activateTruthBomb(obj);
+
+    MessageNotificationStack(obj);
+
+  });
+
+
+
+
+
   //Kaguya
 
   socket.on("Dark Destiny", (name) => {

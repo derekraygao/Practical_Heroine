@@ -83,7 +83,7 @@ class Psychologist extends RolesMasterClass {
                 case 5:
                     return -3;
 
-                //for 7 and & players, no mission team is 
+                //for 7 and 6 players, no mission team is 
                 //greater than size of 5
 
                 default:
@@ -155,15 +155,21 @@ class Psychologist extends RolesMasterClass {
     }; //end wasMissionTeamPredictionCorrect()
 
 
+
     adjustNegativeVotesPrediction(negativeVoteSum, obj) {
 
         if (!this.wasMissionTeamPredictionCorrect(obj)) { return negativeVoteSum; };
 
+
         var negativePowerIncrease = this.predictionNegativeVotePower(obj);
+
+        this.messageHandler("Prediction Success", negativePowerIncrease, obj);
+
 
         return (negativeVoteSum + negativePowerIncrease);
 
-    };
+    }; //end adjustNegativeVotesPrediction()
+
 
 
     getOppositeRandomRole(team, obj) {
@@ -304,7 +310,23 @@ class Psychologist extends RolesMasterClass {
             obj.stack.push(stackObj);
 
 
-        }; //end if power == Truth Bomb
+
+        } else if (power == "Prediction Success") {
+
+            var sysMess = {
+                            type: "urgent",
+                            message: ("Psychologist: So predictable! I can read you like an open book! Because I successfully predicted the player composition of this Mission Team, the Mission Team's negative vote sum is made more negative by: " + data + ".")
+                          };
+            
+            var stackObj = {
+                            type: "SME Music",
+                            data: {messageObj: sysMess, song: "Prediction"}
+                           };
+
+            obj.stack.push(stackObj);     
+
+        }; //end "Prediction Success"
+
 
 
     }; //end messageHandler

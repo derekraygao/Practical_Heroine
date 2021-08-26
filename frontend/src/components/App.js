@@ -102,11 +102,21 @@ absoluteAcceptanceAudio.volume = 0.10;
 var absoluteRejectionAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Absolute_Rejection.mp4");
 absoluteRejectionAudio.volume = 0.10;
 
+var truthBombAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Truth_Bomb.mp3");
+truthBombAudio.volume = 0.10;
+
+var predictionAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Prediction.mp3");
+predictionAudio.volume = 0.10;
+
 
 
 /*Game Over Music */
 var hVictory = new Audio(process.env.PUBLIC_URL + "/sounds/Heroes_Victory.mp4");
 hVictory.volume = 0.15;
+
+var hVictoryObliterate = new Audio(process.env.PUBLIC_URL + "/sounds/Heroes_Victory_Obliterate.mp3");
+hVictoryObliterate.volume = 0.15;
+
 
 var vVictoryGeneral = new Audio(process.env.PUBLIC_URL + "/sounds/Villains_Victory_General.mp3");
 vVictoryGeneral.volume = 0.02;
@@ -160,6 +170,19 @@ function playSong(song) {
 
     case "Hurricane":
       hurricaneAudio.play();
+      break;
+
+    case "Truth Bomb":
+      truthBombAudio.play();
+      break;
+
+    case "Prediction":
+      predictionAudio.play();
+      break;
+
+    case "Obliterate":
+      hVictoryObliterate.play();
+      break;
 
     default:
       break;
@@ -189,7 +212,6 @@ class App extends React.Component {
 
 
   componentDidMount = () => {
-
 
     socket.on("connect", () => {
 
@@ -293,7 +315,7 @@ class App extends React.Component {
       setTimeout(() => this.props.updateGamePhase(1), 1000);
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
-      this.props.updateTimerSeconds(7);
+      this.props.updateTimerSeconds(1);
 
       this.props.updateCharacterStatus("jailed", false);
       this.props.updateCharacterStatus("selectedForTelepathy", false);
@@ -304,7 +326,9 @@ class App extends React.Component {
       this.addSysMess("new mission", ("Mission " + newMissionNumber));
       
       /*At beginning of new mission, automatically scroll down
-      to the very bottom */
+      to the very bottom. Something about the way I set things up,
+      it won't auto scroll for a new mission even if your scroll 
+      bar is at the very bottom already*/
       var scrollElem = document.querySelector('.system-message-box');
 
       scrollElem.scrollTop = scrollElem.scrollHeight;
@@ -363,7 +387,7 @@ class App extends React.Component {
 
       } else {
 
-        this.props.updateTimerSeconds(50);
+        this.props.updateTimerSeconds(35);
 
       };
 
@@ -375,7 +399,7 @@ class App extends React.Component {
 
       setTimeout(() => this.props.updateGamePhase(6), 1000);
 
-      this.props.updateTimerSeconds(700);
+      this.props.updateTimerSeconds(800);
 
     }); //end socket.on("Start Game Phase 6")
 
@@ -403,7 +427,7 @@ class App extends React.Component {
 
       setTimeout(() => this.props.updateGamePhase(8), 1000);
 
-      this.props.updateTimerSeconds(16);
+      this.props.updateTimerSeconds(2);
      
       /*Auto scroll down to latest mission results */
       setTimeout(() => {
@@ -603,6 +627,24 @@ class App extends React.Component {
       vVictoryDarkDestiny.play();
 
     });
+
+
+
+    //allInfo = [{name:, role:, team:}, {}]
+    socket.on("Start Game Phase 10: Game Over", (data) => {
+
+      setTimeout(() => this.props.updateGamePhase(10), 1000);
+
+      this.props.updateGameEndScenario(data.gameEndScenario);
+
+      this.props.addSystemMessage(data.winMessage);      
+
+      this.revealAllIdentitiesAndRoles(data.allInfo);
+
+      playSong(data.song);
+
+    }); //end socket.on("Game Phase 10: Game Over")
+
 
 
 

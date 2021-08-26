@@ -34,10 +34,12 @@ import PP6Persequor from './PP6Persequor.js';
 import PP6BabyDoll from './PP6BabyDoll.js';
 import PP6Reverser from './PP6Reverser.js';
 import PP6Kaguya from './PP6Kaguya.js';
-
+import PP6Psychologist from './PP6Psychologist.js';
 
 
 var phase6TimerInterval;
+
+
 
 class MissionVotingPhase6 extends React.Component {
 
@@ -194,6 +196,7 @@ class MissionVotingPhase6 extends React.Component {
         case "Oracle":
           return <PP6Oracle voted={this.clearTimerAndSetVote} />;          
 
+
         case "Umbra Lord":
           return <PP6UmbraLord voted={this.clearTimerAndSetVote} />; 
           
@@ -223,6 +226,10 @@ class MissionVotingPhase6 extends React.Component {
 
         case "Kaguya":
           return <PP6Kaguya voted={this.clearTimerAndSetVote} />;
+
+        case "Psychologist":
+          return <PP6Psychologist voted={this.clearTimerAndSetVote} />;
+
 
         default:
           return <PP6NoPower voted={this.clearTimerAndSetVote} />;
