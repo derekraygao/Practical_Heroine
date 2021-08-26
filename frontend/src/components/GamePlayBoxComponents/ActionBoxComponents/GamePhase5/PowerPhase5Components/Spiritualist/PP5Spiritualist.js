@@ -121,7 +121,7 @@ class PP5Spiritualist extends React.Component {
 
 
           <button
-            className="ui button yellow PP5-margin-left"
+            className="ui button purple PP5-margin-left"
             onClick={this.submitButtonMarkClick}
           >
             Mark Soul!
@@ -153,7 +153,7 @@ class PP5Spiritualist extends React.Component {
 
 
           <button
-            className="ui button yellow PP5-margin-left"
+            className="ui button purple PP5-margin-left"
             onClick={this.submitButtonScanClick}
           >
             Scan Soul!

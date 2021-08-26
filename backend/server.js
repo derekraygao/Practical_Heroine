@@ -2712,6 +2712,24 @@ io.on('connection', function (socket) {
 
 
 
+  socket.on("Release Souls", (choice) => {
+
+    var obj = Controller.returnpArrayRoomAndIndex(socket);
+    if (!obj.pA) { return 0; }; 
+
+    if (obj.pA[obj.index].role !== "Spiritualist") { return 0; };
+
+
+    obj.rO.roles["Spiritualist"].soulRelease(choice, obj);
+
+    MessageNotificationStack(obj);
+
+  }); //end socket.on("Release Souls")
+
+
+
+
+
   //Baby Doll
   socket.on("Sing", (name) => {
 
