@@ -1834,7 +1834,13 @@ function testHecatePower() {
 
 	obj.rO.roles["Saintess"].curagaBoostTarget = "Derek";
 
-	obj.rO.roles["Hecate"].setEoSTargets(["Derek", "Serena"]);
+
+	console.log("Status before exchange of spirits");
+	console.log("");
+	console.log(princess.updateEoSenseArray(obj));
+	console.log("");
+
+	obj.rO.roles["Hecate"].setEoSTargets(["Derek", "Xing"]);
 
 	AbilityManager.updateStatusesAfterGamePhase1(obj);
 
