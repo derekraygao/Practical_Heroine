@@ -22,8 +22,12 @@ class Psychologist extends RolesMasterClass {
             7: {"predictionArray": "no array"},
         };
 
+
         this.revealRoleUsed = false;
         this.reveal1Good1BadUsed = false;
+
+        this.truthBombPower = 0;
+
 
         this.goodRoles7or9 = ["Princess", "Saintess", "Ichigo", "Marcus", 
                               "Lottie", "Lan", "Seer", "Balancer", "Esper", 
@@ -231,6 +235,79 @@ class Psychologist extends RolesMasterClass {
 
 
 
+    numberOfVillains(obj) {
+
+        var numVillains = 0;
+        var forLength = obj.rD.missionTeam.length;
+        var i = 0;
+        var rIG = obj.rO.rolesInGame;
+        var missionTeamArr = obj.rD.missionTeam;
+
+        for (i; i < forLength; i++) {
+
+            if (rIG[obj.pT[missionTeamArr[i]]].team == "villains") {
+
+                numVillains += 1;
+
+            };
+
+        }; //end for 
+
+
+        return numVillains;
+
+    }; //end numberOfVillains
+
+
+
+
+    activateTruthBomb(obj) {
+
+        var numVillains = this.numberOfVillains(obj);
+        var boostAmount = (numVillains * 1.25);
+
+        obj.pA[this.index].boost += boostAmount;
+
+        this.messageHandler(
+                               "Truth Bomb", 
+
+                               {
+                                "numVillains": numVillains,
+                                "boostAmount": boostAmount
+                               },
+
+                               obj
+                           );
+
+
+    }; //end activateTruthBomb
+
+
+
+
+
+    messageHandler(power, data, obj) {
+
+        if (power == "Truth Bomb") {
+
+
+            var sysMess = {
+                            type: "urgent",
+                            message: ("Psychologist: The truth will set you free! On the current Mission Team, including me, there are " + data.numVillains + " Villain(s)! In exchange for revealing this information, I immediately get a ±" + data.boostAmount + " 'Boost'!")
+                          };
+            
+            var stackObj = {
+                            type: "SME Music",
+                            data: {messageObj: sysMess, song: "Truth Bomb"}
+                           };
+
+            obj.stack.push(stackObj);
+
+
+        }; //end if power == Truth Bomb
+
+
+    }; //end messageHandler
 
 
 

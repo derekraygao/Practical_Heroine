@@ -91,6 +91,8 @@ var delayer = obj.rO.roles["Delayer"];
 var backstabber = obj.rO.roles["Backstabber"];
 var persequor = obj.rO.roles["Persequor"];
 var babyDoll = obj.rO.roles["Baby Doll"];
+var spiritualist = obj.rO.roles["Spiritualist"];
+var psychologist = obj.rO.roles["Psychologist"];
 
 
 //console.log(obj.rO.rolesInGame);
@@ -1799,11 +1801,11 @@ function testPharaohPower() {
 
 function testHecatePower() {
 
-	obj.rO.roles["Hecate"].setMultiplierTarget("Derek", obj);
+	//obj.rO.roles["Hecate"].setMultiplierTarget("Derek", obj);
 
-	AbilityManager.updateStatusesBeforeNightPhase(obj);
+	//AbilityManager.updateStatusesBeforeNightPhase(obj);
 
-	console.log("Derek multiplication is now: " + obj.pA[0].multiplier);
+	//console.log("Derek multiplication is now: " + obj.pA[0].multiplier);
 
 	obj.pA[0].corrupted = true;
 	obj.pA[0].bomb = true
@@ -1816,7 +1818,7 @@ function testHecatePower() {
 	obj.pA[0].confused = true;
 	obj.pA[0].markedMan = true;
 	obj.pA[0].slow = true;
-	obj.pA[0].slowCharge = -5;
+	obj.pA[0].energyPool = -5;
 	obj.pA[0].zombie = "zombie";
 	obj.pA[1].zombie = "recovered";
 	obj.pA[0].paralyzed = true;
@@ -1832,7 +1834,9 @@ function testHecatePower() {
 
 	obj.rO.roles["Saintess"].curagaBoostTarget = "Derek";
 
-	obj.rO.roles["Hecate"].exchangeOfTheSpirits("Derek", "Serena", obj);
+	obj.rO.roles["Hecate"].setEoSTargets(["Derek", "Serena"]);
+
+	AbilityManager.updateStatusesAfterGamePhase1(obj);
 
 	console.log("Status after exchange of spirits");
 	console.log("");
@@ -2070,21 +2074,25 @@ function testCopycatVoteWithVanishAndSlowAndPerishSong() {
 
 	console.log("Testing Copycat Vote Power With Vanish + Slow");
 		
-	Controller.addMissionVote(obj, 0, 3); //Derek //0
+	Controller.addMissionVote(obj, 0, 1); //Derek //0
 	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
 	Controller.addMissionVote(obj, 2, 2); //Serena //2 Persequor
 	Controller.addMissionVote(obj, 3, 3); //Lucio //3 Pear
 	//Controller.addMissionVote(obj, 4, -2); //Xing //4 Baby Doll
 
-	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena", "Xing"]);
+	Controller.setMissionTeam(obj, ["Lucio", "Derek", "Serena"]);
 	Controller.setPlayersForMission(obj);
 
 	//delayer.stall("Derek", obj);
 	//pear.vanish("Derek");
-	babyDoll.activatePerishSong(["Derek"], obj);
-	babyDoll.setPerishSongArray(obj);
+	//babyDoll.activatePerishSong(["Derek"], obj);
+	//babyDoll.setPerishSongArray(obj);
 
 	persequor.copyCat("Derek");
+
+	//obj.pA[0].energyPool = 2;
+	//obj.pA[0].multiplier = 3;
+	//obj.pA[2].safeguard = true;
 
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
@@ -2490,6 +2498,73 @@ function testSoulScan() {
 };
 
 //testSoulScan();
+
+
+
+function testSoulCannonAndResonance() {
+
+	console.log("Testing Spiritualist Soul Cannon and Resonance");
+	console.log("");
+
+
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 0); //Derek //0
+	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 0); //Serena //2
+	Controller.addMissionVote(obj, 3, 0); //Lucio //3
+	//Controller.addMissionVote(obj, 4, -2); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Derek", "Lucio", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+
+	//obj.pA[0].soulMark = true;
+	obj.pA[1].soulMark = true;
+	obj.pA[4].soulMark = true;
+
+	//spiritualist.soulRelease("Soul Cannon", obj);
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+	Controller.resetDataAtEndOfMission(obj);
+
+
+	console.log("");
+	console.log("");
+	obj.rD.missionNo = 2;
+
+
+	//obj.pA[0].soulMark = true;
+	//obj.pA[1].soulMark = true;
+	//obj.pA[4].soulMark = true;
+
+	spiritualist.soulRelease("Resonance", obj);
+
+	console.log(princess.updateEoSenseArray(obj));
+
+	Controller.addMissionVote(obj, 0, 0); //Derek //0
+	Controller.addMissionVote(obj, 2, 0); //Serena //2
+	Controller.addMissionVote(obj, 3, 0); //Lucio //3
+	Controller.addMissionVote(obj, 4, 0); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Derek", "Lucio", "Serena", "Xing"]);
+	Controller.setPlayersForMission(obj);
+
+
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	console.log(princess.updateEoSenseArray(obj));
+
+};
+
+//testSoulCannonAndResonance();
+
+
+
+
 
 
 //Need to set Serena as backstabber inside RolesObject assignroles
@@ -3244,6 +3319,45 @@ function testPsychologistPowers() {
 
 
 
+function testPsychologistTruthBomb() {
+
+
+	console.log("Testing Kaguya Entranced Effect on Mission Votes");
+	
+	obj.rD.missionNo = 1;
+
+	Controller.addMissionVote(obj, 0, 0); //Derek //0
+	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 0); //Serena //2
+	Controller.addMissionVote(obj, 3, 0); //Lucio //3
+	Controller.addMissionVote(obj, 4, 0); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Serena", "Derek", "Lucio"]);
+	Controller.setPlayersForMission(obj);
+
+	console.log(princess.updateEoSenseArray(obj));
+
+
+	console.log("");
+	console.log("Activate Truth Bomb");
+
+	psychologist.activateTruthBomb(obj);
+
+	console.log(princess.updateEoSenseArray(obj));
+
+	console.log("");
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	console.log(princess.updateEoSenseArray(obj));
+
+};
+
+
+//testPsychologistTruthBomb();
+
+
+
+
 function testKaguyaEntranced() {
 
 	console.log("Testing Kaguya Entranced Effect on Mission Votes");
@@ -3614,3 +3728,62 @@ var Filter = require('bad-words');
 var customFilter = new Filter({ placeHolder: 'x'});
 
 customFilter.clean("Don't be an ash0le");
+
+
+
+
+
+
+
+
+function testsomechanges() {
+
+	obj.rD.missionNo = 1;
+
+	//Controller.addMissionVote(obj, 0, 1); //Derek //0
+	//Controller.addMissionVote(obj, 1, -3); //Cloud //1
+	Controller.addMissionVote(obj, 2, 0); //Serena //2
+	Controller.addMissionVote(obj, 3, 0); //Lucio //3
+	Controller.addMissionVote(obj, 4, 0); //Xing //4
+
+	Controller.setMissionTeam(obj, ["Lucio", "Xing", "Serena"]);
+	Controller.setPlayersForMission(obj);
+
+	lottie.activateGroupHug();
+	lottie.addTherapyTarget("Xing");
+	princess.setHeartacheDefenseTarget("Xing");
+
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
+	console.log("");
+	obj.rD.missionNo = 2;
+
+	Controller.addMissionVote(obj, 2, 0); //Serena //2
+	Controller.addMissionVote(obj, 3, 0); //Lucio //3
+	Controller.addMissionVote(obj, 4, 0); //Xing //4
+
+
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+	//princess.setHeartacheDefenseTarget("Xing");
+	//lottie.addTherapyTarget("Xing");
+
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
+	console.log("");
+	obj.rD.missionNo = 3;
+
+
+	Controller.addMissionVote(obj, 2, 0); //Serena //2
+	Controller.addMissionVote(obj, 3, 0); //Lucio //3
+	Controller.addMissionVote(obj, 4, 0); //Xing //4
+
+	//console.log(obj.pA);
+	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
+
+
+};
+
+
+//testsomechanges();

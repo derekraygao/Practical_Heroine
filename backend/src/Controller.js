@@ -999,8 +999,12 @@ class Controller {
 		missionVoteAccumulator = obj.rO.roles["Detective Chat"]
 		.adjustVoteSumCrossExamination(missionVoteAccumulator, obj);
 
+
 		missionVoteAccumulator = obj.rO.roles["Backstabber"]
 		.adjustVoteSumAssassinate(missionVoteAccumulator, obj);
+
+		missionVoteAccumulator = obj.rO.roles["Spiritualist"]
+		.adjustVoteSumSoulCannon(missionVoteAccumulator, obj);
 
 
 		//Hylian shield needs to be the very last thing
@@ -1155,7 +1159,6 @@ class Controller {
 	       	obj.pA[i].markedMan = false; //backstabber
 
 	        obj.pA[i].slow = false;
-	        obj.pA[i].slowCharge = 0;
 	        obj.pA[i].shrinkCount = 0; //default is 0
 	        obj.pA[i].multiplier = 1; //default 1: needs to be 1 (and not 0) so you can stack multiplication powers
 	        obj.pA[i].boost = 0;
@@ -1823,7 +1826,6 @@ class Player {
        	this.markedMan = false; //backstabber
 
         this.slow = false;
-        this.slowCharge = 0;
         this.shrinkCount = 0; //default is 0
         this.multiplier = 1; //default 1: needs to be 1 (and not 0) so you can stack multiplication powers
         this.boost = 0;

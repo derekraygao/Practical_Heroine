@@ -1,5 +1,6 @@
 var {RolesMasterClass} = require("./RolesMasterClass.js");
 var {shuffle} = require("./shuffle.js");
+var {formatArrayIntoString} = require ("./functions/formatArrayIntoString.js");
 
 
 class Spiritualist extends RolesMasterClass {
@@ -40,6 +41,9 @@ class Spiritualist extends RolesMasterClass {
         	5: {"soulMark": "nobody chosen"},
         	6: {"soulMark": "nobody chosen"},
         };
+
+
+        this.soulCannonAmount = 0;
 
 
 	}; //end constructor
@@ -160,6 +164,184 @@ class Spiritualist extends RolesMasterClass {
 
 	}; //end soulScan
 
+
+
+
+	getArrayOfSoulMarkedPlayersAndRemoveSM(obj) {
+
+		var forLength = obj.pA.length;
+		var i = 0;
+		var smArray = [];
+
+		for (i; i < forLength; i++) {
+
+			if (!obj.pA[i].soulMark) { continue; };
+
+			smArray.push(obj.pA[i].name);
+
+			obj.pA[i].soulMark = false;
+		
+		};
+
+
+		return smArray;
+
+	}; //end getArrayOfSoulMarkedPlayers()
+
+
+
+
+	soulRelease(choice, obj) {
+
+		var smArray = this.getArrayOfSoulMarkedPlayersAndRemoveSM(obj);
+
+		if (smArray.length == 0) {
+
+			this.messageHandler("No Soul Marks", "", obj);
+
+			return 0;
+		};
+
+
+		if (choice == "Soul Cannon") {
+
+			this.soulCannonAmount = ((smArray.length) * -2.5);
+
+			this.messageHandler("Soul Cannon", smArray, obj);
+
+
+		} else {
+
+			this.resonance(smArray, obj);
+
+		}; //end else
+
+
+	}; //end soulRelease
+
+
+
+
+	resonance(smArray, obj) {
+
+		var rolesIG = obj.rO.rolesInGame;
+		var forLength = rolesIG.length;
+		var i = 0;
+
+		var energyPoolPowerUp = (smArray.length * -1);
+
+		var notificationMessage = ("The soul(s) of " + formatArrayIntoString(smArray) + " have been released! The resonance of the freed souls adds " + energyPoolPowerUp + " to each of the Energy Pools of you and your fellow Villains.");
+
+
+		for (i; i < forLength; i++) {
+
+			if (rolesIG[i].team == "heroes") { continue; };
+
+			obj.pA[i].energyPool += energyPoolPowerUp;
+
+			this.messageHandler(
+									"Resonance", 
+
+									{
+										mess: notificationMessage,
+										socketID: obj.pA[i].socketID 
+									}, 
+
+									obj
+							   );
+		
+		}; //end for
+
+
+	}; //end resonance()
+
+
+
+	adjustVoteSumSoulCannon(voteSum, obj) {
+
+		if (this.soulCannonAmount == 0) {
+			return voteSum;
+		};
+
+
+		if (!obj.pA[this.index].selectedForMission) { 
+
+			this.soulCannonAmount = 0;
+
+			return voteSum;
+
+		};
+	
+
+		voteSum += this.soulCannonAmount;
+
+		this.soulCannonAmount = 0;
+
+		return voteSum;
+
+	}; //end adjustVoteSumSoulCannon
+
+
+
+	messageHandler(power, data, obj) {
+
+		if (power == "Resonance") {
+	
+			var sysMess = {
+							type: "power",
+							message: data.mess
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: data.socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);	
+
+
+
+
+		} else if (power == "Soul Cannon") {
+
+
+			var sysMess = {
+							type: "power",
+							message: ("The souls of " + formatArrayIntoString(data) + " have been released! Soul Cannon focuses the released energy into a powerful blast of negative energy! " + (data.length * -2.5) + " will be added to this round's Mission Team's vote sum ONLY if you, the Spiritualist, are chosen for the Mission Team.")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: obj.pA[this.index].socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);		
+
+
+
+
+		} else if (power == "No Soul Marks") {
+
+			var sysMess = {
+							type: "power",
+							message: ("No player currently has a 'Soul Mark' placed within his/her soul. Soul Release fails.")
+						  };
+
+			var stackObj = {
+							type: "SMI",
+							socketID: obj.pA[this.index].socketID,
+							data: sysMess
+						   };
+
+			obj.stack.push(stackObj);	
+
+		}; //end if power == "No Soul Marks"
+
+
+
+	}; //end messageHandler
 
 
 
