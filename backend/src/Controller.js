@@ -896,9 +896,15 @@ class Controller {
 
 
 
-	missionSuccessOrFail(accumulator) {
+	missionSuccessOrFail(accumulator, obj) {
+
+		if (obj.rO.roles["Reverser"].useReverserTrickRoom(obj)) {
+			return ( (accumulator > 0) ? "Success" : "Fail" );
+		};
+
 		return ( (accumulator >= 0) ? "Success" : "Fail" );
-	};
+
+	}; //end missionSuccessOrFail
 
 
 	missionVoteCalculation(obj) {
@@ -1024,7 +1030,7 @@ class Controller {
 			negativeVoteAccumulator,
 			neutralPointsTotal,
 			missionVoteAccumulator,
-			this.missionSuccessOrFail(missionVoteAccumulator)
+			this.missionSuccessOrFail(missionVoteAccumulator, obj)
 		);
 
 

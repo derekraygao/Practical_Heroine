@@ -136,6 +136,21 @@ class Reverser extends RolesMasterClass {
 	};
 
 
+
+	useReverserTrickRoom(obj) {
+
+		if (!this.inGame) { return false; };
+
+		if (obj.pA[this.index].selectedForMission) {
+			return true;
+		};	
+
+		return false;
+
+	}; //useReverseTrickRoom
+
+
+
 	wasMirrorWorldAlreadyUsed(type) {
 
 		if (type === "Normal") {
