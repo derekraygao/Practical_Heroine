@@ -18,6 +18,7 @@ class PP6Seer extends React.Component {
   state = {
             powerMenuSelection: "Vote",
             power1Target: "Power1 ?",
+            usedPower: false,
           };
 
 
@@ -26,9 +27,9 @@ class PP6Seer extends React.Component {
 
     if (this.state.power1Target == "Power1 ?") { return 0; };
 
-    socket.emit("Flash", this.state.power1Target);
-    socket.emit("Vote on Mission", "Power (-1)");
+    this.setState({usedPower: true});
 
+    socket.emit("Flash", this.state.power1Target);
 
     this.props.addSystemMessage(
       {
@@ -37,14 +38,9 @@ class PP6Seer extends React.Component {
           + this.state.power1Target 
           + ", blinding & confusing him/her with a flash of light! For the "
           + "current mission, there is a 75% chance his/her "
-          + "base mission voting power will be reversed! " 
-          + "He/she was notified that he/she was affected by "
-          + "'Flash'!")
+          + "base mission voting power will be reversed!")
       }
     );
-
-
-    this.props.voted("Power");
 
   }; //end clickButtonPower1
 
@@ -86,10 +82,50 @@ class PP6Seer extends React.Component {
 
 
 
+  returnWhichPowerMenuButtons = () => {
+
+    if (this.state.usedPower) {
+
+      return (
+          <button className="ui button">Vote</button>
+      ); //end return
+
+    }; //end if usedPower
+
+
+    /*not used power (Flash) yet*/
+    return (
+
+      <>
+
+          <button 
+            className={`ui button ${this.powerMenuColor("Vote")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Vote"}) }
+          >
+            Vote
+          </button>
+
+          <button 
+            className={`ui button ${this.powerMenuColor("Flash")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Flash"}) }
+          >
+            Flash
+          </button>
+
+      </>
+
+    ); //end return
+
+
+  }; //end returnWhichPowerMenuButtons()
+
+
+
 
   returnWhichActionAreaComponent = () => {
 
-    if (this.state.powerMenuSelection == "Vote") {
+    if (this.state.powerMenuSelection == "Vote"
+      || this.state.usedPower) {
 
         return (<NormalMissionVoteButtons voted={this.props.voted} />);
 
@@ -137,19 +173,7 @@ class PP6Seer extends React.Component {
 
         <div className="PP6-powers-menu-bar-container orange ui buttons">
           
-          <button 
-            className={`ui button ${this.powerMenuColor("Vote")}`}
-            onClick={ () => this.setState({powerMenuSelection: "Vote"}) }
-          >
-            Vote
-          </button>
-
-          <button 
-            className={`ui button ${this.powerMenuColor("Flash")}`}
-            onClick={ () => this.setState({powerMenuSelection: "Flash"}) }
-          >
-            Flash
-          </button>
+          {this.returnWhichPowerMenuButtons()}
 
         </div> 
 
