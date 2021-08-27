@@ -1954,7 +1954,9 @@ io.on('connection', function (socket) {
     var obj = Controller.returnpArrayRoomAndIndex(socket);
     if (!obj.pA) { return 0; };
 
-    if (obj.pA[obj.index].role !== "Detective Chat") { return 0; };
+    /*target is sending the plea, NOT detective chat
+    which is why you want it to NOT be detective chat */
+    if (obj.pA[obj.index].name !== obj.rO.roles["Detective Chat"].crossExaminationTarget) { return 0; };
 
 
     obj.rO.roles["Detective Chat"].setCrossExaminationPlea(plea, obj);
@@ -2882,8 +2884,6 @@ io.on('connection', function (socket) {
                           );
 
   });
-
-
 
 
 

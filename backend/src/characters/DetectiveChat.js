@@ -66,6 +66,7 @@ class DetectiveChat extends RolesMasterClass {
 
 	};
 
+
 	sendCrossExaminationRequest(obj) {
 
 		if (obj.rD.missionNo > this.missionXXNWasUsed) { return 0; };
@@ -73,6 +74,8 @@ class DetectiveChat extends RolesMasterClass {
 		var targetSID = obj.pA[obj.pT[this.crossExaminationTarget]].socketID;
 
 		this.messageHandler("Send Cross Examination", targetSID, obj);
+
+		this.crossExaminationPlea = "Not Guilty"; //default value, maybe should move to constructor
 
 	};
 
@@ -100,7 +103,11 @@ class DetectiveChat extends RolesMasterClass {
 
 		var targetPObj = obj.pA[obj.pT[this.crossExaminationTarget]];
 
+
 		if (!targetPObj.selectedForMission) {
+
+			this.crossExaminationTarget = "nobody chosen";
+
 			return voteSum;
 		};
 
@@ -124,6 +131,8 @@ class DetectiveChat extends RolesMasterClass {
 		};
 
 
+		this.crossExaminationTarget = "nobody chosen";
+		
 		return voteSum;
 
 	}; //end adjustVoteSumCrossExamination(voteSum)
