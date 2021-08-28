@@ -169,9 +169,6 @@ class PowerPhase1 extends React.Component {
       case "Reverser":
         return <PP1Reverser />;
 
-      case "Backstabber":
-        return <PP1Backstabber />;
-
       case "Baby Doll":
         return <PP1BabyDoll />;
 

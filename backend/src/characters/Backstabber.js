@@ -172,6 +172,8 @@ class Backstabber extends RolesMasterClass {
 		obj.pT[this.name] = this.index;
 
 
+		var newListOfVillains = obj.rO.getVillainsIdentities();
+
 
 		this.backstabberSwitchMessageHandler(
 			"Give New Backstabber Info", 
@@ -180,7 +182,7 @@ class Backstabber extends RolesMasterClass {
 
 			{
 				originalBSName: obj.pA[switchInd].name,
-	            villainList: obj.rO.getVillainsIdentities()
+	            villainList: newListOfVillains
 			}, 
 
 			obj
@@ -196,6 +198,13 @@ class Backstabber extends RolesMasterClass {
 
 			obj
 		);
+
+
+		this.backstabberSwitchMessageHandler("Update All Villains' Villain List", 
+											  "", 
+											  newListOfVillains, 
+											  obj
+											);
 
 
 		this.messageHandler("Notify Princess of Switch", obj, "");
@@ -239,13 +248,20 @@ class Backstabber extends RolesMasterClass {
 	}; //end adjustVoteRevenge
 
 
-	markAMan(name, obj) {
+	markAMan(target, obj) {
 
-		var markInd = obj.pT[name];
+		var markInd = obj.pT[target];
 
 		if (obj.pA[markInd].role == "Saintess") { return 0; };
 
-		obj.pA[markInd].markedMan = true;
+		var statusObj = {
+						 "caster": this.name,
+						 "target": target,
+						 "effect": "Bounty",
+						};
+
+
+		obj.sE.push(statusObj);
 
 		this.messageHandler("mark a man", obj, obj.pA[markInd].socketID);
 
@@ -402,7 +418,28 @@ class Backstabber extends RolesMasterClass {
 			obj.stack.push(stackObj);
 
 
-		};
+
+		} else if (power == "Update All Villains' Villain List") {
+
+
+			var stackObj;
+
+			//data is array of ALL villain's names
+			for (var i = 0; i < data.length; i++) {
+
+				stackObj = {
+					          type: "Individual",
+					          socketID: obj.pA[obj.pT[data[i]]].socketID,
+					          destination: "Set Villains List For Villains",
+					          data: data
+		   				   };	
+
+		   		obj.stack.push(stackObj);
+
+			}; //end for
+
+
+		}; //end if power == Update All Villains' Villain List
 
 
 

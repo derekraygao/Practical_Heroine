@@ -18,6 +18,7 @@ class PP6Backstabber extends React.Component {
   state = {
             powerMenuSelection: "Vote",
             power1Target: "Power1 ?",
+            usedBounty: false,
             power2Target: "Power2 ?",
           };
 
@@ -25,27 +26,27 @@ class PP6Backstabber extends React.Component {
 
   clickButtonPower1 = () => {
 
-    if (this.state.power1Target !== "Power1 ?") {
+    if (this.state.power1Target == "Power1 ?") { return 0; };
 
-      socket.emit("Mark A Man", this.state.power1Target);
 
-      socket.emit("Vote on Mission", "Power");
+    this.setState({usedBounty: true});
 
-      this.props.addSystemMessage(
-        {
-          type: "power",
-          message: ("You put a bounty on " + 
-            this.state.power1Target + ". "
-            + "He/she is a marked man! If you "
-            + "successfully assassinate him/her on "
-            + "another mission, -5 to that mission's "
-            + "vote sum.")
-        }
-      );
+    socket.emit("Mark A Man", this.state.power1Target);
 
-      this.props.voted("Power");
 
-    };
+    this.props.addSystemMessage(
+      {
+        type: "power",
+        message: ("You put a bounty on " + 
+          this.state.power1Target + ". "
+          + "He/she is a marked man! If you "
+          + "successfully assassinate him/her on "
+          + "another mission, -5 to that mission's vote sum. "
+          + "However, " + this.state.power1Target
+          + " was notified that he/she was marked!")
+      }
+    );
+
 
   }; //end clickButtonPower1
 
@@ -65,7 +66,7 @@ class PP6Backstabber extends React.Component {
           message: ("You readied your shadow blades to "
             + "assassinate " + this.state.power2Target 
             + ". You will be notified if the assassination was "
-            + "unsucessful. Otherwise, -5 to the mission team's "
+            + "unsucessful. Otherwise, -5 to the Mission Team's "
             + "vote total/sum.")
         }
       );
@@ -120,14 +121,63 @@ class PP6Backstabber extends React.Component {
 
     return "";
 
-  };
+  }; //end powerMenuColor()
+
+
+
+  returnWhichPowerMenuButtons = () => {
+
+    if (this.state.usedBounty) {
+
+      return (
+
+        <button className="ui button">Vote</button>
+
+      ); //end return
+
+    }; //end if usedBounty == true
+
+
+    /* have not used bounty power yet*/
+    return (
+
+      <>
+          <button 
+            className={`ui button ${this.powerMenuColor("Vote")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Vote"}) }
+          >
+            Vote
+          </button>
+
+          <button 
+            className={`ui button ${this.powerMenuColor("Mark")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Mark"}) }
+          >
+            Bounty
+          </button>
+
+          <button 
+            className={`ui button ${this.powerMenuColor("Assassinate")}`}
+            onClick={ () => this.setState({powerMenuSelection: "Assassinate"}) }
+          >
+            Assassinate
+          </button>
+
+      </>
+
+    ); //end return
+
+
+
+  }; //end returnWhichPowerMenuButtons()
 
 
 
 
   returnWhichActionAreaComponent = () => {
 
-    if (this.state.powerMenuSelection == "Vote") {
+    if (this.state.powerMenuSelection == "Vote" 
+      || this.state.usedBounty) {
 
         return (<NormalMissionVoteButtons voted={this.props.voted} />);
 
@@ -205,26 +255,7 @@ class PP6Backstabber extends React.Component {
 
         <div className="PP6-powers-menu-bar-container orange ui buttons">
           
-          <button 
-            className={`ui button ${this.powerMenuColor("Vote")}`}
-            onClick={ () => this.setState({powerMenuSelection: "Vote"}) }
-          >
-            Vote
-          </button>
-
-          <button 
-            className={`ui button ${this.powerMenuColor("Mark")}`}
-            onClick={ () => this.setState({powerMenuSelection: "Mark"}) }
-          >
-            Bounty
-          </button>
-
-          <button 
-            className={`ui button ${this.powerMenuColor("Assassinate")}`}
-            onClick={ () => this.setState({powerMenuSelection: "Assassinate"}) }
-          >
-            Assassinate
-          </button>
+          {this.returnWhichPowerMenuButtons()}
 
         </div> 
 

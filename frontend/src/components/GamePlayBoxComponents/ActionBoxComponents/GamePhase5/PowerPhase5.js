@@ -34,8 +34,11 @@ import PP5Psychologist from './PowerPhase5Components/Psychologist/PP5Psychologis
 /*Not on Mission Team*/
 
 import PP5NotSelectedForMissionLottie from './NotSelectedForMissionPowers/PP5NotSelectedForMissionLottie.js';
-import PP5NotSelectedForMissionPersequor from './NotSelectedForMissionPowers/PP5NotSelectedForMissionPersequor.js';
 import PP5NotSelectedForMissionPharaoh from './NotSelectedForMissionPowers/PP5NotSelectedForMissionPharaoh.js';
+
+import PP5NotSelectedForMissionPersequor from './NotSelectedForMissionPowers/PP5NotSelectedForMissionPersequor.js';
+import PP5NotSelectedForMissionBackstabber from './NotSelectedForMissionPowers/PP5NotSelectedForMissionBackstabber.js';
+
 
 import PP5NotSelectedForMissionFrozen from './NotSelectedForMissionPowers/PP5NotSelectedForMissionFrozen.js';
 
@@ -168,11 +171,16 @@ class PowerPhase5 extends React.Component {
       case "Lottie":
         return <PP5NotSelectedForMissionLottie />;
 
+      case "Pharaoh":
+        return <PP5NotSelectedForMissionPharaoh />;
+
+
       case "Persequor":
         return <PP5NotSelectedForMissionPersequor />;
 
-      case "Pharaoh":
-        return <PP5NotSelectedForMissionPharaoh />;
+      case "Backstabber":
+        return <PP5NotSelectedForMissionBackstabber />;
+
 
 
       default:
