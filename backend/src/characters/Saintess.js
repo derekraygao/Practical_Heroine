@@ -164,6 +164,11 @@ class Saintess extends RolesMasterClass {
 			obj.rO.roles["Delayer"].delayerCount = 0;
 		};
 
+
+		if (obj.pA[index].role == "Umbra Lord") {
+			obj.rO.roles["Umbra Lord"].bide = 0;
+		};
+
 	};
 
 

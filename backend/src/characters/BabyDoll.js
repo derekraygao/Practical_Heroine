@@ -167,8 +167,8 @@ class BabyDoll extends RolesMasterClass {
 				continue;
 			};
 
-			if (obj.pA[i].missionVote < -3) {
-				obj.pA[i].missionVote = -3;
+			if (obj.pA[i].missionVote < -3.5) {
+				obj.pA[i].missionVote = -3.5;
 			}
 
 		}; //end for

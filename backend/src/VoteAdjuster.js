@@ -29,7 +29,7 @@ class VoteAdjuster {
 		for (var i = 0; i < forLength; i++) {
 
 			if (!obj.pA[i].confused) { continue; };
-
+			
 			if (this._75PercentChanceTrue()) {
 				obj.pA[i].missionVote *= -1;
 			};
