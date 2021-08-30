@@ -4,9 +4,17 @@ import { Redirect } from 'react-router-dom';
 
 import './Lobby.css';
 
+import LeftMenu from './RoomComponents/LeftMenu.js';
+
+import LobbyGameRules from './LobbyMenuComponents/LobbyGameRules.js';
+import LobbyContact from './LobbyMenuComponents/LobbyContact.js';
+
 import CreateRoom from './RoomComponents/CreateRoom.js';
 import JoinRoom from './RoomComponents/JoinRoom.js';
+
+
 import LobbyPopupMessage from './LobbyPopupMessage.js';
+
 
 import socket from 'Socket.js';
 
@@ -15,10 +23,13 @@ import socket from 'Socket.js';
 class Lobby extends React.Component {
 
   state = {
+
             popupMessage: "None", //none means popup is not rendered
             redirect: false,
+            menuChoice: "Lobby",
 
           };
+
 
 
   componentDidMount = () => {
@@ -68,6 +79,46 @@ class Lobby extends React.Component {
 
 
 
+  showWhichLobbyMenuComponent() {
+
+    switch(this.props.lobbyMenuSelection) {
+
+      case "Lobby":
+
+        return (
+          <>
+            <CreateRoom />
+            <JoinRoom />
+          </>
+        );
+
+
+      case "Game Rules":
+        return <LobbyGameRules />;
+
+
+      case "Contact":
+        return <LobbyContact />;
+        
+
+      default:
+
+        return (
+          <>
+            <CreateRoom />
+            <JoinRoom />
+          </>
+        );
+
+
+    }; //end switch
+
+  }; //end showWhichLobbyMenuComponent
+
+
+
+
+
   render() {
 
     if (this.state.redirect) {
@@ -91,16 +142,18 @@ class Lobby extends React.Component {
           <div className="lobby-message">
             Welcome to Practical Hero(ine), an online social deduction 
             game that is inspired by the games Resistance/Avalon and 
-            Werewolf. Please shoot me an email if you run into any bugs.
-            I currently work as a full-time software engineer, but will 
-            try to fix things when I have time, as well as extend 
-            functionality of this game. - Cloud "D" Gao
+            Werewolf. Please shoot me an email if you run into bugs 
+            or have suggestions/comments! As the sole developer of 
+            this game, I've done testing and quality assurance on my 
+            own, but nothing beats UAT/Beta testing. Thanks, and have 
+            fun! -Aster
           </div>
 
           <div className="create-and-join-room-grid-container">
 
-            <CreateRoom />
-            <JoinRoom />
+            <LeftMenu />
+
+            {this.showWhichLobbyMenuComponent()}
 
           </div>
 
@@ -132,7 +185,8 @@ const mapStateToProps = (state) => {
   return (
          { 
             role: state.role,
-            gamePhase: state.gamePhase
+            gamePhase: state.gamePhase,
+            lobbyMenuSelection: state.lobbyMenuSelection,
          }
   );
 

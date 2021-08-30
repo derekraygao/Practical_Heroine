@@ -67,9 +67,9 @@
 
 
 	display: grid;
-	grid-template-columns: 40% 60%;
+	grid-template-columns: 12% 33% 55%;
 	grid-template-rows: 100%;
 
-	grid-template-areas: "Create-Room   Join-Room";
+	grid-template-areas: "Left-Menu   Create-Room   Join-Room";
 
 }

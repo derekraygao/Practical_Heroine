@@ -1,0 +1,58 @@
+
+
+.lobby-menu-component-container {
+
+	grid-column-start: 2;
+	grid-column-end: -1;
+
+
+	display: grid;
+	grid-template-rows: 10% 90%;
+	grid-template-areas: "title"
+						 "body"
+						 ;
+
+
+	overflow-y: auto;
+
+}
+
+
+.lobby-menu-component-title {
+
+	grid-area: title;
+
+	display: flex;
+
+	color: white;
+	font-size: 170%;
+
+	background-color: rgba(0, 0, 0, 0.4);
+
+}
+
+
+.lobby-menu-component-title span {
+	margin: auto;
+}
+
+
+
+
+.lobby-menu-component-body {
+
+	grid-area: body;
+
+	/*
+	display: flex;
+	flex-direction: column;
+	*/
+	
+	font-size: 140%;
+
+
+	padding: 2% 2% 2% 2%;
+
+	background-color: rgba(255,255,255,0.5);
+
+}

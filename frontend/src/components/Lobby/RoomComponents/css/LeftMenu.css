@@ -1,0 +1,14 @@
+.lobby-left-menu-container {
+
+	grid-area: Left-Menu;
+
+	display: flex;
+	flex-direction: column;
+
+	overflow: auto;
+
+	border-top: 2px solid white;
+	border-right: 2px solid white;
+}
+
+
