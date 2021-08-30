@@ -24,6 +24,7 @@ import JailerPowerInfo from './CharacterPowers/JailerPowerInfo.js';
 import SensorPowerInfo from './CharacterPowers/SensorPowerInfo.js';
 import LottiePowerInfo from './CharacterPowers/LottiePowerInfo.js';
 import LanPowerInfo from './CharacterPowers/LanPowerInfo.js';
+import PharaohPowerInfo from './CharacterPowers/PharaohPowerInfo.js';
 
 
 import UmbraLordPowerInfo from './CharacterPowers/UmbraLordPowerInfo.js';
@@ -203,6 +204,12 @@ class PowersInfoBox extends React.Component {
                   prevScrollPosition={this.state.characterScrollPosition}
                />;
 
+
+      case "Pharaoh":
+        return <PharaohPowerInfo
+                  setScrollPosition={this.setScrollPosition}
+                  prevScrollPosition={this.state.characterScrollPosition}
+               />;
 
 
 
@@ -393,7 +400,10 @@ class PowersInfoBox extends React.Component {
 
 
 
-
+  /*for Character role title, used a ternary operator instead of
+  setting it to this.props.myRole directly because I wanted the 
+  "none" to be capitalized "None" and was scared of breaking 
+  something if I just changed it to "None" inside playerRole reducer*/
   render() {
 
     return (
@@ -406,7 +416,7 @@ class PowersInfoBox extends React.Component {
             className={`ui button ${this.powerMenuColor("Character")}`}
             onClick={ () => this.setState({menuSelection: "Character"}) }
           >
-            {this.props.myRole}
+            {this.props.myRole == "none" ? "None" : this.props.myRole}
           </button>
 
           <button 

@@ -5,7 +5,9 @@
 
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	/*align-items: center; 
+	don't use this cause it causes weird behavior with 
+	overflow-x, where things are cut off at the beginning*/
 
 	overflow: auto;
 
@@ -15,7 +17,14 @@
 }
 
 
+.power-info-menu-component-container a {
+	align-self: center;
+}
+
+
 .power-info-character-header {
+
+	align-self: center;
 
 	font-size: 200%;
 	font-weight: bold;
