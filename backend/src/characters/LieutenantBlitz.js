@@ -73,18 +73,28 @@ class LieutenantBlitz extends RolesMasterClass {
 	};
 
 
-	setUnitedStatesOfSmashTarget(name, obj) {
+	setUnitedStatesOfSmashTarget(target, obj) {
 
-		var ind = obj.pT[name];
-		if (ind == undefined) { return 0; };
+		var pObj = obj.pA[obj.pT[target]];
 
-		if (["Umbra Lord", "Saintess"].includes(obj.pA[ind].role)) {
+		if (["Umbra Lord", "Saintess"].includes(pObj.role)) {
 			return 0;
 		};
 
-		this.powersHistory[obj.rD.missionNo]["USOS"] = name;
+		
+		var statusObj = {
+						 "caster": this.name,
+						 "target": target,
+						 "effect": "Injury",
+						};
 
-	};
+		obj.sE.push(statusObj);
+
+		//to notify target he/she was smashed!
+		this.messageHandler(obj, pObj.socketID);
+
+	}; //end setUnitedStatesOfSmashTarget
+
 
 
 	adjustMissionVotesInjured(playerObj) {
@@ -121,11 +131,7 @@ class LieutenantBlitz extends RolesMasterClass {
 
 			var sysMess = {
 							type: "urgent",
-							message: ("United States of Smash! BAM! POW! "
-								+ "You see stars as Lt. Blitz smashes into you, "
-								+ "inflicting the 'Injury' status. Starting next "
-								+ "mission round and for 2 rounds, your " 
-								+ "base voting power is reduced to 0!")
+							message: ("Lieutenant Blitz: United States of Smash! BAM! POW! Weakling! After suffering the might of my awesome punch, you have been inflicted with the 'Injury' status. Starting Mission/Round " + (obj.rD.missionNo + 1) + ", and for 2 whole rounds, your mission B.V.P. will be reduced to 0!")
 						  };
 
 			var stackObj = {

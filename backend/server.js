@@ -1222,7 +1222,7 @@ io.on('connection', function (socket) {
     };
     
 
-    console.log(obj.pA[obj.index].name + " guessed the princess to be: " + guess);
+    //console.log(obj.pA[obj.index].name + " guessed the princess to be: " + guess);
 
     if (!Controller.didAllConnectedVillainsGuessOnThePrincessIdentity(obj)) {
       return 0;
@@ -2535,6 +2535,8 @@ io.on('connection', function (socket) {
 
 
     obj.rO.roles["Lieutenant Blitz"].setUnitedStatesOfSmashTarget(name, obj);
+
+    MessageNotificationStack(obj);
 
     //console.log(obj.rO.roles["Lieutenant Blitz"].powersHistory[obj.rD.missionNo]["USOS"]);
 

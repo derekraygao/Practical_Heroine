@@ -1518,7 +1518,17 @@ function checkStatusConditionForSaintess(playerObject) {
 	console.log("");
 	console.log("Curaga boost target name: " + obj.rO.roles["Saintess"].curagaBoostTarget);
 
-};
+	if (playerObject.role == "Umbra Lord") {
+		console.log("Bide Count is: " + obj.rO.roles["Umbra Lord"].bide);
+	};
+
+
+	if (playerObject.role == "Delayer") {
+		console.log("Temporal Charge is: " + obj.rO.roles["Delayer"].delayerCount);
+	};
+
+
+}; //end checkStatusConditionForSaintess()
 
 //checkStatusConditionForSaintess(obj.pA[0]);
 
@@ -1619,6 +1629,27 @@ function testSaintessPower() {
 	saintess.activateHolyPower(obj);
 	console.log("After safeguard");
 	//AbilityManager.updateStatuses(obj);
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+
+	/*Check Umbra Lord Bide & Delayer Temporal Charge*/
+
+	obj.pA[0].role = "Umbra Lord";
+	//obj.pA[0].role = "Delayer";
+
+	console.log(""); console.log("");
+	obj.rO.roles["Umbra Lord"].bide = 3;
+	obj.rO.roles["Delayer"].delayerCount = 3;
+
+	console.log("Umbra Lord & Delayer Count before Dispel");
+	checkStatusConditionForSaintess(obj.pA[0]);
+
+	console.log(""); console.log("");
+	console.log("Umbra Lord & Delayer Count AFTER Dispel");
+
+
+	saintess.setSaintessPower({power: "Dispel", target: "Derek"}, obj);
+	saintess.activateHolyPower(obj);
 	checkStatusConditionForSaintess(obj.pA[0]);
 	
 };
@@ -1918,10 +1949,16 @@ function testInjuredStatus() {
 	Controller.setMissionTeam(obj, ["Derek", "Serena"]);
 	Controller.setPlayersForMission(obj);
 
-	ltBlitz.setUnitedStatesOfSmashTarget("Serena", obj);
-	AbilityManager.updateStatuses(obj);
+	ltBlitz.setUnitedStatesOfSmashTarget("Lucio", obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
-	console.log("Injured Count is: " + obj.pA[2].injuredCount);
+	Controller.roomsData["testing"].statusEffects = [];
+	obj.sE = [];
+
+	console.log(obj.sE);
+	console.log(Controller.roomsData["testing"].statusEffects);
+
+	console.log("Injured Count is: " + obj.pA[3].injuredCount);
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 
 	console.log("");
@@ -1932,19 +1969,22 @@ function testInjuredStatus() {
 	Controller.addMissionVote(obj, 0, 1); //Derek
 	Controller.addMissionVote(obj, 2, -5); //Serena Lieutenant Blitz
 
-	ltBlitz.setUnitedStatesOfSmashTarget("Serena", obj);
+	//ltBlitz.setUnitedStatesOfSmashTarget("Serena", obj);
 	console.log("Injured Count is: " + obj.pA[2].injuredCount);
-	AbilityManager.updateStatuses(obj);
+
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
+	Controller.roomsData["testing"].statusEffects = [];
+
 	console.log("Injured Count is: " + obj.pA[2].injuredCount);
 
 	obj.rD.missionNo = 3;
 
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 	console.log("Injured Count is: " + obj.pA[2].injuredCount);
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 	console.log("Injured Count is: " + obj.pA[2].injuredCount);
-	AbilityManager.updateStatuses(obj);
+	AbilityManager.updateStatusesBeforeNightPhase(obj);
 
 
 	console.log("Injured Count is: " + obj.pA[2].injuredCount);
@@ -3006,8 +3046,8 @@ function testBabyDollPowers() {
 
 	Controller.addMissionVote(obj, 0, 3); //Derek
 	Controller.addMissionVote(obj, 1, -1); //Cloud
-	Controller.addMissionVote(obj, 2, 3); //Serena
-	Controller.addMissionVote(obj, 3, -5); //Lucio
+	Controller.addMissionVote(obj, 2, 1); //Serena
+	Controller.addMissionVote(obj, 3, -4); //Lucio
 	Controller.addMissionVote(obj, 4, 2); //Xing
 
 	Controller.setMissionTeam(obj, ["Derek", "Serena", "Lucio"]);
@@ -3019,7 +3059,7 @@ function testBabyDollPowers() {
 	console.log(obj.rD.missionTeam);
 
 
-	obj.rO.roles["Baby Doll"].activateLullaby();
+	obj.rO.roles["Baby Doll"].activateLullaby(obj);
 
 	console.log("Mission Vote Total Is: " + Controller.missionVoteCalculation(obj));
 	/*
@@ -3793,3 +3833,21 @@ function testsomechanges() {
 
 
 //testsomechanges();
+
+
+/*
+var {calculateNumberofTeamMembers} = require("./functions/calculateNumberofTeamMembers.js");
+
+var mNo = 1;
+var numP = 6;
+
+console.log(calculateNumberofTeamMembers(0, numP));
+console.log(calculateNumberofTeamMembers(1, numP));
+console.log(calculateNumberofTeamMembers(2, numP));
+console.log(calculateNumberofTeamMembers(3, numP));
+console.log(calculateNumberofTeamMembers(4, numP));
+console.log(calculateNumberofTeamMembers(5, numP));
+console.log(calculateNumberofTeamMembers(6, numP));
+console.log(calculateNumberofTeamMembers(7, numP));
+console.log(calculateNumberofTeamMembers(8, numP));
+*/

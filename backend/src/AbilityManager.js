@@ -440,12 +440,6 @@ class AbilityManager {
 
 
 
-  updateLieutenantBlitzStatuses(obj) {
-
-    obj.rO.roles["Lieutenant Blitz"].updateInjuredStatus(obj);
-
-  };
-
 
   updateBabyDollPowers(obj) {
 
@@ -695,8 +689,7 @@ class AbilityManager {
     obj.rO.roles["Detective Chat"].sendInterrogationResults(obj);
     
     this.updateNoahAbilities(obj);
-    this.updateToxiturtleAbilities(obj)
-    this.updateLieutenantBlitzStatuses(obj);
+    this.updateToxiturtleAbilities(obj);
     this.updateDelayerStatuses(obj);
     this.updateHecateStatuses(obj);
     this.updateBabyDollPowers(obj);
