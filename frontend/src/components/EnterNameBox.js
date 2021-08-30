@@ -100,12 +100,7 @@ class EnterNameBox extends React.Component {
       e.preventDefault();
       //console.log(this.state.term);
 
-      if (this.state.enteredName !== "") {
-
-        socket.emit("Submit Player Name", this.state.enteredName);
-        this.setState({ enteredName: ""});
-
-      };
+      this.nameSubmit();
 
     }; //end if e.key === "Enter"
 
@@ -122,6 +117,14 @@ class EnterNameBox extends React.Component {
       inputName = inputName.slice(0, 12)
     
     };
+
+
+    if (inputName.includes(" ")) {
+
+      inputName = inputName.slice(0, (inputName.length - 1));
+
+    };
+
 
     this.setState({ enteredName: inputName });
       
