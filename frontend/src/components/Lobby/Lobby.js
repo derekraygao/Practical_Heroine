@@ -132,12 +132,26 @@ class Lobby extends React.Component {
 
       <>
 
-
         <div className="lobby-grid-container-main">
         
-          <div className="lobby-title">
-            Practical Hero(ine)
+
+          <div className="lobby-title-bar">
+
+            <div className="lobby-title-div">
+              <span>Practical Hero(ine)</span>
+            </div>
+
+            <div className="lobby-title-discord">
+              <button 
+                className="ui button blue"
+                onClick={ () => window.open("https://discord.gg/BPr5624XAj", "_blank") }
+              >
+                Discord
+              </button>
+            </div>
+
           </div>
+
 
           <div className="lobby-message">
             Welcome to Practical Hero(ine), an online social deduction 
@@ -145,9 +159,10 @@ class Lobby extends React.Component {
             Werewolf. Please shoot me an email if you run into bugs 
             or have suggestions/comments! As the sole developer of 
             this game, I've done testing and quality assurance on my 
-            own, but nothing beats UAT/Beta testing. Thanks, and have 
+            own, but nothing beats U.A.T./beta testing. Thanks, and have 
             fun! -Aster
           </div>
+
 
           <div className="create-and-join-room-grid-container">
 
@@ -156,6 +171,7 @@ class Lobby extends React.Component {
             {this.showWhichLobbyMenuComponent()}
 
           </div>
+
 
         </div>
 

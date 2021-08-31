@@ -4,7 +4,7 @@
 	display: grid;
 	grid-template-rows: 10% 12% 78%;
 
-	grid-template-areas: "Title"
+	grid-template-areas: "Title-Bar"
 						 "Message"
 						 "Create-Join-Room"
 						 ;
@@ -20,14 +20,15 @@
 }
 
 
-.lobby-title {
 
-	grid-area: Title;
+.lobby-title-bar {
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	grid-area: Title-Bar;
 
+	display: grid;
+
+	grid-template-columns: 90% 10%;
+	grid-template-areas: "Title   Discord";
 
 	font-size: 200%;
 
@@ -36,6 +37,30 @@
 
 	background-color:rgba(255,255,255,0.4);
 }
+
+
+.lobby-title-div {
+
+	grid-area: Title;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+
+
+.lobby-title-discord {
+
+	grid-area: Discord;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+
+
 
 
 .lobby-message {
