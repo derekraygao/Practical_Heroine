@@ -41,6 +41,7 @@ class LobbyContact extends React.Component {
 
           <div>Aster "D" Gao</div>
           <div>Aster@practicalheroine.com</div>
+          <a href="https://discord.com/invite/BPr5624XAj">Discord</a>
 
           <br></br>
           <br></br>
