@@ -7,7 +7,9 @@ import './Lobby.css';
 import LeftMenu from './RoomComponents/LeftMenu.js';
 
 import LobbyGameRules from './LobbyMenuComponents/LobbyGameRules.js';
+import LobbyDemo from './LobbyMenuComponents/LobbyDemo.js';
 import LobbyContact from './LobbyMenuComponents/LobbyContact.js';
+
 
 import CreateRoom from './RoomComponents/CreateRoom.js';
 import JoinRoom from './RoomComponents/JoinRoom.js';
@@ -99,6 +101,10 @@ class Lobby extends React.Component {
 
       case "Contact":
         return <LobbyContact />;
+
+
+      case "Demo":
+        return <LobbyDemo />;
         
 
       default:

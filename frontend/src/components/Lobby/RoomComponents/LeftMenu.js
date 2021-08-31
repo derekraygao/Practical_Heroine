@@ -38,6 +38,7 @@ class LeftMenu extends React.Component {
 
         <LeftMenuButton text="Lobby" imgName={"home"}/>
         <LeftMenuButton text="Game Rules" imgName={"rules"}/>
+        <LeftMenuButton text="Demo" imgName={"demo"}/>
         <LeftMenuButton text="Contact" imgName={"contact"}/>
 
       </div>

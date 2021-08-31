@@ -16,7 +16,7 @@ var getRoomsInterval;
 class DisplayRooms extends React.Component {
 
   state = {
-            roomList: ["Wait for rooms to load"],
+            roomList: [{roomName: "Wait for rooms to load", numOfPlayers: 0}],
             roomNameInput: "",
             redirect: false,
 
