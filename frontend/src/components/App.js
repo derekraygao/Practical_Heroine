@@ -108,6 +108,9 @@ truthBombAudio.volume = 0.10;
 var predictionAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Prediction.mp3");
 predictionAudio.volume = 0.10;
 
+var poisonBeakAudio = new Audio(process.env.PUBLIC_URL + "/sounds/Poison_Beak.mp4");
+poisonBeakAudio.volume = 0.10;
+
 
 
 /*Game Over Music */
@@ -182,6 +185,10 @@ function playSong(song) {
 
     case "Obliterate":
       hVictoryObliterate.play();
+      break;
+
+    case "Poison Beak":
+      poisonBeakAudio.play();
       break;
 
     default:
@@ -315,7 +322,7 @@ class App extends React.Component {
       setTimeout(() => this.props.updateGamePhase(1), 1000);
       setTimeout(() => this.props.updateMainMenuSelection("video"), 800);
 
-      this.props.updateTimerSeconds(1);
+      this.props.updateTimerSeconds(15);
 
       this.props.updateCharacterStatus("jailed", false);
       this.props.updateCharacterStatus("selectedForTelepathy", false);
@@ -383,11 +390,11 @@ class App extends React.Component {
 
       if (_teamArr.includes(_name)) {
 
-        this.props.updateTimerSeconds(2);
+        this.props.updateTimerSeconds(10);
 
       } else {
 
-        this.props.updateTimerSeconds(35);
+        this.props.updateTimerSeconds(30);
 
       };
 
@@ -399,7 +406,7 @@ class App extends React.Component {
 
       setTimeout(() => this.props.updateGamePhase(6), 1000);
 
-      this.props.updateTimerSeconds(800);
+      this.props.updateTimerSeconds(20);
 
     }); //end socket.on("Start Game Phase 6")
 
@@ -427,7 +434,7 @@ class App extends React.Component {
 
       setTimeout(() => this.props.updateGamePhase(8), 1000);
 
-      this.props.updateTimerSeconds(2);
+      this.props.updateTimerSeconds(40);
      
       /*Auto scroll down to latest mission results */
       setTimeout(() => {
@@ -1056,13 +1063,11 @@ class App extends React.Component {
         <PlayerAndResultsBox />
         <PowersInfoBox />
         
-        {/*
         <JitsiVideoBox
           key={this.state.jitsiKey} 
           display={this.jitsiVideoBoxStyle()}
           roomName={this.props.roomInfo["jitsiRoomName"]} 
         />
-        */}
         
         {this.gamePlayBoxArea()}
 
@@ -1154,4 +1159,7 @@ var introMessage = "If you are confused, you can read the game's "
                   + "You can view your role's powers, "
                   + "access the 'Quick Guide' to view what to do "
                   + "for each game phase, or read the entire "
-                  + "instructions through 'Rules'.";
+                  + "instructions through 'Rules'. Remember, "
+                  + "you can use your browser window's 'Find' "
+                  + "function (CTRL + F or ⌘ + F) to search "
+                  + "through the guides and rule books!";

@@ -2795,6 +2795,8 @@ io.on('connection', function (socket) {
 
     obj.rO.roles["Toxiturtle"].poisonBeak(name, obj);
 
+    MessageNotificationStack(obj);
+
     //console.log(obj.pA[obj.pT[name]].poisonCount);
 
   });

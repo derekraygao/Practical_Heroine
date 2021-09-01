@@ -47,6 +47,11 @@ class AbilityManager {
       };
 
 
+      if (obj.pA[i].poisonCount > 0) {
+        obj.pA[i].poisonCount -= 1;
+      };
+
+
     }; //end for 
 
   }; //end resetCertainStatuses
@@ -364,15 +369,6 @@ class AbilityManager {
   }; //end updateNoahAbilities
 
 
-  updateToxiturtleAbilities(obj) {
-
-    var toxiturtle = obj.rO.roles["Toxiturtle"];
-    if (!toxiturtle.inGame) { return 0; };
-
-    toxiturtle.reducePoisonCounter(obj);
-  
-
-  }; //end updateToxiturtleAbilities(obj)
 
 
   updateParalysisAbilitiesEffect(obj) {
@@ -689,7 +685,6 @@ class AbilityManager {
     obj.rO.roles["Detective Chat"].sendInterrogationResults(obj);
     
     this.updateNoahAbilities(obj);
-    this.updateToxiturtleAbilities(obj);
     this.updateDelayerStatuses(obj);
     this.updateHecateStatuses(obj);
     this.updateBabyDollPowers(obj);

@@ -62,7 +62,7 @@ class Toxiturtle extends RolesMasterClass {
 
 
 	poisonBeak(name, obj) {
-
+		
 		var poisonInd = obj.pT[name];
 
 		if (poisonInd == undefined) { return 0; };
@@ -70,7 +70,7 @@ class Toxiturtle extends RolesMasterClass {
 		if (!this.hasItBeenTwoTurnsSincePoisonBeak(obj)) { return 0; };
 		if (obj.pA[poisonInd].role == "Saintess") { return 0; };
 
-
+		
 		this.poisonBeakArray.push(
 			{
 				name: name, 
@@ -80,7 +80,10 @@ class Toxiturtle extends RolesMasterClass {
 
 		obj.pA[poisonInd].poisonCount = 3;
 
-	};
+		this.messageHandler("Notify Everyone of Poison Beak", name, obj);
+
+	}; //end poisonBeak
+
 
 
 	_67PercentChanceTrue() {
@@ -150,20 +153,6 @@ class Toxiturtle extends RolesMasterClass {
 	}; //end adjustMissionVotesPoisoned(obj)
 
 
-	//inside AbilityManager
-	reducePoisonCounter(obj) {
-
-		for (var i = 0; i < obj.pA.length; i++) {
-
-			if (obj.pA[i].poisonCount > 0) {
-
-				obj.pA[i].poisonCount -= 1;
-
-			};
-
-		}; //end for
-
-	}; //end reducePoisonCounter()
 
 
 	//need to separate out set/remove paralysis because 
@@ -210,6 +199,32 @@ class Toxiturtle extends RolesMasterClass {
 	    }; //end if missionNo !== 1
 
 	}; //end adjustGlareRemoveParalysis
+
+
+
+
+	messageHandler(power, data, obj) {
+
+		if (power == "Notify Everyone of Poison Beak") {
+
+			var sysMess = {
+							type: "urgent",
+							message: ("Toxiturtle: Turtles are reptiles, not amphibians! Ignorant fool! Well, whatever. With the power of my Poison Beak, " + data + " was inflicted with a Poison Count of 3! KEKEKE! Just try putting him/her on a Mission Team! My toxins are unbeatable!")
+						  };
+
+			var stackObj = {
+							type: "SME Music",
+							data: {messageObj: sysMess, song: "Poison Beak"}
+						   };
+
+			obj.stack.push(stackObj);
+
+
+		}; //end if power == "Notify Everyone of Poison Beak"
+
+
+	}; //end messageHandler
+
 
 
 

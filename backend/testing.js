@@ -624,6 +624,8 @@ function testEoSensePower() {
 		obj.pA[0].paralyzed = true;
 		obj.pA[0].frozen = true;
 
+		obj.pA[0].poisonCount = 1;
+
 		obj.pA[0].boost = 3;
 		obj.pA[0].energyPool = -2;
 

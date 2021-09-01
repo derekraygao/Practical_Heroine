@@ -16,15 +16,21 @@ class Princess extends RolesMasterClass {
 
 	}; //end constructor
 
+
 	/*this is same as Sensor */
 	getStatusesForOnePerson(playerObj, obj) {
 
 		var individualStatusArr = [];
 
 		if (playerObj.corrupted) { individualStatusArr.push("Corruption"); };
+		if (playerObj.soulMark) { individualStatusArr.push("Soul Mark"); };
+		if (playerObj.zombie == "zombie") { individualStatusArr.push("Zombie"); };
+		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
+		if (playerObj.poisonCount > 0) { individualStatusArr.push("Poison"); };
+
 		if (playerObj.bomb) { individualStatusArr.push("Flame Seal Bomb"); };
 		if (playerObj.burnCount > 0) { individualStatusArr.push("Burn"); };
-		if (playerObj.soulMark) { individualStatusArr.push("Soul Mark"); };
+		
 		if (playerObj.shrinkCount > 0) { individualStatusArr.push("Shrink"); };
 		if (playerObj.injuredCount > 0) { individualStatusArr.push("Injury"); };
 		if (playerObj.entranced) { individualStatusArr.push("Entrancement"); };
@@ -32,8 +38,7 @@ class Princess extends RolesMasterClass {
 		if (playerObj.markedMan) { individualStatusArr.push("Marked Man"); };
 		if (playerObj.slow) { individualStatusArr.push("Slow"); };
 
-		if (playerObj.zombie == "zombie") { individualStatusArr.push("Zombie"); };
-		if (playerObj.zombie == "recovered") { individualStatusArr.push("Recovered From Zombie"); };
+
 		if (playerObj.paralyzed) { individualStatusArr.push("Paralysis"); };
 		if (playerObj.frozen) { individualStatusArr.push("Freeze"); };
 

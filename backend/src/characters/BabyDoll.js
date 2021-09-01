@@ -76,7 +76,7 @@ class BabyDoll extends RolesMasterClass {
 							+ "energy. The highest allowed "
 							+ "final voting power of any "
 							+ "person is +2, and the lowest "
-							+ "is -3.")
+							+ "is -3.5.")
 					  };
 
 		var stackObj = {
